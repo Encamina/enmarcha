@@ -1,0 +1,12 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Encamina.Enmarcha.Net.Http\Encamina.Enmarcha.Net.Http.csproj" />
+    <ProjectReference Include="..\..\src\Encamina.Enmarcha.Services.Abstractions\Encamina.Enmarcha.Services.Abstractions.csproj" />
+  </ItemGroup>
+
+</Project>

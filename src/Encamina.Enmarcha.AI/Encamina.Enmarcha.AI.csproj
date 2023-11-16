@@ -1,0 +1,35 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Encamina.Enmarcha.AI.Abstractions\Encamina.Enmarcha.AI.Abstractions.csproj" />
+    <ProjectReference Include="..\Encamina.Enmarcha.AI.ConversationsAnalysis.Abstractions\Encamina.Enmarcha.AI.ConversationsAnalysis.Abstractions.csproj" />
+    <ProjectReference Include="..\Encamina.Enmarcha.AI.IntentsPrediction.Abstractions\Encamina.Enmarcha.AI.IntentsPrediction.Abstractions.csproj" />
+    <ProjectReference Include="..\Encamina.Enmarcha.AI.LanguagesDetection.Abstractions\Encamina.Enmarcha.AI.LanguagesDetection.Abstractions.csproj" />
+    <ProjectReference Include="..\Encamina.Enmarcha.AI.QuestionsAnswering.Abstractions\Encamina.Enmarcha.AI.QuestionsAnswering.Abstractions.csproj" />
+    <ProjectReference Include="..\Encamina.Enmarcha.AI.TextsTranslation.Abstractions\Encamina.Enmarcha.AI.TextsTranslation.Abstractions.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Options" Version="6.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Resources\ExceptionMessages.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>ExceptionMessages.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Resources\ExceptionMessages.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>ExceptionMessages.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+
+</Project>

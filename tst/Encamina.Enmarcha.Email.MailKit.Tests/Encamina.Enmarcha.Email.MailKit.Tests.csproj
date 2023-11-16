@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="EmailBuilderTests.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Encamina.Enmarcha.Email.MailKit\Encamina.Enmarcha.Email.MailKit.csproj" />
+    <ProjectReference Include="..\..\src\Encamina.Enmarcha.Testing.Smtp\Encamina.Enmarcha.Testing.Smtp.csproj" />
+  </ItemGroup>
+    
+</Project>

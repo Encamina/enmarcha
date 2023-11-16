@@ -1,0 +1,43 @@
+<Project>
+  <PropertyGroup>
+    <Authors>ENCAMINA</Authors>
+    <Company>ENCAMINA</Company>
+    <Copyright>Copyright © 2023 ENCAMINA S.L.</Copyright>
+    <Product>Enmarcha Libraries</Product>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <DebugType>embedded</DebugType>
+    <DebugSymbols>true</DebugSymbols>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <VersionPrefix>6.0.3.18</VersionPrefix>
+    <VersionSuffix></VersionSuffix>
+  </PropertyGroup>
+
+  <!--
+    Deterministic builds ensure that the same binary is produced regardless of the machine building it, including paths to sources stored in the symbols. 
+    While deterministic builds are enabled by default in .NET SDK projects, there is an extra property (ContinuousIntegrationBuild) to set on the build server 
+    to normalize stored file paths. These should not be enabled during local dev or the debugger won’t be able to find the local source files.
+   -->
+  <PropertyGroup Condition="'$(TF_BUILD)' == 'true'">
+    <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
+  </PropertyGroup>
+  
+  <PropertyGroup>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
+    <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
+    <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+    <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
+  </PropertyGroup>
+</Project>

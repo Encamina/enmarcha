@@ -1,0 +1,26 @@
+{
+  "schema": 1,
+  "type": "completion",
+  "description": "Summarizes a given input text",
+  "completion": {
+    "max_tokens": 1250,
+    "temperature": 0.1,
+    "top_p": 1.0,
+    "presence_penalty": 0.0,
+    "frequency_penalty": 0.0
+  },
+  "input": {
+    "parameters": [
+      {
+        "name": "input",
+        "description": "The input text to summarize",
+        "defaultValue": ""
+      },
+      {
+        "name": "maxWordsCount",
+        "description": "Maximum number of words that the summary should have",
+        "defaultValue": "1000"
+      }
+    ]
+  }
+}

@@ -1,0 +1,9 @@
+<Project>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <NoWarn>1701;1702;CA1707;CS1591;SA0001;SA1600</NoWarn>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <NoWarn>1701;1702;CA1707;CS1591;SA0001;SA1600</NoWarn>
+  </PropertyGroup>
+</Project>

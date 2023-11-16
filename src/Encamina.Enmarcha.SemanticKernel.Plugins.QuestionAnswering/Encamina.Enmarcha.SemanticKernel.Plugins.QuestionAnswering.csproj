@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Plugins\QuestionAnsweringPlugin\QuestionAnsweringFromContext\config.json" />
+    <EmbeddedResource Include="Plugins\QuestionAnsweringPlugin\QuestionAnsweringFromContext\skprompt.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.SemanticKernel.Abstractions" Version="0.20.230821.4-preview" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Encamina.Enmarcha.SemanticKernel.Plugins.Memory\Encamina.Enmarcha.SemanticKernel.Plugins.Memory.csproj" />
+    <ProjectReference Include="..\Encamina.Enmarcha.SemanticKernel\Encamina.Enmarcha.SemanticKernel.csproj" />
+  </ItemGroup>
+
+</Project>

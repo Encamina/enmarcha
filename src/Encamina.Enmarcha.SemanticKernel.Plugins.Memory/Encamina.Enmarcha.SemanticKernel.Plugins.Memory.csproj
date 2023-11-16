@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.SemanticKernel.Abstractions" Version="0.20.230821.4-preview" />
+    <PackageReference Include="System.Linq.Async" Version="6.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Encamina.Enmarcha.AI.OpenAI.Abstractions\Encamina.Enmarcha.AI.OpenAI.Abstractions.csproj" />
+    <ProjectReference Include="..\Encamina.Enmarcha.Core\Encamina.Enmarcha.Core.csproj" />
+    <ProjectReference Include="..\Encamina.Enmarcha.SemanticKernel.Abstractions\Encamina.Enmarcha.SemanticKernel.Abstractions.csproj" />
+    <ProjectReference Include="..\Encamina.Enmarcha.SemanticKernel\Encamina.Enmarcha.SemanticKernel.csproj" />
+  </ItemGroup>
+
+</Project>

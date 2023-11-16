@@ -1,0 +1,26 @@
+{
+  "schema": 1,
+  "type": "completion",
+  "description": "Extract keyphrases from a given text or any text document",
+  "completion": {
+    "max_tokens": 1250,
+    "temperature": 0.0,
+    "top_p": 1.0,
+    "presence_penalty": 0.0,
+    "frequency_penalty": 0.0
+  },
+  "input": {
+    "parameters": [
+      {
+        "name": "input",
+        "description": "Text to analyze and extract keyphrases from",
+        "defaultValue": ""
+      },
+      {
+        "name": "topKeyphrases",
+        "description": "Top number of keyphrases to extract",
+        "defaultValue": "2"
+      }
+    ]
+  }
+}

@@ -1,0 +1,36 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>netstandard2.1</TargetFramework>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="6.0.0" />
+        <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="6.0.0" />
+        <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="6.0.4" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\Encamina.Enmarcha.Core\Encamina.Enmarcha.Core.csproj" />
+        <ProjectReference Include="..\Encamina.Enmarcha.Entities.Abstractions\Encamina.Enmarcha.Entities.Abstractions.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <Compile Update="Resources\ExceptionMessages.Designer.cs">
+            <DesignTime>True</DesignTime>
+            <AutoGen>True</AutoGen>
+            <DependentUpon>ExceptionMessages.resx</DependentUpon>
+        </Compile>
+    </ItemGroup>
+
+    <ItemGroup>
+        <EmbeddedResource Update="Resources\ExceptionMessages.resx">
+            <Generator>ResXFileCodeGenerator</Generator>
+            <LastGenOutput>ExceptionMessages.Designer.cs</LastGenOutput>
+        </EmbeddedResource>
+        <EmbeddedResource Update="Resources\ExceptionMessages.es.resx">
+            <Generator></Generator>
+        </EmbeddedResource>
+    </ItemGroup>
+
+</Project>
