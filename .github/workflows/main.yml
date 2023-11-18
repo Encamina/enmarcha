@@ -95,7 +95,15 @@ jobs:
       with:
         name: enmarcha-libraries-${{ github.run_number }}
         path: ./
-        
+
+    - name: Unzip Libraries
+      run: |
+        cd ${{ github.workspace }}
+        unzip nupkg.zip -d nupkg
+
+    #- name: Push Libraries to NuGet.org
+    #  run: dotnet nuget push **/*.nupkg --api-key ${{ secrets.NUGET_KEY }} --source https://api.nuget.org/v3/index.json --skip-duplicate
+      
     - name: Create Tag
       run: |
         git config --global user.name "${{ github.actor }}"
