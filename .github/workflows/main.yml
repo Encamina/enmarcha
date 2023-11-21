@@ -46,19 +46,19 @@ jobs:
       - name: Build & Pack Libraries
         run: dotnet pack --nologo --no-restore --configuration ${{env.BuildConfiguration}} -p:IncludeSymbols=true -p:SymbolPackageFormat=snupkg -p:SourceLinkCreate=true --output nupkg  
 
-      #- name: SonarCloud Scan
-      #  uses: sonarsource/sonarcloud-github-action@master
-      #  env:
-      #    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      #    SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-      #  with:
-      #    projectBaseDir: ${{ github.workspace }}
-      #    args: >
-      #      -Dsonar.organization=encamina
-      #      -Dsonar.projectKey=${{secrets.SONAR_TOKEN}}
-      #      -Dsonar.python.coverage.reportPaths=CodeCoverage/Cobertura.xml
-      #      -Dsonar.tests=tst/
-      #      -Dsonar.verbose=true
+      - name: Sonar - Install SonarCloud scanners
+        run: |
+          dotnet tool install --global dotnet-sonarscanner
+
+      - name: Sonar - Build and analyze
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: |
+          dotnet-sonarscanner begin /k:"${{ secrets.SONAR_PROJECT_KEY }}" /o:"encamina" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.exclusions="**/tst/**/*" /d:sonar.cs.opencover.reportsPaths="**/tst/**/coverage.opencover.xml"
+          dotnet build --configuration ${{env.BuildConfiguration}}          
+          dotnet test --collect:"XPlat Code Coverage;Format=opencover"
+          dotnet-sonarscanner end
 
       - name: Zip Libraries
         run: |
@@ -101,8 +101,8 @@ jobs:
         cd ${{ github.workspace }}
         unzip nupkg.zip -d nupkg
 
-    #- name: Push Libraries to NuGet.org
-    #  run: dotnet nuget push **/*.nupkg --api-key ${{ secrets.NUGET_KEY }} --source https://api.nuget.org/v3/index.json --skip-duplicate
+    - name: Push Libraries to NuGet.org
+      run: dotnet nuget push **/*.nupkg --api-key ${{ secrets.NUGET_KEY }} --source https://api.nuget.org/v3/index.json --skip-duplicate
       
     - name: Create Tag
       run: |
