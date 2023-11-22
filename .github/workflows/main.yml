@@ -44,7 +44,7 @@ jobs:
         run: cat coverage/Cobertura/SummaryGithub.md >> $GITHUB_STEP_SUMMARY
           
       - name: Build & Pack Libraries
-        run: dotnet pack --nologo --no-restore --configuration ${{env.BuildConfiguration}} -p:IncludeSymbols=true -p:SymbolPackageFormat=snupkg -p:SourceLinkCreate=true --output nupkg  
+        run: dotnet pack --nologo --no-restore --configuration ${{env.BuildConfiguration}} -p:IncludeSymbols=true -p:SymbolPackageFormat=snupkg -p:SourceLinkCreate=true -p:DebugType=full --output nupkg  
 
       - name: Sonar - Install SonarCloud scanners
         run: |
