@@ -55,7 +55,7 @@ public class MyClass
     }
 }
 ```
-The above code is not fully functional as the intent prediction service (available in another NuGet package) has not yet to be configured.
+The above code is not fully functional as the intent prediction service (available in another NuGet package) has yet to be configured.
 
 Another functionality available in this NuGet package is an implementation of [ITextSplitter](../Encamina.Enmarcha.AI.Abstractions/ITextSplitter.cs), Specifically [RecursiveCharacterTextSplitter](./TextSplitters/RecursiveCharacterTextSplitter.cs). This implementation is the recommended of `ITextSplitter` for generic texts. It splits texts in order until the chunks are small enough (based on ITextSplitter.ChunkSize). As long as possible, it will strive to keep all paragraphs, sentences, and then words, intact, since those would generically seem to be the strongest semantically related pieces of text that could be split. There is an extension method available to add it directly to the dependency container. First, you need to add the [TextSplitterOptions](../Encamina.Enmarcha.AI.Abstractions/TextSplitterOptions.cs) to your project configuration. You can achieve this by using any [configuration provider](https://learn.microsoft.com/en-us/dotnet/core/extensions/configuration). The following code is an example of the `appsettings.json` file that contains the TextSplitterOptions settings:
 
