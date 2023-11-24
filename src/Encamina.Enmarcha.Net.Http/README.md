@@ -6,13 +6,13 @@ This project provides utilities related to HTTP, covering aspects such as the mo
 
 ### Nuget package
 
-First, [install NuGet](http://docs.nuget.org/docs/start-here/installing-nuget). Then, install [Encamina.Enmarcha.Net.Http](ToDo:NugetUrl) from the package manager console:
+First, [install NuGet](http://docs.nuget.org/docs/start-here/installing-nuget). Then, install [Encamina.Enmarcha.Net.Http](https://www.nuget.org/packages/Encamina.Enmarcha.Net.Http) from the package manager console:
 
     PM> Install-Package Encamina.Enmarcha.Net.Http
 
 ### .NET CLI:
 
-First, [install .NET CLI](https://learn.microsoft.com/en-us/dotnet/core/tools/). Then, install [Encamina.Enmarcha.Net.Http](ToDo:NugetUrl) from the .NET CLI:
+First, [install .NET CLI](https://learn.microsoft.com/en-us/dotnet/core/tools/). Then, install [Encamina.Enmarcha.Net.Http](https://www.nuget.org/packages/Encamina.Enmarcha.Net.Http) from the .NET CLI:
 
     dotnet add package Encamina.Enmarcha.Net.Http
 

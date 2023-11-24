@@ -6,13 +6,13 @@ This project mainly contains Text Translations abstractions used by other ENMARC
 
 ### Nuget package
 
-First, [install NuGet](http://docs.nuget.org/docs/start-here/installing-nuget). Then, install [Encamina.Enmarcha.AI.TextsTranslation.Abstractions](ToDo:NugetUrl) from the package manager console:
+First, [install NuGet](http://docs.nuget.org/docs/start-here/installing-nuget). Then, install [Encamina.Enmarcha.AI.TextsTranslation.Abstractions](https://www.nuget.org/packages/Encamina.Enmarcha.AI.TextsTranslation.Abstractions) from the package manager console:
 
     PM> Install-Package Encamina.Enmarcha.AI.TextsTranslation.Abstractions
 
 ### .NET CLI:
 
-[Install .NET CLI](https://learn.microsoft.com/en-us/dotnet/core/tools/). Next, install [Encamina.Enmarcha.AI.TextsTranslation.Abstractions](ToDo:NugetUrl) from the .NET CLI:
+[Install .NET CLI](https://learn.microsoft.com/en-us/dotnet/core/tools/). Next, install [Encamina.Enmarcha.AI.TextsTranslation.Abstractions](https://www.nuget.org/packages/Encamina.Enmarcha.AI.TextsTranslation.Abstractions) from the .NET CLI:
 
     dotnet add package Encamina.Enmarcha.AI.TextsTranslation.Abstractions
 

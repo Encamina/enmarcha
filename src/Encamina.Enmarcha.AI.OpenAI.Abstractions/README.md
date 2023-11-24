@@ -6,13 +6,13 @@ This project mainly contains abstractions used by other ENMARCHA NuGet packages.
 
 ### Nuget package
 
-First, [install NuGet](http://docs.nuget.org/docs/start-here/installing-nuget). Then, install [Encamina.Enmarcha.AI.OpenAI.Abstractions](ToDo:NugetUrl) from the package manager console:
+First, [install NuGet](http://docs.nuget.org/docs/start-here/installing-nuget). Then, install [Encamina.Enmarcha.AI.OpenAI.Abstractions](https://www.nuget.org/packages/Encamina.Enmarcha.AI.OpenAI.Abstractions) from the package manager console:
 
     PM> Install-Package Encamina.Enmarcha.AI.OpenAI.Abstractions
 
 ### .NET CLI:
 
-[Install .NET CLI](https://learn.microsoft.com/en-us/dotnet/core/tools/). Next, install [Encamina.Enmarcha.AI.OpenAI.Abstractions](ToDo:NugetUrl) from the .NET CLI:
+[Install .NET CLI](https://learn.microsoft.com/en-us/dotnet/core/tools/). Next, install [Encamina.Enmarcha.AI.OpenAI.Abstractions](https://www.nuget.org/packages/Encamina.Enmarcha.AI.OpenAI.Abstractions) from the .NET CLI:
 
     dotnet add package Encamina.Enmarcha.AI.OpenAI.Abstractions
 

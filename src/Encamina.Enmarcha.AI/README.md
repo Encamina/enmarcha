@@ -6,13 +6,13 @@ This project contains base classes, interfaces, and common functionalities share
 
 ### Nuget package
 
-First, [install NuGet](http://docs.nuget.org/docs/start-here/installing-nuget). Then, install [Encamina.Enmarcha.AI](ToDo:NugetUrl) from the package manager console:
+First, [install NuGet](http://docs.nuget.org/docs/start-here/installing-nuget). Then, install [Encamina.Enmarcha.AI](https://www.nuget.org/packages/Encamina.Enmarcha.AI) from the package manager console:
 
     PM> Install-Package Encamina.Enmarcha.AI
 
 ### .NET CLI:
 
-[Install .NET CLI](https://learn.microsoft.com/en-us/dotnet/core/tools/). Next, install [Encamina.Enmarcha.AI](ToDo:NugetUrl) from the .NET CLI:
+[Install .NET CLI](https://learn.microsoft.com/en-us/dotnet/core/tools/). Next, install [Encamina.Enmarcha.AI](https://www.nuget.org/packages/Encamina.Enmarcha.AI) from the .NET CLI:
 
     dotnet add package Encamina.Enmarcha.AI
 
