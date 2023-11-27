@@ -6,13 +6,13 @@ ASP.NET MVC Formatters is a project that provides input and output formatters fo
 
 ### Nuget package
 
-First, [install NuGet](http://docs.nuget.org/docs/start-here/installing-nuget). Then, install [Encamina.Enmarcha.AspNet.Mvc.Formatters](ToDo:NugetUrl) from the package manager console:
+First, [install NuGet](http://docs.nuget.org/docs/start-here/installing-nuget). Then, install [Encamina.Enmarcha.AspNet.Mvc.Formatters](https://www.nuget.org/packages/Encamina.Enmarcha.AspNet.Mvc.Formatters) from the package manager console:
 
     PM> Install-Package Encamina.Enmarcha.AspNet.Mvc.Formatters
 
 ### .NET CLI:
 
-First, [install .NET CLI](https://learn.microsoft.com/en-us/dotnet/core/tools/). Then, install [Encamina.Enmarcha.AspNet.Mvc.Formatters](ToDo:NugetUrl) from the .NET CLI:
+First, [install .NET CLI](https://learn.microsoft.com/en-us/dotnet/core/tools/). Then, install [Encamina.Enmarcha.AspNet.Mvc.Formatters](https://www.nuget.org/packages/Encamina.Enmarcha.AspNet.Mvc.Formatters) from the .NET CLI:
 
     dotnet add package Encamina.Enmarcha.AspNet.Mvc.Formatters
 
