@@ -20,7 +20,7 @@ public class ChatWithHistoryPluginOptions
     /// Gets a valid instance of <see cref="OpenAIRequestSettings"/> (from Semantic Kernel) with settings for the chat request.
     /// </summary>
     [Required]
-    public OpenAIRequestSettings ChatRequestSettings { get; init; } = new()
+    public virtual OpenAIRequestSettings ChatRequestSettings { get; init; } = new()
     {
         MaxTokens = 1000,
         Temperature = 0.8,
