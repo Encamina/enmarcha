@@ -20,6 +20,7 @@ public class ChatWithHistoryPluginOptions
     /// Gets a valid instance of <see cref="ChatRequestSettings"/> (from Semantic Kernel) with settings for the chat request.
     /// </summary>
     [Required]
+    [Obsolete(@"Due to future changes in Semantic Kernel library, this property type `ChatRequestSettings` will change to `OpenAIRequestSettings `. The signature of this property will change in future versions of this library.")]
     public virtual ChatRequestSettings ChatRequestSettings { get; init; } = new()
     {
         MaxTokens = 1000,

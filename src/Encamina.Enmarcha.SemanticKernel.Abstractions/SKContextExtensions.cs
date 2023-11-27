@@ -30,6 +30,7 @@ public static class SKContextExtensions
     /// Checks if an error occurred in a Semantic Kernel context, and throws an exception if so.
     /// </summary>
     /// <param name="context">The SKContext object.</param>
+    [Obsolete(@"Due to changes in Semantic Kernel library, this method will be removed in future versions of this library. Use common exception handling techniques instead.")]
     public static void ValidateAndThrowIfErrorOccurred(this SKContext context)
     {
         if (context.ErrorOccurred)
