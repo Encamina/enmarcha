@@ -2,9 +2,10 @@
 using Encamina.Enmarcha.Data.EntityFramework;
 
 namespace Sample_Data_EntityFramework;
-public class MyFullUnitOfWork : FullUnitOfWork, IFullUnitOfWork
+
+public class FinantialUnitOfWork : FullUnitOfWork, IFullUnitOfWork
 {
-    public MyFullUnitOfWork(MyDBContext dBContext)
+    public FinantialUnitOfWork(FinantialDBContext dBContext)
         : base(dBContext)
     {
     }

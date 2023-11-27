@@ -28,7 +28,7 @@ public class Bill : IEntity
     public string EmployeeId { get; set; }
 }
 
-public class MyDBContext : DbContext
+public class FinantialDBContext : DbContext
 {
     public DbSet<Bill> Bills { get; set; }
 

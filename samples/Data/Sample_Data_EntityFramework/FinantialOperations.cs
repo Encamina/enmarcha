@@ -1,11 +1,12 @@
 ﻿using Encamina.Enmarcha.Data.Abstractions;
 
 namespace Sample_Data_EntityFramework;
-public class MyClass
+
+public class FinantialOperations
 {
     private readonly IFullUnitOfWork uow;
 
-    public MyClass(IFullUnitOfWork uow)
+    public FinantialOperations(IFullUnitOfWork uow)
     {
         this.uow = uow;
     }

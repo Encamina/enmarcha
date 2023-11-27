@@ -16,12 +16,12 @@ internal sealed class Program
 
         hostBuilder.ConfigureServices((hostContext, services) =>
         {
-            services.AddDbContext<MyDBContext>(opt =>
+            services.AddDbContext<FinantialDBContext>(opt =>
             {
                 opt.UseSqlServer(hostContext.Configuration.GetConnectionString("DefaultConnection"));
             });
 
-            services.AddScoped<IFullUnitOfWork, MyFullUnitOfWork>();
+            services.AddScoped<IFullUnitOfWork, FinantialUnitOfWork>();
         });
 
         var host = hostBuilder.Build();
@@ -30,7 +30,7 @@ internal sealed class Program
         {
             Console.Write("Select an option: \n0 - exit\n1 - Add bill\n2 - Add employee\n3 - Get all bills");
             var input = Console.ReadLine();
-            var myClass = new MyClass(host.Services.GetRequiredService<IFullUnitOfWork>());
+            var finantialSystemOperations = new FinantialOperations(host.Services.GetRequiredService<IFullUnitOfWork>());
 
             switch (input)
             {
@@ -38,25 +38,25 @@ internal sealed class Program
                     return;
                 case "1":
                     Console.WriteLine("Select the employee who created the bill:");
-                    var employees = await myClass.GetAllAsync<Employee>(CancellationToken.None);
+                    var employees = await finantialSystemOperations.GetAllAsync<Employee>(CancellationToken.None);
                     var employeeDictionary = new Dictionary<int, Employee>();
 
-                    for (int i = 0; i < employees.Count(); i++)
+                    for (var i = 0; i < employees.Count(); i++)
                     {
                         var employee = (Employee)employees[i];
                         employeeDictionary.Add(i + 1, employee);
                         Console.WriteLine($"{i + 1} - {employee.FullName}");
                     }
 
-                    int selectedNumber = int.Parse(Console.ReadLine());
+                    var selectedNumber = int.Parse(Console.ReadLine());
 
-                    if (employeeDictionary.TryGetValue(selectedNumber, out Employee selectedEmployee))
+                    if (employeeDictionary.TryGetValue(selectedNumber, out var selectedEmployee))
                     {
                         Console.WriteLine("Concept of the bill:");
                         var concept = Console.ReadLine();
                         Console.WriteLine("Amount of the bill:");
-                        var amount = Double.Parse(Console.ReadLine());
-                        await myClass.AddAsync(new Bill() { Amount = amount, Concept = concept, EmployeeId = selectedEmployee.Id }, CancellationToken.None);
+                        var amount = double.Parse(Console.ReadLine());
+                        await finantialSystemOperations.AddAsync(new Bill() { Amount = amount, Concept = concept, EmployeeId = selectedEmployee.Id }, CancellationToken.None);
                         Console.WriteLine("Bill succesfully uploaded");
                     }
 

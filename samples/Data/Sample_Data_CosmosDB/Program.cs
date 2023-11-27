@@ -1,5 +1,4 @@
-﻿// Create and configure builder
-using Encamina.Enmarcha.Data.Abstractions;
+﻿using Encamina.Enmarcha.Data.Abstractions;
 using Encamina.Enmarcha.Data.Cosmos;
 
 using Microsoft.Extensions.Configuration;
@@ -16,8 +15,7 @@ internal sealed class Program
         {
             configuration.AddJsonFile(path: @"appsettings.json", optional: false, reloadOnChange: true);
             configuration.AddEnvironmentVariables();
-        }
-    );
+        });
 
         hostBuilder.ConfigureServices((hostContext, services) =>
         {
@@ -40,7 +38,7 @@ internal sealed class Program
                     Console.WriteLine("Concept:");
                     var concept = Console.ReadLine();
                     Console.WriteLine("Amount:");
-                    var amount = Double.Parse(Console.ReadLine());
+                    var amount = double.Parse(Console.ReadLine());
                     var bill = new Bill() { Id = Guid.NewGuid().ToString(), Concept = concept, Amount = amount };
                     await repository.AddAsync(bill, CancellationToken.None);
                     var bills = new Bills(host.Services.GetRequiredService<IAsyncRepository<Bill>>());
