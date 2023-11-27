@@ -6,13 +6,13 @@ Bot is a project that primarily contains cross-cutting utilities that can be use
 
 ### Nuget package
 
-First, [install NuGet](http://docs.nuget.org/docs/start-here/installing-nuget). Then, install [Encamina.Enmarcha.Bot](ToDo:NugetUrl) from the package manager console:
+First, [install NuGet](http://docs.nuget.org/docs/start-here/installing-nuget). Then, install [Encamina.Enmarcha.Bot](https://www.nuget.org/packages/Encamina.Enmarcha.Bot) from the package manager console:
 
     PM> Install-Package Encamina.Enmarcha.Bot
 
 ### .NET CLI:
 
-First, [install .NET CLI](https://learn.microsoft.com/en-us/dotnet/core/tools/). Then, install [Encamina.Enmarcha.Bot](ToDo:NugetUrl) from the .NET CLI:
+First, [install .NET CLI](https://learn.microsoft.com/en-us/dotnet/core/tools/). Then, install [Encamina.Enmarcha.Bot](https://www.nuget.org/packages/Encamina.Enmarcha.Bot) from the .NET CLI:
 
     dotnet add package Encamina.Enmarcha.Bot
 

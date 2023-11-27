@@ -6,13 +6,13 @@ Entities Abstractions is a project that primarily contains abstractions used by 
 
 ### Nuget package
 
-First, [install NuGet](http://docs.nuget.org/docs/start-here/installing-nuget). Then, install [Encamina.Enmarcha.Entities.Abstractions](ToDo:NugetUrl) from the package manager console:
+First, [install NuGet](http://docs.nuget.org/docs/start-here/installing-nuget). Then, install [Encamina.Enmarcha.Entities.Abstractions](https://www.nuget.org/packages/Encamina.Enmarcha.Entities.Abstractions) from the package manager console:
 
     PM> Install-Package Encamina.Enmarcha.Entities.Abstractions
 
 ### .NET CLI:
 
-[Install .NET CLI](https://learn.microsoft.com/en-us/dotnet/core/tools/). Next, install [Encamina.Enmarcha.Entities.Abstractions](ToDo:NugetUrl) from the .NET CLI:
+[Install .NET CLI](https://learn.microsoft.com/en-us/dotnet/core/tools/). Next, install [Encamina.Enmarcha.Entities.Abstractions](https://www.nuget.org/packages/Encamina.Enmarcha.Entities.Abstractions) from the .NET CLI:
 
     dotnet add package Encamina.Enmarcha.Entities.Abstractions
 

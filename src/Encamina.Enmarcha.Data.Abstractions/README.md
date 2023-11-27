@@ -6,13 +6,13 @@ This project mainly contains abstractions related to data used by other ENMARCHA
 
 ### Nuget package
 
-First, [install NuGet](http://docs.nuget.org/docs/start-here/installing-nuget). Then, install [Encamina.Enmarcha.Data.Abstractions](ToDo:NugetUrl) from the package manager console:
+First, [install NuGet](http://docs.nuget.org/docs/start-here/installing-nuget). Then, install [Encamina.Enmarcha.Data.Abstractions](https://www.nuget.org/packages/Encamina.Enmarcha.Data.Abstractions) from the package manager console:
 
     PM> Install-Package Encamina.Enmarcha.Data.Abstractions
 
 ### .NET CLI:
 
-First, [install .NET CLI](https://learn.microsoft.com/en-us/dotnet/core/tools/). Then, install [Encamina.Enmarcha.Data.Abstractions](ToDo:NugetUrl) from the .NET CLI:
+First, [install .NET CLI](https://learn.microsoft.com/en-us/dotnet/core/tools/). Then, install [Encamina.Enmarcha.Data.Abstractions](https://www.nuget.org/packages/Encamina.Enmarcha.Data.Abstractions) from the .NET CLI:
 
     dotnet add package Encamina.Enmarcha.Data.Abstractions
 

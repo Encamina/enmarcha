@@ -6,13 +6,13 @@ Entities project mainly contains implementations of interfaces from the NuGet pa
 
 ### Nuget package
 
-First, [install NuGet](http://docs.nuget.org/docs/start-here/installing-nuget). Then, install [Encamina.Enmarcha.Entities](ToDo:NugetUrl) from the package manager console:
+First, [install NuGet](http://docs.nuget.org/docs/start-here/installing-nuget). Then, install [Encamina.Enmarcha.Entities](https://www.nuget.org/packages/Encamina.Enmarcha.Entities) from the package manager console:
 
     PM> Install-Package Encamina.Enmarcha.Entities
 
 ### .NET CLI:
 
-[Install .NET CLI](https://learn.microsoft.com/en-us/dotnet/core/tools/). Next, install [Encamina.Enmarcha.Entities](ToDo:NugetUrl) from the .NET CLI:
+[Install .NET CLI](https://learn.microsoft.com/en-us/dotnet/core/tools/). Next, install [Encamina.Enmarcha.Entities](https://www.nuget.org/packages/Encamina.Enmarcha.Entities) from the .NET CLI:
 
     dotnet add package Encamina.Enmarcha.Entities
 
