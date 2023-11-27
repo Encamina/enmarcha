@@ -16,6 +16,7 @@ public static class IKernelExtensions
     /// <param name="kernel">The <see cref="IKernel"/> instance to add this plugin.</param>
     /// <param name="tokensLengthFunction">A function to count how many tokens are in a string or text.</param>
     /// <returns>A list of all the functions found in this plugin, indexed by function name.</returns>
+    [Obsolete(@"Due to future changes in Semantic Kernel library, the semantic memory will be a dependency outside the `IKernel`. An additional dependency with `ISemanticTextMemory` will be added. The signature of this method will change in future versions of this library.")]
     public static IDictionary<string, ISKFunction> ImportMemoryPlugin(this IKernel kernel, Func<string, int> tokensLengthFunction)
     {
         var memoryQueryPlugin = new MemoryQueryPlugin(kernel, tokensLengthFunction);

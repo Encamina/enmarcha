@@ -20,6 +20,7 @@ public class MemoryQueryPlugin
     /// </summary>
     /// <param name="kernel">The instance of the semantic kernel to work with in this plugin.</param>
     /// <param name="tokenLengthFunction">Function to calculate the length of a string in tokens.</param>
+    [Obsolete(@"Due to future changes in Semantic Kernel library, the semantic memory will be a dependency outside the `IKernel`. The `IKernel` dependency will be replaced with `ISemanticTextMemory`. The signature of this constructor will change in future versions of this library.")]
     public MemoryQueryPlugin(IKernel kernel, Func<string, int> tokenLengthFunction)
     {
         this.kernel = kernel;
