@@ -36,15 +36,12 @@ The main motivation for this update is to take advantage of the latest improveme
 
 ### **Major Changes**
 
-#### `Encamina.Enmarcha.SemanticKernel.Abstractions`
-  - Implementation of `LengthByTokenCount` now uses `SharpToken` instead of `GPT3Tokenizer` which has been removed from `Semantic Kernel`. The count of tokens using the `SharpToken` library remains the same as before. Reference: 
-    * https://github.com/microsoft/semantic-kernel/issues/2508
-    * https://devblogs.microsoft.com/semantic-kernel/introducing-the-v1-0-0-beta1-for-the-net-semantic-kernel-sdk/
-  - New implementation of `LengthByTokenCountUsingEncoding` to count tokens by a given encoding.
+- Added  this `CHANGELOG.md`
+- In `Encamina.Enmarcha.SemanticKernel.Abstractions`, method `ValidateAndThrowIfErrorOccurred` is now obsolete, and will be removed in a future version of this library.
+- In `Encamina.Enmarcha.SemanticKernel.Plugins.Chat`, property `ChatRequestSettings` is now obsolete due to future changes in Semantic Kernel library its type `ChatRequestSettings` will change to `OpenAIRequestSettings `. Therefore, the signature of this property will change in future versions of this library.
+- In `Encamina.Enmarcha.SemanticKernel.Connectors.Memory`, the constructor of `MemoryQueryPlugin` is now obsolete due to future changes in Semantic Kernel library, where the semantic memory will be a dependency outside the `IKernel`. The `IKernel` dependency will be replaced with `ISemanticTextMemory`. The signature of this constructor will change in future versions of this library. 
+- In `Encamina.Enmarcha.SemanticKernel.Connectors.Memory`, the extension method `ImportMemoryPlugin` is now obsolete due to future changes in Semantic Kernel library, where the semantic memory will be a dependency outside the `IKernel`. An additional dependency with `ISemanticTextMemory` will be added to this extension method. The signature of this method will change in future versions of this library.
 
- ### **Major Changes**
-  - Fixed some documentation typos and other boy scouting tasks.
+## [6.0.3.18] and [6.0.3.19]
 
-## [6.0.3.19]
-
-- First Open Source version of ENMARCHA.
+- First Open Source versions of ENMARCHA.

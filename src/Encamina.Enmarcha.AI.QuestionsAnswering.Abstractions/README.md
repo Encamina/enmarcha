@@ -6,13 +6,13 @@ This project mainly contains AI abstractions used by other ENMARCHA NuGet packag
 
 ### Nuget package
 
-First, [install NuGet](http://docs.nuget.org/docs/start-here/installing-nuget). Then, install [Encamina.Enmarcha.AI.QuestionsAnswering.Abstractions](ToDo:NugetUrl) from the package manager console:
+First, [install NuGet](http://docs.nuget.org/docs/start-here/installing-nuget). Then, install [Encamina.Enmarcha.AI.QuestionsAnswering.Abstractions](https://www.nuget.org/packages/Encamina.Enmarcha.AI.QuestionsAnswering.Abstractions) from the package manager console:
 
     PM> Install-Package Encamina.Enmarcha.AI.QuestionsAnswering.Abstractions
 
 ### .NET CLI:
 
-First, [install .NET CLI](https://learn.microsoft.com/en-us/dotnet/core/tools/). Then, install [Encamina.Enmarcha.AI.QuestionsAnswering.Abstractions](ToDo:NugetUrl) from the .NET CLI:
+First, [install .NET CLI](https://learn.microsoft.com/en-us/dotnet/core/tools/). Then, install [Encamina.Enmarcha.AI.QuestionsAnswering.Abstractions](https://www.nuget.org/packages/Encamina.Enmarcha.AI.QuestionsAnswering.Abstractions) from the .NET CLI:
 
     dotnet add package Encamina.Enmarcha.AI.QuestionsAnswering.Abstractions
 

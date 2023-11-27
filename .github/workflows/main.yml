@@ -1,9 +1,16 @@
-name: GitHubAction
+name: ENMARCHA NuGet
 
 on:
   push:
     branches:
-     - releases/*
+     - releases/**
+  pull_request:
+    types:
+      - opened
+      - reopened
+    branches:
+     - releases/**
+  workflow_dispatch:
 
 env:
   BuildConfiguration: ${{ startsWith(github.ref, 'refs/heads/releases') && 'Release' || 'Debug' }}

@@ -6,12 +6,12 @@ MailKit is a project designed to simplify the configuration and sending of email
 
 ### Nuget package
 
-First, [install NuGet](http://docs.nuget.org/docs/start-here/installing-nuget). Then, install [Encamina.Enmarcha.Email.MailKit](ToDo:NugetUrl) from the package manager console:
+First, [install NuGet](http://docs.nuget.org/docs/start-here/installing-nuget). Then, install [Encamina.Enmarcha.Email.MailKit](https://www.nuget.org/packages/Encamina.Enmarcha.Email.MailKit) from the package manager console:
 
     PM> Install-Package Encamina.Enmarcha.Email.MailKit
 
 ### .NET CLI:
-[Install .NET CLI](https://learn.microsoft.com/en-us/dotnet/core/tools/). Next, install [Encamina.Enmarcha.Email.MailKit](ToDo:NugetUrl) from the .NET CLI:
+[Install .NET CLI](https://learn.microsoft.com/en-us/dotnet/core/tools/). Next, install [Encamina.Enmarcha.Email.MailKit](https://www.nuget.org/packages/Encamina.Enmarcha.Email.MailKit) from the .NET CLI:
 
     dotnet add package Encamina.Enmarcha.Email.MailKit
 
