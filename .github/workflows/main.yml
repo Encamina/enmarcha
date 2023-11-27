@@ -5,7 +5,11 @@ on:
     branches:
      - releases/*
   pull_request:
-    types: [opened, reopened]
+    types:
+      - opened
+      - reopened
+    branches:
+     - releases/*
   workflow_dispatch:
 
 env:
