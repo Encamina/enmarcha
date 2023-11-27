@@ -1,6 +1,8 @@
-# ENMARCHA (Your package to accelerate .NET projects)
+# ENMARCHA — Your package to accelerate .NET projects
 
 ENMARCHA aims to speed up the development of various .NET applications by leveraging robust modules that integrate with popular services and frameworks.
+
+[![ENMARCHA NuGet](https://github.com/Encamina/enmarcha/actions/workflows/main.yml/badge.svg)](https://github.com/Encamina/enmarcha/actions/workflows/main.yml)
 
 ## 🚀 Modules
 

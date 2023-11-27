@@ -25,6 +25,15 @@ jobs:
       - name: Restore NuGet Packages
         run: dotnet restore --configfile NuGet.config --verbosity Minimal   
 
+      - name: Sonar - Install SonarCloud scanners
+        run: dotnet tool install --global dotnet-sonarscanner
+
+      - name: Sonar - Begin Analyze
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: dotnet-sonarscanner begin /k:"${{ secrets.SONAR_PROJECT_KEY }}" /o:"${{ secrets.SONAR_ORGANIZATION }}" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.exclusions="**/tst/**/*" /d:sonar.cs.opencover.reportsPaths="**/tst/**/coverage.opencover.xml"          
+
       - name: Test
         run: dotnet test --nologo --no-restore --collect:"XPlat Code Coverage" --configuration  ${{env.BuildConfiguration}} --settings coverlet.runsettings
 
@@ -45,20 +54,12 @@ jobs:
           
       - name: Build & Pack Libraries
         run: dotnet pack --nologo --no-restore --configuration ${{env.BuildConfiguration}} -p:IncludeSymbols=true -p:SymbolPackageFormat=snupkg -p:SourceLinkCreate=true -p:DebugType=full --output nupkg  
-
-      - name: Sonar - Install SonarCloud scanners
-        run: |
-          dotnet tool install --global dotnet-sonarscanner
-
-      - name: Sonar - Analyze
+     
+      - name: Sonar - End Analyze
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: |
-          dotnet-sonarscanner begin /k:"${{ secrets.SONAR_PROJECT_KEY }}" /o:"${{ secrets.SONAR_ORGANIZATION }}" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.exclusions="**/tst/**/*" /d:sonar.cs.opencover.reportsPaths="**/tst/**/coverage.opencover.xml"
-          dotnet build --configuration ${{env.BuildConfiguration}}          
-          dotnet test --collect:"XPlat Code Coverage;Format=opencover"
-          dotnet-sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
+        run: dotnet-sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
 
       - name: Zip Libraries
         run: |
@@ -77,56 +78,56 @@ jobs:
     needs: CI
     if: github.event_name != 'pull_request' && startsWith(github.ref, 'refs/heads/releases')
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-    - name: Read and Store Version
-      id: PassOutputReleaseVersion
-      shell: pwsh
-      run: |
-        $xml = [Xml] (Get-Content "${{ github.workspace }}/Directory.Build.props")
-        $prefix = [System.Linq.Enumerable]::FirstOrDefault($xml.Project.PropertyGroup.VersionPrefix, [Func[object,bool]]{ param($x) $x -ne $null })
-        $suffix = [System.Linq.Enumerable]::FirstOrDefault($xml.Project.PropertyGroup.VersionSuffix, [Func[object,bool]]{ param($x) $x -ne $null })
-        $release_version = ($prefix, $suffix) |  ? { $_ } | Join-String -Separator "-"
-        echo "RELEASE_VERSION=$release_version" >> $env:GITHUB_OUTPUT
+      - name: Read and Store Version
+        id: PassOutputReleaseVersion
+        shell: pwsh
+        run: |
+          $xml = [Xml] (Get-Content "${{ github.workspace }}/Directory.Build.props")
+          $prefix = [System.Linq.Enumerable]::FirstOrDefault($xml.Project.PropertyGroup.VersionPrefix, [Func[object,bool]]{ param($x) $x -ne $null })
+          $suffix = [System.Linq.Enumerable]::FirstOrDefault($xml.Project.PropertyGroup.VersionSuffix, [Func[object,bool]]{ param($x) $x -ne $null })
+          $release_version = ($prefix, $suffix) |  ? { $_ } | Join-String -Separator "-"
+          echo "RELEASE_VERSION=$release_version" >> $env:GITHUB_OUTPUT
 
-    - name: Download Libraries for Continuous Deployment
-      uses: actions/download-artifact@v3
-      with:
-        name: enmarcha-libraries-${{ github.run_number }}
-        path: ./
+      - name: Download Libraries for Continuous Deployment
+        uses: actions/download-artifact@v3
+        with:
+          name: enmarcha-libraries-${{ github.run_number }}
+          path: ./
 
-    - name: Unzip Libraries
-      run: |
-        cd ${{ github.workspace }}
-        unzip nupkg.zip -d nupkg
+      - name: Unzip Libraries
+        run: |
+          cd ${{ github.workspace }}
+          unzip nupkg.zip -d nupkg
 
-    - name: Push Libraries to NuGet.org
-      run: dotnet nuget push **/*.nupkg --api-key ${{ secrets.NUGET_KEY }} --source https://api.nuget.org/v3/index.json --skip-duplicate
+      - name: Push Libraries to NuGet.org
+        run: dotnet nuget push **/*.nupkg --api-key ${{ secrets.NUGET_KEY }} --source https://api.nuget.org/v3/index.json --skip-duplicate
       
-    - name: Create Tag
-      run: |
-        git config --global user.name "${{ github.actor }}"
-        git config --global user.email "${{ github.actor }}@users.noreply.github.com"
-        git tag -a "Release-${{ steps.PassOutputReleaseVersion.outputs.RELEASE_VERSION }}" -m "Version from build ${{ github.run_number }}"
+      - name: Create Tag
+        run: |
+          git config --global user.name "${{ github.actor }}"
+          git config --global user.email "${{ github.actor }}@users.noreply.github.com"
+          git tag -a "Release-${{ steps.PassOutputReleaseVersion.outputs.RELEASE_VERSION }}" -m "Version from build ${{ github.run_number }}"
         
-    - name: Create Release
-      id: create_release
-      uses: actions/create-release@v1.1.4
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        tag_name: "v${{ steps.PassOutputReleaseVersion.outputs.RELEASE_VERSION }}"
-        release_name: "Release ${{ steps.PassOutputReleaseVersion.outputs.RELEASE_VERSION }}"
-        draft: false
-        prerelease: false
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1.1.4
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: "v${{ steps.PassOutputReleaseVersion.outputs.RELEASE_VERSION }}"
+          release_name: "Release ${{ steps.PassOutputReleaseVersion.outputs.RELEASE_VERSION }}"
+          draft: false
+          prerelease: false
 
-    - name: Upload Release Assets
-      uses: actions/upload-release-asset@v1.0.1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ./nupkg.zip
-        asset_name: enmarcha-libraries-${{ steps.PassOutputReleaseVersion.outputs.RELEASE_VERSION }}.zip
-        asset_content_type: application/zip
+      - name: Upload Release Assets
+        uses: actions/upload-release-asset@v1.0.1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./nupkg.zip
+          asset_name: enmarcha-libraries-${{ steps.PassOutputReleaseVersion.outputs.RELEASE_VERSION }}.zip
+          asset_content_type: application/zip
