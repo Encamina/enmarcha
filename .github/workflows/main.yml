@@ -4,6 +4,8 @@ on:
   push:
     branches:
      - releases/*
+  pull_request:
+    types: [opened, reopened]
   workflow_dispatch:
 
 env:
