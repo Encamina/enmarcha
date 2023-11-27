@@ -123,6 +123,21 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Encamina.Enmarcha.SemanticK
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Encamina.Enmarcha.SemanticKernel.Abstractions", "src\Encamina.Enmarcha.SemanticKernel.Abstractions\Encamina.Enmarcha.SemanticKernel.Abstractions.csproj", "{04DA11A3-937C-4D0A-ABDA-65AE9E0FCA5C}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Samples", "Samples", "{C082F40D-38BE-4283-829E-29346AF71EAE}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Data", "Data", "{B9E33951-E387-4A80-A652-A908FCBB34F3}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sample_Data_CosmosDB", "samples\Data\Sample_Data_CosmosDB\Sample_Data_CosmosDB.csproj", "{264A9DAA-2556-479A-A0F0-20A1DE14AC44}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sample_Data_EntityFramework", "samples\Data\Sample_Data_EntityFramework\Sample_Data_EntityFramework.csproj", "{68E17F14-A683-450C-A557-F27F4DF4DFD9}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SemanticKernel", "SemanticKernel", "{43252034-27E2-4981-AC2D-EA986B287863}"
+	ProjectSection(SolutionItems) = preProject
+		samples\SemanticKernel\Sample_SemanticKernel_Text\Sample_SemanticKernel_Text.csproj = samples\SemanticKernel\Sample_SemanticKernel_Text\Sample_SemanticKernel_Text.csproj
+	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sample_SemanticKernel_QuestionAnswering", "samples\SemanticKernel\Sample_SemanticKernel_QuestionAnswering\Sample_SemanticKernel_QuestionAnswering.csproj", "{661506FB-E0A7-4D6E-997F-A5CA12315424}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -313,6 +328,18 @@ Global
 		{04DA11A3-937C-4D0A-ABDA-65AE9E0FCA5C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{04DA11A3-937C-4D0A-ABDA-65AE9E0FCA5C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{04DA11A3-937C-4D0A-ABDA-65AE9E0FCA5C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{264A9DAA-2556-479A-A0F0-20A1DE14AC44}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{264A9DAA-2556-479A-A0F0-20A1DE14AC44}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{264A9DAA-2556-479A-A0F0-20A1DE14AC44}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{264A9DAA-2556-479A-A0F0-20A1DE14AC44}.Release|Any CPU.Build.0 = Release|Any CPU
+		{68E17F14-A683-450C-A557-F27F4DF4DFD9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{68E17F14-A683-450C-A557-F27F4DF4DFD9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{68E17F14-A683-450C-A557-F27F4DF4DFD9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{68E17F14-A683-450C-A557-F27F4DF4DFD9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{661506FB-E0A7-4D6E-997F-A5CA12315424}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{661506FB-E0A7-4D6E-997F-A5CA12315424}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{661506FB-E0A7-4D6E-997F-A5CA12315424}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{661506FB-E0A7-4D6E-997F-A5CA12315424}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -322,6 +349,11 @@ Global
 		{3D07ED6E-FB91-428B-83E2-5797D790DD54} = {CBD50B5F-AFB8-4DA1-9FD7-17D98EB3ED78}
 		{E8152699-CECB-4BF5-884F-0A760554286E} = {CBD50B5F-AFB8-4DA1-9FD7-17D98EB3ED78}
 		{60C7833C-1E40-4725-8561-D86B424D78A5} = {CBD50B5F-AFB8-4DA1-9FD7-17D98EB3ED78}
+		{B9E33951-E387-4A80-A652-A908FCBB34F3} = {C082F40D-38BE-4283-829E-29346AF71EAE}
+		{264A9DAA-2556-479A-A0F0-20A1DE14AC44} = {B9E33951-E387-4A80-A652-A908FCBB34F3}
+		{68E17F14-A683-450C-A557-F27F4DF4DFD9} = {B9E33951-E387-4A80-A652-A908FCBB34F3}
+		{43252034-27E2-4981-AC2D-EA986B287863} = {C082F40D-38BE-4283-829E-29346AF71EAE}
+		{661506FB-E0A7-4D6E-997F-A5CA12315424} = {43252034-27E2-4981-AC2D-EA986B287863}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {F30DF47A-541C-4383-BCEB-E4108D06A70E}

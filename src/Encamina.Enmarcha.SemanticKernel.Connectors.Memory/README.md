@@ -6,13 +6,13 @@ Memory Connectors is a project that allows adding specific [IMemoryStore](https:
 
 ### Nuget package
 
-First, [install NuGet](http://docs.nuget.org/docs/start-here/installing-nuget). Then, install [Encamina.Enmarcha.SemanticKernel.Connectors.Memory](ToDo:NugetUrl) from the package manager console:
+First, [install NuGet](http://docs.nuget.org/docs/start-here/installing-nuget). Then, install [Encamina.Enmarcha.SemanticKernel.Connectors.Memory](https://www.nuget.org/packages/Encamina.Enmarcha.SemanticKernel.Connectors.Memory) from the package manager console:
 
     PM> Install-Package Encamina.Enmarcha.SemanticKernel.Connectors.Memory
 
 ### .NET CLI:
 
-[Install .NET CLI](https://learn.microsoft.com/en-us/dotnet/core/tools/). Next, install [Encamina.Enmarcha.SemanticKernel.Connectors.Memory](ToDo:NugetUrl) from the .NET CLI:
+[Install .NET CLI](https://learn.microsoft.com/en-us/dotnet/core/tools/). Next, install [Encamina.Enmarcha.SemanticKernel.Connectors.Memory](https://www.nuget.org/packages/Encamina.Enmarcha.SemanticKernel.Connectors.Memory) from the .NET CLI:
 
     dotnet add package Encamina.Enmarcha.SemanticKernel.Connectors.Memory
 

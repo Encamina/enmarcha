@@ -6,13 +6,13 @@ Azure Intent Prediction is a wrapper project for Azure Cognitive Language Servic
 
 ### Nuget package
 
-First, [install NuGet](http://docs.nuget.org/docs/start-here/installing-nuget). Then, install [Encamina.Enmarcha.AI.IntentsPrediction.Azure](ToDo:NugetUrl) from the package manager console:
+First, [install NuGet](http://docs.nuget.org/docs/start-here/installing-nuget). Then, install [Encamina.Enmarcha.AI.IntentsPrediction.Azure](https://www.nuget.org/packages/Encamina.Enmarcha.AI.IntentsPrediction.Azure) from the package manager console:
 
     PM> Install-Package Encamina.Enmarcha.AI.IntentsPrediction.Azure
 
 ### .NET CLI:
 
-[Install .NET CLI](https://learn.microsoft.com/en-us/dotnet/core/tools/). Next, install [Encamina.Enmarcha.AI.IntentsPrediction.Azure](ToDo:NugetUrl) from the .NET CLI:
+[Install .NET CLI](https://learn.microsoft.com/en-us/dotnet/core/tools/). Next, install [Encamina.Enmarcha.AI.IntentsPrediction.Azure](https://www.nuget.org/packages/Encamina.Enmarcha.AI.IntentsPrediction.Azure) from the .NET CLI:
 
     dotnet add package Encamina.Enmarcha.AI.IntentsPrediction.Azure
 
