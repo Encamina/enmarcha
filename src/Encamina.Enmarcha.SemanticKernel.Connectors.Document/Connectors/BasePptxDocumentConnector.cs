@@ -1,10 +1,12 @@
-﻿using System.Text;
+﻿// Ignore Spelling: Pptx
+
+using System.Text;
 
 using CommunityToolkit.Diagnostics;
 
 using DocumentFormat.OpenXml.Packaging;
 
-using Microsoft.SemanticKernel.Skills.Document;
+using Microsoft.SemanticKernel.Plugins.Document;
 
 namespace Encamina.Enmarcha.SemanticKernel.Connectors.Document.Connectors;
 
@@ -46,13 +48,13 @@ public abstract class BasePptxDocumentConnector : IDocumentConnector
     /// <inheritdoc/>
     public virtual void Initialize(Stream stream)
     {
-        // Intentionally not implemented to comly with the Liskov Substitution Principle...
+        // Intentionally not implemented to comply with the Liskov Substitution Principle...
     }
 
     /// <inheritdoc/>
     public virtual void AppendText(Stream stream, string text)
     {
-        // Intentionally not implemented to comly with the Liskov Substitution Principle...
+        // Intentionally not implemented to comply with the Liskov Substitution Principle...
     }
 
     /// <summary>

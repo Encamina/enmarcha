@@ -25,17 +25,4 @@ public static class SKContextExtensions
             ? throw new ArgumentException($"Variable {variableName} not found in SK Context.")
             : null;
     }
-
-    /// <summary>
-    /// Checks if an error occurred in a Semantic Kernel context, and throws an exception if so.
-    /// </summary>
-    /// <param name="context">The SKContext object.</param>
-    public static void ValidateAndThrowIfErrorOccurred(this SKContext context)
-    {
-        if (context.ErrorOccurred)
-        {
-            // Current implementation of Semantic Kernel sets `ErrorOccurred` to `true` if `LastException` is not null.
-            throw new InvalidOperationException(context.LastException.Message);
-        }
-    }
 }

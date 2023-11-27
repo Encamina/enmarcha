@@ -1,4 +1,7 @@
-﻿using System.Text;
+﻿// Ignore Spelling: Pdf
+// Ignore Spelling: Toc
+
+using System.Text;
 using System.Text.RegularExpressions;
 
 using CommunityToolkit.Diagnostics;

@@ -1,4 +1,6 @@
-﻿using System.Collections.ObjectModel;
+﻿// Ignore Spelling: Upsert
+
+using System.Collections.ObjectModel;
 using System.Runtime.CompilerServices;
 using System.Text.Json;
 
@@ -26,14 +28,14 @@ public class MemoryManager : IMemoryManager
     /// Initializes a new instance of the <see cref="MemoryManager"/> class.
     /// </summary>
     /// <param name="kernel">
-    /// A valid instance of <see cref="IKernel"/>, used to get the configured text embeddingfs generation service (<see cref="ITextEmbeddingGeneration"/>) required by this manager.
+    /// A valid instance of <see cref="IKernel"/>, used to get the configured text embeddings generation service (<see cref="ITextEmbeddingGeneration"/>) required by this manager.
     /// </param>
     /// <param name="memoryStore">A valid instance of a <see cref="IMemoryStore"/> to manage.</param>
     public MemoryManager(IKernel kernel, IMemoryStore memoryStore)
     {
         textEmbeddingGeneration = kernel.GetService<ITextEmbeddingGeneration>(); // If the service is not configured, a `KernelException` is thrown...
 
-        this.logger = kernel.Logger;
+        this.logger = kernel.LoggerFactory.CreateLogger<MemoryManager>();
         this.memoryStore = memoryStore;
     }
 

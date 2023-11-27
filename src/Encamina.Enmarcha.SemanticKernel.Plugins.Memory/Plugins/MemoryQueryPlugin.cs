@@ -3,7 +3,6 @@ using System.Text;
 
 using Microsoft.SemanticKernel;
 using Microsoft.SemanticKernel.Memory;
-using Microsoft.SemanticKernel.SkillDefinition;
 
 namespace Encamina.Enmarcha.SemanticKernel.Plugins.Memory.Plugins;
 
@@ -12,22 +11,22 @@ namespace Encamina.Enmarcha.SemanticKernel.Plugins.Memory.Plugins;
 /// </summary>
 public class MemoryQueryPlugin
 {
-    private readonly IKernel kernel;
+    private readonly ISemanticTextMemory semanticTextMemory;
     private readonly Func<string, int> tokenLengthFunction;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="MemoryQueryPlugin"/> class.
     /// </summary>
-    /// <param name="kernel">The instance of the semantic kernel to work with in this plugin.</param>
+    /// <param name="semanticTextMemory">A valid instance of a semantic memory to recall memories associated with text.</param>
     /// <param name="tokenLengthFunction">Function to calculate the length of a string in tokens.</param>
-    public MemoryQueryPlugin(IKernel kernel, Func<string, int> tokenLengthFunction)
+    public MemoryQueryPlugin(ISemanticTextMemory semanticTextMemory, Func<string, int> tokenLengthFunction)
     {
-        this.kernel = kernel;
+        this.semanticTextMemory = semanticTextMemory;
         this.tokenLengthFunction = tokenLengthFunction ?? throw new ArgumentNullException(nameof(tokenLengthFunction));
     }
 
     /// <summary>
-    /// Searchs for a query in a memory's collections.
+    /// Searches for a query in a memory's collections.
     /// </summary>
     /// <param name="query">The query to look for in the memory's collections.</param>
     /// <param name="collectionsStr">A list of collections names, separated by the value of <paramref name="collectionSeparator"/> (usually a comma).</param>
@@ -54,7 +53,7 @@ public class MemoryQueryPlugin
 
         foreach (var documentCollection in collections)
         {
-            var results = kernel.Memory.SearchAsync(
+            var results = semanticTextMemory.SearchAsync(
                 documentCollection,
                 query,
                 limit: resultsLimit,

@@ -1,16 +1,11 @@
-﻿using System.Reflection;
-using System.Xml.Linq;
-
-using Encamina.Enmarcha.Core.Extensions;
-
-using Microsoft.SemanticKernel.SkillDefinition;
+﻿using Encamina.Enmarcha.Core.Extensions;
 
 namespace Encamina.Enmarcha.SemanticKernel.Plugins.Chat;
 
 #pragma warning disable S3218 // Inner class members should not shadow outer class "static" or type members
 
 /// <summary>
-/// Information about plguins in this assembly.
+/// Information about plugins in this assembly.
 /// </summary>
 public static class PluginsInfo
 {

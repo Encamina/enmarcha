@@ -1,8 +1,10 @@
-﻿using System.Text;
+﻿// Ignore Spelling: tXT
+
+using System.Text;
 
 using CommunityToolkit.Diagnostics;
 
-using Microsoft.SemanticKernel.Skills.Document;
+using Microsoft.SemanticKernel.Plugins.Document;
 
 namespace Encamina.Enmarcha.SemanticKernel.Connectors.Document.Connectors;
 
@@ -34,12 +36,12 @@ public sealed class TxtDocumentConnector : IDocumentConnector
     /// <inheritdoc/>
     public void Initialize(Stream stream)
     {
-        // Intentionally not implemented to comly with the Liskov Substitution Principle...
+        // Intentionally not implemented to comply with the Liskov Substitution Principle...
     }
 
     /// <inheritdoc/>
     public void AppendText(Stream stream, string text)
     {
-        // Intentionally not implemented to comly with the Liskov Substitution Principle...
+        // Intentionally not implemented to comply with the Liskov Substitution Principle...
     }
 }

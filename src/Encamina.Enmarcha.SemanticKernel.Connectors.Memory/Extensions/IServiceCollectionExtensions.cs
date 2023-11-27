@@ -42,7 +42,7 @@ public static class IServiceCollectionExtensions
                 httpClient.ConfigureHttpClientForQdrant(qdrantOptions);
             });
 
-            return new QdrantMemoryStore(httpClient, qdrantOptions.VectorSize, logger: sp.GetService<ILogger<QdrantMemoryStore>>());
+            return new QdrantMemoryStore(httpClient, qdrantOptions.VectorSize, loggerFactory: sp.GetService<ILoggerFactory>());
         });
     }
 }

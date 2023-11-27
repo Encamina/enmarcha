@@ -117,10 +117,7 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="NotSemanticFunction" xml:space="preserve">
-    <value>Function '{0}' is not semantic function!</value>
-  </data>
   <data name="PromptFileNotFound" xml:space="preserve">
-    <value>Prompt file ('skprompt.txt') for function '{0}' from plug-in '{0} not found at '{templatePath}'!</value>
+    <value>Prompt file ('skprompt.txt') for function '{function}' from plug-in '{plugin} not found at '{templatePath}'!</value>
   </data>
 </root>

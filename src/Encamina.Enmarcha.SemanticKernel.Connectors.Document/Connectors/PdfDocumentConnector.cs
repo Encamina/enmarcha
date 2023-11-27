@@ -1,6 +1,8 @@
-﻿using CommunityToolkit.Diagnostics;
+﻿// Ignore Spelling: Pdf
 
-using Microsoft.SemanticKernel.Skills.Document;
+using CommunityToolkit.Diagnostics;
+
+using Microsoft.SemanticKernel.Plugins.Document;
 
 using UglyToad.PdfPig;
 

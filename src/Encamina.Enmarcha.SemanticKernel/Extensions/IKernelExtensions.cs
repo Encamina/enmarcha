@@ -1,14 +1,12 @@
 ﻿using System.Reflection;
-
-using CommunityToolkit.Diagnostics;
+using System.Text.Json;
 
 using Encamina.Enmarcha.Core.Extensions;
 
 using Encamina.Enmarcha.SemanticKernel.Extensions.Resources;
 
 using Microsoft.SemanticKernel;
-using Microsoft.SemanticKernel.SemanticFunctions;
-using Microsoft.SemanticKernel.SkillDefinition;
+using Microsoft.SemanticKernel.TemplateEngine;
 
 namespace Encamina.Enmarcha.SemanticKernel.Extensions;
 
@@ -27,7 +25,7 @@ public static class IKernelExtensions
     /// </remarks>
     /// <param name="kernel">The <see cref="IKernel"/> to work with.</param>
     /// <param name="skFunction">The semantic function representation.</param>
-    /// <param name="functionPluginDirectory">The directory containing the plugin and the files that represens and configures the semantic function.</param>
+    /// <param name="functionPluginDirectory">The directory containing the plugin and the files that represents and configures the semantic function.</param>
     /// <param name="contextVariables">A collection of context variables.</param>
     /// <param name="cancellationToken">A cancellation token that can be used to receive notice of cancellation.</param>
     /// <returns>A string containing the generated prompt.</returns>
@@ -37,8 +35,6 @@ public static class IKernelExtensions
     /// </exception>
     public static async Task<string> GetSemanticFunctionPromptAsync(this IKernel kernel, ISKFunction skFunction, string functionPluginDirectory, IDictionary<string, string> contextVariables, CancellationToken cancellationToken)
     {
-        Guard.IsTrue(skFunction.IsSemantic, ExceptionMessages.ResourceManager.GetFormattedStringByCurrentCulture(nameof(ExceptionMessages.NotSemanticFunction), skFunction.Name));
-
         var kernelContext = kernel.CreateNewContext();
 
         foreach (var (key, value) in contextVariables)
@@ -50,7 +46,7 @@ public static class IKernelExtensions
 
         return File.Exists(promptTemplatePath)
             ? await kernel.PromptTemplateEngine.RenderAsync(await File.ReadAllTextAsync(promptTemplatePath, cancellationToken), kernelContext, cancellationToken)
-            : throw new FileNotFoundException(ExceptionMessages.ResourceManager.GetFormattedStringByCurrentCulture(nameof(ExceptionMessages.NotSemanticFunction), skFunction.Name));
+            : throw new FileNotFoundException(ExceptionMessages.ResourceManager.GetFormattedStringByCurrentCulture(nameof(ExceptionMessages.PromptFileNotFound), skFunction.Name, skFunction.SkillName, functionPluginDirectory));
     }
 
     /// <summary>
@@ -73,8 +69,6 @@ public static class IKernelExtensions
     /// </exception>
     public static async Task<string> GetSemanticFunctionPromptAsync(this IKernel kernel, ISKFunction skFunction, Assembly assembly, IDictionary<string, string> contextVariables, CancellationToken cancellationToken)
     {
-        Guard.IsTrue(skFunction.IsSemantic, ExceptionMessages.ResourceManager.GetFormattedStringByCurrentCulture(nameof(ExceptionMessages.NotSemanticFunction), skFunction.Name));
-
         var kernelContext = kernel.CreateNewContext();
 
         foreach (var (key, value) in contextVariables)
@@ -99,7 +93,7 @@ public static class IKernelExtensions
     /// </remarks>
     /// <param name="kernel">The <see cref="IKernel"/> to work with.</param>
     /// <param name="skFunction">The semantic function representation.</param>
-    /// <param name="functionPluginDirectory">The directory containing the plugin and the files that represens and configures the semantic function.</param>
+    /// <param name="functionPluginDirectory">The directory containing the plugin and the files that represents and configures the semantic function.</param>
     /// <param name="contextVariables">A collection of context variables.</param>
     /// <param name="tokenLengthFunction">A function to calculate length of a string in tokens..</param>
     /// <param name="cancellationToken">A cancellation token that can be used to receive notice of cancellation.</param>
@@ -110,9 +104,7 @@ public static class IKernelExtensions
     /// </exception>
     public static async Task<int> GetSemanticFunctionUsedTokensAsync(this IKernel kernel, ISKFunction skFunction, string functionPluginDirectory, IDictionary<string, string> contextVariables, Func<string, int> tokenLengthFunction, CancellationToken cancellationToken)
     {
-        Guard.IsTrue(skFunction.IsSemantic, ExceptionMessages.ResourceManager.GetFormattedStringByCurrentCulture(nameof(ExceptionMessages.NotSemanticFunction), skFunction.Name));
-
-        return tokenLengthFunction(await kernel.GetSemanticFunctionPromptAsync(skFunction, functionPluginDirectory, contextVariables, cancellationToken)) + (skFunction.RequestSettings.MaxTokens ?? 0);
+        return tokenLengthFunction(await kernel.GetSemanticFunctionPromptAsync(skFunction, functionPluginDirectory, contextVariables, cancellationToken)) + GetMaxTokensFrom(skFunction);
     }
 
     /// <summary>
@@ -136,9 +128,7 @@ public static class IKernelExtensions
     /// </exception>
     public static async Task<int> GetSemanticFunctionUsedTokensAsync(this IKernel kernel, ISKFunction skFunction, Assembly assembly, IDictionary<string, string> contextVariables, Func<string, int> tokenLengthFunction, CancellationToken cancellationToken)
     {
-        Guard.IsTrue(skFunction.IsSemantic, ExceptionMessages.ResourceManager.GetFormattedStringByCurrentCulture(nameof(ExceptionMessages.NotSemanticFunction), skFunction.Name));
-
-        return tokenLengthFunction(await kernel.GetSemanticFunctionPromptAsync(skFunction, assembly, contextVariables, cancellationToken)) + (skFunction.RequestSettings.MaxTokens ?? 0);
+        return tokenLengthFunction(await kernel.GetSemanticFunctionPromptAsync(skFunction, assembly, contextVariables, cancellationToken)) + GetMaxTokensFrom(skFunction);
     }
 
     /// <summary>
@@ -164,13 +154,13 @@ public static class IKernelExtensions
                                             // Example: «xxxx.yyyyy.zzzzz.[SkillName].[FunctionName].config.json» and «xxxx.yyyyy.zzzzz.[SkillName].[FunctionName].skprompt.txt»
                                             return new
                                             {
-                                                FileName = $@"{resourceNameTokens[^2]}.{resourceNameTokens[^1]}", // The file name and its extension are the last two tokens (first and second positon from the end).
+                                                FileName = $@"{resourceNameTokens[^2]}.{resourceNameTokens[^1]}", // The file name and its extension are the last two tokens (first and second position from the end).
                                                 FunctionName = resourceNameTokens[^3], // Next always comes the name of the function, which is in the third position from the end.
                                                 PluginName = resourceNameTokens[^4],  // Finally comes the name of the plugin, which is in the fourth position from the end.
                                                 ResourceName = resourceName,
                                             };
                                         })
-                                        .GroupBy(x => (x.PluginName, x.FunctionName), x => (x.ResourceName, x.FileName)) // Group by skill and function names to get all the resources (prompt and configuratio) for each function.
+                                        .GroupBy(x => (x.PluginName, x.FunctionName), x => (x.ResourceName, x.FileName)) // Group by skill and function names to get all the resources (prompt and configuration) for each function.
                                         ;
 
         foreach (var pluginsInfoGroup in pluginsInfoGroups)
@@ -182,14 +172,17 @@ public static class IKernelExtensions
 
             var promptTemplate = new PromptTemplate(ReadResource(assembly, functionPromptResourceName), promptTemplateConfig, kernel.PromptTemplateEngine);
 
-            var functionConfig = new SemanticFunctionConfig(promptTemplateConfig, promptTemplate);
-
             var (pluginName, functionName) = pluginsInfoGroup.Key;
 
-            plugins[functionName] = kernel.RegisterSemanticFunction(pluginName, functionName, functionConfig);
+            plugins[functionName] = kernel.RegisterSemanticFunction(pluginName, functionName, promptTemplateConfig, promptTemplate);
         }
 
         return plugins;
+    }
+
+    private static int GetMaxTokensFrom(ISKFunction sKFunction)
+    {
+        return sKFunction.RequestSettings.ExtensionData.TryGetValue(@"max_tokens", out var maxTokensObj) && maxTokensObj is JsonElement maxTokensElement && maxTokensElement.TryGetInt32(out var value) ? value : 0;
     }
 
     private static string ReadResource(Assembly assembly, string resourceName)

@@ -3,7 +3,6 @@
 using Encamina.Enmarcha.SemanticKernel.Extensions;
 
 using Microsoft.SemanticKernel;
-using Microsoft.SemanticKernel.SkillDefinition;
 
 namespace Encamina.Enmarcha.SemanticKernel.Plugins.Text;
 

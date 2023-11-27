@@ -3,12 +3,10 @@ using System.Globalization;
 using System.Reflection;
 
 using Encamina.Enmarcha.AI.OpenAI.Abstractions;
-using Encamina.Enmarcha.SemanticKernel.Abstractions;
 using Encamina.Enmarcha.SemanticKernel.Extensions;
 
 using Microsoft.SemanticKernel;
 using Microsoft.SemanticKernel.Orchestration;
-using Microsoft.SemanticKernel.SkillDefinition;
 
 namespace Encamina.Enmarcha.SemanticKernel.Plugins.QuestionAnswering.Plugins;
 
@@ -68,10 +66,10 @@ public class QuestionAnsweringPlugin
         var questionAnsweringVariables = new ContextVariables();
         questionAnsweringVariables.Set(@"input", question);
 
-        var questionAnsweringFunction = kernel.Skills.GetFunction(PluginsInfo.QuestionAnsweringPlugin.Name, PluginsInfo.QuestionAnsweringPlugin.Functions.QuestionAnsweringFromContext.Name);
+        var questionAnsweringFunction = kernel.Functions.GetFunction(PluginsInfo.QuestionAnsweringPlugin.Name, PluginsInfo.QuestionAnsweringPlugin.Functions.QuestionAnsweringFromContext.Name);
 
         // Calculates the number of tokens used in the «QuestionAnsweringFromContext» function.
-        // This amount will be subtracted from the total tokens of the model to determine the token limit required by the «QueryMemory» funtion from the «MemoryQueryPlugin».
+        // This amount will be subtracted from the total tokens of the model to determine the token limit required by the «QueryMemory» function from the «MemoryQueryPlugin».
         var questionAnsweringFunctionUsedTokens
             = await kernel.GetSemanticFunctionUsedTokensAsync(questionAnsweringFunction, Assembly.GetExecutingAssembly(), questionAnsweringVariables, tokenLengthFunction, cancellationToken);
 
@@ -85,21 +83,22 @@ public class QuestionAnsweringPlugin
         memoryQueryVariables.Set(@"collectionSeparator", collectionSeparator.ToString(CultureInfo.InvariantCulture));
 
         // Executes the «QueryMemory» function from the «MemoryQueryPlugin»
-        var memoryQueryFunction = kernel.Skills.GetFunction(Memory.PluginsInfo.MemoryQueryPlugin.Name, Memory.PluginsInfo.MemoryQueryPlugin.Functions.QueryMemory.Name);
-        var memoryQueryResultContext = await kernel.RunAsync(memoryQueryVariables, cancellationToken, memoryQueryFunction);
-        memoryQueryResultContext.ValidateAndThrowIfErrorOccurred();
+        var memoryQueryFunction = kernel.Functions.GetFunction(Memory.PluginsInfo.MemoryQueryPlugin.Name, Memory.PluginsInfo.MemoryQueryPlugin.Functions.QueryMemory.Name);
 
-        // If the «QueryMemory» function from the «MemoryQueryPlugin» does not return any result, there is no point in trying to responsd. In such a case, `null` is returned.
-        if (string.IsNullOrWhiteSpace(memoryQueryResultContext.Result))
+        var memoryQueryFunctionResult = await memoryQueryFunction.InvokeAsync(kernel.CreateNewContext(memoryQueryVariables), null, cancellationToken);
+
+        var memoryQueryResult = memoryQueryFunctionResult.GetValue<string>();
+
+        // If the «QueryMemory» function from the «MemoryQueryPlugin» does not return any result, there is no point in trying to answering the question. In such a case, `null` is returned.
+        if (string.IsNullOrWhiteSpace(memoryQueryResult))
         {
             return null;
         }
 
         // Return to the context of the response function and set the result of the memory query.
-        questionAnsweringVariables.Set(@"context", memoryQueryResultContext.Result);
-        var questionAnsweringResultContext = await kernel.RunAsync(questionAnsweringVariables, cancellationToken, questionAnsweringFunction);
-        questionAnsweringResultContext.ValidateAndThrowIfErrorOccurred();
+        questionAnsweringVariables.Set(@"context", memoryQueryResult);
+        var questionAnsweringFunctionResult = await questionAnsweringFunction.InvokeAsync(kernel.CreateNewContext(questionAnsweringVariables), null, cancellationToken);
 
-        return questionAnsweringResultContext.Result;
+        return questionAnsweringFunctionResult.GetValue<string>();
     }
 }
