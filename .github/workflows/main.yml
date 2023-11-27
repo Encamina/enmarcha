@@ -1,4 +1,4 @@
-name: GitHubAction
+name: ENMARCHA NuGet
 
 on:
   push:
