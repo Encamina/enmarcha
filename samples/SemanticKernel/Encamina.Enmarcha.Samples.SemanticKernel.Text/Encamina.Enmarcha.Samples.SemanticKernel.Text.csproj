@@ -7,13 +7,13 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
-  <ItemGroup>
-    <Content Include="appsettings.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
+    <ItemGroup>
+        <None Update="appsettings.json">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+    </ItemGroup>
 
-  <ItemGroup>
+    <ItemGroup>
     <ProjectReference Include="..\..\..\src\Encamina.Enmarcha.SemanticKernel.Plugins.Text\Encamina.Enmarcha.SemanticKernel.Plugins.Text.csproj" />
   </ItemGroup>
 

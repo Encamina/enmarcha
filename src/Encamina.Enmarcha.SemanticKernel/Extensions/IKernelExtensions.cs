@@ -5,8 +5,10 @@ using Encamina.Enmarcha.Core.Extensions;
 
 using Encamina.Enmarcha.SemanticKernel.Extensions.Resources;
 
+using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.SemanticKernel;
 using Microsoft.SemanticKernel.TemplateEngine;
+using Microsoft.SemanticKernel.TemplateEngine.Basic;
 
 namespace Encamina.Enmarcha.SemanticKernel.Extensions;
 
@@ -18,21 +20,12 @@ public static class IKernelExtensions
     /// <summary>
     /// Generates the final prompt for a given semantic function in a directory located plugin, and using the context variables.
     /// </summary>
-    /// <remarks>
-    /// The <paramref name="skFunction"/> parameter must be a semantic function (i.e., the value of the <see cref="ISKFunction.IsSemantic"/> property must
-    /// be <see langword="true"/>, otherwise an <see cref="ArgumentException"/>.
-    /// will be thrown.
-    /// </remarks>
     /// <param name="kernel">The <see cref="IKernel"/> to work with.</param>
     /// <param name="skFunction">The semantic function representation.</param>
     /// <param name="functionPluginDirectory">The directory containing the plugin and the files that represents and configures the semantic function.</param>
     /// <param name="contextVariables">A collection of context variables.</param>
     /// <param name="cancellationToken">A cancellation token that can be used to receive notice of cancellation.</param>
     /// <returns>A string containing the generated prompt.</returns>
-    /// <exception cref="ArgumentException">
-    /// If the <paramref name="skFunction"/> parameter is not a semantic function (i.e., the value of the <see cref="ISKFunction.IsSemantic"/> property is <see langword="false"/>.
-    /// will be thrown.
-    /// </exception>
     public static async Task<string> GetSemanticFunctionPromptAsync(this IKernel kernel, ISKFunction skFunction, string functionPluginDirectory, IDictionary<string, string> contextVariables, CancellationToken cancellationToken)
     {
         var kernelContext = kernel.CreateNewContext();
@@ -52,21 +45,12 @@ public static class IKernelExtensions
     /// <summary>
     /// Generates the final prompt for a given semantic function from embedded resources in an assembly, using the context variables.
     /// </summary>
-    /// <remarks>
-    /// The <paramref name="skFunction"/> parameter must be a semantic function (i.e., the value of the <see cref="ISKFunction.IsSemantic"/> property must
-    /// be <see langword="true"/>, otherwise an <see cref="ArgumentException"/>.
-    /// will be thrown.
-    /// </remarks>
     /// <param name="kernel">The <see cref="IKernel"/> to work with.</param>
     /// <param name="skFunction">The semantic function representation.</param>
     /// <param name="assembly">The assembly containing the embedded resources that represents and configures the semantic function.</param>
     /// <param name="contextVariables">A collection of context variables.</param>
     /// <param name="cancellationToken">A cancellation token that can be used to receive notice of cancellation.</param>
-    /// <returns>A string containing the generated prompt.</returns>
-    /// <exception cref="ArgumentException">
-    /// If the <paramref name="skFunction"/> parameter is not a semantic function (i.e., the value of the <see cref="ISKFunction.IsSemantic"/> property is <see langword="false"/>.
-    /// will be thrown.
-    /// </exception>
+    /// <returns>A string containing the generated prompt.</returns>    
     public static async Task<string> GetSemanticFunctionPromptAsync(this IKernel kernel, ISKFunction skFunction, Assembly assembly, IDictionary<string, string> contextVariables, CancellationToken cancellationToken)
     {
         var kernelContext = kernel.CreateNewContext();
@@ -76,21 +60,28 @@ public static class IKernelExtensions
             kernelContext.Variables[key] = value;
         }
 
-        var resourceName = assembly.GetManifestResourceNames()
-                                   .SingleOrDefault(resourceName => resourceName.IndexOf($"{skFunction.SkillName}.{skFunction.Name}", StringComparison.OrdinalIgnoreCase) != -1
-                                                                        && resourceName.EndsWith(Constants.PromptFile, StringComparison.OrdinalIgnoreCase));
+        var resourceNames = assembly.GetManifestResourceNames()
+                                    .Where(resourceName => resourceName.IndexOf($"{skFunction.SkillName}.{skFunction.Name}", StringComparison.OrdinalIgnoreCase) != -1)
+                                    .ToList(); // Enumerate here to improve performance.
 
-        return await kernel.PromptTemplateEngine.RenderAsync(await ReadResourceAsync(assembly, resourceName), kernelContext, cancellationToken);
+        var promptConfigurationResourceName = resourceNames.SingleOrDefault(resourceName => resourceName.EndsWith(Constants.ConfigFile, StringComparison.OrdinalIgnoreCase));
+        var promptTemplateResourceName = resourceNames.SingleOrDefault(resourceName => resourceName.EndsWith(Constants.PromptFile, StringComparison.OrdinalIgnoreCase));
+
+        if (string.IsNullOrEmpty(promptConfigurationResourceName) || string.IsNullOrEmpty(promptTemplateResourceName))
+        {
+            return null;
+        }
+
+        // TODO : Check this once the final version of Semantic Kernel is released (it seems that it will be changed by `KernelPromptTemplateFactory`)...
+        var promptTemplateConfig = PromptTemplateConfig.FromJson(await ReadResourceAsync(assembly, promptConfigurationResourceName));
+        var promptTemplate = new BasicPromptTemplateFactory(kernel.LoggerFactory).Create(await ReadResourceAsync(assembly, promptTemplateResourceName), promptTemplateConfig);
+
+        return await promptTemplate.RenderAsync(kernelContext, cancellationToken);
     }
 
     /// <summary>
     /// Calculates the current total number of tokens used in generating a prompt of a given semantic function in a directory located plugin, and using the context variables.
     /// </summary>
-    /// <remarks>
-    /// The <paramref name="skFunction"/> parameter must be a semantic function (i.e., the value of the <see cref="ISKFunction.IsSemantic"/> property must
-    /// be <see langword="true"/>, otherwise an <see cref="ArgumentException"/>.
-    /// will be thrown.
-    /// </remarks>
     /// <param name="kernel">The <see cref="IKernel"/> to work with.</param>
     /// <param name="skFunction">The semantic function representation.</param>
     /// <param name="functionPluginDirectory">The directory containing the plugin and the files that represents and configures the semantic function.</param>
@@ -98,10 +89,6 @@ public static class IKernelExtensions
     /// <param name="tokenLengthFunction">A function to calculate length of a string in tokens..</param>
     /// <param name="cancellationToken">A cancellation token that can be used to receive notice of cancellation.</param>
     /// <returns>The total number of tokens used plus the maximum allowed response tokens specified in the function.</returns>
-    /// <exception cref="ArgumentException">
-    /// If the <paramref name="skFunction"/> parameter is not a semantic function (i.e., the value of the <see cref="ISKFunction.IsSemantic"/> property is <see langword="false"/>.
-    /// will be thrown.
-    /// </exception>
     public static async Task<int> GetSemanticFunctionUsedTokensAsync(this IKernel kernel, ISKFunction skFunction, string functionPluginDirectory, IDictionary<string, string> contextVariables, Func<string, int> tokenLengthFunction, CancellationToken cancellationToken)
     {
         return tokenLengthFunction(await kernel.GetSemanticFunctionPromptAsync(skFunction, functionPluginDirectory, contextVariables, cancellationToken)) + GetMaxTokensFrom(skFunction);
@@ -110,11 +97,6 @@ public static class IKernelExtensions
     /// <summary>
     /// Calculates the current total number of tokens used in generating a prompt of a given semantic function from embedded resources in an assembly, using the context variables.
     /// </summary>
-    /// <remarks>
-    /// The <paramref name="skFunction"/> parameter must be a semantic function (i.e., the value of the <see cref="ISKFunction.IsSemantic"/> property must
-    /// be <see langword="true"/>, otherwise an <see cref="ArgumentException"/>.
-    /// will be thrown.
-    /// </remarks>
     /// <param name="kernel">The <see cref="IKernel"/> to work with.</param>
     /// <param name="skFunction">The semantic function representation.</param>
     /// <param name="assembly">The assembly containing the embedded resources that represents and configures the semantic function.</param>
@@ -122,10 +104,6 @@ public static class IKernelExtensions
     /// <param name="tokenLengthFunction">A function to calculate length of a string in tokens..</param>
     /// <param name="cancellationToken">A cancellation token that can be used to receive notice of cancellation.</param>
     /// <returns>The total number of tokens used plus the maximum allowed response tokens specified in the function.</returns>
-    /// <exception cref="ArgumentException">
-    /// If the <paramref name="skFunction"/> parameter is not a semantic function (i.e., the value of the <see cref="ISKFunction.IsSemantic"/> property is <see langword="false"/>.
-    /// will be thrown.
-    /// </exception>
     public static async Task<int> GetSemanticFunctionUsedTokensAsync(this IKernel kernel, ISKFunction skFunction, Assembly assembly, IDictionary<string, string> contextVariables, Func<string, int> tokenLengthFunction, CancellationToken cancellationToken)
     {
         return tokenLengthFunction(await kernel.GetSemanticFunctionPromptAsync(skFunction, assembly, contextVariables, cancellationToken)) + GetMaxTokensFrom(skFunction);
@@ -170,7 +148,8 @@ public static class IKernelExtensions
 
             var promptTemplateConfig = PromptTemplateConfig.FromJson(ReadResource(assembly, functionConfigResourceName));
 
-            var promptTemplate = new PromptTemplate(ReadResource(assembly, functionPromptResourceName), promptTemplateConfig, kernel.PromptTemplateEngine);
+            // TODO : Check this once the final version of Semantic Kernel is released (it seems that it will be changed by `KernelPromptTemplateFactory`)...
+            var promptTemplate = new BasicPromptTemplateFactory(kernel.LoggerFactory).Create(ReadResource(assembly, functionPromptResourceName), promptTemplateConfig);
 
             var (pluginName, functionName) = pluginsInfoGroup.Key;
 

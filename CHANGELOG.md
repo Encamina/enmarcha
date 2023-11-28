@@ -33,14 +33,18 @@ Sadly, some warnings regarding types or members obsolescence could not be addres
 
 ### Breaking Changes
 
+- Updated `Semantic Kernel` libraries to version `1.0.0-beta8`.
 - `Encamina.Enmarcha.SemanticKernel.Abstractions`
   * Removed method `ValidateAndThrowIfErrorOccurred`.
   * Removed properties `ChatModelName`, `CompletionsModelName`, and `EmbeddingsModelName` from `SemanticKernelOptions`.
 - The following methods do not throw an `ArgumentException` if the instance of `ISKFunction` is not a semantic function, since now `Semantic Kernel` does not longer differentiates between Semantic and Native functions:
   * GetSemanticFunctionPromptAsync
   * GetSemanticFunctionUsedTokensAsync
+- The extension method `ImportQuestionAnsweringPlugin` in `Encamina.Enmarcha.SemanticKernel.Plugins.QuestionAnswering` does not import the Memory plugin anymore. If the usage of the Question Answering plugin requires memory support, use the `ImportQuestionAnsweringPluginWithMemory` extension method instead. Remember to add a valid instance of `ISemanticTextMemory` as a service in the dependency container.
 
 ### Major Changes
+
+- New extension method `ImportQuestionAnsweringPluginWithMemory` in `Encamina.Enmarcha.SemanticKernel.Plugins.QuestionAnswering` to support memories when getting context for the Question Answering plugin. Remember to add a valid instance of `ISemanticTextMemory` as a service in the dependency container.
 
 ### Minor Changes
 - Renamed sample projects to match Microsoft's naming conventions.

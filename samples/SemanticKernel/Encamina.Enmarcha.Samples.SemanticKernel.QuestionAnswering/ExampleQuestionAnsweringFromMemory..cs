@@ -35,7 +35,7 @@ internal static class ExampleQuestionAnsweringFromMemory
             // Add Semantic Kernel options
             services.AddOptions<SemanticKernelOptions>().Bind(hostContext.Configuration.GetSection(nameof(SemanticKernelOptions))).ValidateDataAnnotations().ValidateOnStart();
 
-            // Here use the desired implementation (Qdrant, Volatile...)
+            // Here use any desired implementation (Qdrant, Volatile...)
             services.AddSingleton<IMemoryStore, VolatileMemoryStore>();
 
             // Initialize semantic memory for text (i.e., ISemanticTextMemory).
@@ -43,7 +43,7 @@ internal static class ExampleQuestionAnsweringFromMemory
             {
                 return new MemoryBuilder()
                     .WithAzureOpenAITextEmbeddingGenerationService(options.EmbeddingsModelDeploymentName, options.Endpoint.ToString(), options.Key)
-                    .WithMemoryStore(new VolatileMemoryStore())
+                    .WithMemoryStore(sp.GetRequiredService<IMemoryStore>())
                     .Build();
             });
 
@@ -56,7 +56,7 @@ internal static class ExampleQuestionAnsweringFromMemory
                     .Build();
 
                 // Import Question Answering plugin
-                kernel.ImportQuestionAnsweringPlugin(sp, ILengthFunctions.LengthByTokenCount);
+                kernel.ImportQuestionAnsweringPluginWithMemory(sp, ILengthFunctions.LengthByTokenCount);
 
                 return kernel;
             });
@@ -67,7 +67,7 @@ internal static class ExampleQuestionAnsweringFromMemory
         var host = hostBuilder.Build();
 
         // Initialize mock memory
-        var mockMemoryInformation = new MockMemoryInformation(host.Services.GetService<IMemoryManager>(), host.Services.GetService<IMemoryStore>());
+        var mockMemoryInformation = new MockMemoryInformation(host.Services.GetRequiredService<IMemoryManager>(), host.Services.GetRequiredService<IMemoryStore>());
         await mockMemoryInformation.CreateCollection();
         await mockMemoryInformation.SaveDataMockAsync();
 

@@ -8,6 +8,7 @@
         <PackageReference Include="Microsoft.Extensions.Hosting" Version="6.0.1" />
         <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="6.0.0" />
         <PackageReference Include="Microsoft.Extensions.Options.DataAnnotations" Version="6.0.0" />
+        <PackageReference Include="Microsoft.SemanticKernel.TemplateEngine.Basic" Version="1.0.0-beta8" />
         <PackageReference Include="System.Linq.Async" Version="6.0.1" />
     </ItemGroup>
 
