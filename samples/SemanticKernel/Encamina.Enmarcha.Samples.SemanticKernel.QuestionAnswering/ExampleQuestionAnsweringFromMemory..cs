@@ -1,19 +1,18 @@
 ﻿using Encamina.Enmarcha.SemanticKernel.Abstractions;
-using Encamina.Enmarcha.SemanticKernel.Plugins.Memory;
 using Encamina.Enmarcha.SemanticKernel.Plugins.QuestionAnswering;
 
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+
 using Microsoft.SemanticKernel;
+using Microsoft.SemanticKernel.Connectors.AI.OpenAI;
 using Microsoft.SemanticKernel.Memory;
+using Microsoft.SemanticKernel.Plugins.Memory;
 
-using Sample_SemanticKernelQuestionAnswering.Memory;
-using Sample_SemanticKernelQuestionAnswering.QuestionAnsweringPlugin;
+namespace Encamina.Enmarcha.Samples.SemanticKernel.QuestionAnswering;
 
-namespace Sample_SemanticKernelQuestionAnswering;
-
-public static class Example_QuestionAnsweringFromMemory
+internal static class ExampleQuestionAnsweringFromMemory
 {
     public static async Task RunAsync()
     {
@@ -29,30 +28,35 @@ public static class Example_QuestionAnsweringFromMemory
         // Configure service
         hostBuilder.ConfigureServices((hostContext, services) =>
         {
+            // Get semantic kernel options
+            var options = hostContext.Configuration.GetRequiredSection(nameof(SemanticKernelOptions)).Get<SemanticKernelOptions>()
+                ?? throw new InvalidOperationException(@$"Missing configuration for {nameof(SemanticKernelOptions)}");
+
             // Add Semantic Kernel options
             services.AddOptions<SemanticKernelOptions>().Bind(hostContext.Configuration.GetSection(nameof(SemanticKernelOptions))).ValidateDataAnnotations().ValidateOnStart();
 
             // Here use the desired implementation (Qdrant, Volatile...)
             services.AddSingleton<IMemoryStore, VolatileMemoryStore>();
 
+            // Initialize semantic memory for text (i.e., ISemanticTextMemory).
+            services.AddSingleton(sp =>
+            {
+                return new MemoryBuilder()
+                    .WithAzureOpenAITextEmbeddingGenerationService(options.EmbeddingsModelDeploymentName, options.Endpoint.ToString(), options.Key)
+                    .WithMemoryStore(new VolatileMemoryStore())
+                    .Build();
+            });
+
             services.AddScoped(sp =>
             {
-                // Get semantic kernel options
-                var options = hostContext.Configuration.GetRequiredSection(nameof(SemanticKernelOptions)).Get<SemanticKernelOptions>()
-                ?? throw new InvalidOperationException(@$"Missing configuration for {nameof(SemanticKernelOptions)}");
-
                 // Initialize semantic kernel
                 var kernel = new KernelBuilder()
-                    .WithMemoryStorage(sp.GetService<IMemoryStore>())
-                    .WithAzureChatCompletionService(options.ChatModelDeploymentName, options.Endpoint.ToString(), options.Key)
-                    .WithAzureTextEmbeddingGenerationService(options.EmbeddingsModelDeploymentName, options.Endpoint.ToString(), options.Key)
+                    .WithAzureOpenAIChatCompletionService(options.ChatModelDeploymentName, options.Endpoint.ToString(), options.Key)
+                    .WithAzureOpenAITextEmbeddingGenerationService(options.EmbeddingsModelDeploymentName, options.Endpoint.ToString(), options.Key)
                     .Build();
 
                 // Import Question Answering plugin
                 kernel.ImportQuestionAnsweringPlugin(sp, ILengthFunctions.LengthByTokenCount);
-
-                // Import Memory Plugin
-                kernel.ImportMemoryPlugin(ILengthFunctions.LengthByTokenCount);
 
                 return kernel;
             });
@@ -70,5 +74,7 @@ public static class Example_QuestionAnsweringFromMemory
         // Initialize Q&A from Memory
         var testQuestionAnswering = new TestQuestionAnswering(host.Services.GetService<IKernel>());
         var result = await testQuestionAnswering.TestQuestionAnsweringFromMemoryAsync();
+
+        Console.WriteLine($@"RESULT: {result}");
     }
 }

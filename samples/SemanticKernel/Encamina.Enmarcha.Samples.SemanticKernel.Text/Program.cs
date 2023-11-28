@@ -4,11 +4,12 @@ using Encamina.Enmarcha.SemanticKernel.Plugins.Text;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+
 using Microsoft.SemanticKernel;
 
-using Sample_SemanticKernel_Text.Text;
+namespace Encamina.Enmarcha.Samples.SemanticKernel.Text;
 
-internal sealed class Program
+internal static class Program
 {
     private static async Task Main(string[] args)
     {
@@ -30,7 +31,7 @@ internal sealed class Program
 
                 // Initialize semantic kernel
                 var kernel = new KernelBuilder()
-                    .WithAzureChatCompletionService(options.ChatModelDeploymentName, options.Endpoint.ToString(), options.Key)
+                    .WithAzureOpenAIChatCompletionService(options.ChatModelDeploymentName, options.Endpoint.ToString(), options.Key)
                     .Build();
 
                 kernel.ImportTextPlugin();
@@ -42,10 +43,10 @@ internal sealed class Program
         var host = hostBuilder.Build();
 
         // Initialize Examples
-        var exampleClass = new MyClass(host.Services.GetService<IKernel>());
+        var example = new Example(host.Services.GetRequiredService<IKernel>());
 
-        await exampleClass.TestSummaryAsync();
+        await example.TestSummaryAsync();
 
-        await exampleClass.TextKeyPhrasesAsync();
+        await example.TextKeyPhrasesAsync();
     }
 }

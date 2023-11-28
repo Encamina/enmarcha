@@ -20,9 +20,16 @@ Previous classification is not required if changes are simple or all belong to t
 
 ### Important
 
-This version updates the `Semantic Kernel` library to version `1.0.0-beta8`, which introduces a lot of breaking changes in the code that mostly translate in multiple obsolete warnings. Eventually, newer versions of this library will fix these obsolescences once a final version of `Semantic Kernel` is used.
+This version updates the `Semantic Kernel` library to version `1.0.0-beta8`, which introduces a lot of breaking changes in the code that mostly translate into multiple obsolescence warnings. Eventually, newer versions of this library will fix these warnings once a final version of `Semantic Kernel` is used.
 
 The main motivation for this update is to take advantage of the latest improvements in the `Semantic Kernel` library, like the `Stepwise Planner` or Function Calls, plus better integrations with LLMs like OpenAI, among many other improvements.
+
+Sadly, some warnings regarding types or members obsolescence could not be addresses until the Microsoft team behind `Semantic Kernel` provides a final version of the library. So far, these warnings are:
+
+ - CS0618: *IKernel.PromptTemplateEngine' is obsolete: 'PromptTemplateEngine has been replaced with PromptTemplateFactory and will be null. If you pass an PromptTemplateEngine instance when creating a Kernel it will be wrapped in an instance of IPromptTemplateFactory. This will be removed in a future release.*
+ - CS0618: *ISKFunction.RequestSettings' is obsolete: 'Use PromptTemplateConfig.ModelSettings instead. This will be removed in a future release.*
+ - CS0618: *ISKFunction.SkillName' is obsolete: 'Methods, properties and classes which include Skill in the name have been renamed. Use ISKFunction.SkillName instead. This will be removed in a future release.*
+ - CS0618: *PromptTemplate' is obsolete: 'IPromptTemplateEngine is being replaced with IPromptTemplateFactory. This will be removed in a future release.*
 
 ### Breaking Changes
 
@@ -32,7 +39,15 @@ The main motivation for this update is to take advantage of the latest improveme
 - The following methods do not throw an `ArgumentException` if the instance of `ISKFunction` is not a semantic function, since now `Semantic Kernel` does not longer differentiates between Semantic and Native functions:
   * GetSemanticFunctionPromptAsync
   * GetSemanticFunctionUsedTokensAsync
-  
+
+### Major Changes
+
+### Minor Changes
+- Renamed sample projects to match Microsoft's naming conventions.
+- Sample projects also use the new `Semantic Kernel` library version `1.0.0-beta8`.
+- Some boy scouting by editing the comments in the code to have correct grammar and fixing some StyleCop warnings.
+
+## [6.0.3.20]
 
 ### **Major Changes**
 

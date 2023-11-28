@@ -5,9 +5,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
-using Sample_Data_CosmosDB;
+namespace Encamina.Enmarcha.Samples.Data.CosmosDB;
 
-internal sealed class Program
+internal static class Program
 {
     private static async Task Main(string[] args)
     {

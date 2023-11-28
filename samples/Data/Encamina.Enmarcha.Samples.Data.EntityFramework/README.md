@@ -1,6 +1,6 @@
 # Running the EntityFramework ENMARCHA Nuget sample
 
-The EntityFramework ENMARCHA Nuget provides a similar Microsoft Entity Framework experience using SQL Server databasde. SQL Server is a relational database management system (RDBMS) developed by Microsoft. This guide will assist you in executing the sample.
+The Entity Framework ENMARCHA Nuget provides a similar Microsoft Entity Framework experience using SQL Server databasde. SQL Server is a relational database management system (RDBMS) developed by Microsoft. This guide will assist you in executing the sample.
 
 
 ## Prerequisites
@@ -32,7 +32,7 @@ CREATE TABLE BILL
 ```
 - Go to the database general information, copy the ConnectionString and store it in `appsettings.json`.
 - Open the solution `enmarcha.sln` in the start folder with Visual Studio.
-- Go to Samples > Data right-click `Sample_Data_CosmosDB` project and click Set as Startup project.
+- Go to Samples > Data right-click `Encamina.Enmarcha.Samples.Data.EntityFramework` project and click Set as Startup project.
 - Click on the run button.
 
 Once the program is running, a console will be displayed waiting for inputs. You can then indicate the actions you want to do.

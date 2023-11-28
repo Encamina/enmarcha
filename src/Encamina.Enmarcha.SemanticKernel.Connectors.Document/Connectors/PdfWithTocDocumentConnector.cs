@@ -91,8 +91,10 @@ public class PdfWithTocDocumentConnector : CleanPdfDocumentConnector
             string tocContent;
             var nextTocItemIndex = tocItems.IndexOf(tocItem) + 1;
 
-            if (nextTocItemIndex < tocItems.Count) // If it is not the last title
+            if (nextTocItemIndex < tocItems.Count)
             {
+                // It is not the last title
+
                 var nextTocItem = tocItems[nextTocItemIndex];
                 var nextTitle = RemoveExtraSpaces(nextTocItem.Title);
                 var nextPage = pages.First(p => p.Number == nextTocItem.PageNumber);
@@ -100,9 +102,10 @@ public class PdfWithTocDocumentConnector : CleanPdfDocumentConnector
 
                 tocContent = GetTocContent(pages, currentPage, currentIndex, nextPage, nextIndex);
             }
-            else // It is the last title
+            else
             {
-                // Extract the text to the end
+                // It is the last title. Extract the text to the end.
+
                 var lastPage = pages.MaxBy(p => p.Number);
                 var lastIndex = lastPage.Content.Length;
 

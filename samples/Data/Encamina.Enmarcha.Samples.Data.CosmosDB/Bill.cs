@@ -1,7 +1,8 @@
 ﻿using Newtonsoft.Json;
 
-namespace Sample_Data_CosmosDB;
-public class Bill
+namespace Encamina.Enmarcha.Samples.Data.CosmosDB;
+
+internal class Bill
 {
     [JsonProperty("id")]
     public string Id { get; set; }

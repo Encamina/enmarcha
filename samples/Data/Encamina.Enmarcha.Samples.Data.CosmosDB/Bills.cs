@@ -1,8 +1,8 @@
 ﻿using Encamina.Enmarcha.Data.Abstractions;
 
-namespace Sample_Data_CosmosDB;
+namespace Encamina.Enmarcha.Samples.Data.CosmosDB;
 
-public class Bills
+internal class Bills
 {
     private readonly IAsyncRepository<Bill> billsRepository;
 
