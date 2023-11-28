@@ -124,6 +124,9 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Encamina.Enmarcha.SemanticKernel.Abstractions", "src\Encamina.Enmarcha.SemanticKernel.Abstractions\Encamina.Enmarcha.SemanticKernel.Abstractions.csproj", "{04DA11A3-937C-4D0A-ABDA-65AE9E0FCA5C}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Samples", "Samples", "{C082F40D-38BE-4283-829E-29346AF71EAE}"
+	ProjectSection(SolutionItems) = preProject
+		samples\Directory.Build.targets = samples\Directory.Build.targets
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Data", "Data", "{B9E33951-E387-4A80-A652-A908FCBB34F3}"
 EndProject

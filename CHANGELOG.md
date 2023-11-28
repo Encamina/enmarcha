@@ -29,8 +29,7 @@ Sadly, some warnings regarding types or members obsolescence could not be addres
  - CS0618: *IKernel.PromptTemplateEngine' is obsolete: 'PromptTemplateEngine has been replaced with PromptTemplateFactory and will be null. If you pass an PromptTemplateEngine instance when creating a Kernel it will be wrapped in an instance of IPromptTemplateFactory. This will be removed in a future release.*
  - CS0618: *ISKFunction.RequestSettings' is obsolete: 'Use PromptTemplateConfig.ModelSettings instead. This will be removed in a future release.*
  - CS0618: *ISKFunction.SkillName' is obsolete: 'Methods, properties and classes which include Skill in the name have been renamed. Use ISKFunction.SkillName instead. This will be removed in a future release.*
- - CS0618: *PromptTemplate' is obsolete: 'IPromptTemplateEngine is being replaced with IPromptTemplateFactory. This will be removed in a future release.*
-
+ 
 ### Breaking Changes
 
 - Updated `Semantic Kernel` libraries to version `1.0.0-beta8`.
@@ -45,7 +44,8 @@ Sadly, some warnings regarding types or members obsolescence could not be addres
 ### Major Changes
 
 - New extension method `ImportQuestionAnsweringPluginWithMemory` in `Encamina.Enmarcha.SemanticKernel.Plugins.QuestionAnswering` to support memories when getting context for the Question Answering plugin. Remember to add a valid instance of `ISemanticTextMemory` as a service in the dependency container.
-
+- Added `Directory.Build.targets` at Samples level to prevent generating NuGet packages of these projects.
+- 
 ### Minor Changes
 - Renamed sample projects to match Microsoft's naming conventions.
 - Sample projects also use the new `Semantic Kernel` library version `1.0.0-beta8`.

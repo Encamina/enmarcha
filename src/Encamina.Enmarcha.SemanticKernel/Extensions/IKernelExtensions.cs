@@ -5,7 +5,6 @@ using Encamina.Enmarcha.Core.Extensions;
 
 using Encamina.Enmarcha.SemanticKernel.Extensions.Resources;
 
-using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.SemanticKernel;
 using Microsoft.SemanticKernel.TemplateEngine;
 using Microsoft.SemanticKernel.TemplateEngine.Basic;
@@ -50,7 +49,7 @@ public static class IKernelExtensions
     /// <param name="assembly">The assembly containing the embedded resources that represents and configures the semantic function.</param>
     /// <param name="contextVariables">A collection of context variables.</param>
     /// <param name="cancellationToken">A cancellation token that can be used to receive notice of cancellation.</param>
-    /// <returns>A string containing the generated prompt.</returns>    
+    /// <returns>A string containing the generated prompt.</returns>
     public static async Task<string> GetSemanticFunctionPromptAsync(this IKernel kernel, ISKFunction skFunction, Assembly assembly, IDictionary<string, string> contextVariables, CancellationToken cancellationToken)
     {
         var kernelContext = kernel.CreateNewContext();
