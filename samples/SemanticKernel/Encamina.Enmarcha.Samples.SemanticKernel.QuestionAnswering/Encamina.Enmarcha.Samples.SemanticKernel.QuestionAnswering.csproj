@@ -8,6 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\src\Encamina.Enmarcha.SemanticKernel.Connectors.Memory\Encamina.Enmarcha.SemanticKernel.Connectors.Memory.csproj" />
     <ProjectReference Include="..\..\..\src\Encamina.Enmarcha.SemanticKernel.Plugins.QuestionAnswering\Encamina.Enmarcha.SemanticKernel.Plugins.QuestionAnswering.csproj" />
   </ItemGroup>
 

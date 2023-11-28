@@ -43,9 +43,10 @@ Sadly, some warnings regarding types or members obsolescence could not be addres
 
 ### Major Changes
 
+- New extension method `AddSemanticTextMemory` in `Encamina.Enmarcha.SemanticKernel.Connectors.Memory` to add a semantic text memory (i.e., `ISemanticTextMemory`) to the dependency container.
 - New extension method `ImportQuestionAnsweringPluginWithMemory` in `Encamina.Enmarcha.SemanticKernel.Plugins.QuestionAnswering` to support memories when getting context for the Question Answering plugin. Remember to add a valid instance of `ISemanticTextMemory` as a service in the dependency container.
 - Added `Directory.Build.targets` at Samples level to prevent generating NuGet packages of these projects.
-- 
+
 ### Minor Changes
 - Renamed sample projects to match Microsoft's naming conventions.
 - Sample projects also use the new `Semantic Kernel` library version `1.0.0-beta8`.

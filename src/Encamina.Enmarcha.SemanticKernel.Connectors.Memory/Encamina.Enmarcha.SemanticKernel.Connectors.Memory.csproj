@@ -14,6 +14,8 @@
 
     <ItemGroup>
         <ProjectReference Include="..\Encamina.Enmarcha.Data.Qdrant.Abstractions\Encamina.Enmarcha.Data.Qdrant.Abstractions.csproj" />
+        <ProjectReference Include="..\Encamina.Enmarcha.DependencyInjection\Encamina.Enmarcha.DependencyInjection.csproj" />
+        <ProjectReference Include="..\Encamina.Enmarcha.SemanticKernel.Abstractions\Encamina.Enmarcha.SemanticKernel.Abstractions.csproj" />
     </ItemGroup>
 
 </Project>

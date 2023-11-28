@@ -36,16 +36,8 @@ internal static class ExampleQuestionAnsweringFromMemory
             services.AddOptions<SemanticKernelOptions>().Bind(hostContext.Configuration.GetSection(nameof(SemanticKernelOptions))).ValidateDataAnnotations().ValidateOnStart();
 
             // Here use any desired implementation (Qdrant, Volatile...)
-            services.AddSingleton<IMemoryStore, VolatileMemoryStore>();
-
-            // Initialize semantic memory for text (i.e., ISemanticTextMemory).
-            services.AddSingleton(sp =>
-            {
-                return new MemoryBuilder()
-                    .WithAzureOpenAITextEmbeddingGenerationService(options.EmbeddingsModelDeploymentName, options.Endpoint.ToString(), options.Key)
-                    .WithMemoryStore(sp.GetRequiredService<IMemoryStore>())
-                    .Build();
-            });
+            services.AddSingleton<IMemoryStore, VolatileMemoryStore>()
+                    .AddSemanticTextMemory();
 
             services.AddScoped(sp =>
             {

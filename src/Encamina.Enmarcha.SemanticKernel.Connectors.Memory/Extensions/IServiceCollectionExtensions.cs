@@ -1,11 +1,15 @@
-﻿using Encamina.Enmarcha.Data.Qdrant.Abstractions;
+﻿using System.Net.Http;
+
+using Encamina.Enmarcha.Data.Qdrant.Abstractions;
 using Encamina.Enmarcha.Data.Qdrant.Abstractions.Extensions;
+using Encamina.Enmarcha.SemanticKernel.Abstractions;
 
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-
+using Microsoft.SemanticKernel.Connectors.AI.OpenAI;
 using Microsoft.SemanticKernel.Connectors.Memory.Qdrant;
 using Microsoft.SemanticKernel.Memory;
+using Microsoft.SemanticKernel.Plugins.Memory;
 
 namespace Microsoft.Extensions.DependencyInjection;
 
@@ -43,6 +47,28 @@ public static class IServiceCollectionExtensions
             });
 
             return new QdrantMemoryStore(httpClient, qdrantOptions.VectorSize, loggerFactory: sp.GetService<ILoggerFactory>());
+        });
+    }
+
+    /// <summary>
+    /// Adds semantic text memory (<see cref="ISemanticTextMemory"/>) to the <see cref="IServiceCollection"/> in the specified <see cref="ServiceLifetime">service lifetime</see>.
+    /// </summary>
+    /// <remarks>
+    /// By default, the <see cref="ServiceLifetime">service lifetime</see> is <see cref="ServiceLifetime.Singleton"/>.
+    /// </remarks>
+    /// <param name="services"> The <see cref="IServiceCollection"/> to add services to.</param>
+    /// <param name="serviceLifetime">The lifetime for the semantic text memory.</param>
+    /// <returns>The <see cref="IServiceCollection"/> so that additional calls can be chained.</returns>
+    public static IServiceCollection AddSemanticTextMemory(this IServiceCollection services, ServiceLifetime serviceLifetime = ServiceLifetime.Singleton)
+    {
+        return services.TryAddType(serviceLifetime, sp =>
+        {
+            var options = sp.GetRequiredService<IOptions<SemanticKernelOptions>>().Value;
+
+            return new MemoryBuilder()
+                .WithAzureOpenAITextEmbeddingGenerationService(options.EmbeddingsModelDeploymentName, options.Endpoint.ToString(), options.Key)
+                .WithMemoryStore(sp.GetRequiredService<IMemoryStore>())
+                .Build();
         });
     }
 }
