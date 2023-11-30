@@ -1,4 +1,4 @@
-﻿// Ignore Spelling: Vtt
+﻿// Ignore Spelling: vtt
 
 using System.Text;
 using System.Text.RegularExpressions;

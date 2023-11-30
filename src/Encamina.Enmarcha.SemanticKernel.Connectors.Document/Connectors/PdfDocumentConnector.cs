@@ -1,4 +1,4 @@
-﻿// Ignore Spelling: Pdf
+﻿// Ignore Spelling: pdf
 
 using CommunityToolkit.Diagnostics;
 

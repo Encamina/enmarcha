@@ -1,4 +1,4 @@
-﻿// Ignore Spelling: Pptx
+﻿// Ignore Spelling: pptx
 
 using System.Text;
 

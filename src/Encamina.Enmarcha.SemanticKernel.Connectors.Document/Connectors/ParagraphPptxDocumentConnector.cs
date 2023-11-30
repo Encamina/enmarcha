@@ -1,4 +1,6 @@
-﻿using System.Text;
+﻿// Ignore Spelling: pptx
+
+using System.Text;
 
 using CommunityToolkit.Diagnostics;
 

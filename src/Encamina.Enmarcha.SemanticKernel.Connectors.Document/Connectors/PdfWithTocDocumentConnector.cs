@@ -1,5 +1,5 @@
-﻿// Ignore Spelling: Pdf
-// Ignore Spelling: Toc
+﻿// Ignore Spelling: pdf
+// Ignore Spelling: toc
 
 using System.Text;
 using System.Text.RegularExpressions;
