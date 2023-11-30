@@ -4,6 +4,9 @@ on:
   push:
     branches:
      - releases/**
+    paths-ignore:
+     - '/**/*.md'
+     - '.github/**/*'
   pull_request:
     types:
       - opened
