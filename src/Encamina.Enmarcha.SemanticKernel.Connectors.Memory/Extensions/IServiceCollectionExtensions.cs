@@ -1,11 +1,11 @@
-﻿using System.Net.Http;
-
-using Encamina.Enmarcha.Data.Qdrant.Abstractions;
+﻿using Encamina.Enmarcha.Data.Qdrant.Abstractions;
 using Encamina.Enmarcha.Data.Qdrant.Abstractions.Extensions;
+
 using Encamina.Enmarcha.SemanticKernel.Abstractions;
 
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+
 using Microsoft.SemanticKernel.Connectors.AI.OpenAI;
 using Microsoft.SemanticKernel.Connectors.Memory.Qdrant;
 using Microsoft.SemanticKernel.Memory;

@@ -1,4 +1,4 @@
-﻿// Ignore Spelling: tXT
+﻿// Ignore Spelling: txt
 
 using System.Text;
 
