@@ -10,11 +10,13 @@ public interface ILengthFunctions : AI.Abstractions.ILengthFunctions
     /// If the text is <see langword="null"/> or empty (i.e., <see cref="string.Empty"/>), returns zero (<c>0</c>).
     /// </summary>
     /// <seealso href="https://platform.openai.com/tokenizer"/>
+    /// <seealso href="https://github.com/openai/openai-cookbook/blob/main/examples/How_to_count_tokens_with_tiktoken.ipynb"/>
     public static Func<string, int> LengthByTokenCount => (text) => string.IsNullOrEmpty(text) ? 0 : GptEncoding.GetEncoding("cl100k_base").Encode(text).Count;
 
     /// <summary>
     /// Gets the number of tokens using a given encoding on the specified text.
     /// If the text is <see langword="null"/> or empty (i.e., <see cref="string.Empty"/>), returns zero (<c>0</c>).
     /// </summary>
+    /// <seealso href="https://github.com/openai/openai-cookbook/blob/main/examples/How_to_count_tokens_with_tiktoken.ipynb"/>
     public static Func<string, string, int> LengthByTokenCountUsingEncoding => (encoding, text) => string.IsNullOrEmpty(text) ? 0 : GptEncoding.GetEncoding(encoding).Encode(text).Count;
 }
