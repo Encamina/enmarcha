@@ -1,5 +1,7 @@
 ﻿# OpenApi - Swashbuckle
 
+[![Nuget package](https://img.shields.io/nuget/v/Encamina.Enmarcha.AspNet.OpenApi.Swashbuckle)](https://www.nuget.org/packages/Encamina.Enmarcha.AspNet.OpenApi.Swashbuckle)
+
 The Data Qdrant project contains functionalities related to the [OpenApi Swashbuckle](https://learn.microsoft.com/es-es/aspnet/core/tutorials/web-api-help-pages-using-swagger?view=aspnetcore-7.0)
 
 ## Setup

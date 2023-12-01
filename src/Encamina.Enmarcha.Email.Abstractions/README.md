@@ -1,5 +1,7 @@
 ﻿# Email - Abstractions
 
+[![Nuget package](https://img.shields.io/nuget/v/Encamina.Enmarcha.Email.Abstractions)](https://www.nuget.org/packages/Encamina.Enmarcha.Email.Abstractions)
+
 This project mainly contains abstractions used by the Encamina.Enmarcha.Email.MailKit NuGet package. Essentially, it includes interfaces and entities related to email sending management.
 
 ## Setup

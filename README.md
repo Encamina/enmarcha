@@ -1,5 +1,7 @@
 # ENMARCHA (Your package to accelerate .NET projects)
 
+[![dotnet-ci-nuget](https://github.com/Encamina/enmarcha/actions/workflows/main.yml/badge.svg)](https://github.com/Encamina/enmarcha/actions/workflows/main.yml) [![CodeQL](https://github.com/Encamina/enmarcha/actions/workflows/codeql.yml/badge.svg)](https://github.com/Encamina/enmarcha/actions/workflows/codeql.yml)
+
 > :warning: **This project is still under development.** We're working hard to release the first version of ENMARCHA as soon as possible. Stay tuned! Documentation and code examples will be available soon.
 
 ENMARCHA aims to speed up the development of various .NET applications by leveraging robust modules that integrate with popular services and frameworks.

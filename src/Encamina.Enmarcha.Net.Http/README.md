@@ -1,5 +1,7 @@
 ﻿# HTTP
 
+[![Nuget package](https://img.shields.io/nuget/v/Encamina.Enmarcha.Net.Http)](https://www.nuget.org/packages/Encamina.Enmarcha.Net.Http)
+
 This project provides utilities related to HTTP, covering aspects such as the most common media types and common constants, ultimately providing a collection of useful tools for HTTP.
 
 ## Setup

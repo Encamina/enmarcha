@@ -1,5 +1,7 @@
 ﻿# AI - Azure Intent Prediction
 
+[![Nuget package](https://img.shields.io/nuget/v/Encamina.Enmarcha.AI.IntentsPrediction.Azure)](https://www.nuget.org/packages/Encamina.Enmarcha.AI.IntentsPrediction.Azure)
+
 Azure Intent Prediction is a wrapper project for Azure Cognitive Language Services Conversations client library. Its main functionality is to simplify and abstract the usage of the library, primarily focused on intention detection.
 
 ## Setup

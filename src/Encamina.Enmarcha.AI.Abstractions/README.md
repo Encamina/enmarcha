@@ -1,5 +1,7 @@
 ﻿# AI - Abstractions
 
+[![Nuget package](https://img.shields.io/nuget/v/Encamina.Enmarcha.AI.Abstractions)](https://www.nuget.org/packages/Encamina.Enmarcha.AI.Abstractions)
+
 This project houses AI abstractions that are utilized by other ENMARCHA NuGet packages. These abstractions primarily include interfaces, which have their implementations in separate projects, and entities that represent the configurations of various services. The Encamina.Enmarcha.AI NuGet package encompasses the implementations of these abstractions. For more details, please refer to the [documentation](../Encamina.Enmarcha.AI/README.md).
 
 ## Setup

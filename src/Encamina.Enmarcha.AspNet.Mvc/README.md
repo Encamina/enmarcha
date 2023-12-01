@@ -1,5 +1,7 @@
 ﻿# ASP.NET - MVC
 
+[![Nuget package](https://img.shields.io/nuget/v/Encamina.Enmarcha.AspNet.Mvc)](https://www.nuget.org/packages/Encamina.Enmarcha.AspNet.Mvc)
+
 ASP.NET MVC is a project designed to simplify the configuration and usage of MVC projects. It contains utilities related to authentication, authorization, binders, and more, with a focus on streamlining the use of common functionalities and reducing the necessary code for their implementation.
 
 ## Setup

@@ -1,5 +1,7 @@
 ﻿# Testing
 
+[![Nuget package](https://img.shields.io/nuget/v/Encamina.Enmarcha.Testing)](https://www.nuget.org/packages/Encamina.Enmarcha.Testing)
+
 This project provides utilities to facilitate testing.
 
 ## Setup

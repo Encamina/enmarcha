@@ -1,5 +1,7 @@
 ﻿# AI - Intents Prediction Abstractions
 
+[![Nuget package](https://img.shields.io/nuget/v/Encamina.Enmarcha.AI.IntentsPrediction.Abstractions)](https://www.nuget.org/packages/Encamina.Enmarcha.AI.IntentsPrediction.Abstractions)
+
 This project houses Intents Prediction abstractions uilized by other ENMARCHA NuGet packages. These abstractions primarily include interfaces that have their implementations in separate projects, and entities that represent abstractions for information exchange. The NuGet package `Encamina.Enmarcha.AI.IntentsPrediction.Azure` encompasses implementations of this package (see [documentation](../Encamina.Enmarcha.AI.IntentsPrediction.Azure/README.md)).
 
 ## Setup

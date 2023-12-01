@@ -1,5 +1,7 @@
 ﻿# Semantic Kernel - Abstractions
 
+[![Nuget package](https://img.shields.io/nuget/v/Encamina.Enmarcha.SemanticKernel.Abstractions)](https://www.nuget.org/packages/Encamina.Enmarcha.SemanticKernel.Abstractions)
+
 This project mainly contains abstractions used by other ENMARCHA NuGet packages. Additionally, it includes extension methods and utilities primarily related to Semantic Kernel.
 
 ## Setup

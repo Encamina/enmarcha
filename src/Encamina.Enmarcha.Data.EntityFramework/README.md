@@ -1,5 +1,7 @@
 ﻿# Data - Entity Framework
 
+[![Nuget package](https://img.shields.io/nuget/v/Encamina.Enmarcha.Data.EntityFramework)](https://www.nuget.org/packages/Encamina.Enmarcha.Data.EntityFramework)
+
 Entity Framework Data project primarily contains Entity Framework implementations based on the abstractions provided by [Encamina.Enmarcha.Data.Abstractions](../Encamina.Enmarcha.Data.Abstractions/README.md), as well as some other utilities related to Entity Framework.
 
 ## Setup

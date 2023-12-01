@@ -1,5 +1,7 @@
 ﻿# Bot Skills Question Answering
 
+[![Nuget package](https://img.shields.io/nuget/v/Encamina.Enmarcha.Bot.Skills.QuestionAnswering)](https://www.nuget.org/packages/Encamina.Enmarcha.Bot.Skills.QuestionAnswering)
+
 This project mainly contains abstractions related to data used by other ENMARCHA NuGet packages or necessary for creating Question Answering skills
 
 ## Setup

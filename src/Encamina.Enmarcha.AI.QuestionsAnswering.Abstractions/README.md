@@ -1,5 +1,7 @@
 ﻿# AI - Questions Answering Abstractions
 
+[![Nuget package](https://img.shields.io/nuget/v/Encamina.Enmarcha.AI.QuestionsAnswering.Abstractions)](https://www.nuget.org/packages/Encamina.Enmarcha.AI.QuestionsAnswering.Abstractions)
+
 This project mainly contains AI abstractions used by other ENMARCHA NuGet packages. This abstractions include interfaces that have their implementations in other projects, clase bases and entities that represent abstractions for information exchange. The NuGet package `Encamina.Enmarcha.AI.QuestionsAnswering.Azure` contains implementations of this package (see [documentation](../Encamina.Enmarcha.AI.QuestionsAnswering.Azure/README.md)).
 
 ## Setup

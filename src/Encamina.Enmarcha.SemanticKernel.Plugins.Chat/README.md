@@ -1,5 +1,7 @@
 # Semantic Kernel - Chat Plugin
 
+[![Nuget package](https://img.shields.io/nuget/v/Encamina.Enmarcha.SemanticKernel.Plugins.Chat)](https://www.nuget.org/packages/Encamina.Enmarcha.SemanticKernel.Plugins.Chat)
+
 Chat Plugin is a project that provides Chat functionality in the form of a Semantic Kernel Plugin. It allows users to interact while chatting and asking questions to an Artificial Intelligence, usually a Large Language Model (LLM). Additionally, it stores the conversation history.
 
 ## Setup

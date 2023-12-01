@@ -1,5 +1,7 @@
 ﻿# Data - Qdrant
 
+[![Nuget package](https://img.shields.io/nuget/v/Encamina.Enmarcha.Data.Qdrant)](https://www.nuget.org/packages/Encamina.Enmarcha.Data.Qdrant)
+
 The Data Qdrant project contains functionalities related to the [Qdrant](https://qdrant.tech/) vector database.
 
 ## Setup

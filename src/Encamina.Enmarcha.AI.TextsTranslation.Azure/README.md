@@ -1,5 +1,7 @@
 ﻿# AI - Azure Texts Translation
 
+[![Nuget package](https://img.shields.io/nuget/v/Encamina.Enmarcha.AI.TextsTranslation.Azure)](https://www.nuget.org/packages/Encamina.Enmarcha.AI.TextsTranslation.Azure)
+
 Azure Texts Translation is a wrapper project for Azure AI Translator API REST. Its main functionality is to simplify and abstract the usage of API REST, primarily focused on text translations.
 
 ## Setup

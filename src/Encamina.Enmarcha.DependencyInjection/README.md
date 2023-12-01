@@ -1,5 +1,7 @@
 ﻿# Dependency Injection
 
+[![Nuget package](https://img.shields.io/nuget/v/Encamina.Enmarcha.DependencyInjection)](https://www.nuget.org/packages/Encamina.Enmarcha.DependencyInjection)
+
 This project contains functionalities related to dependency injection. It primarily includes extension methods to simplify and enhance the capabilities of [Microsoft.Extensions.DependencyInjection](https://www.nuget.org/packages/Microsoft.Extensions.DependencyInjection/).
 
 ## Setup

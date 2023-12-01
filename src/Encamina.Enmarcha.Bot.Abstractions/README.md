@@ -1,5 +1,7 @@
 ﻿# Bot Skills Question Answering
 
+[![Nuget package](https://img.shields.io/nuget/v/Encamina.Enmarcha.Bot.Abstractions)](https://www.nuget.org/packages/Encamina.Enmarcha.Bot.Abstractions)
+
 This project mainly contains abstractions related to data used by other ENMARCHA NuGet packages or necessary for creating your own implementations.
 
 ## Setup

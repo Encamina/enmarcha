@@ -1,5 +1,7 @@
 ﻿# Email - MailKit
 
+[![Nuget package](https://img.shields.io/nuget/v/Encamina.Enmarcha.Email.MailKit)](https://www.nuget.org/packages/Encamina.Enmarcha.Email.MailKit)
+
 MailKit is a project designed to simplify the configuration and sending of emails. The most typical use case is configuring your SMTP account and sending an email with attachments, subject, and more.
 
 ## Setup

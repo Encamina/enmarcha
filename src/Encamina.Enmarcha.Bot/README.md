@@ -1,5 +1,7 @@
 ﻿# Bot
 
+[![Nuget package](https://img.shields.io/nuget/v/Encamina.Enmarcha.Bot)](https://www.nuget.org/packages/Encamina.Enmarcha.Bot)
+
 Bot is a project that primarily contains cross-cutting utilities that can be used in a wide variety of projects.
 
 ## Setup
