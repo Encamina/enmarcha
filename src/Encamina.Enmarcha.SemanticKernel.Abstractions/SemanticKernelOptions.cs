@@ -27,6 +27,7 @@ public sealed class SemanticKernelOptions
     /// <remarks>
     /// <para>
     /// This property is required if <see cref="ChatModelDeploymentName"/> is not <see langword="null"/>.
+    /// It is usually used with the <c>Encamina.Enmarcha.AI.OpenAI.Abstractions.ModelInfo</c> class to get metadata and information about the model.
     /// </para>
     /// <para>
     /// This model name must match the model names from the LLM (like OpenAI), like for example <c>gpt-4</c> or <c>gpt-35-turbo</c>.
@@ -52,6 +53,7 @@ public sealed class SemanticKernelOptions
     /// <remarks>
     /// <para>
     /// This property is required if <see cref="CompletionsModelDeploymentName"/> is not <see langword="null"/>.
+    /// It is usually used with the <c>Encamina.Enmarcha.AI.OpenAI.Abstractions.ModelInfo</c> class to get metadata and information about the model.
     /// </para>
     /// <para>
     /// This model name must match the model names from the LLM (like OpenAI), like for example <c>gpt-4</c> or <c>gpt-35-turbo</c>.
@@ -62,7 +64,7 @@ public sealed class SemanticKernelOptions
     public string CompletionsModelName { get; init; }
 
     /// <summary>
-    /// Gets the model deployment name on the LLM (for example OpenAI) to use for embddings.
+    /// Gets the model deployment name on the LLM (for example OpenAI) to use for embeddings.
     /// </summary>
     /// <remarks>
     /// <b>WARNING:</b> The model name does not necessarily have to be the same as the model ID. For example, a model of type «text-embedding-ada-002» might be called «MyEmbeddings»;
@@ -77,6 +79,7 @@ public sealed class SemanticKernelOptions
     /// <remarks>
     /// <para>
     /// This property is required if <see cref="EmbeddingsModelDeploymentName"/> is not <see langword="null"/>.
+    /// It is usually used with the <c>Encamina.Enmarcha.AI.OpenAI.Abstractions.ModelInfo</c> class to get metadata and information about the model.
     /// </para>
     /// <para>
     /// This model name must match the model names from the LLM (like OpenAI), like for example <c>gpt-4</c> or <c>gpt-35-turbo</c>.
@@ -87,7 +90,7 @@ public sealed class SemanticKernelOptions
     public string EmbeddingsModelName { get; init; }
 
     /// <summary>
-    /// Gets the <see cref="Uri"/> for an LLM resource (like OpenAI). This should include protocol and hostname.
+    /// Gets the <see cref="Uri"/> for an LLM resource (like OpenAI). This should include protocol and host name.
     /// </summary>
     [Required]
     [Uri]

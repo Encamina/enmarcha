@@ -16,6 +16,42 @@ Also, any bug fix must start with the prefix «Bug fix:» followed by the descript
 
 Previous classification is not required if changes are simple or all belong to the same category.
 
+## [6.0.4]
+
+### Important
+
+This version updates the `Semantic Kernel` library to version `1.0.0-beta8`, which introduces a lot of breaking changes in the code that mostly translate into multiple obsolescence warnings. Eventually, newer versions of this library will fix these warnings once a final version of `Semantic Kernel` is used.
+
+The main motivation for this update is to take advantage of the latest improvements in the `Semantic Kernel` library, like the `Stepwise Planner` or Function Calls, plus better integrations with LLMs like OpenAI, among many other improvements.
+
+Sadly, some warnings regarding types or members obsolescence could not be addresses until the Microsoft team behind `Semantic Kernel` provides a final version of the library. So far, these warnings are:
+
+ - CS0618: *IKernel.PromptTemplateEngine' is obsolete: 'PromptTemplateEngine has been replaced with PromptTemplateFactory and will be null. If you pass an PromptTemplateEngine instance when creating a Kernel it will be wrapped in an instance of IPromptTemplateFactory. This will be removed in a future release.*
+ - CS0618: *ISKFunction.RequestSettings' is obsolete: 'Use PromptTemplateConfig.ModelSettings instead. This will be removed in a future release.*
+ - CS0618: *ISKFunction.SkillName' is obsolete: 'Methods, properties and classes which include Skill in the name have been renamed. Use ISKFunction.SkillName instead. This will be removed in a future release.*
+ 
+### Breaking Changes
+
+- Updated `Semantic Kernel` libraries to version `1.0.0-beta8`.
+- `Encamina.Enmarcha.SemanticKernel.Abstractions`
+  * Removed method `ValidateAndThrowIfErrorOccurred`.
+  * Removed properties `ChatModelName`, `CompletionsModelName`, and `EmbeddingsModelName` from `SemanticKernelOptions`.
+- The following methods do not throw an `ArgumentException` if the instance of `ISKFunction` is not a semantic function, since now `Semantic Kernel` does not longer differentiates between Semantic and Native functions:
+  * GetSemanticFunctionPromptAsync
+  * GetSemanticFunctionUsedTokensAsync
+- The extension method `ImportQuestionAnsweringPlugin` in `Encamina.Enmarcha.SemanticKernel.Plugins.QuestionAnswering` does not import the Memory plugin anymore. If the usage of the Question Answering plugin requires memory support, use the `ImportQuestionAnsweringPluginWithMemory` extension method instead. Remember to add a valid instance of `ISemanticTextMemory` as a service in the dependency container.
+
+### Major Changes
+
+- New extension method `AddSemanticTextMemory` in `Encamina.Enmarcha.SemanticKernel.Connectors.Memory` to add a semantic text memory (i.e., `ISemanticTextMemory`) to the dependency container.
+- New extension method `ImportQuestionAnsweringPluginWithMemory` in `Encamina.Enmarcha.SemanticKernel.Plugins.QuestionAnswering` to support memories when getting context for the Question Answering plugin. Remember to add a valid instance of `ISemanticTextMemory` as a service in the dependency container.
+- Added `Directory.Build.targets` at Samples level to prevent generating NuGet packages of these projects.
+
+### Minor Changes
+- Renamed sample projects to match Microsoft's naming conventions.
+- Sample projects also use the new `Semantic Kernel` library version `1.0.0-beta8`.
+- Some boy scouting by editing the comments in the code to have correct grammar and fixing some StyleCop warnings.
+
 ## [6.0.3.20]
 
 ### **Major Changes**

@@ -3,22 +3,20 @@
 using Microsoft.SemanticKernel;
 using Microsoft.SemanticKernel.Orchestration;
 
-namespace Sample_SemanticKernelQuestionAnswering.QuestionAnsweringPlugin;
+namespace Encamina.Enmarcha.Samples.SemanticKernel.QuestionAnswering;
 
 /// <summary>
 /// Example class of Question Answering Plugin.
 /// </summary>
-public class TestQuestionAnswering
+internal class TestQuestionAnswering
 {
     private readonly IKernel kernel;
 
-    /// <inheritdoc/>
     public TestQuestionAnswering(IKernel kernel)
     {
         this.kernel = kernel;
     }
 
-    /// <inheritdoc/>
     public async Task<string> TestQuestionAnsweringFromContextAsync()
     {
         var input = @"What year was the French Revolution?";
@@ -37,15 +35,15 @@ to vote.";
         contextVariables.Set(PluginsInfo.QuestionAnsweringPlugin.Functions.QuestionAnsweringFromContext.Parameters.Input, input);
         contextVariables.Set(PluginsInfo.QuestionAnsweringPlugin.Functions.QuestionAnsweringFromContext.Parameters.Context, context);
 
-        var functionQuestionAnswering = kernel.Func(PluginsInfo.QuestionAnsweringPlugin.Name, PluginsInfo.QuestionAnsweringPlugin.Functions.QuestionAnsweringFromContext.Name);
+        var functionQuestionAnswering = kernel.Functions.GetFunction(PluginsInfo.QuestionAnsweringPlugin.Name, PluginsInfo.QuestionAnsweringPlugin.Functions.QuestionAnsweringFromContext.Name);
         var resultContext = await kernel.RunAsync(contextVariables, functionQuestionAnswering);
+        var result = resultContext.GetValue<string>();
 
-        Console.WriteLine($"# Result: {resultContext.Result} \n");
+        Console.WriteLine($"# Result: {result} \n");
 
-        return resultContext.Result;
+        return result;
     }
 
-    /// <inheritdoc/>
     public async Task<string> TestQuestionAnsweringFromMemoryAsync()
     {
         var input = "What period occurred the Industrial Revolution?";
@@ -59,12 +57,12 @@ to vote.";
 
         Console.WriteLine($"# Question: {input} \n");
 
-        var functionQuestionAnswering = kernel.Func(PluginsInfo.QuestionAnsweringPlugin.Name, PluginsInfo.QuestionAnsweringPlugin.Functions.QuestionAnsweringFromMemoryQuery.Name);
+        var functionQuestionAnswering = kernel.Functions.GetFunction(PluginsInfo.QuestionAnsweringPlugin.Name, PluginsInfo.QuestionAnsweringPlugin.Functions.QuestionAnsweringFromMemoryQuery.Name);
         var resultContext = await kernel.RunAsync(contextVariables, functionQuestionAnswering);
+        var result = resultContext.GetValue<string>();
 
-        Console.WriteLine($"# Result: {resultContext.Result} \n");
+        Console.WriteLine($"# Result: {result} \n");
 
-        return resultContext.Result;
+        return result;
     }
-
 }

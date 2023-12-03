@@ -2,9 +2,9 @@
 
 using Microsoft.SemanticKernel.Memory;
 
-namespace Sample_SemanticKernelQuestionAnswering.Memory;
+namespace Encamina.Enmarcha.Samples.SemanticKernel.QuestionAnswering;
 
-public class MockMemoryInformation
+internal class MockMemoryInformation
 {
     private readonly IMemoryManager memoryManager;
     private readonly IMemoryStore memoryStore;

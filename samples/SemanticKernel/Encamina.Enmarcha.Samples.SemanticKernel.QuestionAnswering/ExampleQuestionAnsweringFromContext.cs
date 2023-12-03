@@ -1,14 +1,16 @@
-﻿using Encamina.Enmarcha.SemanticKernel.Abstractions;
+﻿using Encamina.Enmarcha.Samples.SemanticKernel.QuestionAnswering;
+using Encamina.Enmarcha.SemanticKernel.Abstractions;
 using Encamina.Enmarcha.SemanticKernel.Plugins.QuestionAnswering;
 
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+
 using Microsoft.SemanticKernel;
 
-using Sample_SemanticKernelQuestionAnswering.QuestionAnsweringPlugin;
+namespace Encamina.Enmarcha.Samples.SemanticKernel.QuestionAnswering;
 
-public static class Example_QuestionAnsweringFromContext
+internal static class ExampleQuestionAnsweringFromContext
 {
     public static async Task RunAsync()
     {
@@ -35,7 +37,7 @@ public static class Example_QuestionAnsweringFromContext
 
                 // Initialize semantic kernel
                 var kernel = new KernelBuilder()
-                    .WithAzureChatCompletionService(options.ChatModelDeploymentName, options.Endpoint.ToString(), options.Key)
+                    .WithAzureOpenAIChatCompletionService(options.ChatModelDeploymentName, options.Endpoint.ToString(), options.Key)
                     .Build();
 
                 // Import Question Answering plugin
@@ -48,8 +50,10 @@ public static class Example_QuestionAnsweringFromContext
         var host = hostBuilder.Build();
 
         // Initialize Q&A
-        var testQuestionAnswering = new TestQuestionAnswering(host.Services.GetService<IKernel>());
+        var testQuestionAnswering = new TestQuestionAnswering(host.Services.GetRequiredService<IKernel>());
 
         var result = await testQuestionAnswering.TestQuestionAnsweringFromContextAsync();
+
+        Console.WriteLine($@"RESULT: {result}");
     }
 }

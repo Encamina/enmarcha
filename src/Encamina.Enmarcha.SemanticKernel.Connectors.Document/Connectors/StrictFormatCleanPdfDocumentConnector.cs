@@ -1,4 +1,6 @@
-﻿using System.Text;
+﻿// Ignore Spelling: pdf
+
+using System.Text;
 
 using UglyToad.PdfPig;
 using UglyToad.PdfPig.Content;

@@ -4,8 +4,10 @@
         <TargetFramework>netstandard2.1</TargetFramework>
     </PropertyGroup>
 
-    <ItemGroup>
-        <PackageReference Include="Microsoft.SemanticKernel.Connectors.AI.OpenAI" Version="0.20.230821.4-preview" PrivateAssets="none" />
+    <ItemGroup>        
+        <PackageReference Include="Microsoft.SemanticKernel.Connectors.AI.OpenAI" Version="1.0.0-beta8" PrivateAssets="none" />        
+        <PackageReference Include="Microsoft.SemanticKernel.TemplateEngine.Basic" Version="1.0.0-beta8" />        
+        <PackageReference Include="SharpToken" Version="1.2.12" />
     </ItemGroup>
 
     <ItemGroup>

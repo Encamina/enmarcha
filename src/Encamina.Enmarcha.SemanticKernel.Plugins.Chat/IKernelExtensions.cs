@@ -10,7 +10,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 
 using Microsoft.SemanticKernel;
-using Microsoft.SemanticKernel.SkillDefinition;
 
 namespace Encamina.Enmarcha.SemanticKernel.Plugins.Chat;
 
@@ -67,6 +66,6 @@ public static class IKernelExtensions
 
         var chatWithHistoryPlugin = new ChatWithHistoryPlugin(kernel, semanticKernelOptions.ChatModelName, tokensLengthFunction, chatMessagesHistoryRepository, chatWithHistoryPluginOptions);
 
-        return kernel.ImportSkill(chatWithHistoryPlugin, PluginsInfo.ChatWithHistoryPlugin.Name);
+        return kernel.ImportFunctions(chatWithHistoryPlugin, PluginsInfo.ChatWithHistoryPlugin.Name);
     }
 }

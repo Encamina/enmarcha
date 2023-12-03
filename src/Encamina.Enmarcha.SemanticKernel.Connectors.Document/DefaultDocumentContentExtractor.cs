@@ -5,8 +5,8 @@ using Encamina.Enmarcha.Core.Extensions;
 using Encamina.Enmarcha.SemanticKernel.Connectors.Document.Connectors;
 using Encamina.Enmarcha.SemanticKernel.Connectors.Document.Resources;
 
-using Microsoft.SemanticKernel.Skills.Document;
-using Microsoft.SemanticKernel.Skills.Document.OpenXml;
+using Microsoft.SemanticKernel.Plugins.Document;
+using Microsoft.SemanticKernel.Plugins.Document.OpenXml;
 
 namespace Encamina.Enmarcha.SemanticKernel.Connectors.Document;
 

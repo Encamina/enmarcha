@@ -2,14 +2,12 @@
 
 using Encamina.Enmarcha.Core.Extensions;
 
-using Microsoft.SemanticKernel.SkillDefinition;
-
 namespace Encamina.Enmarcha.SemanticKernel.Plugins.Memory;
 
 #pragma warning disable S3218 // Inner class members should not shadow outer class "static" or type members
 
 /// <summary>
-/// Information about plguins in this assembly.
+/// Information about plugins in this assembly.
 /// </summary>
 public static class PluginsInfo
 {
