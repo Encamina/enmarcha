@@ -1,5 +1,7 @@
 ﻿# Entities - Abstractions
 
+[![Nuget package](https://img.shields.io/nuget/v/Encamina.Enmarcha.Entities.Abstractions)](https://www.nuget.org/packages/Encamina.Enmarcha.Entities.Abstractions)
+
 Entities Abstractions is a project that primarily contains abstractions used by other NuGet packages in ENMARCHA. These abstractions represent properties or characteristics that entities can have.
 
 ## Setup

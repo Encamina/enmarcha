@@ -1,5 +1,7 @@
 ﻿# Entities
 
+[![Nuget package](https://img.shields.io/nuget/v/Encamina.Enmarcha.Entities)](https://www.nuget.org/packages/Encamina.Enmarcha.Entities)
+
 Entities project mainly contains implementations of interfaces from the NuGet package Encamina.Enmarcha.Entities.Abstractions.
 
 ## Setup

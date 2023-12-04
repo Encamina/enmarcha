@@ -1,5 +1,7 @@
 # ASP.NET - MVC Formatters
 
+[![Nuget package](https://img.shields.io/nuget/v/Encamina.Enmarcha.AspNet.Mvc.Formatters)](https://www.nuget.org/packages/Encamina.Enmarcha.AspNet.Mvc.Formatters)
+
 ASP.NET MVC Formatters is a project that provides input and output formatters for enhancing the functionality of ASP.NET MVC applications. These formatters are designed to simplify the handling of data input and output, making it more convenient and efficient for developers to work with MVC projects.
 
 ## Setup

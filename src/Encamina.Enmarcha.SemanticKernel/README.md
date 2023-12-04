@@ -1,5 +1,7 @@
 ﻿# Semantic Kernel
 
+[![Nuget package](https://img.shields.io/nuget/v/Encamina.Enmarcha.SemanticKernel)](https://www.nuget.org/packages/Encamina.Enmarcha.SemanticKernel)
+
 This project provides extended functionality for Semantic Kernel and additional features related to Semantic Kernel.
 
 ## Setup

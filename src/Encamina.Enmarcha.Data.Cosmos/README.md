@@ -1,5 +1,7 @@
 ﻿# Data - Cosmos
 
+[![Nuget package](https://img.shields.io/nuget/v/Encamina.Enmarcha.Data.Cosmos)](https://www.nuget.org/packages/Encamina.Enmarcha.Data.Cosmos)
+
 Cosmos Data project primarily contains Cosmos DB implementations based on the abstractions provided by [Encamina.Enmarcha.Data.Abstractions](../Encamina.Enmarcha.Data.Abstractions/README.md), as well as some other utilities related to Cosmos DB.
 
 ## Setup

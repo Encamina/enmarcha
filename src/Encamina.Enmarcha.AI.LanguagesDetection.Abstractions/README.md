@@ -1,5 +1,7 @@
 ﻿# AI - Languages Detection Abstractions
 
+[![Nuget package](https://img.shields.io/nuget/v/Encamina.Enmarcha.AI.LanguagesDetection.Abstractions)](https://www.nuget.org/packages/Encamina.Enmarcha.AI.LanguageDetections.Abstractions)
+
 This project mainly contains Languages Detection abstractions used by other ENMARCHA NuGet packages. This abstractions include interfaces, which have their implementations in other projects, and entities that represent abstractions for information exchange. The NuGet package `Encamina.Enmarcha.AI.LanguagesDetection.Azure` contains implementations of this package (see [documentation](../Encamina.Enmarcha.AI.LanguagesDetection.Azure/README.md)).
 
 ## Setup

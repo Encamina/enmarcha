@@ -1,5 +1,7 @@
 # Semantic Kernel - Memory Plugin
 
+[![Nuget package](https://img.shields.io/nuget/v/Encamina.Enmarcha.SemanticKernel.Plugins.Memory)](https://www.nuget.org/packages/Encamina.Enmarcha.SemanticKernel.Plugins.Memory)
+
 Memory Plugin is a project that offers functionality as a plugin for searching the memory of the Semantic Kernel. When text is stored in memory within the Semantic Kernel, it is saved in the form of embeddings that can be queried through the Memory Plugin.
 
 ## Setup

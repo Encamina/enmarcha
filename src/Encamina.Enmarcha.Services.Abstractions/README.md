@@ -1,5 +1,7 @@
 ﻿# Services - Abstractions
 
+[![Nuget package](https://img.shields.io/nuget/v/Encamina.Enmarcha.Services.Abstractions)](https://www.nuget.org/packages/Encamina.Enmarcha.Services.Abstractions)
+
 Services Abstractions is a project that provides useful abstractions for your services. It contains classes and interfaces so that you can create an execution context and gather information that you can later consume from your services.
 
 ## Setup

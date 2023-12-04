@@ -1,5 +1,7 @@
 ﻿# AI - Azure OpenAI
 
+[![Nuget package](https://img.shields.io/nuget/v/Encamina.Enmarcha.AI.OpenAI.Azure)](https://www.nuget.org/packages/Encamina.Enmarcha.AI.OpenAI.Azure)
+
 This project focuses on making it easier to use Azure OpenAI services to utilize the completion service.
 
 ## Setup

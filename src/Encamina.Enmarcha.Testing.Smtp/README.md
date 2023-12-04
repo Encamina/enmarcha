@@ -1,5 +1,7 @@
 ﻿# Testing - SMPT
 
+[![Nuget package](https://img.shields.io/nuget/v/Encamina.Enmarcha.Testing.Smtp)](https://www.nuget.org/packages/Encamina.Enmarcha.Testing.Smtp)
+
 This project provides utilities for tests related to SMTP servers, allowing you to perform unit tests simulating all the aspects related to SMTP.
 
 ## Setup

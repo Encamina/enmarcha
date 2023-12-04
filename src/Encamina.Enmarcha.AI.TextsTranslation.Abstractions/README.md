@@ -1,5 +1,7 @@
 ﻿# AI - Text Translations Abstractions
 
+[![Nuget package](https://img.shields.io/nuget/v/Encamina.Enmarcha.AI.TextsTranslation.Abstractions)](https://www.nuget.org/packages/Encamina.Enmarcha.AI.TextsTranslation.Abstractions)
+
 This project mainly contains Text Translations abstractions used by other ENMARCHA NuGet packages. These abstractions include interfaces that have their implementations in other projects, and entities that represent abstractions for information exchange. The NuGet package `Encamina.Enmarcha.AI.TextsTranslation.Azure` contains implementations of this package (see [documentation](../Encamina.Enmarcha.AI.TextsTranslation.Azure/README.md)).
 
 ## Setup

@@ -1,4 +1,6 @@
 ﻿# Core
+[![Nuget package](https://img.shields.io/nuget/v/Encamina.Enmarcha.Core)](https://www.nuget.org/packages/Encamina.Enmarcha.Core)
+
 
 Core is a project that primarily contains cross-cutting utilities that can be used in a wide variety of projects. Among them, there are utilities related to Uris, Strings, Attributes, JSON handling, and more.
 

@@ -1,5 +1,7 @@
 ﻿# AI
 
+[![Nuget package](https://img.shields.io/nuget/v/Encamina.Enmarcha.AI)](https://www.nuget.org/packages/Encamina.Enmarcha.AI)
+
 This project contains base classes, interfaces, and common functionalities shared across all ENMARCHA projects related to AI. Essentially, it serves as the common ground for orchestrating the creation and retrieval of cognitive services.
 
 ## Setup

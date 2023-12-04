@@ -1,5 +1,7 @@
 ﻿# Semantic Kernel - Document Connectors
 
+[![Nuget package](https://img.shields.io/nuget/v/Encamina.Enmarcha.SemanticKernel.Connectors.Document)](https://www.nuget.org/packages/Encamina.Enmarcha.SemanticKernel.Connectors.Document)
+
 Document Connectors specializes in reading information from files in various formats and subsequently chunking it. The most typical use case is, within the context of generating document embeddings, reading information from a variety of file formats (pdf, docx, pptx, etc.) and chunks its content into smaller parts.
 
 ## Setup

@@ -1,5 +1,7 @@
 ﻿# AI - Azure Languages Detection
 
+[![Nuget package](https://img.shields.io/nuget/v/Encamina.Enmarcha.AI.LanguagesDetection.Azure)](https://www.nuget.org/packages/Encamina.Enmarcha.AI.LanguagesDetection.Azure)
+
 Azure Languages Detection is a wrapper project for Azure Cognitive Services Text Analytic client library and Azure AI Translator API REST. Its main functionality is to simplify and abstract the usage of the library, primarily focused on detect language.
 
 ## Setup

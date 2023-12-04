@@ -1,5 +1,7 @@
 # Semantic Kernel - Question Answering Plugin
 
+[![Nuget package](https://img.shields.io/nuget/v/Encamina.Enmarcha.SemanticKernel.Plugins.QuestionAnswering)](https://www.nuget.org/packages/Encamina.Enmarcha.SemanticKernel.Plugins.QuestionAnswering)
+
 The Question Answering Plugin is a project that provides functionality as a plugin for answering questions based on a given context or based on the information stored in the Semantic Kernel's memory.
 
 ## Setup

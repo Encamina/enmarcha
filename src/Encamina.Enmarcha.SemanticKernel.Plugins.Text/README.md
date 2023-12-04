@@ -1,5 +1,7 @@
 # Semantic Kernel - Text Plugin
 
+[![Nuget package](https://img.shields.io/nuget/v/Encamina.Enmarcha.SemanticKernel.Plugins.Text)](https://www.nuget.org/packages/Encamina.Enmarcha.SemanticKernel.Plugins.Text)
+
 The Text Plugin is a project that provides functionality to obtain various types of information from a text, such as a summary or keywords.
 
 ## Setup

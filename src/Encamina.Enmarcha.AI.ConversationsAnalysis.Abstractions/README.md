@@ -1,5 +1,7 @@
 ﻿# AI - Conversation Analysis Abstractions
 
+[![Nuget package](https://img.shields.io/nuget/v/Encamina.Enmarcha.AI.ConversationsAnalysis.Abstractions)](https://www.nuget.org/packages/Encamina.Enmarcha.AI.ConversationsAnalysis.Abstractions)
+
 The primary way to leverage this project is by applying its interfaces within other projects. Currently, there are no implementations in other ENMARCHA projects.
 
 ## Setup

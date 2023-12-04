@@ -1,5 +1,7 @@
 ﻿# Semantic Kernel - Memory Connectors
 
+[![Nuget package](https://img.shields.io/nuget/v/Encamina.Enmarcha.SemanticKernel.Connectors.Memory)](https://www.nuget.org/packages/Encamina.Enmarcha.SemanticKernel.Connectors.Memory)
+
 Memory Connectors is a project that allows adding specific [IMemoryStore](https://github.com/microsoft/semantic-kernel/blob/76db027273371ea81e6db66afcb1d888cc53b459/dotnet/src/SemanticKernel.Abstractions/Memory/IMemoryStore.cs#L13) instances. These `IMemoryStore` instances are used for storing and retrieving embeddings.
 
 ## Setup
