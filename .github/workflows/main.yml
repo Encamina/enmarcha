@@ -6,8 +6,7 @@ on:
       - releases/**
       - main
     paths-ignore:
-      - '/**/*.md'
-      - '.github/**/*'
+      - '/**/*.md'   
   pull_request:
     types:
       - opened
@@ -90,7 +89,7 @@ jobs:
   CD:
     runs-on: ubuntu-latest
     needs: CI
-    if: github.event_name != 'pull_request' && (startsWith(github.ref, 'refs/heads/releases') || github.ref == 'refs/head/main')
+    if: github.event_name != 'pull_request' && (startsWith(github.ref, 'refs/heads/releases') || github.ref == 'refs/heads/main')
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
