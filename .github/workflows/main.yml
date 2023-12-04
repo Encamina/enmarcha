@@ -40,7 +40,7 @@ jobs:
         run: dotnet restore --configfile NuGet.config --verbosity Minimal   
 
       - name: Sonar - Install SonarCloud scanners
-        run: dotnet tool install --global dotnet-sonarscanner --version 6.0.0
+        run: dotnet tool install --global dotnet-sonarscanner --version 5.15.0
 
       - name: Sonar - Begin Analyze
         env:
