@@ -3,16 +3,20 @@ name: ENMARCHA NuGet
 on:
   push:
     branches:
-     - releases/**
+      - releases/**
+      - main
     paths-ignore:
-     - '/**/*.md'
-     - '.github/**/*'
+      - '/**/*.md'
+      - '.github/**/*'
   pull_request:
     types:
       - opened
       - reopened
+      - synchronize
+      - ready_for_review
     branches:
-     - releases/**
+      - releases/**
+      - main
   workflow_dispatch:
 
 env:
@@ -86,7 +90,7 @@ jobs:
   CD:
     runs-on: ubuntu-latest
     needs: CI
-    if: github.event_name != 'pull_request' && startsWith(github.ref, 'refs/heads/releases')
+    if: github.event_name != 'pull_request' && (startsWith(github.ref, 'refs/heads/releases') || github.ref == 'refs/head/main')
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
