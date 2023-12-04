@@ -3,16 +3,20 @@ name: ENMARCHA NuGet
 on:
   push:
     branches:
-     - releases/**
+      - releases/**
+      - main
     paths-ignore:
-     - '/**/*.md'
-     - '.github/**/*'
+      - '/**/*.md'
+      - '.github/**/*'
   pull_request:
     types:
       - opened
       - reopened
+      - synchronize
+      - ready_for_review
     branches:
-     - releases/**
+      - releases/**
+      - main
   workflow_dispatch:
 
 env:
@@ -36,13 +40,13 @@ jobs:
         run: dotnet restore --configfile NuGet.config --verbosity Minimal   
 
       - name: Sonar - Install SonarCloud scanners
-        run: dotnet tool install --global dotnet-sonarscanner
+        run: dotnet tool install --global dotnet-sonarscanner --version 5.15.0
 
       - name: Sonar - Begin Analyze
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: dotnet-sonarscanner begin /k:"${{ secrets.SONAR_PROJECT_KEY }}" /o:"${{ secrets.SONAR_ORGANIZATION }}" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.exclusions="**/tst/**/*" /d:sonar.cs.opencover.reportsPaths="**/tst/**/coverage.opencover.xml" /s:$GITHUB_WORKSPACE/SonarQube.Analysis.xml
+        run: dotnet-sonarscanner begin /k:"${{ secrets.SONAR_PROJECT_KEY }}" /o:"${{ secrets.SONAR_ORGANIZATION }}" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.exclusions="**/tst/**/*" /d:sonar.cs.opencover.reportsPaths="**/tst/**/coverage.opencover.xml"
 
       - name: Test
         run: dotnet test --nologo --no-restore --collect:"XPlat Code Coverage" --configuration  ${{env.BuildConfiguration}} --settings coverlet.runsettings
@@ -86,7 +90,7 @@ jobs:
   CD:
     runs-on: ubuntu-latest
     needs: CI
-    if: github.event_name != 'pull_request' && startsWith(github.ref, 'refs/heads/releases')
+    if: github.event_name != 'pull_request' && (startsWith(github.ref, 'refs/heads/releases') || github.ref == 'refs/head/main')
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
