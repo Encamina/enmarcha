@@ -1,15 +1,11 @@
-﻿using System.Reflection;
-
-using Encamina.Enmarcha.Core.Extensions;
-
-using Microsoft.SemanticKernel.SkillDefinition;
+﻿using Encamina.Enmarcha.Core.Extensions;
 
 namespace Encamina.Enmarcha.SemanticKernel.Plugins.QuestionAnswering;
 
 #pragma warning disable S3218 // Inner class members should not shadow outer class "static" or type members
 
 /// <summary>
-/// Information about plguins in this assembly.
+/// Information about plugins in this assembly.
 /// </summary>
 public static class PluginsInfo
 {
@@ -71,7 +67,7 @@ public static class PluginsInfo
                 public static class Parameters
                 {
                     /// <summary>
-                    /// The name of the «question» parameter, used to look for an answer by searchinf a memory.
+                    /// The name of the «question» parameter, used to look for an answer by searching a memory.
                     /// </summary>
                     public static readonly string Question = nameof(Question).ToLowerInvariant();
 

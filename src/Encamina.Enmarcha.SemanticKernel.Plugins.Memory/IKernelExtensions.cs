@@ -1,7 +1,7 @@
 ﻿using Encamina.Enmarcha.SemanticKernel.Plugins.Memory.Plugins;
 
 using Microsoft.SemanticKernel;
-using Microsoft.SemanticKernel.SkillDefinition;
+using Microsoft.SemanticKernel.Memory;
 
 namespace Encamina.Enmarcha.SemanticKernel.Plugins.Memory;
 
@@ -14,13 +14,13 @@ public static class IKernelExtensions
     /// Imports the «Memory» plugin and its functions into the kernel.
     /// </summary>
     /// <param name="kernel">The <see cref="IKernel"/> instance to add this plugin.</param>
+    /// <param name="semanticTextMemory">A valid instance of a semantic memory to recall memories associated with text.</param>
     /// <param name="tokensLengthFunction">A function to count how many tokens are in a string or text.</param>
     /// <returns>A list of all the functions found in this plugin, indexed by function name.</returns>
-    [Obsolete(@"Due to future changes in Semantic Kernel library, the semantic memory will be a dependency outside the `IKernel`. An additional dependency with `ISemanticTextMemory` will be added. The signature of this method will change in future versions of this library.")]
-    public static IDictionary<string, ISKFunction> ImportMemoryPlugin(this IKernel kernel, Func<string, int> tokensLengthFunction)
+    public static IDictionary<string, ISKFunction> ImportMemoryPlugin(this IKernel kernel, ISemanticTextMemory semanticTextMemory, Func<string, int> tokensLengthFunction)
     {
-        var memoryQueryPlugin = new MemoryQueryPlugin(kernel, tokensLengthFunction);
+        var memoryQueryPlugin = new MemoryQueryPlugin(semanticTextMemory, tokensLengthFunction);
 
-        return kernel.ImportSkill(memoryQueryPlugin, PluginsInfo.MemoryQueryPlugin.Name);
+        return kernel.ImportFunctions(memoryQueryPlugin, PluginsInfo.MemoryQueryPlugin.Name);
     }
 }

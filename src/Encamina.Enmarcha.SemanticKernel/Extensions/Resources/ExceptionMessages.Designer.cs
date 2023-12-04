@@ -61,16 +61,7 @@ namespace Encamina.Enmarcha.SemanticKernel.Extensions.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Function &apos;{0}&apos; is not semantic function!.
-        /// </summary>
-        internal static string NotSemanticFunction {
-            get {
-                return ResourceManager.GetString("NotSemanticFunction", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Prompt file (&apos;skprompt.txt&apos;) for function &apos;{0}&apos; from plug-in &apos;{0} not found at &apos;{templatePath}&apos;!.
+        ///   Looks up a localized string similar to Prompt file (&apos;skprompt.txt&apos;) for function &apos;{function}&apos; from plug-in &apos;{plugin} not found at &apos;{templatePath}&apos;!.
         /// </summary>
         internal static string PromptFileNotFound {
             get {

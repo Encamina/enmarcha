@@ -6,9 +6,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
-using Sample_Data_EntityFramework;
+namespace Encamina.Enmarcha.Samples.Data.EntityFramework;
 
-internal sealed class Program
+internal static class Program
 {
     private static async Task Main(string[] args)
     {
@@ -57,7 +57,7 @@ internal sealed class Program
                         Console.WriteLine("Amount of the bill:");
                         var amount = double.Parse(Console.ReadLine());
                         await finantialSystemOperations.AddAsync(new Bill() { Amount = amount, Concept = concept, EmployeeId = selectedEmployee.Id }, CancellationToken.None);
-                        Console.WriteLine("Bill succesfully uploaded");
+                        Console.WriteLine("Bill successfully uploaded");
                     }
 
                     break;

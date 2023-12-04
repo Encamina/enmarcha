@@ -1,7 +1,5 @@
 ﻿using System.Collections.ObjectModel;
 
-using static System.Net.WebRequestMethods;
-
 namespace Encamina.Enmarcha.AI.OpenAI.Abstractions;
 
 /// <summary>
@@ -58,7 +56,7 @@ public sealed class ModelInfo
     public string Id { get; init; }
 
     /// <summary>
-    /// Gets the maximium number of tokens allowed for the model.
+    /// Gets the maximum number of tokens allowed for the model.
     /// </summary>
     public int MaxTokens { get; init; }
 

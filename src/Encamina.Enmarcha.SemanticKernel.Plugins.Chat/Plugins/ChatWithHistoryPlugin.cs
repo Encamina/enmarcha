@@ -7,7 +7,6 @@ using Microsoft.Extensions.Options;
 
 using Microsoft.SemanticKernel;
 using Microsoft.SemanticKernel.AI.ChatCompletion;
-using Microsoft.SemanticKernel.SkillDefinition;
 
 namespace Encamina.Enmarcha.SemanticKernel.Plugins.Chat.Plugins;
 

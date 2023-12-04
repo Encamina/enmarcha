@@ -1,4 +1,6 @@
-﻿using CommunityToolkit.Diagnostics;
+﻿// Ignore Spelling: pdf
+
+using CommunityToolkit.Diagnostics;
 
 using UglyToad.PdfPig;
 using UglyToad.PdfPig.Content;

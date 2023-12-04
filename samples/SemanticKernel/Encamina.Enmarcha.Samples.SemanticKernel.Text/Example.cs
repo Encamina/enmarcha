@@ -3,9 +3,9 @@
 using Microsoft.SemanticKernel;
 using Microsoft.SemanticKernel.Orchestration;
 
-namespace Sample_SemanticKernel_Text.Text;
+namespace Encamina.Enmarcha.Samples.SemanticKernel.Text;
 
-public class MyClass
+internal class Example
 {
     private readonly IKernel kernel;
 
@@ -16,7 +16,7 @@ public class MyClass
         English playwright Watts Phillips, who knew Dumas in his later life, described him as ""the most generous, large - hearted being in the world.He also was the most delightfully amusing and egotistical creature on the face of the earth.His tongue was like a windmill – once set in motion, you never knew when he would stop, especially if the theme was himself.""";
 
     /// <inheritdoc/>
-    public MyClass(IKernel kernel)
+    public Example(IKernel kernel)
     {
         this.kernel = kernel;
         Console.WriteLine($"# Context: {input} \n");
@@ -29,10 +29,12 @@ public class MyClass
         contextVariables.Set(PluginsInfo.TextPlugin.Functions.Summarize.Parameters.Input, input);
         contextVariables.Set(PluginsInfo.TextPlugin.Functions.Summarize.Parameters.MaxWordsCount, "15");
 
-        var functionSummarize = kernel.Func(PluginsInfo.TextPlugin.Name, PluginsInfo.TextPlugin.Functions.Summarize.Name);
+        var functionSummarize = kernel.Functions.GetFunction(PluginsInfo.TextPlugin.Name, PluginsInfo.TextPlugin.Functions.Summarize.Name);
 
         var resultContext = await kernel.RunAsync(contextVariables, functionSummarize);
-        Console.WriteLine($"# Summary: {resultContext.Result} \n");
+        var result = resultContext.GetValue<string>();
+
+        Console.WriteLine($"# Summary: {result} \n");
     }
 
     /// <inheritdoc/>
@@ -42,10 +44,11 @@ public class MyClass
         contextVariables.Set(PluginsInfo.TextPlugin.Functions.KeyPhrases.Parameters.Input, input);
         contextVariables.Set(PluginsInfo.TextPlugin.Functions.KeyPhrases.Parameters.TopKeyphrases, "2");
 
-        var functionSummarize = kernel.Func(PluginsInfo.TextPlugin.Name, PluginsInfo.TextPlugin.Functions.KeyPhrases.Name);
+        var functionSummarize = kernel.Functions.GetFunction(PluginsInfo.TextPlugin.Name, PluginsInfo.TextPlugin.Functions.KeyPhrases.Name);
 
         var resultContext = await kernel.RunAsync(contextVariables, functionSummarize);
-        Console.WriteLine($"# Key Phrases: {resultContext.Result} \n");
-    }
+        var result = resultContext.GetValue<string>();
 
+        Console.WriteLine($"# Key Phrases: {result} \n");
+    }
 }
