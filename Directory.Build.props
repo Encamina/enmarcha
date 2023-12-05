@@ -1,8 +1,8 @@
 <Project>
   <PropertyGroup>
     <Authors>ENCAMINA</Authors>
-    <Company>ENCAMINA</Company>
-    <Copyright>Copyright © 2023 ENCAMINA S.L.</Copyright>
+    <Company>ENCAMINA S.L.</Company>
+    <Copyright>Copyright © $([System.DateTime]::Now.Year) ENCAMINA S.L.</Copyright>
     <Product>Enmarcha Libraries</Product>
   </PropertyGroup>
 
@@ -16,7 +16,7 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <VersionPrefix>6.0.4.0</VersionPrefix>
+    <VersionPrefix>8.0.0</VersionPrefix>
     <VersionSuffix></VersionSuffix>
   </PropertyGroup>
 
