@@ -12,9 +12,55 @@ Each version and revision is followed by a date of change, specially for under d
 - **Major Changes**: big improvements in the code, like adding or enabling features, or bug fixes.
 - **Minor Changes**: small changes that have little impact, like spell checks in an API's documentation, adding or removing comments, etc.
 
-Also, any bug fix must start with the prefix «Bug fix:» followed by the description of the changes _per se_.
+Also, any bug fix must start with the prefix ï¿½Bug fix:ï¿½ followed by the description of the changes _per se_.
 
 Previous classification is not required if changes are simple or all belong to the same category.
+
+## [8.0.1]
+
+### **Major Changes**
+ - In `Encamina.Enmarcha.SemanticKernel.Abstractions.ILengthFunctions`, `GptEncoding` is now cached and reused to improve performance. [(#30)](https://github.com/Encamina/enmarcha/pull/30)
+
+### Minor Changes
+  - Changes from version 8.0.0 have been added to the `CHANGELOG.md` file.
+
+## [8.0.0]
+
+### Major Changes
+
+ - Changed .NET version from 6 to 8, therefore closes issue `Everything ready for ENMARCHA 8.0.0 #7`.
+ - Updated the following .NET libraries to their newest version (8.0.0):
+   - Microsoft.AspNetCore.Authentication.JwtBearer
+   - Microsoft.AspNetCore.Authentication.OpenIdConnect
+   - Microsoft.EntityFrameworkCore
+   - Microsoft.EntityFrameworkCore.SqlServer
+   - Microsoft.Extensions.Caching.Abstractions
+   - Microsoft.Extensions.Configuration.Abstractions
+   - Microsoft.Extensions.DependencyInjection.Abstractions
+   - Microsoft.Extensions.Hosting
+   - Microsoft.Extensions.Http
+   - Microsoft.Extensions.Logging.Abstractions
+   - Microsoft.Extensions.Options
+   - Microsoft.Extensions.Options.ConfigurationExtensions
+   - Microsoft.Extensions.Options.DataAnnotations
+   - System.Net.Http.Json
+   - System.Text.Json
+ - Updated library Azure.Data.Tables from 12.8.1 to 12.8.2.
+ - Updated library Microsoft.Azure.Cosmos from 3.36.0 to 3.37.0.
+ - Updated Bot Framework related libraries from version 4.21.1 to 4.21.2. These libraries are:
+   - Microsoft.Bot.Builder.Azure
+   - Microsoft.Bot.Builder.Azure.Blobs
+   - Microsoft.Bot.Builder.Dialogs
+   - Microsoft.Bot.Builder.Integration.ApplicationInsights.Core
+   - Microsoft.Bot.Builder.Integration.AspNet.Core
+ - Updated library Moq from 4.20.69 to 4.20.70.
+ - Updated library xunit from 2.6.1 to 2.6.2.
+ - Updated library xunit.analyzers from 1.5.0 to 1.6.0.
+ - Updated library xunit.extensibility.core from 2.6.1 to 2.6.2.
+ - Updated library xunit.runner.visualstudio from 2.5.3 to 2.5.4.
+
+## Minor Changes
+ - Some minor tweaks.
 
 ## [6.0.4]
 
