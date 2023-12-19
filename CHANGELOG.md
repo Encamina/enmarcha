@@ -16,6 +16,11 @@ Also, any bug fix must start with the prefix «Bug fix:» followed by the descript
 
 Previous classification is not required if changes are simple or all belong to the same category.
 
+## [6.0.4.1]
+
+### Major Changes
+
+- In `Encamina.Enmarcha.SemanticKernel.Abstractions.ILengthFunctions`, `GptEncoding` is now cached and reused to improve performance.
 ## [6.0.4]
 
 ### Important
