@@ -1,4 +1,5 @@
 ﻿using System.Collections.Concurrent;
+using System.Runtime.Serialization;
 
 using Microsoft.SemanticKernel.Memory;
 
@@ -13,7 +14,9 @@ public abstract class MemoryStoreHandlerBase : IMemoryStoreHandler
     /// Initializes a new instance of the <see cref="MemoryStoreHandlerBase"/> class.
     /// </summary>
     /// <param name="memoryStore">The <see cref="IMemoryStore"/> to handle.</param>
+#pragma warning disable SKEXP0003 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
     protected MemoryStoreHandlerBase(IMemoryStore memoryStore)
+#pragma warning restore SKEXP0003 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
     {
         MemoryStore = memoryStore;
     }
@@ -72,6 +75,16 @@ public abstract class MemoryStoreHandlerBase : IMemoryStoreHandler
         /// <summary>
         /// Gets or sets the last access date in UTC.
         /// </summary>
+        [Obsolete("Use 'LastAccessUTC' property instead.")]
         public DateTime LastAccessUtc { get; set; }
+
+        /// <summary>
+        /// Gets or sets the last access date in UTC.
+        /// </summary>
+        public DateTime LastAccessUTC
+        {
+            get => LastAccessUtc;
+            set => LastAccessUtc = value;
+        }
     }
 }
