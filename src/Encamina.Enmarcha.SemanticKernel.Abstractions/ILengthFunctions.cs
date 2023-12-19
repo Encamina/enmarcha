@@ -13,7 +13,7 @@ public interface ILengthFunctions : AI.Abstractions.ILengthFunctions
     /// <summary>
     /// Dictionary to cache GptEncoding instances based on encoding names.
     /// </summary>
-    private static readonly Dictionary<string, GptEncoding> EncodingCache = [];
+    private static readonly Dictionary<string, GptEncoding> EncodingCache = new Dictionary<string, GptEncoding>();
 
     /// <summary>
     /// Gets the number of tokens using encodings for models like `GPT-3.5-Turbo` and `GPT-4` from OpenAI on the specified text.
