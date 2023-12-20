@@ -20,6 +20,11 @@
         "name": "maxWordsCount",
         "description": "Maximum number of words that the summary should have",
         "defaultValue": "1000"
+      },
+      {
+        "name": "locale",
+        "description": "Language in which the summary will be generated",
+        "defaultValue": "en"
       }
     ]
   }
