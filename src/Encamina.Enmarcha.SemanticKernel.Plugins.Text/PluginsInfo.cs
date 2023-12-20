@@ -71,6 +71,11 @@ public static class PluginsInfo
                     /// The name of the «minWordsCount» parameter, which represents the maximum number of words that the summary should have.
                     /// </summary>
                     public static readonly string MaxWordsCount = nameof(MaxWordsCount).ToLowerInvariant();
+
+                    /// <summary>
+                    /// The name of the «locale» parameter, which represents the language in which the summary will be generated.
+                    /// </summary>
+                    public static readonly string Locale = nameof(Locale).ToLowerInvariant();
                 }
             }
         }
