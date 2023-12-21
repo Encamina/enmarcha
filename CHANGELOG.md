@@ -12,9 +12,14 @@ Each version and revision is followed by a date of change, specially for under d
 - **Major Changes**: big improvements in the code, like adding or enabling features, or bug fixes.
 - **Minor Changes**: small changes that have little impact, like spell checks in an API's documentation, adding or removing comments, etc.
 
-Also, any bug fix must start with the prefix «Bug fix:» followed by the description of the changes _per se_.
+Also, any bug fix must start with the prefix ï¿½Bug fix:ï¿½ followed by the description of the changes _per se_.
 
 Previous classification is not required if changes are simple or all belong to the same category.
+
+## [6.0.4.2]
+
+### **Major Changes**
+ - In `Encamina.Enmarcha.SemanticKernel.Plugins.Text` Summarize Plugin, a new parameter `locale` has been added to control the output language of the generated summary. [(#34)](https://github.com/Encamina/enmarcha/issues/34)
 
 ## [6.0.4.1]
 
