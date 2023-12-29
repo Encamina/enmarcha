@@ -16,6 +16,11 @@ Also, any bug fix must start with the prefix �Bug fix:� followed by the desc
 
 Previous classification is not required if changes are simple or all belong to the same category.
 
+## [8.0.3]
+
+### Minor Changes
+  - Add gpt-35-turbo-16k and gpt-3.5-turbo-16k model implementation allowed
+
 ## [8.0.2]
 
 ### **Major Changes**
