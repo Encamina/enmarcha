@@ -1,9 +1,8 @@
-Your task is TO SUMMARIZE the INPUT text using no more than {{$maxWordsCount}} words.
-DO NOT TRANSLATE the text, USE the same language as the INPUT.
+Your task is TO SUMMARIZE the INPUT text using no more than {{$maxWordsCount}} words in the '{{$locale}}' language.
 Maximize detail and meaning.
 Focus on the content in the INPUT text.
-ALWAYS answer in the SAME LANGUAGE as the INPUT.
 USE {{$maxWordsCount}} words or less TO SUMMARIZE the content in INPUT.
+Summarize using the '{{$locale}}' language.
 
 [INPUT]
 

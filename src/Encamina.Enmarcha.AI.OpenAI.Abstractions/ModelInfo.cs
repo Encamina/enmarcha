@@ -13,6 +13,8 @@ public sealed class ModelInfo
     private static readonly IDictionary<string, ModelInfo> ModelInfoById = new ReadOnlyDictionary<string, ModelInfo>(new Dictionary<string, ModelInfo>()
     {
         // Chat...
+        { @"gpt-35-turbo-16k", new ModelInfo() { Id = @"gpt-35-turbo-16k", MaxTokens = 16200, Encoding = @"cl100k_base", IsObsolete = false } },
+        { @"gpt-3.5-turbo-16k", new ModelInfo() { Id = @"gpt-3.5-turbo-16k", MaxTokens = 16200, Encoding = @"cl100k_base", IsObsolete = false } },
         { @"gpt-35-turbo", new ModelInfo() { Id = @"gpt-35-turbo", MaxTokens = 4096, Encoding = @"cl100k_base", IsObsolete = false } },
         { @"gpt-3.5-turbo", new ModelInfo() { Id = @"gpt-3.5-turbo", MaxTokens = 4096, Encoding = @"cl100k_base", IsObsolete = false } },
         { @"gpt-4", new ModelInfo() { Id = @"gpt-4", MaxTokens = 8192, Encoding = @"cl100k_base", IsObsolete = false } },
