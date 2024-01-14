@@ -78,6 +78,8 @@ public sealed class RecursiveCharacterTextSplitterTests
         // Assert...
         Assert.Equal(81, splitsWithParameterOptions.Count);
         Assert.Equal(10, splitsWithDefaultOptions.Count);
+        Assert.Equal("Lorem ipsum dolor sit amet\n\nConsectetur adipiscing elit", splitsWithDefaultOptions[0]);
+        Assert.Equal("tortor vitae purus faucibus ornare suspendisse.", splitsWithDefaultOptions[9]);
     }
 
     private static string GivenAText()
