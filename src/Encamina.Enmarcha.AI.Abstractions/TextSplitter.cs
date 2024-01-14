@@ -46,7 +46,18 @@ public abstract class TextSplitter : ITextSplitter
     public IList<string> Separators { get; }
 
     /// <inheritdoc/>
-    public abstract IEnumerable<string> Split(string text, Func<string, int> lengthFunction);
+    public abstract IEnumerable<string> Split(string text, Func<string, int> lengthFunction, TextSplitterOptions options);
+
+    /// <inheritdoc/>
+    public virtual IEnumerable<string> Split(string text, Func<string, int> lengthFunction)
+    {
+        return Split(text, lengthFunction, new TextSplitterOptions()
+        {
+            ChunkOverlap = ChunkOverlap,
+            ChunkSize = ChunkSize,
+            Separators = Separators,
+        });
+    }
 
     /// <inheritdoc/>
     /// <exception cref="ArgumentNullException">
@@ -70,11 +81,26 @@ public abstract class TextSplitter : ITextSplitter
     /// </exception>"
     public virtual IEnumerable<string> MergeSplits(IEnumerable<string> splits, string separator, Func<string, int> lengthFunction)
     {
+        return MergeSplits(splits, separator, lengthFunction, new TextSplitterOptions()
+        {
+            ChunkOverlap = ChunkOverlap,
+            ChunkSize = ChunkSize,
+            Separators = Separators,
+        });
+    }
+
+    /// <inheritdoc/>
+    /// <exception cref="ArgumentNullException">
+    /// Thrown when any of the parameters <paramref name="splits"/>, <paramref name="separator"/>, <paramref name="lengthFunction"/> or <paramref name="options"/> is <see langword="null"/>.
+    /// </exception>"
+    public virtual IEnumerable<string> MergeSplits(IEnumerable<string> splits, string separator, Func<string, int> lengthFunction, TextSplitterOptions options)
+    {
         Guard.IsNotNull(splits);
         Guard.IsNotNull(separator);
         Guard.IsNotNull(lengthFunction);
+        Guard.IsNotNull(options);
 
-        string chunk = null;
+        string chunk;
         var chunks = new List<string>();
         var currentChunks = new Queue<string>();
 
@@ -86,7 +112,7 @@ public abstract class TextSplitter : ITextSplitter
             var splitLength = lengthFunction(split);
             var hasCurrentChunks = currentChunks.Any();
 
-            if (hasCurrentChunks && total + splitLength + separatorLength > ChunkSize)
+            if (hasCurrentChunks && total + splitLength + separatorLength > options.ChunkSize)
             {
                 chunk = JoinChunks(currentChunks, separator);
 
@@ -100,7 +126,7 @@ public abstract class TextSplitter : ITextSplitter
                 // - There is a larger chunk than the chunk overlap
                 while (
                     hasCurrentChunks
-                    && (total > ChunkOverlap || (total + splitLength + separatorLength > ChunkSize && total > 0)))
+                    && (total > options.ChunkOverlap || (total + splitLength + separatorLength > options.ChunkSize && total > 0)))
                 {
                     total -= lengthFunction(currentChunks.Dequeue()) + (currentChunks.Count > 1 ? separatorLength : 0);
                     hasCurrentChunks = currentChunks.Any();
