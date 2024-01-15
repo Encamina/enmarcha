@@ -23,15 +23,15 @@ internal static class Program
         // Configure service
         hostBuilder.ConfigureServices((hostContext, services) =>
         {
-            services.AddScoped(sp =>
+            services.AddScoped(_ =>
             {
                 // Get semantic kernel options
                 var options = hostContext.Configuration.GetRequiredSection(nameof(SemanticKernelOptions)).Get<SemanticKernelOptions>()
                 ?? throw new InvalidOperationException(@$"Missing configuration for {nameof(SemanticKernelOptions)}");
 
                 // Initialize semantic kernel
-                var kernel = new KernelBuilder()
-                    .WithAzureOpenAIChatCompletionService(options.ChatModelDeploymentName, options.Endpoint.ToString(), options.Key)
+                var kernel = Kernel.CreateBuilder()
+                    .AddAzureOpenAIChatCompletion(options.ChatModelDeploymentName, options.Endpoint.ToString(), options.Key)
                     .Build();
 
                 kernel.ImportTextPlugin();

@@ -6,9 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
 using Microsoft.SemanticKernel;
-using Microsoft.SemanticKernel.Connectors.AI.OpenAI;
 using Microsoft.SemanticKernel.Memory;
-using Microsoft.SemanticKernel.Plugins.Memory;
 
 namespace Encamina.Enmarcha.Samples.SemanticKernel.QuestionAnswering;
 
@@ -37,14 +35,14 @@ internal static class ExampleQuestionAnsweringFromMemory
 
             // Here use any desired implementation (Qdrant, Volatile...)
             services.AddSingleton<IMemoryStore, VolatileMemoryStore>()
-                    .AddSemanticTextMemory();
+                .AddSemanticTextMemory();
 
             services.AddScoped(sp =>
             {
                 // Initialize semantic kernel
-                var kernel = new KernelBuilder()
-                    .WithAzureOpenAIChatCompletionService(options.ChatModelDeploymentName, options.Endpoint.ToString(), options.Key)
-                    .WithAzureOpenAITextEmbeddingGenerationService(options.EmbeddingsModelDeploymentName, options.Endpoint.ToString(), options.Key)
+                var kernel = Kernel.CreateBuilder()
+                    .AddAzureOpenAIChatCompletion(options.ChatModelDeploymentName, options.Endpoint.ToString(), options.Key)
+                    .AddAzureOpenAITextEmbeddingGeneration(options.EmbeddingsModelDeploymentName, options.Endpoint.ToString(), options.Key)
                     .Build();
 
                 // Import Question Answering plugin

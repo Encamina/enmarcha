@@ -1,5 +1,4 @@
-﻿using Encamina.Enmarcha.Samples.SemanticKernel.QuestionAnswering;
-using Encamina.Enmarcha.SemanticKernel.Abstractions;
+﻿using Encamina.Enmarcha.SemanticKernel.Abstractions;
 using Encamina.Enmarcha.SemanticKernel.Plugins.QuestionAnswering;
 
 using Microsoft.Extensions.Configuration;
@@ -14,7 +13,7 @@ internal static class ExampleQuestionAnsweringFromContext
 {
     public static async Task RunAsync()
     {
-        Console.WriteLine("# Executing Example_QuestionAnsweringFromContext");
+        Console.WriteLine(@"# Executing Example_QuestionAnsweringFromContext");
 
         // Create and configure builder
         var hostBuilder = new HostBuilder()
@@ -36,8 +35,8 @@ internal static class ExampleQuestionAnsweringFromContext
                 ?? throw new InvalidOperationException(@$"Missing configuration for {nameof(SemanticKernelOptions)}");
 
                 // Initialize semantic kernel
-                var kernel = new KernelBuilder()
-                    .WithAzureOpenAIChatCompletionService(options.ChatModelDeploymentName, options.Endpoint.ToString(), options.Key)
+                var kernel = Kernel.CreateBuilder()
+                    .AddAzureOpenAIChatCompletion(options.ChatModelDeploymentName, options.Endpoint.ToString(), options.Key)
                     .Build();
 
                 // Import Question Answering plugin

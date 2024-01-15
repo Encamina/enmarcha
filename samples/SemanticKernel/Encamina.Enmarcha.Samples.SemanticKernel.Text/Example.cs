@@ -24,14 +24,15 @@ internal class Example
     /// <inheritdoc/>
     public async Task TestSummaryAsync()
     {
-        var contextVariables = new ContextVariables();
-        contextVariables.Set(PluginsInfo.TextPlugin.Functions.Summarize.Parameters.Input, input);
-        contextVariables.Set(PluginsInfo.TextPlugin.Functions.Summarize.Parameters.MaxWordsCount, "15");
+        var summaryArguments = new KernelArguments()
+        {
+            [PluginsInfo.TextPlugin.Functions.Summarize.Parameters.Input] = input,
+            [PluginsInfo.TextPlugin.Functions.Summarize.Parameters.MaxWordsCount] = 15,
+        };
 
-        var functionSummarize = kernel.Functions.GetFunction(PluginsInfo.TextPlugin.Name, PluginsInfo.TextPlugin.Functions.Summarize.Name);
+        var functionSummarize = kernel.Plugins.GetFunction(PluginsInfo.TextPlugin.Name, PluginsInfo.TextPlugin.Functions.Summarize.Name);
 
-        var resultContext = await kernel.RunAsync(contextVariables, functionSummarize);
-        var result = resultContext.GetValue<string>();
+        var result = await kernel.InvokeAsync<string>(functionSummarize, summaryArguments);
 
         Console.WriteLine($"# Summary: {result} \n");
     }
@@ -39,14 +40,15 @@ internal class Example
     /// <inheritdoc/>
     public async Task TextKeyPhrasesAsync()
     {
-        var contextVariables = new ContextVariables();
-        contextVariables.Set(PluginsInfo.TextPlugin.Functions.KeyPhrases.Parameters.Input, input);
-        contextVariables.Set(PluginsInfo.TextPlugin.Functions.KeyPhrases.Parameters.TopKeyphrases, "2");
+        var keyPhrasesArguments = new KernelArguments()
+        {
+            [PluginsInfo.TextPlugin.Functions.KeyPhrases.Parameters.Input] = input,
+            [PluginsInfo.TextPlugin.Functions.KeyPhrases.Parameters.TopKeyphrases] = 2,
+        };
 
-        var functionSummarize = kernel.Functions.GetFunction(PluginsInfo.TextPlugin.Name, PluginsInfo.TextPlugin.Functions.KeyPhrases.Name);
+        var functionSummarize = kernel.Plugins.GetFunction(PluginsInfo.TextPlugin.Name, PluginsInfo.TextPlugin.Functions.KeyPhrases.Name);
 
-        var resultContext = await kernel.RunAsync(contextVariables, functionSummarize);
-        var result = resultContext.GetValue<string>();
+        var result = await kernel.InvokeAsync<string>(functionSummarize, keyPhrasesArguments);
 
         Console.WriteLine($"# Key Phrases: {result} \n");
     }
