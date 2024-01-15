@@ -1,4 +1,4 @@
-using Encamina.Enmarcha.AI.Abstractions;
+﻿using Encamina.Enmarcha.AI.Abstractions;
 using Encamina.Enmarcha.AI.TextSplitters;
 using Encamina.Enmarcha.Testing;
 
@@ -18,11 +18,11 @@ public sealed class RecursiveCharacterTextSplitterTests
         };
         var optionsMonitor = new TestOptionsMonitor<TextSplitterOptions>(defaultTextSplitterOptions);
         var recursiveCharacterTextSplitter = new RecursiveCharacterTextSplitter(optionsMonitor);
-        var lenghtFunction = ILengthFunctions.LengthByCharacterCount;
+        var lengthFunction = ILengthFunctions.LengthByCharacterCount;
         var text = GivenAText();
 
         // Act...
-        var splits = recursiveCharacterTextSplitter.Split(text, lenghtFunction).ToList();
+        var splits = recursiveCharacterTextSplitter.Split(text, lengthFunction).ToList();
 
         // Assert...
         Assert.Equal(10, splits.Count);
@@ -43,11 +43,11 @@ public sealed class RecursiveCharacterTextSplitterTests
             ChunkOverlap = 0,
             ChunkSize = 100,
         };
-        var lenghtFunction = ILengthFunctions.LengthByCharacterCount;
+        var lengthFunction = ILengthFunctions.LengthByCharacterCount;
         var text = GivenAText();
 
         // Act...
-        var splits = recursiveCharacterTextSplitter.Split(text, lenghtFunction, textSplitterOptions).ToList();
+        var splits = recursiveCharacterTextSplitter.Split(text, lengthFunction, textSplitterOptions).ToList();
 
         // Assert...
         Assert.Equal(10, splits.Count);
@@ -68,12 +68,12 @@ public sealed class RecursiveCharacterTextSplitterTests
         };
         var optionsMonitor = new TestOptionsMonitor<TextSplitterOptions>(textSplitterOptions);
         var recursiveCharacterTextSplitter = new RecursiveCharacterTextSplitter(optionsMonitor);
-        var lenghtFunction = ILengthFunctions.LengthByCharacterCount;
+        var lengthFunction = ILengthFunctions.LengthByCharacterCount;
         var text = GivenAText();
 
         // Act...
-        var splitsWithParameterOptions = recursiveCharacterTextSplitter.Split(text, lenghtFunction, dummyTextSplitterOptions).ToList();
-        var splitsWithDefaultOptions = recursiveCharacterTextSplitter.Split(text, lenghtFunction).ToList();
+        var splitsWithParameterOptions = recursiveCharacterTextSplitter.Split(text, lengthFunction, dummyTextSplitterOptions).ToList();
+        var splitsWithDefaultOptions = recursiveCharacterTextSplitter.Split(text, lengthFunction).ToList();
 
         // Assert...
         Assert.Equal(81, splitsWithParameterOptions.Count);
