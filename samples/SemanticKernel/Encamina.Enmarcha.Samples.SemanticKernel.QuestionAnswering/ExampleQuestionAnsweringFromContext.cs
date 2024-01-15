@@ -50,7 +50,7 @@ internal static class ExampleQuestionAnsweringFromContext
         var host = hostBuilder.Build();
 
         // Initialize Q&A
-        var testQuestionAnswering = new TestQuestionAnswering(host.Services.GetRequiredService<IKernel>());
+        var testQuestionAnswering = new TestQuestionAnswering(host.Services.GetRequiredService<Kernel>());
 
         var result = await testQuestionAnswering.TestQuestionAnsweringFromContextAsync();
 

@@ -14,12 +14,12 @@ using Microsoft.SemanticKernel;
 namespace Encamina.Enmarcha.SemanticKernel.Plugins.Chat;
 
 /// <summary>
-/// Extension methods on <see cref="IKernel"/> to import and configure plugins.
+/// Extension methods on <see cref="Kernel"/> to import and configure plugins.
 /// </summary>
-public static class IKernelExtensions
+public static class KernelExtensions
 {
     /// <summary>
-    /// Imports the «Chat with History» plugin into the kernel.
+    /// Imports the «Chat with History» plugin into the <see cref="Kernel"/>.
     /// </summary>
     /// <remarks>
     /// This extension method uses a «Service Location» pattern provided by the <see cref="IServiceProvider"/> to resolve the following dependencies:
@@ -27,7 +27,7 @@ public static class IKernelExtensions
     ///     <item>
     ///         <term>SemanticKernelOptions</term>
     ///         <description>
-    ///             A required dependency of type <see cref="SemanticKernelOptions"/> used to retrieve the configurations for the <see cref="IKernel"/>. This dependency
+    ///             A required dependency of type <see cref="SemanticKernelOptions"/> used to retrieve the configurations for the <see cref="Kernel"/>. This dependency
     ///             should be added using any of the <see cref="OptionsServiceCollectionExtensions.AddOptions"/> extension method.
     ///         </description>
     ///     </item>
@@ -47,14 +47,14 @@ public static class IKernelExtensions
     ///     </item>
     /// </list>
     /// </remarks>
-    /// <param name="kernel">The <see cref="IKernel"/> instance to add this plugin.</param>
+    /// <param name="kernel">The <see cref="Kernel"/> instance to add this plugin.</param>
     /// <param name="serviceProvider">A <see cref="IServiceProvider"/> to resolve the dependencies.</param>
     /// <param name="cosmosContainer">The name of the Cosmos DB container to store the chat history messages.</param>
     /// <param name="tokensLengthFunction">
     /// A function to calculate the length by tokens of the chat messages. These functions are usually available in the «mixin» interface <see cref="ILengthFunctions"/>.
     /// </param>
     /// <returns>A list of all the functions found in this plugin, indexed by function name.</returns>
-    public static IDictionary<string, ISKFunction> ImportChatWithHistoryPluginUsingCosmosDb(this IKernel kernel, IServiceProvider serviceProvider, string cosmosContainer, Func<string, int> tokensLengthFunction)
+    public static KernelPlugin ImportChatWithHistoryPluginUsingCosmosDb(this Kernel kernel, IServiceProvider serviceProvider, string cosmosContainer, Func<string, int> tokensLengthFunction)
     {
         Guard.IsNotNull(serviceProvider);
         Guard.IsNotNull(tokensLengthFunction);
@@ -66,6 +66,6 @@ public static class IKernelExtensions
 
         var chatWithHistoryPlugin = new ChatWithHistoryPlugin(kernel, semanticKernelOptions.ChatModelName, tokensLengthFunction, chatMessagesHistoryRepository, chatWithHistoryPluginOptions);
 
-        return kernel.ImportFunctions(chatWithHistoryPlugin, PluginsInfo.ChatWithHistoryPlugin.Name);
+        return kernel.ImportPluginFromObject(chatWithHistoryPlugin, PluginsInfo.ChatWithHistoryPlugin.Name);
     }
 }

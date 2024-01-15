@@ -6,9 +6,11 @@ using Encamina.Enmarcha.Data.Abstractions;
 using Microsoft.Extensions.Options;
 
 using Microsoft.SemanticKernel;
-using Microsoft.SemanticKernel.AI.ChatCompletion;
+using Microsoft.SemanticKernel.ChatCompletion;
 
 namespace Encamina.Enmarcha.SemanticKernel.Plugins.Chat.Plugins;
+
+// TODO - Review the tokens count to be align with the chat model. Use as reference the code from the Chat Copilot project.
 
 /// <summary>
 /// Represents a plugin that allows users to interact while chatting and asking questions to an Artificial Intelligence, usually a Large Language Model (LLM).
@@ -16,9 +18,8 @@ namespace Encamina.Enmarcha.SemanticKernel.Plugins.Chat.Plugins;
 public class ChatWithHistoryPlugin
 {
     private readonly string chatModelName;
-    private readonly IChatCompletion chat;
     private readonly IAsyncRepository<ChatMessageHistoryRecord> chatMessagesHistoryRepository;
-
+    private readonly Kernel kernel;
     private readonly Func<string, int> tokensLengthFunction;
 
     private ChatWithHistoryPluginOptions options;
@@ -31,9 +32,9 @@ public class ChatWithHistoryPlugin
     /// <param name="tokensLengthFunction">Function to calculate the length of a string (usually the chat messages) in tokens.</param>
     /// <param name="chatMessagesHistoryRepository">A valid instance of an asynchronous repository pattern implementation.</param>
     /// <param name="options">Configuration options for this plugin.</param>
-    public ChatWithHistoryPlugin(IKernel kernel, string chatModelName, Func<string, int> tokensLengthFunction, IAsyncRepository<ChatMessageHistoryRecord> chatMessagesHistoryRepository, IOptionsMonitor<ChatWithHistoryPluginOptions> options)
+    public ChatWithHistoryPlugin(Kernel kernel, string chatModelName, Func<string, int> tokensLengthFunction, IAsyncRepository<ChatMessageHistoryRecord> chatMessagesHistoryRepository, IOptionsMonitor<ChatWithHistoryPluginOptions> options)
     {
-        this.chat = kernel.GetService<IChatCompletion>();
+        this.kernel = kernel;
         this.chatModelName = chatModelName;
         this.chatMessagesHistoryRepository = chatMessagesHistoryRepository;
         this.options = options.CurrentValue;
@@ -58,7 +59,7 @@ public class ChatWithHistoryPlugin
     /// <param name="locale">The preferred language of the user while chatting.</param>
     /// <param name="cancellationToken">A cancellation token that can be used to receive notice of cancellation.</param>
     /// <returns>A string representing the response from the Artificial Intelligence.</returns>
-    [SKFunction]
+    [KernelFunction]
     [Description(@"Allows users to chat and ask questions to an Artificial Intelligence.")]
     public virtual async Task<string> ChatAsync(
         [Description(@"What the user says or asks when chatting")] string ask,
@@ -75,7 +76,7 @@ public class ChatWithHistoryPlugin
 
         var remainingTokens = chatModelMaxTokens - askTokens - systemPromptTokens - (options.ChatRequestSettings.MaxTokens ?? 0);
 
-        var chatHistory = chat.CreateNewChat(systemPrompt);
+        var chatHistory = new ChatHistory(systemPrompt);
 
         if (remainingTokens < 0)
         {
@@ -86,7 +87,8 @@ public class ChatWithHistoryPlugin
 
         chatHistory.AddUserMessage(ask);
 
-        var response = await chat.GenerateMessageAsync(chatHistory, options.ChatRequestSettings, cancellationToken);
+        var chatMessage = await kernel.GetRequiredService<IChatCompletionService>().GetChatMessageContentAsync(chatHistory, options.ChatRequestSettings, kernel, cancellationToken);
+        var response = chatMessage.Content;
 
         await SaveChatMessagesHistory(userId, AuthorRole.User.ToString(), ask, cancellationToken);               // Save in chat history the user message (a.k.a. ask).
         await SaveChatMessagesHistory(userId, AuthorRole.Assistant.ToString(), response, cancellationToken);     // Save in chat history the assistant message (a.k.a. response).
@@ -110,7 +112,9 @@ public class ChatWithHistoryPlugin
 
         chatHistory.AddSystemMessage(prompt);
 
-        return await chat.GenerateMessageAsync(chatHistory, options.ChatRequestSettings, cancellationToken);
+        var chatMessage = await kernel.GetRequiredService<IChatCompletionService>().GetChatMessageContentAsync(chatHistory, options.ChatRequestSettings, kernel, cancellationToken);
+
+        return chatMessage.Content;
     }
 
     /// <summary>

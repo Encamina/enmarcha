@@ -10,9 +10,9 @@ namespace Encamina.Enmarcha.Samples.SemanticKernel.QuestionAnswering;
 /// </summary>
 internal class TestQuestionAnswering
 {
-    private readonly IKernel kernel;
+    private readonly Kernel kernel;
 
-    public TestQuestionAnswering(IKernel kernel)
+    public TestQuestionAnswering(Kernel kernel)
     {
         this.kernel = kernel;
     }

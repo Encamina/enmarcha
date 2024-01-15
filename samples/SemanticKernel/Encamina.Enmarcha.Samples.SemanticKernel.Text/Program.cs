@@ -43,7 +43,7 @@ internal static class Program
         var host = hostBuilder.Build();
 
         // Initialize Examples
-        var example = new Example(host.Services.GetRequiredService<IKernel>());
+        var example = new Example(host.Services.GetRequiredService<Kernel>());
 
         await example.TestSummaryAsync();
 

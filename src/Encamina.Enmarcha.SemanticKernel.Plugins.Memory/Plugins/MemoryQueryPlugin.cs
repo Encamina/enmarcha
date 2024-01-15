@@ -36,7 +36,7 @@ public class MemoryQueryPlugin
     /// <param name="collectionSeparator">The character that separates each memory's collection name in <paramref name="collectionsStr"/>.</param>
     /// <param name="cancellationToken">The <see cref="CancellationToken"/> to monitor for cancellation requests.</param>
     /// <returns>A string representing all the information found from searching the memory's collections using the given <paramref name="query"/>.</returns>
-    [SKFunction]
+    [KernelFunction]
     [Description(@"Searches the memory by looking up for a given query, from a list (usually comma-separated) of in memory's collections .")]
     public virtual async Task<string> QueryMemoryAsync(
         [Description(@"The query to search the memory for")] string query,

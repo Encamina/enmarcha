@@ -54,9 +54,9 @@ Now you can inject the kernel via constructor, and the text capabilities are alr
 ```csharp
 public class MyClass
 {
-    private readonly IKernel kernel;
+    private readonly Kernel kernel;
 
-    public MyClass(IKernel kernel)
+    public MyClass(Kernel kernel)
     {
         this.kernel = kernel;
     }

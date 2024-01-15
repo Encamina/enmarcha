@@ -64,7 +64,7 @@ internal static class ExampleQuestionAnsweringFromMemory
         await mockMemoryInformation.SaveDataMockAsync();
 
         // Initialize Q&A from Memory
-        var testQuestionAnswering = new TestQuestionAnswering(host.Services.GetService<IKernel>());
+        var testQuestionAnswering = new TestQuestionAnswering(host.Services.GetService<Kernel>());
         var result = await testQuestionAnswering.TestQuestionAnsweringFromMemoryAsync();
 
         Console.WriteLine($@"RESULT: {result}");

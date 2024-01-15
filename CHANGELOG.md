@@ -16,6 +16,66 @@ Also, any bug fix must start with the prefix �Bug fix:� followed by the desc
 
 Previous classification is not required if changes are simple or all belong to the same category.
 
+## [8.1.0]
+
+### Important
+
+This version updates the `Semantic Kernel` library from version `1.0.0-beta8` to `1.0.1`, which introduces a lot of breaking changes in the code.
+
+Sadly, some features from `Semantic Kernel` that we might have been used are marked as ***experimental*** and produce warnings that do not allow the compilation of the code. To use these features, these warnings must be ignored explicitly per project. The following is a list of these warnings and the affected projects:
+
+ - SKEXP0001: 
+   - `Encamina.Enmarcha.SemanticKernel`   
+ - SKEXP0003: 
+   - `Encamina.Enmarcha.SemanticKernel`
+   - `Encamina.Enmarcha.SemanticKernel.Abstractions`
+   - `Encamina.Enmarcha.SemanticKernel.Connectors.Memory`
+   - `Encamina.Enmarcha.SemanticKernel.Plugins.Memory`
+   - `Encamina.Enmarcha.SemanticKernel.Plugins.QuestionAnswering`
+ - SKEXP0011:
+   - `Encamina.Enmarcha.SemanticKernel.Connectors.Memory`
+ - SKEXP0026: 
+   - `Encamina.Enmarcha.SemanticKernel.Connectors.Memory`
+ - SKEXP0051:
+   - `Encamina.Enmarcha.SemanticKernel.Connectors.Document`
+
+ More information about these warnings is available here: https://github.com/microsoft/semantic-kernel/blob/main/dotnet/docs/EXPERIMENTS.md
+
+### Braking Changes
+
+- The following references were updated due to changes in `Semantic Kernel` version `1.0.1`:
+ - Changed `IKernel` for `Kernel`.
+ - Changed `ISKFunction` for `KernelFunction` or `KernelPlugin`.
+ - Changed `SKFunction` for `KernelFunction`.
+ - Changed `ContextVariables` for `KernelArguments`.
+ - Changed `kernel.Functions.GetFunction(...)` for `kernel.Plugins[<name of plugin>][<name of function>]`.
+ - Changed `OpenAIRequestSettings` for `OpenAIPromptExecutionSettings`.
+- Removed extension methods for `SKContext` because that class does not exists anymore in `Semantic Kernel`.
+- Due to the breaking nature of the new version of `Semantic Kernel`, the following extension methods are not available any more and have been replace by new methods, and it was not possible to marked it as `Obsolete`:
+  - `GetSemanticFunctionPromptAsync` is replaced by `GetKernelFunctionPromptAsync`.
+  - `GetSemanticFunctionUsedTokensAsync` is replaced by `GetKernelFunctionUsedTokensAsync`.
+  - `ImportSemanticPluginsFromAssembly` is replaced by `ImportPromptFunctionsFromAssembly`.
+- Extension method `GetSemanticFunctionPromptAsync` is no longer available. It is replaced by `GetKernelFunctionPromptAsync`. 
+
+### Major Changes
+
+- Updated `Semantic Kernel` from `1.0.0-beta8` to `1.0.1` (first final version of `Semantic Kernel`).
+- Updated `Azure.AI.OpenAI` from version `1.0.0-beta.6` to `1.0.0-beta.12`.
+- Updated `Bogus` from version `34.0.2` to `35.3.0`.
+- Updated `Microsoft.Azure.Cosmos` from version `3.37.0` to `3.37.1`.
+- Updated `SharpToken` from version `1.2.12` to `1.2.14`.
+- Updated `xunit` from version `2.6.2` to `2.6.5`.
+- Updated `xunit.analyzers` from version `1.6.0` to `1.9.0`.
+- Updated `xunit.extensibility.core` from version `2.6.2` to `2.6.5`.
+- Updated `xunit.runner.visualstudio` from version `2.5.4` to `2.5.6`.
+- Updated `StyleCop.Analyzers` from version `1.2.0-beta.507` to `1.2.0-beta.556`.
+- Updated version from `8.0.3` to `8.1.0` due to all the major and breaking changes.
+- Updated some `README.md` files changing `IKernel` for `Kernel`.
+
+### Minor Changes
+
+- Renamed files `IKernelExtensions` to `KernelExtensions.cs`.
+
 ## [8.0.3]
 
 ### Minor Changes
@@ -23,12 +83,12 @@ Previous classification is not required if changes are simple or all belong to t
 
 ## [8.0.2]
 
-### **Major Changes**
+### Major Changes
  - In `Encamina.Enmarcha.SemanticKernel.Plugins.Text` Summarize Plugin, a new parameter `locale` has been added to control the output language of the generated summary. [(#34)](https://github.com/Encamina/enmarcha/issues/34)
 
 ## [8.0.1]
 
-### **Major Changes**
+### Major Changes
  - In `Encamina.Enmarcha.SemanticKernel.Abstractions.ILengthFunctions`, `GptEncoding` is now cached and reused to improve performance. [(#30)](https://github.com/Encamina/enmarcha/pull/30)
 
 ### Minor Changes

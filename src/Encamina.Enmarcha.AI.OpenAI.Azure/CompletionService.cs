@@ -41,6 +41,7 @@ internal sealed class CompletionService : ICompletionService
         var completionsOptions = new CompletionsOptions()
         {
             ChoicesPerPrompt = request.NumberOfCompletionsPerPrompt,
+            DeploymentName = options.DeploymentName,
             Echo = request.DoEcho,
             FrequencyPenalty = request.FrequencyPenalty,
             GenerationSampleCount = request.BestOf,
@@ -54,7 +55,7 @@ internal sealed class CompletionService : ICompletionService
         completionsOptions.Prompts.AddRange(request.Prompts);
         completionsOptions.StopSequences.AddRange(request.StopSequences);
 
-        var response = (await client.GetCompletionsAsync(options.DeploymentName, completionsOptions, cancellationToken)).Value; // Any error while calling Azure OpenAI is handled and thrown by the `GetCompletionsAsync` method itself...
+        var response = (await client.GetCompletionsAsync(completionsOptions, cancellationToken)).Value; // Any error while calling Azure OpenAI is handled and thrown by the `GetCompletionsAsync` method itself...
 
         return new CompletionResult()
         {

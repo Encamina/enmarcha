@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-using Microsoft.SemanticKernel.Connectors.AI.OpenAI;
+using Microsoft.SemanticKernel.Connectors.OpenAI;
 
 namespace Encamina.Enmarcha.SemanticKernel.Plugins.Chat.Plugins;
 
@@ -17,10 +17,10 @@ public class ChatWithHistoryPluginOptions
     public virtual int HistoryMaxMessages { get; init; }
 
     /// <summary>
-    /// Gets a valid instance of <see cref="OpenAIRequestSettings"/> (from Semantic Kernel) with settings for the chat request.
+    /// Gets a valid instance of <see cref="OpenAIPromptExecutionSettings"/> (from Semantic Kernel) with settings for the chat request.
     /// </summary>
     [Required]
-    public virtual OpenAIRequestSettings ChatRequestSettings { get; init; } = new()
+    public virtual OpenAIPromptExecutionSettings ChatRequestSettings { get; init; } = new()
     {
         MaxTokens = 1000,
         Temperature = 0.8,

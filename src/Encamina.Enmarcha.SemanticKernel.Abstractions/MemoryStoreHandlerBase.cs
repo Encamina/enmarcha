@@ -1,5 +1,6 @@
-﻿using System.Collections.Concurrent;
-using System.Runtime.Serialization;
+﻿// Ignore Spelling: Utc
+
+using System.Collections.Concurrent;
 
 using Microsoft.SemanticKernel.Memory;
 
@@ -75,16 +76,6 @@ public abstract class MemoryStoreHandlerBase : IMemoryStoreHandler
         /// <summary>
         /// Gets or sets the last access date in UTC.
         /// </summary>
-        [Obsolete("Use 'LastAccessUTC' property instead.")]
         public DateTime LastAccessUtc { get; set; }
-
-        /// <summary>
-        /// Gets or sets the last access date in UTC.
-        /// </summary>
-        public DateTime LastAccessUTC
-        {
-            get => LastAccessUtc;
-            set => LastAccessUtc = value;
-        }
     }
 }
