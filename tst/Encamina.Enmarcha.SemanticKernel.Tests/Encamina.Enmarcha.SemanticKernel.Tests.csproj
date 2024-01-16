@@ -1,0 +1,34 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="TestUtilities\PromptPlugins\DummyEmbedded\config.json" />
+    <None Remove="TestUtilities\PromptPlugins\DummyEmbedded\skprompt.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="TestUtilities\PromptPlugins\DummyEmbedded\config.json">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="TestUtilities\PromptPlugins\DummyEmbedded\skprompt.txt">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </EmbeddedResource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Encamina.Enmarcha.SemanticKernel\Encamina.Enmarcha.SemanticKernel.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="TestUtilities\PromptPlugins\Dummy\config.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestUtilities\PromptPlugins\Dummy\skprompt.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+</Project>

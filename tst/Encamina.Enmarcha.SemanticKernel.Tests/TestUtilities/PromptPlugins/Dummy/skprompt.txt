@@ -1,0 +1,1 @@
+This is a Prompt function for testing purposes {{$input}} {{$foo}} {{$bar}}
