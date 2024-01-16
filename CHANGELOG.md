@@ -56,6 +56,7 @@ Sadly, some features from `Semantic Kernel` that we might have been used are mar
   - `GetSemanticFunctionUsedTokensAsync` is replaced by `GetKernelFunctionUsedTokensAsync`.
   - `ImportSemanticPluginsFromAssembly` is replaced by `ImportPromptFunctionsFromAssembly`.
 - Extension method `GetSemanticFunctionPromptAsync` is no longer available. It is replaced by `GetKernelFunctionPromptAsync`. 
+- The format of prompt function configuration files `config.json` has been modified.
 
 ### Major Changes
 
@@ -75,6 +76,8 @@ Sadly, some features from `Semantic Kernel` that we might have been used are mar
 ### Minor Changes
 
 - Renamed files `IKernelExtensions` to `KernelExtensions.cs`.
+- Fixed token counting in `ChatWithHistoryPlugin.cs`.
+- Updated prompt function configuration files (`config.json`) to new format.
 
 ## [8.0.3]
 
