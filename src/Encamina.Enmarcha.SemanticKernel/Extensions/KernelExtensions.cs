@@ -31,7 +31,7 @@ public static class KernelExtensions
     /// <returns>A string containing the generated prompt.</returns>
     public static async Task<string> GetKernelFunctionPromptAsync(this Kernel kernel, string pluginDirectory, KernelFunction function, KernelArguments arguments, IPromptTemplateFactory promptTemplateFactory = null, CancellationToken cancellationToken = default)
     {
-        var pluginName = function.Metadata.PluginName;
+        var pluginName = GetPluginNameFromKernelFunction(kernel, function);
 
         var promptConfigPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, pluginDirectory, pluginName, function.Name, Constants.ConfigFile);
 
@@ -62,7 +62,7 @@ public static class KernelExtensions
     /// <returns>A string containing the generated prompt.</returns>
     public static async Task<string> GetKernelFunctionPromptAsync(this Kernel kernel, Assembly assembly, KernelFunction function, KernelArguments arguments, IPromptTemplateFactory promptTemplateFactory = null, CancellationToken cancellationToken = default)
     {
-        var pluginName = function.Metadata.PluginName;
+        var pluginName = GetPluginNameFromKernelFunction(kernel, function);
 
         var resourceNames = assembly.GetManifestResourceNames()
                                     .Where(resourceName => resourceName.Contains($"{pluginName}.{function.Name}", StringComparison.OrdinalIgnoreCase))
@@ -175,6 +175,15 @@ public static class KernelExtensions
         }
 
         return plugins;
+    }
+
+    private static string GetPluginNameFromKernelFunction(Kernel kernel, KernelFunction kernelFunction)
+    {
+        var kernelFunctionMetadata = kernelFunction.Metadata;
+
+        return kernelFunctionMetadata.PluginName ??
+               kernel.Plugins.GetFunctionsMetadata().First(metadata => metadata.Name == kernelFunctionMetadata.Name && metadata.Description == kernelFunctionMetadata.Description 
+                   && metadata.Parameters.Equals(kernelFunctionMetadata.Parameters) && metadata.ReturnParameter == kernelFunctionMetadata.ReturnParameter).PluginName;
     }
 
     private static int GetMaxTokensFromKernelFunction(Kernel kernel, KernelFunction kernelFunction)
