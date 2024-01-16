@@ -70,7 +70,7 @@ public class QuestionAnsweringPlugin
 
         // Calculates the number of tokens used in the «QuestionAnsweringFromContext» function.
         // This amount will be subtracted from the total tokens of the model to determine the token limit required by the «QueryMemory» function from the «MemoryQueryPlugin».
-        var questionAnsweringFunctionUsedTokens = await kernel.GetKernelFunctionUsedTokensAsync(Assembly.GetExecutingAssembly(), questionAnsweringFunction, questionAnsweringVariables, tokenLengthFunction, cancellationToken: cancellationToken);
+        var questionAnsweringFunctionUsedTokens = await kernel.GetKernelFunctionUsedTokensAsync(PluginsInfo.QuestionAnsweringPlugin.Name, Assembly.GetExecutingAssembly(), questionAnsweringFunction, questionAnsweringVariables, tokenLengthFunction, cancellationToken: cancellationToken);
 
         // Switches to the context of the memory query function.
         var memoryQueryVariables = new KernelArguments()

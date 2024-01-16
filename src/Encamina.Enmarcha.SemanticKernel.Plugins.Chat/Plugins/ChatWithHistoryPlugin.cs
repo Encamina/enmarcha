@@ -69,8 +69,8 @@ public class ChatWithHistoryPlugin
         var systemPrompt = $@"{SystemPrompt} The name of the user is {userName}. The user prefers responses using the language identified as {locale}. Always answer using {locale} as language.";
 
         var chatModelMaxTokens = ModelInfo.GetById(chatModelName).MaxTokens;
-        var askTokens = GetContextMessageTokenCount(AuthorRole.User, ask);
-        var systemPromptTokens = GetContextMessageTokenCount(AuthorRole.System, systemPrompt);
+        var askTokens = GetChatMessageTokenCount(AuthorRole.User, ask);
+        var systemPromptTokens = GetChatMessageTokenCount(AuthorRole.System, systemPrompt);
 
         var remainingTokens = chatModelMaxTokens - askTokens - systemPromptTokens - (options.ChatRequestSettings.MaxTokens ?? 0);
 
@@ -148,7 +148,7 @@ public class ChatWithHistoryPlugin
         result.TakeWhile(item =>
         {
             var itemRole = item.RoleName == assistantRoleName ? AuthorRole.Assistant : AuthorRole.User;
-            var tokensHistoryMessage = GetContextMessageTokenCount(itemRole, item.Message);
+            var tokensHistoryMessage = GetChatMessageTokenCount(itemRole, item.Message);
 
             if (tokensHistoryMessage <= remainingTokens)
             {
@@ -213,7 +213,7 @@ public class ChatWithHistoryPlugin
     /// <param name="authorRole">Author role of the message.</param>
     /// <param name="content">Content of the message.</param>
     /// <returns>The calculated token count for the given message.</returns>
-    protected virtual int GetContextMessageTokenCount(AuthorRole authorRole, string content)
+    protected virtual int GetChatMessageTokenCount(AuthorRole authorRole, string content)
     {
         var tokenCount = authorRole == AuthorRole.System ? tokensLengthFunction("\n") : 0;
         return tokenCount + tokensLengthFunction($"role:{authorRole.Label}") + tokensLengthFunction($"content:{content}");

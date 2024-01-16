@@ -1,6 +1,8 @@
 ﻿using System.Reflection;
 using System.Text.Json;
 
+using CommunityToolkit.Diagnostics;
+
 using Encamina.Enmarcha.Core.Extensions;
 
 using Encamina.Enmarcha.SemanticKernel.Extensions.Resources;
@@ -31,20 +33,18 @@ public static class KernelExtensions
     /// <returns>A string containing the generated prompt.</returns>
     public static async Task<string> GetKernelFunctionPromptAsync(this Kernel kernel, string pluginDirectory, KernelFunction function, KernelArguments arguments, IPromptTemplateFactory promptTemplateFactory = null, CancellationToken cancellationToken = default)
     {
-        var pluginName = GetPluginNameFromKernelFunction(kernel, function);
-
-        var promptConfigPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, pluginDirectory, pluginName, function.Name, Constants.ConfigFile);
+        var promptConfigPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, pluginDirectory, function.Name, Constants.ConfigFile);
 
         if (!File.Exists(promptConfigPath))
         {
-            throw new FileNotFoundException(ExceptionMessages.ResourceManager.GetFormattedStringByCurrentCulture(nameof(ExceptionMessages.PromptConfigurationFileNotFound), function.Name, pluginName, pluginDirectory));
+            throw new FileNotFoundException(ExceptionMessages.ResourceManager.GetFormattedStringByCurrentCulture(nameof(ExceptionMessages.PromptConfigurationFileNotFound), function.Name, pluginDirectory));
         }
 
-        var promptTemplatePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, pluginDirectory, pluginName, function.Name, Constants.PromptFile);
+        var promptTemplatePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, pluginDirectory, function.Name, Constants.PromptFile);
 
         if (!File.Exists(promptTemplatePath))
         {
-            throw new FileNotFoundException(ExceptionMessages.ResourceManager.GetFormattedStringByCurrentCulture(nameof(ExceptionMessages.PromptTemplateFileNotFound), function.Name, pluginName, pluginDirectory));
+            throw new FileNotFoundException(ExceptionMessages.ResourceManager.GetFormattedStringByCurrentCulture(nameof(ExceptionMessages.PromptTemplateFileNotFound), function.Name, pluginDirectory));
         }
 
         return await InnerGetKernelFunctionPromptAsync(kernel, arguments, function.Name, await File.ReadAllTextAsync(promptTemplatePath, cancellationToken), await File.ReadAllTextAsync(promptConfigPath, cancellationToken), promptTemplateFactory, cancellationToken);
@@ -54,15 +54,16 @@ public static class KernelExtensions
     /// Generates the final prompt for a given prompt function from embedded resources in an assembly, using the arguments.
     /// </summary>
     /// <param name="kernel">The <see cref="Kernel"/> to work with.</param>
+    /// <param name="pluginName">The name of the plugin associated with the prompt function.</param>
     /// <param name="assembly">The assembly containing the embedded resources that represents and configures the prompt function.</param>
     /// <param name="function">The function for which the prompt is generated.</param>
     /// <param name="arguments">The arguments passed to the function.</param>
     /// <param name="promptTemplateFactory">The factory responsible for creating prompt templates (optional).</param>
     /// <param name="cancellationToken">A cancellation token that can be used to receive notice of cancellation.</param>
     /// <returns>A string containing the generated prompt.</returns>
-    public static async Task<string> GetKernelFunctionPromptAsync(this Kernel kernel, Assembly assembly, KernelFunction function, KernelArguments arguments, IPromptTemplateFactory promptTemplateFactory = null, CancellationToken cancellationToken = default)
+    public static async Task<string> GetKernelFunctionPromptAsync(this Kernel kernel, string pluginName, Assembly assembly, KernelFunction function, KernelArguments arguments, IPromptTemplateFactory promptTemplateFactory = null, CancellationToken cancellationToken = default)
     {
-        var pluginName = GetPluginNameFromKernelFunction(kernel, function);
+        Guard.IsNotNullOrWhiteSpace(pluginName);
 
         var resourceNames = assembly.GetManifestResourceNames()
                                     .Where(resourceName => resourceName.Contains($"{pluginName}.{function.Name}", StringComparison.OrdinalIgnoreCase))
@@ -99,6 +100,7 @@ public static class KernelExtensions
     /// Calculates the current total number of tokens used in generating a prompt of a given prompt function in a directory located plugin, and using the arguments.
     /// </summary>
     /// <param name="kernel">The <see cref="Kernel"/> to work with.</param>
+    /// <param name="pluginName">The name of the plugin associated with the prompt function.</param>
     /// <param name="assembly">The assembly containing the embedded resources that represents and configures the prompt function.</param>
     /// <param name="function">The function for which tokens are calculated.</param>
     /// <param name="arguments">The arguments passed to the function.</param>
@@ -106,9 +108,9 @@ public static class KernelExtensions
     /// <param name="promptTemplateFactory">The factory responsible for creating prompt templates (optional).</param>
     /// <param name="cancellationToken">A cancellation token that can be used to receive notice of cancellation.</param>
     /// <returns>The total number of tokens used plus the maximum allowed response tokens specified in the function.</returns>
-    public static async Task<int> GetKernelFunctionUsedTokensAsync(this Kernel kernel, Assembly assembly, KernelFunction function, KernelArguments arguments, Func<string, int> tokenLengthFunction, IPromptTemplateFactory promptTemplateFactory = null, CancellationToken cancellationToken = default)
+    public static async Task<int> GetKernelFunctionUsedTokensAsync(this Kernel kernel, string pluginName, Assembly assembly, KernelFunction function, KernelArguments arguments, Func<string, int> tokenLengthFunction, IPromptTemplateFactory promptTemplateFactory = null, CancellationToken cancellationToken = default)
     {
-        return tokenLengthFunction(await kernel.GetKernelFunctionPromptAsync(assembly, function, arguments, promptTemplateFactory, cancellationToken)) + GetMaxTokensFromKernelFunction(kernel, function);
+        return tokenLengthFunction(await kernel.GetKernelFunctionPromptAsync(pluginName, assembly, function, arguments, promptTemplateFactory, cancellationToken)) + GetMaxTokensFromKernelFunction(kernel, function);
     }
 
     /// <summary>
@@ -174,41 +176,9 @@ public static class KernelExtensions
             plugins.Add(KernelPluginFactory.CreateFromFunctions(pluginsInfoGroup.Key, functions));
         }
 
-        foreach (var plugin in plugins)
-        {
-            // Check if the kernel already has a plugin with the same name
-            if (kernel.Plugins.TryGetPlugin(plugin.Name, out var existingPlugin))
-            {
-                // Combine functions from the existing kernel plugin and the current plugin
-                var combinedFunctions = existingPlugin.ToList();
-                combinedFunctions.AddRange(plugin.ToList());
-
-                // Create a new plugin with the combined functions
-                var updatedPlugin = KernelPluginFactory.CreateFromFunctions(plugin.Name, plugin.Description, combinedFunctions);
-
-                // Remove the existing plugin with the same name from the kernel
-                kernel.Plugins.Remove(existingPlugin);
-
-                // Add the updated plugin to the kernel's plugins collection
-                kernel.Plugins.Add(updatedPlugin);
-            }
-            else
-            {
-                // If no existing plugin, simply add the current plugin to the collection
-                kernel.Plugins.Add(plugin);
-            }
-        }
+        kernel.Plugins.AddRange(plugins);
 
         return plugins;
-    }
-
-    private static string GetPluginNameFromKernelFunction(Kernel kernel, KernelFunction kernelFunction)
-    {
-        var kernelFunctionMetadata = kernelFunction.Metadata;
-
-        return kernelFunctionMetadata.PluginName ??
-               kernel.Plugins.GetFunctionsMetadata().First(metadata => metadata.Name == kernelFunctionMetadata.Name && metadata.Description == kernelFunctionMetadata.Description
-                   && metadata.Parameters.Equals(kernelFunctionMetadata.Parameters) && metadata.ReturnParameter == kernelFunctionMetadata.ReturnParameter).PluginName;
     }
 
     private static int GetMaxTokensFromKernelFunction(Kernel kernel, KernelFunction kernelFunction)

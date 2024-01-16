@@ -2,7 +2,6 @@
 
 using Encamina.Enmarcha.AI.Abstractions;
 using Encamina.Enmarcha.SemanticKernel.Extensions;
-using Encamina.Enmarcha.SemanticKernel.Tests.TestUtilities.PluginTest;
 using Encamina.Enmarcha.Testing;
 
 using Microsoft.SemanticKernel;
@@ -37,31 +36,6 @@ public class KernelExtensionsTests : FakerProviderFixturedBase
     }
 
     [Fact]
-    public void ImportPromptFunctionsFromAssembly_WhenPluginNameAlreadyExists_SuccessfullyMergesFunctions()
-    {
-        // Arrange...
-        var kernel = GivenAKernel();
-
-        // Act...
-        kernel.Plugins.AddFromType<DummyNative>(PluginName);
-        kernel.ImportPromptFunctionsFromAssembly(Assembly.GetExecutingAssembly());
-
-        // Assert..
-        var plugin = Assert.Single(kernel.Plugins);
-        Assert.Equal(PluginName, plugin.Name);
-        Assert.Collection(plugin,
-            function1 =>
-            {
-                Assert.Equal("SayHello", function1.Name);
-            },
-            function2 =>
-            {
-                Assert.Equal("DummyEmbedded", function2.Name);
-            }
-        );
-    }
-
-    [Fact]
     public async Task GetKernelFunctionPromptAsync_FromPluginDirectory_Succeeds()
     {
         // Arrange...
@@ -76,7 +50,7 @@ public class KernelExtensionsTests : FakerProviderFixturedBase
         };
 
         // Act...
-        var prompt = await kernel.GetKernelFunctionPromptAsync(PluginDirectory, function, arguments);
+        var prompt = await kernel.GetKernelFunctionPromptAsync(Path.Combine(PluginDirectory, PluginName), function, arguments);
 
         // Assert..
         Assert.Equal("This is a Prompt function for testing purposes dummy foo value bar value", prompt);
@@ -97,7 +71,7 @@ public class KernelExtensionsTests : FakerProviderFixturedBase
         };
 
         // Act...
-        var prompt = await kernel.GetKernelFunctionPromptAsync(Assembly.GetExecutingAssembly(), function, arguments);
+        var prompt = await kernel.GetKernelFunctionPromptAsync(PluginName, Assembly.GetExecutingAssembly(), function, arguments);
 
         // Assert..
         Assert.Equal("This is a Prompt function for testing purposes dummy foo value bar value", prompt);
@@ -118,7 +92,7 @@ public class KernelExtensionsTests : FakerProviderFixturedBase
         };  
           
         // Act...
-        var usedTokens = await kernel.GetKernelFunctionUsedTokensAsync(PluginDirectory, function, arguments, ILengthFunctions.LengthByCharacterCount);
+        var usedTokens = await kernel.GetKernelFunctionUsedTokensAsync(Path.Combine(PluginDirectory, PluginName), function, arguments, ILengthFunctions.LengthByCharacterCount);
 
         //Assert
         var expectedUsedTokens = "This is a Prompt function for testing purposes dummy foo value bar value".Length + 500; // prompt with arguments + config json max tokens
@@ -140,7 +114,7 @@ public class KernelExtensionsTests : FakerProviderFixturedBase
         };
 
         // Act...
-        var usedTokens = await kernel.GetKernelFunctionUsedTokensAsync(Assembly.GetExecutingAssembly(), function, arguments, ILengthFunctions.LengthByCharacterCount);
+        var usedTokens = await kernel.GetKernelFunctionUsedTokensAsync(PluginName, Assembly.GetExecutingAssembly(), function, arguments, ILengthFunctions.LengthByCharacterCount);
 
         //Assert
         var expectedUsedTokens = "This is a Prompt function for testing purposes dummy foo value bar value".Length + 500; // prompt with arguments + config json max tokens
