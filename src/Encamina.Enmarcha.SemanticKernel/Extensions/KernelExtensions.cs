@@ -189,11 +189,12 @@ public static class KernelExtensions
         // Finally, if the value is an integer, return it.
         // In any other case (if the service settings are not found, or the `max_tokens` property is not found, or the value is not an integer), throw an exception.
         return (kernel.ServiceSelector.TrySelectAIService<IChatCompletionService>(kernel, kernelFunction, [], out _, out var serviceSettings) || kernel.ServiceSelector.TrySelectAIService<ITextGenerationService>(kernel, kernelFunction, [], out _, out serviceSettings))
+               && serviceSettings?.ExtensionData != null
                && serviceSettings.ExtensionData.TryGetValue(@"max_tokens", out var maxTokensObj)
                && maxTokensObj is JsonElement maxTokensElement
                && maxTokensElement.TryGetInt32(out var value)
                 ? value
-                : throw new InvalidOperationException(@"Could not find in the kernel function execution settings with");
+                : 0;
     }
 
     private static string GetResourceNameFromPluginInfoByFileName(IGrouping<(string PluginName, string FunctionName), (string ResourceName, string FileName)> pluginsInfoGroup, string fileName)

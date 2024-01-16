@@ -61,7 +61,7 @@ namespace Encamina.Enmarcha.SemanticKernel.Extensions.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Prompt configuration file (&apos;config.json&apos;) for function &apos;{function}&apos; from plug-in &apos;{plugin} not found at &apos;{templatePath}&apos;!.
+        ///   Looks up a localized string similar to Prompt configuration file (&apos;config.json&apos;) for function &apos;{0}&apos; not found at &apos;{1}&apos;!.
         /// </summary>
         internal static string PromptConfigurationFileNotFound {
             get {
@@ -70,7 +70,7 @@ namespace Encamina.Enmarcha.SemanticKernel.Extensions.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Prompt template file (&apos;skprompt.txt&apos;) for function &apos;{function}&apos; from plug-in &apos;{plugin} not found at &apos;{templatePath}&apos;!.
+        ///   Looks up a localized string similar to Prompt template file (&apos;skprompt.txt&apos;) for function &apos;{0}&apos; not found at &apos;{1}&apos;!.
         /// </summary>
         internal static string PromptTemplateFileNotFound {
             get {
