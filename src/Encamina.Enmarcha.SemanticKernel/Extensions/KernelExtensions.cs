@@ -174,7 +174,30 @@ public static class KernelExtensions
             plugins.Add(KernelPluginFactory.CreateFromFunctions(pluginsInfoGroup.Key, functions));
         }
 
-        kernel.Plugins.AddRange(plugins);
+        foreach (var plugin in plugins)
+        {
+            // Check if the kernel already has a plugin with the same name
+            if (kernel.Plugins.TryGetPlugin(plugin.Name, out var existingPlugin))
+            {
+                // Combine functions from the existing kernel plugin and the current plugin
+                var combinedFunctions = existingPlugin.ToList();
+                combinedFunctions.AddRange(plugin.ToList());
+
+                // Create a new plugin with the combined functions
+                var updatedPlugin = KernelPluginFactory.CreateFromFunctions(plugin.Name, plugin.Description, combinedFunctions);
+
+                // Remove the existing plugin with the same name from the kernel
+                kernel.Plugins.Remove(existingPlugin);
+
+                // Add the updated plugin to the kernel's plugins collection
+                kernel.Plugins.Add(updatedPlugin);
+            }
+            else
+            {
+                // If no existing plugin, simply add the current plugin to the collection
+                kernel.Plugins.Add(plugin);
+            }
+        }
 
         return plugins;
     }
@@ -184,7 +207,7 @@ public static class KernelExtensions
         var kernelFunctionMetadata = kernelFunction.Metadata;
 
         return kernelFunctionMetadata.PluginName ??
-               kernel.Plugins.GetFunctionsMetadata().First(metadata => metadata.Name == kernelFunctionMetadata.Name && metadata.Description == kernelFunctionMetadata.Description 
+               kernel.Plugins.GetFunctionsMetadata().First(metadata => metadata.Name == kernelFunctionMetadata.Name && metadata.Description == kernelFunctionMetadata.Description
                    && metadata.Parameters.Equals(kernelFunctionMetadata.Parameters) && metadata.ReturnParameter == kernelFunctionMetadata.ReturnParameter).PluginName;
     }
 

@@ -5,15 +5,15 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="TestUtilities\PromptPlugins\DummyEmbedded\config.json" />
-    <None Remove="TestUtilities\PromptPlugins\DummyEmbedded\skprompt.txt" />
+    <None Remove="TestUtilities\PluginTest\DummyEmbedded\config.json" />
+    <None Remove="TestUtilities\PluginTest\DummyEmbedded\skprompt.txt" />
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="TestUtilities\PromptPlugins\DummyEmbedded\config.json">
+    <EmbeddedResource Include="TestUtilities\PluginTest\DummyEmbedded\config.json">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </EmbeddedResource>
-    <EmbeddedResource Include="TestUtilities\PromptPlugins\DummyEmbedded\skprompt.txt">
+    <EmbeddedResource Include="TestUtilities\PluginTest\DummyEmbedded\skprompt.txt">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </EmbeddedResource>
   </ItemGroup>
@@ -23,10 +23,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="TestUtilities\PromptPlugins\Dummy\config.json">
+    <None Update="TestUtilities\PluginTest\Dummy\config.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="TestUtilities\PromptPlugins\Dummy\skprompt.txt">
+    <None Update="TestUtilities\PluginTest\Dummy\skprompt.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
