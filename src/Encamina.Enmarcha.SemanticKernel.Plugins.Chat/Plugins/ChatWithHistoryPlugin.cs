@@ -10,8 +10,6 @@ using Microsoft.SemanticKernel.ChatCompletion;
 
 namespace Encamina.Enmarcha.SemanticKernel.Plugins.Chat.Plugins;
 
-// TODO - Review the tokens count to be align with the chat model. Use as reference the code from the Chat Copilot project.
-
 /// <summary>
 /// Represents a plugin that allows users to interact while chatting and asking questions to an Artificial Intelligence, usually a Large Language Model (LLM).
 /// </summary>
@@ -71,8 +69,8 @@ public class ChatWithHistoryPlugin
         var systemPrompt = $@"{SystemPrompt} The name of the user is {userName}. The user prefers responses using the language identified as {locale}. Always answer using {locale} as language.";
 
         var chatModelMaxTokens = ModelInfo.GetById(chatModelName).MaxTokens;
-        var askTokens = tokensLengthFunction(ask);
-        var systemPromptTokens = tokensLengthFunction(systemPrompt);
+        var askTokens = GetContextMessageTokenCount(AuthorRole.User, ask);
+        var systemPromptTokens = GetContextMessageTokenCount(AuthorRole.System, systemPrompt);
 
         var remainingTokens = chatModelMaxTokens - askTokens - systemPromptTokens - (options.ChatRequestSettings.MaxTokens ?? 0);
 
@@ -149,7 +147,8 @@ public class ChatWithHistoryPlugin
 
         result.TakeWhile(item =>
         {
-            var tokensHistoryMessage = tokensLengthFunction(item.Message);
+            var itemRole = item.RoleName == assistantRoleName ? AuthorRole.Assistant : AuthorRole.User;
+            var tokensHistoryMessage = GetContextMessageTokenCount(itemRole, item.Message);
 
             if (tokensHistoryMessage <= remainingTokens)
             {
@@ -203,5 +202,20 @@ public class ChatWithHistoryPlugin
             Message = message,
             TimestampUtc = DateTime.UtcNow,
         }, cancellationToken);
+    }
+
+    /// <summary>
+    /// Rough token costing of ChatHistory's message object.
+    /// Follows the syntax defined by Azure OpenAI's ChatMessage object: https://learn.microsoft.com/en-us/azure/ai-services/openai/reference#chatmessage
+    /// e.g., "message": {"role":"assistant","content":"Yes }
+    /// Code based on: https://github.com/microsoft/chat-copilot/blob/6a744cf50fca3a8d0d1aa1af39bf1069757b9bfb/webapi/Plugins/Utils/TokenUtils.cs#L117C8-L117C8
+    /// </summary>
+    /// <param name="authorRole">Author role of the message.</param>
+    /// <param name="content">Content of the message.</param>
+    /// <returns>The calculated token count for the given message.</returns>
+    protected virtual int GetContextMessageTokenCount(AuthorRole authorRole, string content)
+    {
+        var tokenCount = authorRole == AuthorRole.System ? tokensLengthFunction("\n") : 0;
+        return tokenCount + tokensLengthFunction($"role:{authorRole.Label}") + tokensLengthFunction($"content:{content}");
     }
 }
