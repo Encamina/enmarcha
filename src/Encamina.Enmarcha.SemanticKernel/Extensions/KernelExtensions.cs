@@ -174,6 +174,8 @@ public static class KernelExtensions
             plugins.Add(KernelPluginFactory.CreateFromFunctions(pluginsInfoGroup.Key, functions));
         }
 
+        kernel.Plugins.AddRange(plugins);
+
         return plugins;
     }
 
