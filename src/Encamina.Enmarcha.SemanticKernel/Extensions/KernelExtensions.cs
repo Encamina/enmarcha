@@ -20,10 +20,13 @@ namespace Encamina.Enmarcha.SemanticKernel.Extensions;
 public static class KernelExtensions
 {
     /// <summary>
-    /// Generates the final prompt for a given semantic function in a directory located plugin, and using the context variables.
+    /// Generates the final prompt for a given prompt function in a directory located plugin, and using the arguments.
     /// </summary>
     /// <param name="kernel">The <see cref="Kernel"/> to work with.</param>
-    /// <param name="function">The kernel function.</param>
+    /// <param name="pluginDirectory">The directory containing the plugin and the files that represents and configures the prompt function.</param>
+    /// <param name="function">The function for which the prompt is generated.</param>
+    /// <param name="arguments">The arguments passed to the function.</param>
+    /// <param name="promptTemplateFactory">The factory responsible for creating prompt templates (optional).</param>
     /// <param name="cancellationToken">A cancellation token that can be used to receive notice of cancellation.</param>
     /// <returns>A string containing the generated prompt.</returns>
     public static async Task<string> GetKernelFunctionPromptAsync(this Kernel kernel, string pluginDirectory, KernelFunction function, KernelArguments arguments, IPromptTemplateFactory promptTemplateFactory = null, CancellationToken cancellationToken = default)
@@ -48,11 +51,13 @@ public static class KernelExtensions
     }
 
     /// <summary>
-    /// Generates the final prompt for a given semantic function from embedded resources in an assembly, using the context variables.
+    /// Generates the final prompt for a given prompt function from embedded resources in an assembly, using the arguments.
     /// </summary>
     /// <param name="kernel">The <see cref="Kernel"/> to work with.</param>
-    /// <param name="assembly">The assembly containing the embedded resources that represents and configures the semantic function.</param>
-    /// <param name="function">The kernel function.</param>
+    /// <param name="assembly">The assembly containing the embedded resources that represents and configures the prompt function.</param>
+    /// <param name="function">The function for which the prompt is generated.</param>
+    /// <param name="arguments">The arguments passed to the function.</param>
+    /// <param name="promptTemplateFactory">The factory responsible for creating prompt templates (optional).</param>
     /// <param name="cancellationToken">A cancellation token that can be used to receive notice of cancellation.</param>
     /// <returns>A string containing the generated prompt.</returns>
     public static async Task<string> GetKernelFunctionPromptAsync(this Kernel kernel, Assembly assembly, KernelFunction function, KernelArguments arguments, IPromptTemplateFactory promptTemplateFactory = null, CancellationToken cancellationToken = default)
@@ -75,13 +80,14 @@ public static class KernelExtensions
     }
 
     /// <summary>
-    /// Calculates the current total number of tokens used in generating a prompt of a given semantic function in a directory located plugin, and using the context variables.
+    /// Calculates the current total number of tokens used in generating a prompt of a given prompt function in a directory located plugin, and using the arguments.
     /// </summary>
     /// <param name="kernel">The <see cref="Kernel"/> to work with.</param>
-    /// <param name="kernelFunction">The kernel function representation.</param>
-    /// <param name="functionPluginDirectory">The directory containing the plugin and the files that represents and configures the semantic function.</param>
-    /// <param name="contextVariables">A collection of context variables.</param>
-    /// <param name="tokenLengthFunction">A function to calculate length of a string in tokens..</param>
+    /// <param name="pluginDirectory">The directory containing the plugin and the files that represents and configures the prompt function.</param>
+    /// <param name="function">The function for which tokens are calculated.</param>
+    /// <param name="arguments">The arguments passed to the function.</param>
+    /// <param name="tokenLengthFunction">A function to calculate length of a string in tokens.</param>
+    /// <param name="promptTemplateFactory">The factory responsible for creating prompt templates (optional).</param>
     /// <param name="cancellationToken">A cancellation token that can be used to receive notice of cancellation.</param>
     /// <returns>The total number of tokens used plus the maximum allowed response tokens specified in the function.</returns>
     public static async Task<int> GetKernelFunctionUsedTokensAsync(this Kernel kernel, string pluginDirectory, KernelFunction function, KernelArguments arguments, Func<string, int> tokenLengthFunction, IPromptTemplateFactory promptTemplateFactory = null, CancellationToken cancellationToken = default)
@@ -90,13 +96,14 @@ public static class KernelExtensions
     }
 
     /// <summary>
-    /// Calculates the current total number of tokens used in generating a prompt of a given semantic function from embedded resources in an assembly, using the context variables.
+    /// Calculates the current total number of tokens used in generating a prompt of a given prompt function in a directory located plugin, and using the arguments.
     /// </summary>
     /// <param name="kernel">The <see cref="Kernel"/> to work with.</param>
-    /// <param name="kernelFunction">The kernel function representation.</param>
-    /// <param name="assembly">The assembly containing the embedded resources that represents and configures the semantic function.</param>
-    /// <param name="contextVariables">A collection of context variables.</param>
-    /// <param name="tokenLengthFunction">A function to calculate length of a string in tokens..</param>
+    /// <param name="assembly">The assembly containing the embedded resources that represents and configures the prompt function.</param>
+    /// <param name="function">The function for which tokens are calculated.</param>
+    /// <param name="arguments">The arguments passed to the function.</param>
+    /// <param name="tokenLengthFunction">A function to calculate length of a string in tokens.</param>
+    /// <param name="promptTemplateFactory">The factory responsible for creating prompt templates (optional).</param>
     /// <param name="cancellationToken">A cancellation token that can be used to receive notice of cancellation.</param>
     /// <returns>The total number of tokens used plus the maximum allowed response tokens specified in the function.</returns>
     public static async Task<int> GetKernelFunctionUsedTokensAsync(this Kernel kernel, Assembly assembly, KernelFunction function, KernelArguments arguments, Func<string, int> tokenLengthFunction, IPromptTemplateFactory promptTemplateFactory = null, CancellationToken cancellationToken = default)
@@ -105,14 +112,15 @@ public static class KernelExtensions
     }
 
     /// <summary>
-    /// Imports plugins with semantic functions from embedded resources in an assembly that represents their prompt and configuration files.
+    /// Imports plugins with prompt functions from embedded resources in an assembly that represents their prompt and configuration files.
     /// </summary>
     /// <param name="kernel">The <see cref="Kernel"/> to work with.</param>
-    /// <param name="assembly">The assembly containing the embedded resources that represents and configures the semantic function.</param>
+    /// <param name="assembly">The assembly containing the embedded resources that represents and configures the prompt function.</param>
     /// <param name="promptTemplateFactory">
     /// The <see cref="IPromptTemplateFactory"/> to use when interpreting discovered prompts into <see cref="IPromptTemplate"/>s.
     /// If <see langword="null"/>, a default factory will be used.
     /// </param>
+    /// <param name="loggerFactory">The <see cref="ILoggerFactory"/> to use for logging. If null, no logging will be performed.</param>
     /// <returns>A list of all the semantic functions found in the assembly, indexed by function name.</returns>
     public static IEnumerable<KernelPlugin> ImportPromptFunctionsFromAssembly(this Kernel kernel, Assembly assembly, IPromptTemplateFactory promptTemplateFactory = null, ILoggerFactory loggerFactory = null)
     {
