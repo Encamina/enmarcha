@@ -87,6 +87,7 @@ Sadly, some features from `Semantic Kernel` that we might have been using, are m
 
 ### Minor Changes
 
+- Replaced reference `Microsoft.AspNetCore.Mvc.Versioning.ApiExplorer` (version `5.1.0`) for `Asp.Versioning.Mvc.ApiExplorer` (version `8.0.0`) which is the new name and implementation of the ASP.NET versioning libraries.
 - Updated prompt function configuration files (`config.json`) to new format.
 - Renamed files `IKernelExtensions` to `KernelExtensions.cs`.
 - Fixed token counting in `ChatWithHistoryPlugin.cs`.
