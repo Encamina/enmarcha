@@ -65,7 +65,7 @@ Sadly, some features from `Semantic Kernel` that we might have been using, are m
 
 ### Major Changes
 
-- Updated `Semantic Kernel` from `1.0.0-beta8` to `1.0.1` (first final version of `Semantic Kernel`).
+- Updated `Semantic Kernel` from `1.0.0-beta8` to `1.1.0` (second final version of `Semantic Kernel`).
 - Updated `Azure.Core` from version `1.36.0` to `1.37.0`.
 - Updated `Azure.AI.OpenAI` from version `1.0.0-beta.6` to `1.0.0-beta.12`.
 - Updated `Bogus` from version `34.0.2` to `35.4.0`.
@@ -83,7 +83,7 @@ Sadly, some features from `Semantic Kernel` that we might have been using, are m
 - Updated `System.Text.Json` from version `8.0.0` to `8.0.1`.
 - Updated version from `8.0.3` to `8.1.0` due to all the major and breaking changes.
 - Updated some `README.md` files changing `IKernel` for `Kernel`.
-- Updated and added new unit tests to cover the main "happy path" of implementations that use `Semnantic Kernel`.
+- Updated and added new unit tests to cover the main "happy path" of implementations that use `Semantic Kernel`.
 
 ### Minor Changes
 
