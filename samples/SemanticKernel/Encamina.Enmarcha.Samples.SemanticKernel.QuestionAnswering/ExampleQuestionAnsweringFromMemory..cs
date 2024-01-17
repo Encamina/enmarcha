@@ -1,4 +1,5 @@
-﻿using Encamina.Enmarcha.SemanticKernel.Abstractions;
+﻿using Encamina.Enmarcha.AI.OpenAI.Azure;
+using Encamina.Enmarcha.SemanticKernel.Abstractions;
 using Encamina.Enmarcha.SemanticKernel.Plugins.QuestionAnswering;
 
 using Microsoft.Extensions.Configuration;
@@ -27,11 +28,11 @@ internal static class ExampleQuestionAnsweringFromMemory
         hostBuilder.ConfigureServices((hostContext, services) =>
         {
             // Get semantic kernel options
-            var options = hostContext.Configuration.GetRequiredSection(nameof(SemanticKernelOptions)).Get<SemanticKernelOptions>()
-                ?? throw new InvalidOperationException(@$"Missing configuration for {nameof(SemanticKernelOptions)}");
+            var options = hostContext.Configuration.GetRequiredSection(nameof(AzureOpenAIOptions)).Get<AzureOpenAIOptions>()
+                ?? throw new InvalidOperationException(@$"Missing configuration for {nameof(AzureOpenAIOptions)}");
 
             // Add Semantic Kernel options
-            services.AddOptions<SemanticKernelOptions>().Bind(hostContext.Configuration.GetSection(nameof(SemanticKernelOptions))).ValidateDataAnnotations().ValidateOnStart();
+            services.AddOptions<AzureOpenAIOptions>().Bind(hostContext.Configuration.GetSection(nameof(AzureOpenAIOptions))).ValidateDataAnnotations().ValidateOnStart();
 
             // Here use any desired implementation (Qdrant, Volatile...)
             services.AddSingleton<IMemoryStore, VolatileMemoryStore>()
@@ -46,7 +47,7 @@ internal static class ExampleQuestionAnsweringFromMemory
                     .Build();
 
                 // Import Question Answering plugin
-                kernel.ImportQuestionAnsweringPluginWithMemory(sp, ILengthFunctions.LengthByTokenCount);
+                kernel.ImportQuestionAnsweringPluginWithMemory(options, sp.GetRequiredService<ISemanticTextMemory>(), ILengthFunctions.LengthByTokenCount);
 
                 return kernel;
             });

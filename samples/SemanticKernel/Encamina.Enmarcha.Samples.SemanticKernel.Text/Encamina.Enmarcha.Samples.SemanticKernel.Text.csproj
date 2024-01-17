@@ -14,6 +14,7 @@
     </ItemGroup>
 
     <ItemGroup>
+    <ProjectReference Include="..\..\..\src\Encamina.Enmarcha.AI.OpenAI.Azure\Encamina.Enmarcha.AI.OpenAI.Azure.csproj" />
     <ProjectReference Include="..\..\..\src\Encamina.Enmarcha.SemanticKernel.Plugins.Text\Encamina.Enmarcha.SemanticKernel.Plugins.Text.csproj" />
   </ItemGroup>
 

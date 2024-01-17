@@ -59,7 +59,7 @@ public static class PluginsInfo
                 /// <summary>
                 /// The name of the function.
                 /// </summary>
-                public static readonly string Name = nameof(Plugins.QuestionAnsweringPlugin.QuestionAnsweringFromMemoryQuery).RemoveAsyncSuffix();
+                public static readonly string Name = nameof(Plugins.QuestionAnsweringPlugin.QuestionAnsweringFromMemoryQueryAsync).RemoveAsyncSuffix();
 
                 /// <summary>
                 /// Information about the function's parameters.

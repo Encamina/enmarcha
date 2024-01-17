@@ -1,4 +1,5 @@
-﻿using Encamina.Enmarcha.SemanticKernel.Abstractions;
+﻿using Encamina.Enmarcha.AI.OpenAI.Azure;
+using Encamina.Enmarcha.SemanticKernel.Abstractions;
 using Encamina.Enmarcha.SemanticKernel.Plugins.QuestionAnswering;
 
 using Microsoft.Extensions.Configuration;
@@ -26,13 +27,13 @@ internal static class ExampleQuestionAnsweringFromContext
         hostBuilder.ConfigureServices((hostContext, services) =>
         {
             // Add Semantic Kernel options
-            services.AddOptions<SemanticKernelOptions>().Bind(hostContext.Configuration.GetSection(nameof(SemanticKernelOptions))).ValidateDataAnnotations().ValidateOnStart();
+            services.AddOptions<AzureOpenAIOptions>().Bind(hostContext.Configuration.GetSection(nameof(AzureOpenAIOptions))).ValidateDataAnnotations().ValidateOnStart();
 
             services.AddScoped(sp =>
             {
                 // Get semantic kernel options
-                var options = hostContext.Configuration.GetRequiredSection(nameof(SemanticKernelOptions)).Get<SemanticKernelOptions>()
-                ?? throw new InvalidOperationException(@$"Missing configuration for {nameof(SemanticKernelOptions)}");
+                var options = hostContext.Configuration.GetRequiredSection(nameof(AzureOpenAIOptions)).Get<AzureOpenAIOptions>()
+                ?? throw new InvalidOperationException(@$"Missing configuration for {nameof(AzureOpenAIOptions)}");
 
                 // Initialize semantic kernel
                 var kernel = Kernel.CreateBuilder()
@@ -40,7 +41,7 @@ internal static class ExampleQuestionAnsweringFromContext
                     .Build();
 
                 // Import Question Answering plugin
-                kernel.ImportQuestionAnsweringPlugin(sp, ILengthFunctions.LengthByTokenCount);
+                kernel.ImportQuestionAnsweringPlugin(options, ILengthFunctions.LengthByTokenCount);
 
                 return kernel;
             });

@@ -2,7 +2,7 @@
 
 internal static class Program
 {
-    private static async Task Main(string[] args)
+    private static async Task Main(string[] _)
     {
         await ExampleQuestionAnsweringFromContext.RunAsync();
         await ExampleQuestionAnsweringFromMemory.RunAsync();

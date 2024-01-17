@@ -61,7 +61,7 @@ internal sealed class CompletionService : ICompletionService
         {
             Id = response.Id,
             CreatedUtc = response.Created.UtcDateTime,
-            Completitions = response.Choices.Select(choice => new Completition()
+            Completitions = response.Choices.Select(choice => new Completion()
             {
                 Text = choice.Text,
                 Index = choice.Index,

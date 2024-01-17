@@ -20,9 +20,9 @@ Previous classification is not required if changes are simple or all belong to t
 
 ### Important
 
-This version updates the `Semantic Kernel` library from version `1.0.0-beta8` to `1.0.1`, which introduces a lot of breaking changes in the code.
+This version updates the `Semantic Kernel` library from version `1.0.0-beta8` to `1.1.0`, which introduces a lot of breaking changes in the code.
 
-Sadly, some features from `Semantic Kernel` that we might have been used are marked as ***experimental*** and produce warnings that do not allow the compilation of the code. To use these features, these warnings must be ignored explicitly per project. The following is a list of these warnings and the affected projects:
+Sadly, some features from `Semantic Kernel` that we might have been using, are marked as ***experimental*** and produce warnings that do not allow the compilation of the code. To use these features, these warnings must be ignored explicitly per project. The following is a list of these warnings and the affected projects:
 
  - SKEXP0001: 
    - `Encamina.Enmarcha.SemanticKernel`   
@@ -43,6 +43,8 @@ Sadly, some features from `Semantic Kernel` that we might have been used are mar
 
 ### Braking Changes
 
+- Replaced class `Completition` for `Completion` in `Encamina.Enmarcha.AI.OpenAI.Abstractions`. It was misspelled.
+- Class `SemanticKernelOptions` does not exists anymore. It has been replaced by `AzureOpenAIOptions` from `Encamina.Enmarcha.AI.OpenAI.Abstractions`. 
 - The following references were updated due to changes in `Semantic Kernel` version `1.0.1`:
  - Changed `IKernel` for `Kernel`.
  - Changed `ISKFunction` for `KernelFunction` or `KernelPlugin`.
@@ -56,28 +58,40 @@ Sadly, some features from `Semantic Kernel` that we might have been used are mar
   - `GetSemanticFunctionUsedTokensAsync` is replaced by `GetKernelFunctionUsedTokensAsync`.
   - `ImportSemanticPluginsFromAssembly` is replaced by `ImportPromptFunctionsFromAssembly`.
 - Extension method `GetSemanticFunctionPromptAsync` is no longer available. It is replaced by `GetKernelFunctionPromptAsync`. 
+- Extension method `ImportQuestionAnsweringPlugin` has different signature.
+- Extension method `ImportQuestionAnsweringPluginWithMemory` has different signature.
+- Extension method `ImportChatWithHistoryPluginUsingCosmosDb` has different signature.
 - The format of prompt function configuration files `config.json` has been modified.
 
 ### Major Changes
 
 - Updated `Semantic Kernel` from `1.0.0-beta8` to `1.0.1` (first final version of `Semantic Kernel`).
+- Updated `Azure.Core` from version `1.36.0` to `1.37.0`.
 - Updated `Azure.AI.OpenAI` from version `1.0.0-beta.6` to `1.0.0-beta.12`.
-- Updated `Bogus` from version `34.0.2` to `35.3.0`.
+- Updated `Bogus` from version `34.0.2` to `35.4.0`.
+- Updated `Microsoft.AspNetCore.Authentication.JwtBearer` from version `8.0.0` to `8.0.1`.
+- Updated `Microsoft.AspNetCore.Authentication.OpenIdConnect` from version `8.0.0` to `8.0.1`.
 - Updated `Microsoft.Azure.Cosmos` from version `3.37.0` to `3.37.1`.
+- Updated `Microsoft.EntityFrameworkCore` from version `8.0.0` to `8.0.1`.
+- Updated `Microsoft.Extensions.Options` from version `8.0.0` to `8.0.1`.
 - Updated `SharpToken` from version `1.2.12` to `1.2.14`.
-- Updated `xunit` from version `2.6.2` to `2.6.5`.
-- Updated `xunit.analyzers` from version `1.6.0` to `1.9.0`.
-- Updated `xunit.extensibility.core` from version `2.6.2` to `2.6.5`.
+- Updated `xunit` from version `2.6.2` to `2.6.6`.
+- Updated `xunit.analyzers` from version `1.6.0` to `1.10.0`.
+- Updated `xunit.extensibility.core` from version `2.6.2` to `2.6.6`.
 - Updated `xunit.runner.visualstudio` from version `2.5.4` to `2.5.6`.
 - Updated `StyleCop.Analyzers` from version `1.2.0-beta.507` to `1.2.0-beta.556`.
+- Updated `System.Text.Json` from version `8.0.0` to `8.0.1`.
 - Updated version from `8.0.3` to `8.1.0` due to all the major and breaking changes.
 - Updated some `README.md` files changing `IKernel` for `Kernel`.
+- Updated and added new unit tests to cover the main "happy path" of implementations that use `Semnantic Kernel`.
 
 ### Minor Changes
 
+- Updated prompt function configuration files (`config.json`) to new format.
 - Renamed files `IKernelExtensions` to `KernelExtensions.cs`.
 - Fixed token counting in `ChatWithHistoryPlugin.cs`.
-- Updated prompt function configuration files (`config.json`) to new format.
+- Updated sample projects.
+- Fixed some typos and grammatical errors.
 
 ## [8.0.3]
 

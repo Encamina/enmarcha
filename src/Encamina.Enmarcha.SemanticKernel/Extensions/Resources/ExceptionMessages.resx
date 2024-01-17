@@ -120,6 +120,9 @@
   <data name="PromptConfigurationFileNotFound" xml:space="preserve">
     <value>Prompt configuration file ('config.json') for function '{0}' not found at '{1}'!</value>
   </data>
+  <data name="PromptEmbeddedResourcesNotFound" xml:space="preserve">
+    <value>Prompt embedded resources (template and configuration files) not found for plugin name '{0}' and function '{1}' in assembly '{2}'!</value>
+  </data>
   <data name="PromptTemplateFileNotFound" xml:space="preserve">
     <value>Prompt template file ('skprompt.txt') for function '{0}' not found at '{1}'!</value>
   </data>

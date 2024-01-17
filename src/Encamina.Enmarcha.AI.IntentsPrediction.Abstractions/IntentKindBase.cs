@@ -8,7 +8,7 @@ namespace Encamina.Enmarcha.AI.IntentsPrediction.Abstractions;
 /// </summary>
 [SuppressMessage(@"Major Code Smell",
                  "S4035:Classes implementing \"IEquatable<T>\" should be sealed",
-                 Justification = "Intended useage of this class requires it to be inheritable and implement the \"IEquatable<T>\" interface!")]
+                 Justification = "Intended usage of this class requires it to be inheritable and implement the \"IEquatable<T>\" interface!")]
 public class IntentKindBase : IEqualityComparer<IntentKindBase>, IEquatable<IntentKindBase>
 {
     private readonly string value;
@@ -29,8 +29,8 @@ public class IntentKindBase : IEqualityComparer<IntentKindBase>, IEquatable<Inte
     /// <summary>
     /// Determines if two <see cref="IntentKindBase"/> values are the same.
     /// </summary>
-    /// <param name="left">The left part from the equality comparisson.</param>
-    /// <param name="right">The right part from the equality comparisson.</param>
+    /// <param name="left">The left part from the equality comparison.</param>
+    /// <param name="right">The right part from the equality comparison.</param>
     /// <returns>
     /// Returns <see langword="true"/> if <paramref name="left"/> is the same as <paramref name="right"/>, otherwise returns <see langword="false"/>.
     /// </returns>

@@ -29,6 +29,12 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+      
+      - name: Set Java for SonarCloud
+        uses: actions/setup-java@v4
+        with:
+            distribution: 'microsoft'
+            java-version: '21'
         
       - name: Using .NET from 'global.json'
         uses: actions/setup-dotnet@v3

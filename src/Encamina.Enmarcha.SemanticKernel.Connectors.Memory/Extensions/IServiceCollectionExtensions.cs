@@ -1,7 +1,6 @@
-﻿using Encamina.Enmarcha.Data.Qdrant.Abstractions;
+﻿using Encamina.Enmarcha.AI.OpenAI.Azure;
+using Encamina.Enmarcha.Data.Qdrant.Abstractions;
 using Encamina.Enmarcha.Data.Qdrant.Abstractions.Extensions;
-
-using Encamina.Enmarcha.SemanticKernel.Abstractions;
 
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -62,7 +61,7 @@ public static class IServiceCollectionExtensions
     {
         return services.TryAddType(serviceLifetime, sp =>
         {
-            var options = sp.GetRequiredService<IOptions<SemanticKernelOptions>>().Value;
+            var options = sp.GetRequiredService<IOptions<AzureOpenAIOptions>>().Value;
 
             return new MemoryBuilder()
                 .WithAzureOpenAITextEmbeddingGeneration(options.EmbeddingsModelDeploymentName, options.Endpoint.ToString(), options.Key)

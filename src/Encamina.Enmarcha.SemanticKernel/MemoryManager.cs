@@ -20,7 +20,7 @@ namespace Encamina.Enmarcha.SemanticKernel;
 /// Initializes a new instance of the <see cref="MemoryManager"/> class.
 /// </remarks>
 /// <param name="kernel">
-/// A valid instance of <see cref="Kernel"/>, used to get the configured text embeddings generation service (<see cref="ITextEmbeddingGeneration"/>) required by this manager.
+/// A valid instance of <see cref="Kernel"/>, used to get the configured text embeddings generation service (<see cref="ITextEmbeddingGenerationService"/>) required by this manager.
 /// </param>
 /// <param name="memoryStore">A valid instance of a <see cref="IMemoryStore"/> to manage.</param>
 public class MemoryManager(Kernel kernel, IMemoryStore memoryStore) : IMemoryManager
@@ -152,4 +152,3 @@ public class MemoryManager(Kernel kernel, IMemoryStore memoryStore) : IMemoryMan
         await memoryStore.UpsertBatchAsync(collectionName, memoryRecords, cancellationToken).ToListAsync(cancellationToken: cancellationToken);
     }
 }
-

@@ -130,7 +130,7 @@ public class ChatWithHistoryPlugin
     {
         if (options.HistoryMaxMessages <= 0 || remainingTokens <= 0)
         {
-              return;
+            return;
         }
 
         // Obtain the chat history for the user, ordered by timestamps descending to get the most recent messages first, and then take 'N' messages.
@@ -205,11 +205,11 @@ public class ChatWithHistoryPlugin
     }
 
     /// <summary>
-    /// Rough token costing of ChatHistory's message object.
-    /// Follows the syntax defined by Azure OpenAI's ChatMessage object: https://learn.microsoft.com/en-us/azure/ai-services/openai/reference#chatmessage
-    /// e.g., "message": {"role":"assistant","content":"Yes }
-    /// Code based on: https://github.com/microsoft/chat-copilot/blob/6a744cf50fca3a8d0d1aa1af39bf1069757b9bfb/webapi/Plugins/Utils/TokenUtils.cs#L117C8-L117C8
+    /// Gets a rough token count of a message for the <see cref="ChatHistory"/> by following the syntax defined by <see href="https://learn.microsoft.com/en-us/azure/ai-services/openai/reference#chatmessage">Azure OpenAI's ChatMessage</see> object.
     /// </summary>
+    /// <remarks>
+    /// The code of this method is based on <a href="https://github.com/microsoft/chat-copilot/blob/6a744cf50fca3a8d0d1aa1af39bf1069757b9bfb/webapi/Plugins/Utils/TokenUtils.cs#L117C8-L117C8" />.
+    /// </remarks>
     /// <param name="authorRole">Author role of the message.</param>
     /// <param name="content">Content of the message.</param>
     /// <returns>The calculated token count for the given message.</returns>
