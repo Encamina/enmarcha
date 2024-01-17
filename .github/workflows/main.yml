@@ -19,7 +19,7 @@ on:
   workflow_dispatch:
 
 env:
-  BuildConfiguration: ${{ startsWith(github.ref, 'refs/heads/releases') && 'Release' || 'Debug' }}
+  BuildConfiguration: ${{ (startsWith(github.ref, 'refs/heads/releases') || startsWith(github.ref, 'refs/main')) && 'Release' || 'Debug' }}
 
 jobs:
   CI:
