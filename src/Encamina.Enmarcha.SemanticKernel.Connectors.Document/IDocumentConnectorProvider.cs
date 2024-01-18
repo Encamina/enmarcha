@@ -12,5 +12,5 @@ public interface IDocumentConnectorProvider
     /// </summary>
     /// <param name="fileExtension">The file extension.</param>
     /// <returns>A valid instance of <see cref="IDocumentConnector"/> that could handle documents from the given file extension.</returns>
-    protected abstract IDocumentConnector GetDocumentConnector(string fileExtension);
+    IDocumentConnector GetDocumentConnector(string fileExtension);
 }
