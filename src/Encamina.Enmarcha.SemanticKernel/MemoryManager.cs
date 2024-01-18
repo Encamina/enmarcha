@@ -8,7 +8,7 @@ using Encamina.Enmarcha.SemanticKernel.Abstractions;
 
 using Microsoft.Extensions.Logging;
 using Microsoft.SemanticKernel;
-using Microsoft.SemanticKernel.AI.Embeddings;
+using Microsoft.SemanticKernel.Embeddings;
 using Microsoft.SemanticKernel.Memory;
 
 namespace Encamina.Enmarcha.SemanticKernel;
@@ -16,28 +16,21 @@ namespace Encamina.Enmarcha.SemanticKernel;
 /// <summary>
 /// Manager that provides some CRUD operations over memories with multiple chunks that need to be managed by an <see cref="IMemoryStore"/>, using batch operations.
 /// </summary>
-public class MemoryManager : IMemoryManager
+/// <remarks>
+/// Initializes a new instance of the <see cref="MemoryManager"/> class.
+/// </remarks>
+/// <param name="kernel">
+/// A valid instance of <see cref="Kernel"/>, used to get the configured text embeddings generation service (<see cref="ITextEmbeddingGenerationService"/>) required by this manager.
+/// </param>
+/// <param name="memoryStore">A valid instance of a <see cref="IMemoryStore"/> to manage.</param>
+public class MemoryManager(Kernel kernel, IMemoryStore memoryStore) : IMemoryManager
 {
     private const string ChunkSize = @"chunkSize";
 
-    private readonly ILogger logger;
-    private readonly IMemoryStore memoryStore;
-    private readonly ITextEmbeddingGeneration textEmbeddingGeneration;
+    private readonly Kernel kernel = kernel;
 
-    /// <summary>
-    /// Initializes a new instance of the <see cref="MemoryManager"/> class.
-    /// </summary>
-    /// <param name="kernel">
-    /// A valid instance of <see cref="IKernel"/>, used to get the configured text embeddings generation service (<see cref="ITextEmbeddingGeneration"/>) required by this manager.
-    /// </param>
-    /// <param name="memoryStore">A valid instance of a <see cref="IMemoryStore"/> to manage.</param>
-    public MemoryManager(IKernel kernel, IMemoryStore memoryStore)
-    {
-        textEmbeddingGeneration = kernel.GetService<ITextEmbeddingGeneration>(); // If the service is not configured, a `KernelException` is thrown...
-
-        this.logger = kernel.LoggerFactory.CreateLogger<MemoryManager>();
-        this.memoryStore = memoryStore;
-    }
+    private readonly ILogger logger = kernel.LoggerFactory.CreateLogger<MemoryManager>();
+    private readonly IMemoryStore memoryStore = memoryStore;
 
     /// <inheritdoc/>
     public virtual async Task UpsertMemoryAsync(string memoryId, string collectionName, IEnumerable<string> chunks, CancellationToken cancellationToken, IDictionary<string, string> metadata = null)
@@ -101,7 +94,7 @@ public class MemoryManager : IMemoryManager
                 for (var i = 0; i < totalChunks; i++)
                 {
                     var chunk = memoryContent.Chunks.ElementAt(i);
-                    var embedding = await textEmbeddingGeneration.GenerateEmbeddingAsync(chunk, cancellationToken);
+                    var embedding = await kernel.GetRequiredService<ITextEmbeddingGenerationService>().GenerateEmbeddingAsync(chunk, kernel, cancellationToken);
                     memoryRecords.Add(MemoryRecord.LocalRecord($@"{memoryContentId}-{i}", chunk, null, embedding, JsonSerializer.Serialize(memoryContent.Metadata)));
                 }
             }
@@ -152,11 +145,10 @@ public class MemoryManager : IMemoryManager
         for (var i = 0; i < chunksCount; i++)
         {
             var chunk = chunks.ElementAt(i);
-            var embedding = await textEmbeddingGeneration.GenerateEmbeddingAsync(chunk, cancellationToken);
+            var embedding = await kernel.GetRequiredService<ITextEmbeddingGenerationService>().GenerateEmbeddingAsync(chunk, kernel, cancellationToken);
             memoryRecords.Add(MemoryRecord.LocalRecord(BuildMemoryIdentifier(memoryid, i), chunk, null, embedding, metadataJson));
         }
 
         await memoryStore.UpsertBatchAsync(collectionName, memoryRecords, cancellationToken).ToListAsync(cancellationToken: cancellationToken);
     }
 }
-

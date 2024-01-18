@@ -1,0 +1,33 @@
+{
+  "schema": 1,
+  "description": "Dummy description",
+  "execution_settings": {
+    "default": {
+      "max_tokens": 500,
+      "temperature": 0.0,
+      "top_p": 0.0,
+      "presence_penalty": 0.0,
+      "frequency_penalty": 0.0
+    }
+  },
+  "input_variables": [
+    {
+      "name": "input",
+      "description": "The input value.",
+      "default": "",
+      "is_required": true
+    },
+    {
+      "name": "foo",
+      "description": "The foo value.",
+      "default": "",
+      "is_required": false
+    },
+    {
+      "name": "bar",
+      "description": "The bar value.",
+      "default": "",
+      "is_required": true
+    }
+  ]
+}

@@ -1,13 +1,12 @@
 ﻿using Encamina.Enmarcha.SemanticKernel.Plugins.Text;
 
 using Microsoft.SemanticKernel;
-using Microsoft.SemanticKernel.Orchestration;
 
 namespace Encamina.Enmarcha.Samples.SemanticKernel.Text;
 
 internal class Example
 {
-    private readonly IKernel kernel;
+    private readonly Kernel kernel;
 
     private readonly string input = @"Alexandre Dumas born Dumas Davy de la Pailleterie, 24 July 1802 – 5 December 1870), also known as Alexandre Dumas père, was a French novelist and playwright.
         His works have been translated into many languages and he is one of the most widely read French authors. Many of his historical novels of adventure were originally published as serials, including The Count of Monte Cristo, The Three Musketeers, Twenty Years After and The Vicomte of Bragelonne: Ten Years Later.Since the early 20th century, his novels have been adapted into nearly 200 films.Prolific in several genres, Dumas began his career by writing plays, which were successfully produced from the first. He wrote numerous magazine articles and travel books; his published works totalled 100,000 pages.In the 1840s, Dumas founded the Théâtre Historique in Paris.
@@ -16,7 +15,7 @@ internal class Example
         English playwright Watts Phillips, who knew Dumas in his later life, described him as ""the most generous, large - hearted being in the world.He also was the most delightfully amusing and egotistical creature on the face of the earth.His tongue was like a windmill – once set in motion, you never knew when he would stop, especially if the theme was himself.""";
 
     /// <inheritdoc/>
-    public Example(IKernel kernel)
+    public Example(Kernel kernel)
     {
         this.kernel = kernel;
         Console.WriteLine($"# Context: {input} \n");
@@ -25,14 +24,15 @@ internal class Example
     /// <inheritdoc/>
     public async Task TestSummaryAsync()
     {
-        var contextVariables = new ContextVariables();
-        contextVariables.Set(PluginsInfo.TextPlugin.Functions.Summarize.Parameters.Input, input);
-        contextVariables.Set(PluginsInfo.TextPlugin.Functions.Summarize.Parameters.MaxWordsCount, "15");
+        var summaryArguments = new KernelArguments()
+        {
+            [PluginsInfo.TextPlugin.Functions.Summarize.Parameters.Input] = input,
+            [PluginsInfo.TextPlugin.Functions.Summarize.Parameters.MaxWordsCount] = 15,
+        };
 
-        var functionSummarize = kernel.Functions.GetFunction(PluginsInfo.TextPlugin.Name, PluginsInfo.TextPlugin.Functions.Summarize.Name);
+        var functionSummarize = kernel.Plugins.GetFunction(PluginsInfo.TextPlugin.Name, PluginsInfo.TextPlugin.Functions.Summarize.Name);
 
-        var resultContext = await kernel.RunAsync(contextVariables, functionSummarize);
-        var result = resultContext.GetValue<string>();
+        var result = await kernel.InvokeAsync<string>(functionSummarize, summaryArguments);
 
         Console.WriteLine($"# Summary: {result} \n");
     }
@@ -40,14 +40,15 @@ internal class Example
     /// <inheritdoc/>
     public async Task TextKeyPhrasesAsync()
     {
-        var contextVariables = new ContextVariables();
-        contextVariables.Set(PluginsInfo.TextPlugin.Functions.KeyPhrases.Parameters.Input, input);
-        contextVariables.Set(PluginsInfo.TextPlugin.Functions.KeyPhrases.Parameters.TopKeyphrases, "2");
+        var keyPhrasesArguments = new KernelArguments()
+        {
+            [PluginsInfo.TextPlugin.Functions.KeyPhrases.Parameters.Input] = input,
+            [PluginsInfo.TextPlugin.Functions.KeyPhrases.Parameters.TopKeyphrases] = 2,
+        };
 
-        var functionSummarize = kernel.Functions.GetFunction(PluginsInfo.TextPlugin.Name, PluginsInfo.TextPlugin.Functions.KeyPhrases.Name);
+        var functionSummarize = kernel.Plugins.GetFunction(PluginsInfo.TextPlugin.Name, PluginsInfo.TextPlugin.Functions.KeyPhrases.Name);
 
-        var resultContext = await kernel.RunAsync(contextVariables, functionSummarize);
-        var result = resultContext.GetValue<string>();
+        var result = await kernel.InvokeAsync<string>(functionSummarize, keyPhrasesArguments);
 
         Console.WriteLine($"# Key Phrases: {result} \n");
     }

@@ -134,9 +134,9 @@ public class MyClass
 
 This allows the my-collection collection stored in memory to be tracked, and after [EphemeralMemoryStoreHandlerOptions.IdleTimeoutMinutes](./Options/EphemeralMemoryStoreHandlerOptions.cs) since the last access to the collection through the `GetCollectionNameAsync` method, it will be deleted.
 
-### IKernelExtensions
+### KernelExtensions
 
-Contains extension methods for IKernel. You can see all available extension methods in the [IKernelExtensions](./Extensions/IKernelExtensions.cs) class.
+Contains extension methods for Kernel. You can see all available extension methods in the [KernelExtensions](./Extensions/KernelExtensions.cs) class.
 
 ```csharp
     var mySemanticFunction = kernel.Skills.GetFunction("MyFunctionName");

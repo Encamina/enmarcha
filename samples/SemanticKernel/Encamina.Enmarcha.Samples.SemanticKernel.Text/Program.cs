@@ -1,4 +1,4 @@
-﻿using Encamina.Enmarcha.SemanticKernel.Abstractions;
+﻿using Encamina.Enmarcha.AI.OpenAI.Azure;
 using Encamina.Enmarcha.SemanticKernel.Plugins.Text;
 
 using Microsoft.Extensions.Configuration;
@@ -11,7 +11,7 @@ namespace Encamina.Enmarcha.Samples.SemanticKernel.Text;
 
 internal static class Program
 {
-    private static async Task Main(string[] args)
+    private static async Task Main(string[] _)
     {
         // Create and configure builder
         var hostBuilder = new HostBuilder()
@@ -23,15 +23,15 @@ internal static class Program
         // Configure service
         hostBuilder.ConfigureServices((hostContext, services) =>
         {
-            services.AddScoped(sp =>
+            services.AddScoped(_ =>
             {
                 // Get semantic kernel options
-                var options = hostContext.Configuration.GetRequiredSection(nameof(SemanticKernelOptions)).Get<SemanticKernelOptions>()
-                ?? throw new InvalidOperationException(@$"Missing configuration for {nameof(SemanticKernelOptions)}");
+                var options = hostContext.Configuration.GetRequiredSection(nameof(AzureOpenAIOptions)).Get<AzureOpenAIOptions>()
+                ?? throw new InvalidOperationException(@$"Missing configuration for {nameof(AzureOpenAIOptions)}");
 
                 // Initialize semantic kernel
-                var kernel = new KernelBuilder()
-                    .WithAzureOpenAIChatCompletionService(options.ChatModelDeploymentName, options.Endpoint.ToString(), options.Key)
+                var kernel = Kernel.CreateBuilder()
+                    .AddAzureOpenAIChatCompletion(options.ChatModelDeploymentName, options.Endpoint.ToString(), options.Key)
                     .Build();
 
                 kernel.ImportTextPlugin();
@@ -43,7 +43,7 @@ internal static class Program
         var host = hostBuilder.Build();
 
         // Initialize Examples
-        var example = new Example(host.Services.GetRequiredService<IKernel>());
+        var example = new Example(host.Services.GetRequiredService<Kernel>());
 
         await example.TestSummaryAsync();
 

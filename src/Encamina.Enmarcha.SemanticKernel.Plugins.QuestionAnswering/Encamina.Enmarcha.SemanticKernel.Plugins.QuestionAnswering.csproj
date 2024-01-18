@@ -6,16 +6,20 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <NoWarn>1701;1702;SKEXP0003</NoWarn>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <NoWarn>1701;1702;SKEXP0003</NoWarn>
+  </PropertyGroup>
+
   <ItemGroup>
-    <EmbeddedResource Include="Plugins\QuestionAnsweringPlugin\QuestionAnsweringFromContext\config.json" />
-    <EmbeddedResource Include="Plugins\QuestionAnsweringPlugin\QuestionAnsweringFromContext\skprompt.txt" />
+    <PackageReference Include="Microsoft.SemanticKernel.Abstractions" Version="1.1.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.SemanticKernel.Abstractions" Version="1.0.0-beta8" />
-  </ItemGroup>
-
-  <ItemGroup>
+    <ProjectReference Include="..\Encamina.Enmarcha.AI.OpenAI.Azure\Encamina.Enmarcha.AI.OpenAI.Azure.csproj" />
     <ProjectReference Include="..\Encamina.Enmarcha.SemanticKernel.Plugins.Memory\Encamina.Enmarcha.SemanticKernel.Plugins.Memory.csproj" />
     <ProjectReference Include="..\Encamina.Enmarcha.SemanticKernel\Encamina.Enmarcha.SemanticKernel.csproj" />
   </ItemGroup>

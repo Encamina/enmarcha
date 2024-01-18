@@ -64,7 +64,7 @@ public class StrictFormatCleanPdfDocumentConnector : CleanPdfDocumentConnector
         var pageSegmenter = new DocstrumBoundingBoxes(pageSegmenterOptions);
         var textBlocks = pageSegmenter.GetBlocks(words);
 
-        // 3. Postprocessing
+        // 3. Post-processing
         var orderedTextBlocks = RenderingReadingOrderDetector.Instance.Get(textBlocks);
 
         return orderedTextBlocks;

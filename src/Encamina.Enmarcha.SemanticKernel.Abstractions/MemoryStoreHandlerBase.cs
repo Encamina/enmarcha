@@ -1,4 +1,6 @@
-﻿using System.Collections.Concurrent;
+﻿// Ignore Spelling: Utc
+
+using System.Collections.Concurrent;
 
 using Microsoft.SemanticKernel.Memory;
 
@@ -13,7 +15,9 @@ public abstract class MemoryStoreHandlerBase : IMemoryStoreHandler
     /// Initializes a new instance of the <see cref="MemoryStoreHandlerBase"/> class.
     /// </summary>
     /// <param name="memoryStore">The <see cref="IMemoryStore"/> to handle.</param>
+#pragma warning disable SKEXP0003 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
     protected MemoryStoreHandlerBase(IMemoryStore memoryStore)
+#pragma warning restore SKEXP0003 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
     {
         MemoryStore = memoryStore;
     }

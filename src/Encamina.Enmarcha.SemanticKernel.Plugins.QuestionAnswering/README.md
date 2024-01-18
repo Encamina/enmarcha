@@ -57,9 +57,9 @@ Now you can inject the kernel via constructor, and the question capabilities are
 ```csharp
 public class MyClass
 {
-    private readonly IKernel kernel;
+    private readonly Kernel kernel;
 
-    public MyClass(IKernel kernel)
+    public MyClass(Kernel kernel)
     {
         this.kernel = kernel;
     }
@@ -128,9 +128,9 @@ Now you can inject the kernel via constructor, and the memory question capabilit
 ```csharp
 public class MyClass
 {
-    private readonly IKernel kernel;
+    private readonly Kernel kernel;
 
-    public MyClass(IKernel kernel)
+    public MyClass(Kernel kernel)
     {
         this.kernel = kernel;
     }

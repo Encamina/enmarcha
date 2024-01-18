@@ -79,9 +79,9 @@ Once configured, you can now use Semantic Kernel, and it will utilize the Qdrant
 ```csharp
 public class MyClass
 {
-    private readonly IKernel kernel;
+    private readonly Kernel kernel;
 
-    public MyClass(IKernel kernel)
+    public MyClass(Kernel kernel)
     {
         this.kernel = kernel;
     }

@@ -1,4 +1,4 @@
-﻿using Encamina.Enmarcha.Samples.SemanticKernel.QuestionAnswering;
+﻿using Encamina.Enmarcha.AI.OpenAI.Azure;
 using Encamina.Enmarcha.SemanticKernel.Abstractions;
 using Encamina.Enmarcha.SemanticKernel.Plugins.QuestionAnswering;
 
@@ -14,7 +14,7 @@ internal static class ExampleQuestionAnsweringFromContext
 {
     public static async Task RunAsync()
     {
-        Console.WriteLine("# Executing Example_QuestionAnsweringFromContext");
+        Console.WriteLine(@"# Executing Example_QuestionAnsweringFromContext");
 
         // Create and configure builder
         var hostBuilder = new HostBuilder()
@@ -27,21 +27,21 @@ internal static class ExampleQuestionAnsweringFromContext
         hostBuilder.ConfigureServices((hostContext, services) =>
         {
             // Add Semantic Kernel options
-            services.AddOptions<SemanticKernelOptions>().Bind(hostContext.Configuration.GetSection(nameof(SemanticKernelOptions))).ValidateDataAnnotations().ValidateOnStart();
+            services.AddOptions<AzureOpenAIOptions>().Bind(hostContext.Configuration.GetSection(nameof(AzureOpenAIOptions))).ValidateDataAnnotations().ValidateOnStart();
 
             services.AddScoped(sp =>
             {
                 // Get semantic kernel options
-                var options = hostContext.Configuration.GetRequiredSection(nameof(SemanticKernelOptions)).Get<SemanticKernelOptions>()
-                ?? throw new InvalidOperationException(@$"Missing configuration for {nameof(SemanticKernelOptions)}");
+                var options = hostContext.Configuration.GetRequiredSection(nameof(AzureOpenAIOptions)).Get<AzureOpenAIOptions>()
+                ?? throw new InvalidOperationException(@$"Missing configuration for {nameof(AzureOpenAIOptions)}");
 
                 // Initialize semantic kernel
-                var kernel = new KernelBuilder()
-                    .WithAzureOpenAIChatCompletionService(options.ChatModelDeploymentName, options.Endpoint.ToString(), options.Key)
+                var kernel = Kernel.CreateBuilder()
+                    .AddAzureOpenAIChatCompletion(options.ChatModelDeploymentName, options.Endpoint.ToString(), options.Key)
                     .Build();
 
                 // Import Question Answering plugin
-                kernel.ImportQuestionAnsweringPlugin(sp, ILengthFunctions.LengthByTokenCount);
+                kernel.ImportQuestionAnsweringPlugin(options, ILengthFunctions.LengthByTokenCount);
 
                 return kernel;
             });
@@ -50,7 +50,7 @@ internal static class ExampleQuestionAnsweringFromContext
         var host = hostBuilder.Build();
 
         // Initialize Q&A
-        var testQuestionAnswering = new TestQuestionAnswering(host.Services.GetRequiredService<IKernel>());
+        var testQuestionAnswering = new TestQuestionAnswering(host.Services.GetRequiredService<Kernel>());
 
         var result = await testQuestionAnswering.TestQuestionAnsweringFromContextAsync();
 
