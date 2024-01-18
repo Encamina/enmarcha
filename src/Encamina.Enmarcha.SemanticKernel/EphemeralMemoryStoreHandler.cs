@@ -35,11 +35,8 @@ internal sealed class EphemeralMemoryStoreHandler : MemoryStoreHandlerBase
         Task.Run(() => RemoveOutdatedCollectionsAsync());
     }
 
-    /// <inheritdoc />
-    public override string CollectionNamePostfix { get; init; }
-
-    /// <inheritdoc />
-    public override string CollectionNamePrefix { get; init; }
+    /// <inheritdoc/>
+    public override string CollectionNamePrefix => @"ephemeral-";
 
     private async Task RemoveOutdatedCollectionsAsync(CancellationToken cancellationToken = default)
     {
