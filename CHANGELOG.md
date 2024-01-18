@@ -16,6 +16,11 @@ Also, any bug fix must start with the prefix �Bug fix:� followed by the desc
 
 Previous classification is not required if changes are simple or all belong to the same category.
 
+## [8.1.1]
+
+### Minor Changes
+  - Fixed `BuildConfiguration` not set to Release in `.github/workflows/main.yml` for the main branch. [(#31)](https://github.com/Encamina/enmarcha/issues/31)
+
 ## [8.1.0]
 
 ### Important
