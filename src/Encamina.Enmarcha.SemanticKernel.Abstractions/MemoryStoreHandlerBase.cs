@@ -23,10 +23,10 @@ public abstract class MemoryStoreHandlerBase : IMemoryStoreHandler
     }
 
     /// <inheritdoc/>
-    public abstract string CollectionNamePostfix { get; init; }
+    public virtual string CollectionNamePostfix { get; init; }
 
     /// <inheritdoc/>
-    public abstract string CollectionNamePrefix { get; init; }
+    public virtual string CollectionNamePrefix { get; init; }
 
     /// <summary>
     /// Gets the current collection of memory stores.
