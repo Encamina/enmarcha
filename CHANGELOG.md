@@ -18,9 +18,14 @@ Previous classification is not required if changes are simple or all belong to t
 
 ## [8.1.2]
 
+### Major change
+- Method `DocumentContentExtractorBase` in `DocumentContentExtractorBase` is now `public` instead of `protected`.
+
 ### Minor Changes
 - Properties `CollectionNamePostfix` and `CollectionNamePrefix` from `MemoryStoreHandlerBase` are now `virtual` instead of `abstract`.
 - In `EphemeralMemoryStoreHandler`, property `CollectionNamePrefix` has the value `ephemeral-` fixed.
+- Fixed some typos and grammatical errors (mostly on code comments).
+- Added new extension method `AddDefaultDocumentConnectorProvider` in `Encamina.Enmarcha.SemanticKernel.Connectors.Document` to get access to a default implementation of a `IDocumentConnector`.
 
 ## [8.1.1]
 
