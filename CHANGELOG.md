@@ -19,7 +19,7 @@ Previous classification is not required if changes are simple or all belong to t
 ## [8.1.2]
 
 ### Major change
-- Method `DocumentContentExtractorBase` in `DocumentContentExtractorBase` is now `public` instead of `protected`.
+- Method `GetDocumentConnector` in `DocumentContentExtractorBase` is now `public` instead of `protected`.
 
 ### Minor Changes
 - Properties `CollectionNamePostfix` and `CollectionNamePrefix` from `MemoryStoreHandlerBase` are now `virtual` instead of `abstract`.
