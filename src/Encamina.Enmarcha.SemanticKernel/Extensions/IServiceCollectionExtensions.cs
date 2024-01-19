@@ -24,7 +24,7 @@ public static class IServiceCollectionExtensions
     /// <returns>The <see cref="IServiceCollection"/> so that additional calls can be chained.</returns>
     public static IServiceCollection AddMemoryManager(this IServiceCollection services)
     {
-        services.TryAddTransient<IMemoryManager, MemoryManager>();
+        services.TryAddSingleton<IMemoryManager, MemoryManager>();
 
         return services;
     }
@@ -47,7 +47,7 @@ public static class IServiceCollectionExtensions
                 .ValidateDataAnnotations()
                 .ValidateOnStart();
 
-        services.TryAddTransient<IMemoryStoreHandler, EphemeralMemoryStoreHandler>();
+        services.TryAddSingleton<IMemoryStoreHandler, EphemeralMemoryStoreHandler>();
 
         return services;
     }

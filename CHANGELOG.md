@@ -21,13 +21,15 @@ Previous classification is not required if changes are simple or all belong to t
 ### Braking Changes
 - Replace dependency with `IMemoryStore` for `IMemoryManager` in abstract class `MemoryStoreHandlerBase`. This affects internal types like the `EphemeralMemoryStoreHandler`.
 - Removed visibility modifiers in `IMemoryManager` interface.
+- Signature of `UpsertMemoryAsync` method has changed in `IMemoryManager` interface.
+- Signature of `BatchUpsertMemoriesAsync` method has changed in `IMemoryManager` interface.
+- Dependency with `Kernel` has been replace with dependency to `ITextEmbeddingGenerationService` in `MemoryManager` class. Also, added dependency with `ILogger`.
 
 ### Major change
 - Method `GetDocumentConnector` in `DocumentContentExtractorBase` is now `public` instead of `protected`.
 - New `MemoryManager` property of type `IMemoryManager` in `IMemoryStoreHandler` interface to get read-only access to the underlaying memory manager.
 - New `MemoryStore` property of type `IMemoryStore` in `IMemoryManager` interface to get read-only access to the underlaying memory store.
 - Removed unnecessary `Guards` when adding a Memory Manager and the Ephemeral Memory Store Handler. The exceptions will be thrown by the DI engine itself.
-- Modified dependency injection lifetime for `MemoryManager` and `EphemeralMemoryStoreHandler` services.
 
 ### Minor Changes
 - Properties `CollectionNamePostfix` and `CollectionNamePrefix` from `MemoryStoreHandlerBase` are now `virtual` instead of `abstract`.
