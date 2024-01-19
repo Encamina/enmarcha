@@ -18,7 +18,7 @@ Previous classification is not required if changes are simple or all belong to t
 
 ## [8.1.2]
 
-### Braking Changes
+### Breaking Changes
 - Replace dependency with `IMemoryStore` for `IMemoryManager` in abstract class `MemoryStoreHandlerBase`. This affects internal types like the `EphemeralMemoryStoreHandler`.
 - Removed visibility modifiers in `IMemoryManager` interface.
 - Signature of `UpsertMemoryAsync` method has changed in `IMemoryManager` interface.
@@ -67,7 +67,7 @@ Sadly, some features from `Semantic Kernel` that we might have been using, are m
 
  More information about these warnings is available here: https://github.com/microsoft/semantic-kernel/blob/main/dotnet/docs/EXPERIMENTS.md
 
-### Braking Changes
+### Breaking Changes
 
 - Replaced class `Completition` for `Completion` in `Encamina.Enmarcha.AI.OpenAI.Abstractions`. It was misspelled.
 - Class `SemanticKernelOptions` does not exists anymore. It has been replaced by `AzureOpenAIOptions` from `Encamina.Enmarcha.AI.OpenAI.Abstractions`. 
