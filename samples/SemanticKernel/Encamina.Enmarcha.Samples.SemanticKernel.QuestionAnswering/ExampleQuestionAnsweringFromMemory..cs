@@ -57,13 +57,15 @@ internal static class ExampleQuestionAnsweringFromMemory
 
         var host = hostBuilder.Build();
 
+        var kernel = host.Services.GetRequiredService<Kernel>();
+
         // Initialize mock memory
         var mockMemoryInformation = new MockMemoryInformation(host.Services.GetRequiredService<IMemoryManager>(), host.Services.GetRequiredService<IMemoryStore>());
         await mockMemoryInformation.CreateCollection();
-        await mockMemoryInformation.SaveDataMockAsync();
+        await mockMemoryInformation.SaveDataMockAsync(kernel);
 
         // Initialize Q&A from Memory
-        var testQuestionAnswering = new TestQuestionAnswering(host.Services.GetService<Kernel>());
+        var testQuestionAnswering = new TestQuestionAnswering(kernel);
         var result = await testQuestionAnswering.TestQuestionAnsweringFromMemoryAsync();
 
         Console.WriteLine($@"RESULT: {result}");

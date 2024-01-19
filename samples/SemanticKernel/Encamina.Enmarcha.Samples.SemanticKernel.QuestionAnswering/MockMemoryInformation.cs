@@ -1,5 +1,6 @@
 ﻿using Encamina.Enmarcha.SemanticKernel.Abstractions;
 
+using Microsoft.SemanticKernel;
 using Microsoft.SemanticKernel.Memory;
 
 namespace Encamina.Enmarcha.Samples.SemanticKernel.QuestionAnswering;
@@ -20,7 +21,7 @@ internal class MockMemoryInformation
         await memoryStore.CreateCollectionAsync(collectionName: "my-collection", CancellationToken.None);
     }
 
-    public async Task SaveDataMockAsync()
+    public async Task SaveDataMockAsync(Kernel kernel)
     {
         var memoryId = Guid.NewGuid().ToString();
 
@@ -33,6 +34,6 @@ internal class MockMemoryInformation
         Console.WriteLine($"# Second chunk: {secondChunkText}  \n");
         Console.WriteLine($"# Third chunk: {thirdChunkText}   \n");
 
-        await memoryManager.UpsertMemoryAsync(memoryId: memoryId, collectionName: "my-collection", chunks: new List<string> { firstChunkText, secondChunkText, thirdChunkText }, cancellationToken: CancellationToken.None);
+        await memoryManager.UpsertMemoryAsync(memoryId: memoryId, collectionName: "my-collection", chunks: new List<string> { firstChunkText, secondChunkText, thirdChunkText }, kernel, cancellationToken: CancellationToken.None);
     }
 }
