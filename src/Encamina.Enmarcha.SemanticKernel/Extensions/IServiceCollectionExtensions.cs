@@ -22,14 +22,8 @@ public static class IServiceCollectionExtensions
     /// </summary>
     /// <param name="services">The <see cref="IServiceCollection"/> to add services to.</param>
     /// <returns>The <see cref="IServiceCollection"/> so that additional calls can be chained.</returns>
-    /// <exception cref="ArgumentException">
-    /// If the <see cref="IServiceCollection"/> does not contain a service reference for the <see cref="Kernel"/> and the <see cref="IMemoryStore"/> services.
-    /// </exception>
     public static IServiceCollection AddMemoryManager(this IServiceCollection services)
     {
-        Guard.IsTrue(services.Any(service => service.ServiceType == typeof(Kernel)), @"Service `Kernel` is required to use `MemoryManager`.");
-        Guard.IsTrue(services.Any(service => service.ServiceType == typeof(IMemoryStore)), @"Service `IMemoryStore` is required to use `MemoryManager`.");
-
         services.TryAddScoped<IMemoryManager, MemoryManager>();
 
         return services;
@@ -42,13 +36,8 @@ public static class IServiceCollectionExtensions
     /// <param name="services">The <see cref="IServiceCollection"/> to add services to.</param>
     /// <param name="configuration">The current set of key-value application configuration parameters.</param>
     /// <returns>The <see cref="IServiceCollection"/> so that additional calls can be chained.</returns>
-    /// <exception cref="ArgumentException">
-    /// If the <see cref="IServiceCollection"/> does not contain a service reference for the <see cref="IMemoryStore"/> service.
-    /// </exception>
     public static IServiceCollection AddEphemeralMemoryStoreHandler(this IServiceCollection services, IConfiguration configuration)
     {
-        Guard.IsTrue(services.Any(service => service.ServiceType == typeof(IMemoryStore)), @"Service `IMemoryStore` is required to use `MemoryManager`.");
-
         services.AddOptions<EphemeralMemoryStoreHandlerOptions>()
                 .Bind(configuration.GetSection(nameof(EphemeralMemoryStoreHandlerOptions)))
                 .ValidateDataAnnotations()
