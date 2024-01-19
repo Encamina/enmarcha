@@ -23,9 +23,17 @@ public static class IServiceCollectionExtensions
     /// Adds a default implementation of <see cref="IDocumentConnectorProvider"/> to the specified <see cref="IServiceCollection"/> as a singleton service.
     /// </summary>
     /// <param name="services">The <see cref="IServiceCollection"/> to add services to.</param>
+    /// <param name="lengthCountFunction">Function to count or calculate the length (or size) of a text.</param>
     /// <returns>The <see cref="IServiceCollection"/> so that additional calls can be chained.</returns>
-    public static IServiceCollection AddDefaultDocumentConnectorProvider(this IServiceCollection services)
+    public static IServiceCollection AddDefaultDocumentConnectorProvider(this IServiceCollection services, Func<string, int> lengthCountFunction = null)
     {
-        return services.AddSingleton<IDocumentConnectorProvider, DefaultDocumentContentExtractor>();
+        if (lengthCountFunction is not null)
+        {
+            services.AddSingleton(lengthCountFunction);
+        }
+
+        services.AddSingleton<IDocumentConnectorProvider, DefaultDocumentContentExtractor>();
+
+        return services;
     }
 }
