@@ -24,7 +24,7 @@ public interface IMemoryManager
     /// <param name="cancellationToken">Cancellation token to cancel the operation.</param>
     /// <param name="metadata">Metadata of the memory.</param>
     /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
-    Task UpsertMemoryAsync(string memoryId, string collectionName, IEnumerable<string> chunks, IDictionary<string, string> metadata = null, Kernel kernel = null, CancellationToken cancellationToken = default);
+    Task UpsertMemoryAsync(string memoryId, string collectionName, IEnumerable<string> chunks, Kernel kernel, IDictionary<string, string> metadata = null, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Deletes the memory content from a collection.
@@ -55,5 +55,5 @@ public interface IMemoryManager
     /// </param>
     /// <param name="cancellationToken">Cancellation token to cancel the operation.</param>
     /// <returns>The unique identifiers for the memory records (not necessarily the same as the unique identifier of the memory content).</returns>
-    IAsyncEnumerable<string> BatchUpsertMemoriesAsync(string collectionName, IDictionary<string, MemoryContent> memoryContents, Kernel kernel = null, CancellationToken cancellationToken = default);
+    IAsyncEnumerable<string> BatchUpsertMemoriesAsync(string collectionName, IDictionary<string, MemoryContent> memoryContents, Kernel kernel, CancellationToken cancellationToken);
 }

@@ -22,28 +22,21 @@ public class MemoryManager : IMemoryManager
 
     private readonly ILogger logger;
 
-    private readonly ITextEmbeddingGenerationService textEmbeddingGenerationService;
-
     /// <summary>
     /// Initializes a new instance of the <see cref="MemoryManager"/> class.
     /// </summary>
-    /// <param name="kernel">
-    /// A valid instance of <see cref="Kernel"/>, used to get the configured text embeddings generation service (<see cref="ITextEmbeddingGenerationService"/>) required by this manager.
-    /// </param>
     /// <param name="memoryStore">A valid instance of a <see cref="IMemoryStore"/> to manage.</param>
-    public MemoryManager(IMemoryStore memoryStore, ITextEmbeddingGenerationService textEmbeddingGenerationService, ILogger<MemoryManager> logger)
+    public MemoryManager(IMemoryStore memoryStore, ILogger<MemoryManager> logger)
     {
         this.logger = logger;
         MemoryStore = memoryStore;
-
-        this.textEmbeddingGenerationService = textEmbeddingGenerationService;
     }
 
     /// <inheritdoc/>
     public IMemoryStore MemoryStore { get; init; }
 
     /// <inheritdoc/>
-    public virtual async Task UpsertMemoryAsync(string memoryId, string collectionName, IEnumerable<string> chunks, IDictionary<string, string> metadata = null, Kernel kernel = null, CancellationToken cancellationToken = default)
+    public virtual async Task UpsertMemoryAsync(string memoryId, string collectionName, IEnumerable<string> chunks, Kernel kernel, IDictionary<string, string> metadata = null, CancellationToken cancellationToken = default)
     {
         var memoryChunkSize = await GetChunkSize(memoryId, collectionName, cancellationToken);
 
@@ -87,7 +80,7 @@ public class MemoryManager : IMemoryManager
     }
 
     /// <inheritdoc/>
-    public virtual async IAsyncEnumerable<string> BatchUpsertMemoriesAsync(string collectionName, IDictionary<string, MemoryContent> memoryContents, Kernel kernel = null, [EnumeratorCancellation] CancellationToken cancellationToken = default)
+    public virtual async IAsyncEnumerable<string> BatchUpsertMemoriesAsync(string collectionName, IDictionary<string, MemoryContent> memoryContents, Kernel kernel, [EnumeratorCancellation] CancellationToken cancellationToken)
     {
         var memoryRecords = new Collection<MemoryRecord>();
 
@@ -104,7 +97,7 @@ public class MemoryManager : IMemoryManager
                 for (var i = 0; i < totalChunks; i++)
                 {
                     var chunk = memoryContent.Chunks.ElementAt(i);
-                    var embedding = await textEmbeddingGenerationService.GenerateEmbeddingAsync(chunk, kernel, cancellationToken);
+                    var embedding = await kernel.GetRequiredService<ITextEmbeddingGenerationService>().GenerateEmbeddingAsync(chunk, kernel, cancellationToken);
                     memoryRecords.Add(MemoryRecord.LocalRecord($@"{memoryContentId}-{i}", chunk, null, embedding, JsonSerializer.Serialize(memoryContent.Metadata)));
                 }
             }
@@ -140,7 +133,7 @@ public class MemoryManager : IMemoryManager
         await MemoryStore.RemoveBatchAsync(collectionName, Enumerable.Range(0, chunkSize).Select(i => BuildMemoryIdentifier(memoryId, i)), cancellationToken);
     }
 
-    private async Task SaveChunks(string memoryid, string collectionName, IEnumerable<string> chunks, IDictionary<string, string> metadata, Kernel kernel = null, CancellationToken cancellationToken = default)
+    private async Task SaveChunks(string memoryid, string collectionName, IEnumerable<string> chunks, IDictionary<string, string> metadata, Kernel kernel, CancellationToken cancellationToken)
     {
         metadata ??= new Dictionary<string, string>();
 
@@ -155,7 +148,7 @@ public class MemoryManager : IMemoryManager
         for (var i = 0; i < chunksCount; i++)
         {
             var chunk = chunks.ElementAt(i);
-            var embedding = await textEmbeddingGenerationService.GenerateEmbeddingAsync(chunk, kernel, cancellationToken);
+            var embedding = await kernel.GetRequiredService<ITextEmbeddingGenerationService>().GenerateEmbeddingAsync(chunk, kernel, cancellationToken);
             memoryRecords.Add(MemoryRecord.LocalRecord(BuildMemoryIdentifier(memoryid, i), chunk, null, embedding, metadataJson));
         }
 

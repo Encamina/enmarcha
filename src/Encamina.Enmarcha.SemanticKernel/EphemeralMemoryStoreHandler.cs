@@ -4,8 +4,6 @@ using Encamina.Enmarcha.SemanticKernel.Options;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
-using Microsoft.SemanticKernel.Memory;
-
 namespace Encamina.Enmarcha.SemanticKernel;
 
 /// <summary>

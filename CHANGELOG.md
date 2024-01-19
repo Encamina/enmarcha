@@ -23,7 +23,7 @@ Previous classification is not required if changes are simple or all belong to t
 - Removed visibility modifiers in `IMemoryManager` interface.
 - Signature of `UpsertMemoryAsync` method has changed in `IMemoryManager` interface.
 - Signature of `BatchUpsertMemoriesAsync` method has changed in `IMemoryManager` interface.
-- Dependency with `Kernel` has been replace with dependency to `ITextEmbeddingGenerationService` in `MemoryManager` class. Also, added dependency with `ILogger`.
+- Dependency with `Kernel` has been removed in `MemoryManager` class. Also, added dependency with `ILogger`.
 
 ### Major change
 - Method `GetDocumentConnector` in `DocumentContentExtractorBase` is now `public` instead of `protected`.
@@ -36,6 +36,7 @@ Previous classification is not required if changes are simple or all belong to t
 - In `EphemeralMemoryStoreHandler`, property `CollectionNamePrefix` has the value `ephemeral-` fixed.
 - Fixed some typos and grammatical errors (mostly on code comments).
 - Added new extension method `AddDefaultDocumentConnectorProvider` in `Encamina.Enmarcha.SemanticKernel.Connectors.Document` to get access to a default implementation of a `IDocumentConnector`.
+- Updated sample projects with latest changes.
 
 ## [8.1.1]
 
