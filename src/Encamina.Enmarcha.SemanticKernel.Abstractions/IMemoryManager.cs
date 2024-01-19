@@ -1,4 +1,6 @@
-﻿using Microsoft.SemanticKernel.Memory;
+﻿// Ignore Spelling: Upsert
+
+using Microsoft.SemanticKernel.Memory;
 
 namespace Encamina.Enmarcha.SemanticKernel.Abstractions;
 
@@ -8,6 +10,11 @@ namespace Encamina.Enmarcha.SemanticKernel.Abstractions;
 public interface IMemoryManager
 {
     /// <summary>
+    /// Gets the instance of the memory store manage by this manager.
+    /// </summary>
+    IMemoryStore MemoryStore { get; }
+
+    /// <summary>
     /// Upserts the memory content into a collection.
     /// </summary>
     /// <param name="memoryId">The memory unique identifier.</param>
@@ -16,7 +23,7 @@ public interface IMemoryManager
     /// <param name="cancellationToken">Cancellation token to cancel the operation.</param>
     /// <param name="metadata">Metadata of the memory.</param>
     /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
-    public Task UpsertMemoryAsync(string memoryId, string collectionName, IEnumerable<string> chunks, CancellationToken cancellationToken, IDictionary<string, string> metadata = null);
+    Task UpsertMemoryAsync(string memoryId, string collectionName, IEnumerable<string> chunks, CancellationToken cancellationToken, IDictionary<string, string> metadata = null);
 
     /// <summary>
     /// Deletes the memory content from a collection.
@@ -25,7 +32,7 @@ public interface IMemoryManager
     /// <param name="collectionName">Name of the collection from where the content will be deleted.</param>
     /// <param name="cancellationToken">Cancellation token to cancel the operation.</param>
     /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
-    public Task DeleteMemoryAsync(string memoryId, string collectionName, CancellationToken cancellationToken);
+    Task DeleteMemoryAsync(string memoryId, string collectionName, CancellationToken cancellationToken);
 
     /// <summary>
     /// Gets the memory content from a collection.
@@ -34,7 +41,7 @@ public interface IMemoryManager
     /// <param name="collectionName">Name of the collection where the content will be saved.</param>
     /// <param name="cancellationToken">Cancellation token to cancel the operation.</param>
     /// <returns>A <see cref="Task"/> containing the <see cref="MemoryContent"/>, or <see langword="null"/> if the content could not be found.</returns>
-    public Task<MemoryContent> GetMemoryAsync(string memoryId, string collectionName, CancellationToken cancellationToken);
+    Task<MemoryContent> GetMemoryAsync(string memoryId, string collectionName, CancellationToken cancellationToken);
 
     /// <summary>
     /// Upserts a batch of memory contents into a collection.
@@ -42,7 +49,7 @@ public interface IMemoryManager
     /// <param name="collectionName">Name of the collection where the content will be saved.</param>
     /// <param name="memoryContents">
     /// Dictionary with the memory contents to upsert.
-    /// The <c>key</c> in the dictionary must containt a unique identifier for the content of the memory,
+    /// The <c>key</c> in the dictionary must contain a unique identifier for the content of the memory,
     /// and the <c>value</c> of the dictionary must provide the memory content (chunks and metadata).
     /// </param>
     /// <param name="cancellationToken">Cancellation token to cancel the operation.</param>
