@@ -16,21 +16,30 @@ namespace Encamina.Enmarcha.SemanticKernel;
 /// <summary>
 /// Manager that provides some CRUD operations over memories with multiple chunks that need to be managed by an <see cref="IMemoryStore"/>, using batch operations.
 /// </summary>
-/// <remarks>
-/// Initializes a new instance of the <see cref="MemoryManager"/> class.
-/// </remarks>
-/// <param name="kernel">
-/// A valid instance of <see cref="Kernel"/>, used to get the configured text embeddings generation service (<see cref="ITextEmbeddingGenerationService"/>) required by this manager.
-/// </param>
-/// <param name="memoryStore">A valid instance of a <see cref="IMemoryStore"/> to manage.</param>
-public class MemoryManager(Kernel kernel, IMemoryStore memoryStore) : IMemoryManager
+public class MemoryManager : IMemoryManager
 {
     private const string ChunkSize = @"chunkSize";
 
-    private readonly Kernel kernel = kernel;
+    private readonly Kernel kernel;
 
-    private readonly ILogger logger = kernel.LoggerFactory.CreateLogger<MemoryManager>();
-    private readonly IMemoryStore memoryStore = memoryStore;
+    private readonly ILogger logger;
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="MemoryManager"/> class.
+    /// </summary>
+    /// <param name="kernel">
+    /// A valid instance of <see cref="Kernel"/>, used to get the configured text embeddings generation service (<see cref="ITextEmbeddingGenerationService"/>) required by this manager.
+    /// </param>
+    /// <param name="memoryStore">A valid instance of a <see cref="IMemoryStore"/> to manage.</param>
+    public MemoryManager(Kernel kernel, IMemoryStore memoryStore)
+    {
+        this.kernel = kernel;
+        logger = kernel.LoggerFactory.CreateLogger<MemoryManager>();
+        MemoryStore = memoryStore;
+    }
+
+    /// <inheritdoc/>
+    public IMemoryStore MemoryStore { get; init; }
 
     /// <inheritdoc/>
     public virtual async Task UpsertMemoryAsync(string memoryId, string collectionName, IEnumerable<string> chunks, CancellationToken cancellationToken, IDictionary<string, string> metadata = null)
@@ -66,7 +75,7 @@ public class MemoryManager(Kernel kernel, IMemoryStore memoryStore) : IMemoryMan
             return null;
         }
 
-        var memoryRecords = await memoryStore.GetBatchAsync(collectionName, Enumerable.Range(0, chunkSize).Select(i => BuildMemoryIdentifier(memoryId, i)), cancellationToken: cancellationToken)
+        var memoryRecords = await MemoryStore.GetBatchAsync(collectionName, Enumerable.Range(0, chunkSize).Select(i => BuildMemoryIdentifier(memoryId, i)), cancellationToken: cancellationToken)
                                              .ToListAsync(cancellationToken);
 
         return new MemoryContent
@@ -100,7 +109,7 @@ public class MemoryManager(Kernel kernel, IMemoryStore memoryStore) : IMemoryMan
             }
         }
 
-        var memoryRecordsUniqueIdentifiers = memoryStore.UpsertBatchAsync(collectionName, memoryRecords, cancellationToken);
+        var memoryRecordsUniqueIdentifiers = MemoryStore.UpsertBatchAsync(collectionName, memoryRecords, cancellationToken);
 
         await foreach (var item in memoryRecordsUniqueIdentifiers)
         {
@@ -113,7 +122,7 @@ public class MemoryManager(Kernel kernel, IMemoryStore memoryStore) : IMemoryMan
 
     private async Task<int> GetChunkSize(string memoryId, string collectionName, CancellationToken cancellationToken)
     {
-        var fistMemoryChunk = await memoryStore.GetAsync(collectionName, BuildMemoryIdentifier(memoryId, 0), cancellationToken: cancellationToken);
+        var fistMemoryChunk = await MemoryStore.GetAsync(collectionName, BuildMemoryIdentifier(memoryId, 0), cancellationToken: cancellationToken);
 
         if (fistMemoryChunk == null)
         {
@@ -127,7 +136,7 @@ public class MemoryManager(Kernel kernel, IMemoryStore memoryStore) : IMemoryMan
 
     private async Task DeleteMemoryAsync(string memoryId, string collectionName, int chunkSize, CancellationToken cancellationToken)
     {
-        await memoryStore.RemoveBatchAsync(collectionName, Enumerable.Range(0, chunkSize).Select(i => BuildMemoryIdentifier(memoryId, i)), cancellationToken);
+        await MemoryStore.RemoveBatchAsync(collectionName, Enumerable.Range(0, chunkSize).Select(i => BuildMemoryIdentifier(memoryId, i)), cancellationToken);
     }
 
     private async Task SaveChunks(string memoryid, string collectionName, IEnumerable<string> chunks, IDictionary<string, string> metadata, CancellationToken cancellationToken)
@@ -149,6 +158,6 @@ public class MemoryManager(Kernel kernel, IMemoryStore memoryStore) : IMemoryMan
             memoryRecords.Add(MemoryRecord.LocalRecord(BuildMemoryIdentifier(memoryid, i), chunk, null, embedding, metadataJson));
         }
 
-        await memoryStore.UpsertBatchAsync(collectionName, memoryRecords, cancellationToken).ToListAsync(cancellationToken: cancellationToken);
+        await MemoryStore.UpsertBatchAsync(collectionName, memoryRecords, cancellationToken).ToListAsync(cancellationToken: cancellationToken);
     }
 }

@@ -3,8 +3,8 @@
 namespace Encamina.Enmarcha.SemanticKernel.Abstractions;
 
 /// <summary>
-/// Represents types that helps working with memory stores (i.e., <see cref="IMemoryStore"/>), when sometimes
-/// it is necessary to centrally manage how some operations or actions are done.
+/// Represents types that helps working with memory stores (i.e., <see cref="IMemoryStore"/>) through a memory handler (<see cref="IMemoryManager"/>),
+/// when sometimes it is necessary to centrally manage how some operations or actions are done.
 /// </summary>
 public interface IMemoryStoreHandler
 {
@@ -17,6 +17,11 @@ public interface IMemoryStoreHandler
     /// Gets a prefix string value that can be used when creating a collection name.
     /// </summary>
     string CollectionNamePrefix { get; init; }
+
+    /// <summary>
+    /// Gets the <see cref="IMemoryManager"/> that manages the memory stored handled by this instance.
+    /// </summary>
+    IMemoryManager MemoryManager { get; }
 
     /// <summary>
     /// Gets the name of a collection from its unique identifier.
