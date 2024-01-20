@@ -61,11 +61,29 @@ namespace Encamina.Enmarcha.SemanticKernel.Extensions.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Prompt file (&apos;skprompt.txt&apos;) for function &apos;{function}&apos; from plug-in &apos;{plugin} not found at &apos;{templatePath}&apos;!.
+        ///   Looks up a localized string similar to Prompt configuration file (&apos;config.json&apos;) for function &apos;{0}&apos; not found at &apos;{1}&apos;!.
         /// </summary>
-        internal static string PromptFileNotFound {
+        internal static string PromptConfigurationFileNotFound {
             get {
-                return ResourceManager.GetString("PromptFileNotFound", resourceCulture);
+                return ResourceManager.GetString("PromptConfigurationFileNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Prompt embedded resources (template and configuration files) not found for plugin name &apos;{0}&apos; and function &apos;{1}&apos; in assembly &apos;{2}&apos;!.
+        /// </summary>
+        internal static string PromptEmbeddedResourcesNotFound {
+            get {
+                return ResourceManager.GetString("PromptEmbeddedResourcesNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Prompt template file (&apos;skprompt.txt&apos;) for function &apos;{0}&apos; not found at &apos;{1}&apos;!.
+        /// </summary>
+        internal static string PromptTemplateFileNotFound {
+            get {
+                return ResourceManager.GetString("PromptTemplateFileNotFound", resourceCulture);
             }
         }
     }

@@ -20,7 +20,7 @@ First, [install .NET CLI](https://learn.microsoft.com/en-us/dotnet/core/tools/).
 
 ## How to use
 
-To use [MemoryQueryPlugin](/Plugins/MemoryQueryPlugin.cs), the usual approach is to import it as a plugin within Semantic Kernel. The simplest way to do this is by using the extension method [ImportMemoryPlugin](/IKernelExtensions.cs), which handles the import of the Plugin into Semantic Kernel. 
+To use [MemoryQueryPlugin](/Plugins/MemoryQueryPlugin.cs), the usual approach is to import it as a plugin within Semantic Kernel. The simplest way to do this is by using the extension method [ImportMemoryPlugin](/KernelExtensions.cs), which handles the import of the Plugin into Semantic Kernel. 
 
 ```csharp
 // Entry point
@@ -52,9 +52,9 @@ Now you can inject the kernel via constructor, and the memory capabilities are a
 ```csharp
 public class MyClass
 {
-    private readonly IKernel kernel;
+    private readonly Kernel kernel;
 
-    public MyClass(IKernel kernel)
+    public MyClass(Kernel kernel)
     {
         this.kernel = kernel;
     }

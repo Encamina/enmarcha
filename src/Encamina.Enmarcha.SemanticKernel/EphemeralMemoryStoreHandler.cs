@@ -4,8 +4,6 @@ using Encamina.Enmarcha.SemanticKernel.Options;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
-using Microsoft.SemanticKernel.Memory;
-
 namespace Encamina.Enmarcha.SemanticKernel;
 
 /// <summary>
@@ -20,11 +18,11 @@ internal sealed class EphemeralMemoryStoreHandler : MemoryStoreHandlerBase
     /// <summary>
     /// Initializes a new instance of the <see cref="EphemeralMemoryStoreHandler"/> class.
     /// </summary>
-    /// <param name="memoryStore">A valid instance of an <see cref="IMemoryStore"/> handled by this memory store handler.</param>
+    /// <param name="memoryManager">A valid instance of <see cref="IMemoryManager"/> that manages the memory store handled by this instance.</param>
     /// <param name="sessionManagementOptions">Configuration options for this memory store handler.</param>
     /// <param name="logger">A logger for this memory store handler.</param>
-    public EphemeralMemoryStoreHandler(IMemoryStore memoryStore, IOptionsMonitor<EphemeralMemoryStoreHandlerOptions> sessionManagementOptions, ILogger<EphemeralMemoryStoreHandler> logger)
-        : base(memoryStore)
+    public EphemeralMemoryStoreHandler(IMemoryManager memoryManager, IOptionsMonitor<EphemeralMemoryStoreHandlerOptions> sessionManagementOptions, ILogger<EphemeralMemoryStoreHandler> logger)
+        : base(memoryManager)
     {
         this.logger = logger;
 
@@ -35,11 +33,8 @@ internal sealed class EphemeralMemoryStoreHandler : MemoryStoreHandlerBase
         Task.Run(() => RemoveOutdatedCollectionsAsync());
     }
 
-    /// <inheritdoc />
-    public override string CollectionNamePostfix { get; init; }
-
-    /// <inheritdoc />
-    public override string CollectionNamePrefix { get; init; }
+    /// <inheritdoc/>
+    public override string CollectionNamePrefix => @"ephemeral-";
 
     private async Task RemoveOutdatedCollectionsAsync(CancellationToken cancellationToken = default)
     {
@@ -57,7 +52,7 @@ internal sealed class EphemeralMemoryStoreHandler : MemoryStoreHandlerBase
                 foreach (var memoryStoreInfo in MemoryStoreCollectionInfo.Where(i => i.Value.LastAccessUtc < date).ToList())
                 {
                     MemoryStoreCollectionInfo.Remove(memoryStoreInfo.Key);
-                    await MemoryStore.DeleteCollectionAsync(memoryStoreInfo.Value.CollectionName, cancellationToken);
+                    await MemoryManager.MemoryStore.DeleteCollectionAsync(memoryStoreInfo.Value.CollectionName, cancellationToken);
                 }
 
                 Thread.Sleep(TimeSpan.FromMinutes(options.InactivePollingTimeMinutes));

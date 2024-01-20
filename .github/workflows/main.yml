@@ -19,7 +19,7 @@ on:
   workflow_dispatch:
 
 env:
-  BuildConfiguration: ${{ startsWith(github.ref, 'refs/heads/releases') && 'Release' || 'Debug' }}
+  BuildConfiguration: ${{ (startsWith(github.ref, 'refs/heads/releases') || startsWith(github.ref, 'refs/heads/main')) && 'Release' || 'Debug' }}
 
 jobs:
   CI:
@@ -29,6 +29,12 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+      
+      - name: Set Java for SonarCloud
+        uses: actions/setup-java@v4
+        with:
+            distribution: 'microsoft'
+            java-version: '21'
         
       - name: Using .NET from 'global.json'
         uses: actions/setup-dotnet@v3
@@ -39,7 +45,7 @@ jobs:
         run: dotnet restore --configfile NuGet.config --verbosity Minimal   
 
       - name: Sonar - Install SonarCloud scanners
-        run: dotnet tool install --global dotnet-sonarscanner --version 5.15.0
+        run: dotnet tool install --global dotnet-sonarscanner --version 6.0.0
 
       - name: Sonar - Begin Analyze
         env:

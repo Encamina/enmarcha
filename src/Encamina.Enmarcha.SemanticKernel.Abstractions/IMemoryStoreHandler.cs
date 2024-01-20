@@ -3,8 +3,8 @@
 namespace Encamina.Enmarcha.SemanticKernel.Abstractions;
 
 /// <summary>
-/// Represents types that helps working with memory stores (i.e., <see cref="IMemoryStore"/>), when sometimes
-/// it is necessary to centrally manage how some operations or actions are done.
+/// Represents types that helps working with memory stores (i.e., <see cref="IMemoryStore"/>) through a memory handler (<see cref="IMemoryManager"/>),
+/// when sometimes it is necessary to centrally manage how some operations or actions are done.
 /// </summary>
 public interface IMemoryStoreHandler
 {
@@ -19,9 +19,14 @@ public interface IMemoryStoreHandler
     string CollectionNamePrefix { get; init; }
 
     /// <summary>
+    /// Gets the <see cref="IMemoryManager"/> that manages the memory stored handled by this instance.
+    /// </summary>
+    IMemoryManager MemoryManager { get; }
+
+    /// <summary>
     /// Gets the name of a collection from its unique identifier.
     /// </summary>
-    /// <param name="collectionId">The unique identifier of the collaction.</param>
+    /// <param name="collectionId">The unique identifier of the collection.</param>
     /// <param name="cancellationToken">A cancellation token that can be used to receive notice of cancellation.</param>
     /// <returns>The name of the collection.</returns>
     Task<string> GetCollectionNameAsync(string collectionId, CancellationToken cancellationToken);

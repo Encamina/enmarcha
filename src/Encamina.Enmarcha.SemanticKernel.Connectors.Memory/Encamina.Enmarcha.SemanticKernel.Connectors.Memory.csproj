@@ -6,13 +6,23 @@
         <Nullable>enable</Nullable>
     </PropertyGroup>
 
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+      <NoWarn>1701;1702;SKEXP0003;SKEXP0011;SKEXP0026</NoWarn>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+      <NoWarn>1701;1702;SKEXP0003;SKEXP0011;SKEXP0026</NoWarn>
+    </PropertyGroup>
+
     <ItemGroup>
         <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.0" />
         <PackageReference Include="Microsoft.Extensions.Http" Version="8.0.0" />
-        <PackageReference Include="Microsoft.SemanticKernel.Connectors.Memory.Qdrant" Version="1.0.0-beta8" />
+        <PackageReference Include="Microsoft.SemanticKernel.Connectors.Qdrant" Version="1.1.0-alpha" />
     </ItemGroup>
 
     <ItemGroup>
+        <ProjectReference Include="..\Encamina.Enmarcha.AI.OpenAI.Abstractions\Encamina.Enmarcha.AI.OpenAI.Abstractions.csproj" />
+        <ProjectReference Include="..\Encamina.Enmarcha.AI.OpenAI.Azure\Encamina.Enmarcha.AI.OpenAI.Azure.csproj" />
         <ProjectReference Include="..\Encamina.Enmarcha.Data.Qdrant.Abstractions\Encamina.Enmarcha.Data.Qdrant.Abstractions.csproj" />
         <ProjectReference Include="..\Encamina.Enmarcha.DependencyInjection\Encamina.Enmarcha.DependencyInjection.csproj" />
         <ProjectReference Include="..\Encamina.Enmarcha.SemanticKernel.Abstractions\Encamina.Enmarcha.SemanticKernel.Abstractions.csproj" />

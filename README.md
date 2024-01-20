@@ -42,9 +42,18 @@ ENGENIA help with the extensibility of the different modules. The idea is to use
 For detailed documentation on each module, see our official documentation.
 
 ## 🙏 Contributing
-We welcome contributions from the community. For guidelines on how to contribute, see our [CONTRIBUTING.md](./CONTRIBUTING.md).
+We welcome contributions from the community. For guidelines on how to contribute, see our [contribution FAQ](./CONTRIBUTING.md).
+
+### Contributor Wall of Fame
+
+[![ENMARCHA contributors](https://contrib.rocks/image?repo=encamina/enmarcha)](https://github.com/encamina/enmarcha/graphs/contributors)
+
+## Code of Conduct
+
+More information about our [Code of Conduct](./CODE_OF_CONDUCT.md).
 
 ## 📄 License
+
 This project is licensed under the [Apache License 2.0](./LICENSE) 
 
 ## 🛠 Getting Started

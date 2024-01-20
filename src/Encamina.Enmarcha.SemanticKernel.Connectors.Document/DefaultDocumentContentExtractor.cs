@@ -31,7 +31,7 @@ internal sealed class DefaultDocumentContentExtractor : DocumentContentExtractor
     }
 
     /// <inheritdoc/>
-    protected override IDocumentConnector GetDocumentConnector(string fileExtension)
+    public override IDocumentConnector GetDocumentConnector(string fileExtension)
     {
         return fileExtension.ToUpperInvariant() switch
         {

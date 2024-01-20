@@ -1,15 +1,13 @@
-﻿using Encamina.Enmarcha.Data.Qdrant.Abstractions;
+﻿using Encamina.Enmarcha.AI.OpenAI.Azure;
+using Encamina.Enmarcha.Data.Qdrant.Abstractions;
 using Encamina.Enmarcha.Data.Qdrant.Abstractions.Extensions;
-
-using Encamina.Enmarcha.SemanticKernel.Abstractions;
 
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
-using Microsoft.SemanticKernel.Connectors.AI.OpenAI;
-using Microsoft.SemanticKernel.Connectors.Memory.Qdrant;
+using Microsoft.SemanticKernel.Connectors.OpenAI;
+using Microsoft.SemanticKernel.Connectors.Qdrant;
 using Microsoft.SemanticKernel.Memory;
-using Microsoft.SemanticKernel.Plugins.Memory;
 
 namespace Microsoft.Extensions.DependencyInjection;
 
@@ -63,10 +61,10 @@ public static class IServiceCollectionExtensions
     {
         return services.TryAddType(serviceLifetime, sp =>
         {
-            var options = sp.GetRequiredService<IOptions<SemanticKernelOptions>>().Value;
+            var options = sp.GetRequiredService<IOptions<AzureOpenAIOptions>>().Value;
 
             return new MemoryBuilder()
-                .WithAzureOpenAITextEmbeddingGenerationService(options.EmbeddingsModelDeploymentName, options.Endpoint.ToString(), options.Key)
+                .WithAzureOpenAITextEmbeddingGeneration(options.EmbeddingsModelDeploymentName, options.Endpoint.ToString(), options.Key)
                 .WithMemoryStore(sp.GetRequiredService<IMemoryStore>())
                 .Build();
         });

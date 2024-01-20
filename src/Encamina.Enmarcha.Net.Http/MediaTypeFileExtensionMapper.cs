@@ -11,7 +11,7 @@ namespace Encamina.Enmarcha.Net.Http;
 /// </summary>
 /// <remarks>
 /// The main difference with <see href="https://github.com/dotnet/aspnetcore/blob/main/src/Middleware/StaticFiles/src/FileExtensionContentTypeProvider.cs">FileExtensionContentTypeProvider</see>
-/// is that this considers various media types per extension, which is usefull for scenarios like for example zip files which can be identified as <c>"application/zip",</c>
+/// is that this considers various media types per extension, which is useful for scenarios like for example zip files which can be identified as <c>"application/zip",</c>
 /// <c>"application/zip-compressed"</c>, or <c>"application/x-zip-compressed"</c>.
 /// </remarks>
 public sealed class MediaTypeFileExtensionMapper
@@ -445,10 +445,10 @@ public sealed class MediaTypeFileExtensionMapper
         }
 
         Mappings = new ReadOnlyDictionary<string, IEnumerable<string>>(aux);
-}
+    }
 
     /// <summary>
-    /// Gets the current mappings between extensions and media tyes.
+    /// Gets the current mappings between extensions and media types.
     /// </summary>
     public IReadOnlyDictionary<string, IEnumerable<string>> Mappings { get; }
 

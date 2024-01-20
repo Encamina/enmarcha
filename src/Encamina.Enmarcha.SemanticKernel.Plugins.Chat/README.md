@@ -20,7 +20,7 @@ First, [install .NET CLI](https://learn.microsoft.com/en-us/dotnet/core/tools/).
 
 ## How to use
 
-To use [ChatWithHistoryPlugin](/Plugins/ChatWithHistoryPlugin.cs), the usual approach is to import it as a plugin within Semantic Kernel. The simplest way to do this is by using the extension method [ImportChatWithHistoryPluginUsingCosmosDb](/IKernelExtensions.cs), which handles the import of the Plugin into Semantic Kernel. However, some previous configuration is required before importing it. 
+To use [ChatWithHistoryPlugin](/Plugins/ChatWithHistoryPlugin.cs), the usual approach is to import it as a plugin within Semantic Kernel. The simplest way to do this is by using the extension method [ImportChatWithHistoryPluginUsingCosmosDb](/KernelExtensions.cs), which handles the import of the Plugin into Semantic Kernel. However, some previous configuration is required before importing it. 
 First, you need to add the [SemanticKernelOptions](../Encamina.Enmarcha.SemanticKernel.Abstractions/SemanticKernelOptions.cs) and [ChatWithHistoryPluginOptions](./Plugins/ChatWithHistoryPluginOptions.cs) to your project configuration. You can achieve this by using any [configuration provider](https://learn.microsoft.com/en-us/dotnet/core/extensions/configuration). The followng code is an example of how the settings should look like using the `appsettings.json` file:
 
 ```json
@@ -94,9 +94,9 @@ Now you can inject the kernel via constructor, and the chat capabilities are alr
 ```csharp
 public class MyClass
 {
-    private readonly IKernel kernel;
+    private readonly Kernel kernel;
 
-    public MyClass(IKernel kernel)
+    public MyClass(Kernel kernel)
     {
         this.kernel = kernel;
     }
@@ -127,7 +127,7 @@ You can also inherit from the ChatWithHistoryPlugin class and add the customizat
 ```csharp
 public class MyCustomChatWithHistoryPlugin : ChatWithHistoryPlugin
 {
-    public MyCustomChatWithHistoryPlugin(IKernel kernel, string chatModelName, Func<string, int> tokensLengthFunction, IAsyncRepository<ChatMessageHistoryRecord> chatMessagesHistoryRepository, IOptionsMonitor<ChatWithHistoryPluginOptions> options)
+    public MyCustomChatWithHistoryPlugin(Kernel kernel, string chatModelName, Func<string, int> tokensLengthFunction, IAsyncRepository<ChatMessageHistoryRecord> chatMessagesHistoryRepository, IOptionsMonitor<ChatWithHistoryPluginOptions> options)
         : base(kernel, chatModelName, tokensLengthFunction, chatMessagesHistoryRepository, options)
     {
     }

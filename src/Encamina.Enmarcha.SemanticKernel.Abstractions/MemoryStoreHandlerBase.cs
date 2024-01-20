@@ -1,4 +1,6 @@
-﻿using System.Collections.Concurrent;
+﻿// Ignore Spelling: Utc
+
+using System.Collections.Concurrent;
 
 using Microsoft.SemanticKernel.Memory;
 
@@ -12,27 +14,25 @@ public abstract class MemoryStoreHandlerBase : IMemoryStoreHandler
     /// <summary>
     /// Initializes a new instance of the <see cref="MemoryStoreHandlerBase"/> class.
     /// </summary>
-    /// <param name="memoryStore">The <see cref="IMemoryStore"/> to handle.</param>
-    protected MemoryStoreHandlerBase(IMemoryStore memoryStore)
+    /// <param name="memoryManager">A valid instance of <see cref="IMemoryManager"/> that manages the memory store handled by this instance.</param>
+    protected MemoryStoreHandlerBase(IMemoryManager memoryManager)
     {
-        MemoryStore = memoryStore;
+        MemoryManager = memoryManager;
     }
 
     /// <inheritdoc/>
-    public abstract string CollectionNamePostfix { get; init; }
+    public virtual IMemoryManager MemoryManager { get; }
 
     /// <inheritdoc/>
-    public abstract string CollectionNamePrefix { get; init; }
+    public virtual string CollectionNamePostfix { get; init; }
+
+    /// <inheritdoc/>
+    public virtual string CollectionNamePrefix { get; init; }
 
     /// <summary>
     /// Gets the current collection of memory stores.
     /// </summary>
     protected IDictionary<string, MemoryStoreCollection> MemoryStoreCollectionInfo { get; } = new ConcurrentDictionary<string, MemoryStoreCollection>();
-
-    /// <summary>
-    /// Gets the current <see cref="IMemoryStore"/> handled by this instance.
-    /// </summary>
-    protected IMemoryStore MemoryStore { get; }
 
     /// <inheritdoc/>
     public virtual async Task<string> GetCollectionNameAsync(string collectionId, CancellationToken cancellationToken)
@@ -51,9 +51,9 @@ public abstract class MemoryStoreHandlerBase : IMemoryStoreHandler
             LastAccessUtc = DateTime.UtcNow,
         };
 
-        if (!await MemoryStore.DoesCollectionExistAsync(collectionName, cancellationToken))
+        if (!await MemoryManager.MemoryStore.DoesCollectionExistAsync(collectionName, cancellationToken))
         {
-            await MemoryStore.CreateCollectionAsync(collectionName, cancellationToken);
+            await MemoryManager.MemoryStore.CreateCollectionAsync(collectionName, cancellationToken);
         }
 
         return MemoryStoreCollectionInfo[collectionId].CollectionName;

@@ -8,7 +8,7 @@ using Encamina.Enmarcha.SemanticKernel.Abstractions;
 
 using Microsoft.Extensions.Logging;
 using Microsoft.SemanticKernel;
-using Microsoft.SemanticKernel.AI.Embeddings;
+using Microsoft.SemanticKernel.Embeddings;
 using Microsoft.SemanticKernel.Memory;
 
 namespace Encamina.Enmarcha.SemanticKernel;
@@ -21,26 +21,22 @@ public class MemoryManager : IMemoryManager
     private const string ChunkSize = @"chunkSize";
 
     private readonly ILogger logger;
-    private readonly IMemoryStore memoryStore;
-    private readonly ITextEmbeddingGeneration textEmbeddingGeneration;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="MemoryManager"/> class.
     /// </summary>
-    /// <param name="kernel">
-    /// A valid instance of <see cref="IKernel"/>, used to get the configured text embeddings generation service (<see cref="ITextEmbeddingGeneration"/>) required by this manager.
-    /// </param>
     /// <param name="memoryStore">A valid instance of a <see cref="IMemoryStore"/> to manage.</param>
-    public MemoryManager(IKernel kernel, IMemoryStore memoryStore)
+    public MemoryManager(IMemoryStore memoryStore, ILogger<MemoryManager> logger)
     {
-        textEmbeddingGeneration = kernel.GetService<ITextEmbeddingGeneration>(); // If the service is not configured, a `KernelException` is thrown...
-
-        this.logger = kernel.LoggerFactory.CreateLogger<MemoryManager>();
-        this.memoryStore = memoryStore;
+        this.logger = logger;
+        MemoryStore = memoryStore;
     }
 
     /// <inheritdoc/>
-    public virtual async Task UpsertMemoryAsync(string memoryId, string collectionName, IEnumerable<string> chunks, CancellationToken cancellationToken, IDictionary<string, string> metadata = null)
+    public IMemoryStore MemoryStore { get; init; }
+
+    /// <inheritdoc/>
+    public virtual async Task UpsertMemoryAsync(string memoryId, string collectionName, IEnumerable<string> chunks, Kernel kernel, IDictionary<string, string> metadata = null, CancellationToken cancellationToken = default)
     {
         var memoryChunkSize = await GetChunkSize(memoryId, collectionName, cancellationToken);
 
@@ -49,7 +45,7 @@ public class MemoryManager : IMemoryManager
             await DeleteMemoryAsync(memoryId, collectionName, memoryChunkSize, cancellationToken);
         }
 
-        await SaveChunks(memoryId, collectionName, chunks, metadata, cancellationToken);
+        await SaveChunks(memoryId, collectionName, chunks, metadata, kernel, cancellationToken);
     }
 
     /// <inheritdoc/>
@@ -73,7 +69,7 @@ public class MemoryManager : IMemoryManager
             return null;
         }
 
-        var memoryRecords = await memoryStore.GetBatchAsync(collectionName, Enumerable.Range(0, chunkSize).Select(i => BuildMemoryIdentifier(memoryId, i)), cancellationToken: cancellationToken)
+        var memoryRecords = await MemoryStore.GetBatchAsync(collectionName, Enumerable.Range(0, chunkSize).Select(i => BuildMemoryIdentifier(memoryId, i)), cancellationToken: cancellationToken)
                                              .ToListAsync(cancellationToken);
 
         return new MemoryContent
@@ -84,7 +80,7 @@ public class MemoryManager : IMemoryManager
     }
 
     /// <inheritdoc/>
-    public virtual async IAsyncEnumerable<string> BatchUpsertMemoriesAsync(string collectionName, IDictionary<string, MemoryContent> memoryContents, [EnumeratorCancellation] CancellationToken cancellationToken)
+    public virtual async IAsyncEnumerable<string> BatchUpsertMemoriesAsync(string collectionName, IDictionary<string, MemoryContent> memoryContents, Kernel kernel, [EnumeratorCancellation] CancellationToken cancellationToken)
     {
         var memoryRecords = new Collection<MemoryRecord>();
 
@@ -101,13 +97,13 @@ public class MemoryManager : IMemoryManager
                 for (var i = 0; i < totalChunks; i++)
                 {
                     var chunk = memoryContent.Chunks.ElementAt(i);
-                    var embedding = await textEmbeddingGeneration.GenerateEmbeddingAsync(chunk, cancellationToken);
+                    var embedding = await kernel.GetRequiredService<ITextEmbeddingGenerationService>().GenerateEmbeddingAsync(chunk, kernel, cancellationToken);
                     memoryRecords.Add(MemoryRecord.LocalRecord($@"{memoryContentId}-{i}", chunk, null, embedding, JsonSerializer.Serialize(memoryContent.Metadata)));
                 }
             }
         }
 
-        var memoryRecordsUniqueIdentifiers = memoryStore.UpsertBatchAsync(collectionName, memoryRecords, cancellationToken);
+        var memoryRecordsUniqueIdentifiers = MemoryStore.UpsertBatchAsync(collectionName, memoryRecords, cancellationToken);
 
         await foreach (var item in memoryRecordsUniqueIdentifiers)
         {
@@ -120,7 +116,7 @@ public class MemoryManager : IMemoryManager
 
     private async Task<int> GetChunkSize(string memoryId, string collectionName, CancellationToken cancellationToken)
     {
-        var fistMemoryChunk = await memoryStore.GetAsync(collectionName, BuildMemoryIdentifier(memoryId, 0), cancellationToken: cancellationToken);
+        var fistMemoryChunk = await MemoryStore.GetAsync(collectionName, BuildMemoryIdentifier(memoryId, 0), cancellationToken: cancellationToken);
 
         if (fistMemoryChunk == null)
         {
@@ -134,10 +130,10 @@ public class MemoryManager : IMemoryManager
 
     private async Task DeleteMemoryAsync(string memoryId, string collectionName, int chunkSize, CancellationToken cancellationToken)
     {
-        await memoryStore.RemoveBatchAsync(collectionName, Enumerable.Range(0, chunkSize).Select(i => BuildMemoryIdentifier(memoryId, i)), cancellationToken);
+        await MemoryStore.RemoveBatchAsync(collectionName, Enumerable.Range(0, chunkSize).Select(i => BuildMemoryIdentifier(memoryId, i)), cancellationToken);
     }
 
-    private async Task SaveChunks(string memoryid, string collectionName, IEnumerable<string> chunks, IDictionary<string, string> metadata, CancellationToken cancellationToken)
+    private async Task SaveChunks(string memoryid, string collectionName, IEnumerable<string> chunks, IDictionary<string, string> metadata, Kernel kernel, CancellationToken cancellationToken)
     {
         metadata ??= new Dictionary<string, string>();
 
@@ -152,11 +148,10 @@ public class MemoryManager : IMemoryManager
         for (var i = 0; i < chunksCount; i++)
         {
             var chunk = chunks.ElementAt(i);
-            var embedding = await textEmbeddingGeneration.GenerateEmbeddingAsync(chunk, cancellationToken);
+            var embedding = await kernel.GetRequiredService<ITextEmbeddingGenerationService>().GenerateEmbeddingAsync(chunk, kernel, cancellationToken);
             memoryRecords.Add(MemoryRecord.LocalRecord(BuildMemoryIdentifier(memoryid, i), chunk, null, embedding, metadataJson));
         }
 
-        await memoryStore.UpsertBatchAsync(collectionName, memoryRecords, cancellationToken).ToListAsync(cancellationToken: cancellationToken);
+        await MemoryStore.UpsertBatchAsync(collectionName, memoryRecords, cancellationToken).ToListAsync(cancellationToken: cancellationToken);
     }
 }
-

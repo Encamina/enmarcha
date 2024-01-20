@@ -16,10 +16,111 @@ Also, any bug fix must start with the prefix �Bug fix:� followed by the desc
 
 Previous classification is not required if changes are simple or all belong to the same category.
 
-## [8.0.4]
+## [8.1.2]
 
-### **Major Changes**
- - Added method overloads to pass `Encamina.Enmarcha.AI.Abstractions.TextSplitterOptions` when splitting text in `Encamina.Enmarcha.AI.Abstractions.ITextSplitter` and its implementations.
+### Breaking Changes
+- Replace dependency with `IMemoryStore` for `IMemoryManager` in abstract class `MemoryStoreHandlerBase`. This affects internal types like the `EphemeralMemoryStoreHandler`.
+- Removed visibility modifiers in `IMemoryManager` interface.
+- Signature of `UpsertMemoryAsync` method has changed in `IMemoryManager` interface.
+- Signature of `BatchUpsertMemoriesAsync` method has changed in `IMemoryManager` interface.
+- Dependency with `Kernel` has been removed in `MemoryManager` class. Also, added dependency with `ILogger`.
+- Added method overloads to pass `Encamina.Enmarcha.AI.Abstractions.TextSplitterOptions` when splitting text in `Encamina.Enmarcha.AI.Abstractions.ITextSplitter` and its implementations.
+
+### Major change
+- Method `GetDocumentConnector` in `DocumentContentExtractorBase` is now `public` instead of `protected`.
+- New `MemoryManager` property of type `IMemoryManager` in `IMemoryStoreHandler` interface to get read-only access to the underlaying memory manager.
+- New `MemoryStore` property of type `IMemoryStore` in `IMemoryManager` interface to get read-only access to the underlaying memory store.
+- Removed unnecessary `Guards` when adding a Memory Manager and the Ephemeral Memory Store Handler. The exceptions will be thrown by the DI engine itself.
+
+### Minor Changes
+- Properties `CollectionNamePostfix` and `CollectionNamePrefix` from `MemoryStoreHandlerBase` are now `virtual` instead of `abstract`.
+- In `EphemeralMemoryStoreHandler`, property `CollectionNamePrefix` has the value `ephemeral-` fixed.
+- Fixed some typos and grammatical errors (mostly on code comments).
+- Added new extension method `AddDefaultDocumentConnectorProvider` in `Encamina.Enmarcha.SemanticKernel.Connectors.Document` to get access to a default implementation of a `IDocumentConnector`.
+- Updated sample projects with latest changes.
+
+## [8.1.1]
+
+### Minor Changes
+  - Fixed `BuildConfiguration` not set to Release in `.github/workflows/main.yml` for the main branch. [(#31)](https://github.com/Encamina/enmarcha/issues/31)
+
+## [8.1.0]
+
+### Important
+
+This version updates the `Semantic Kernel` library from version `1.0.0-beta8` to `1.1.0`, which introduces a lot of breaking changes in the code.
+
+Sadly, some features from `Semantic Kernel` that we might have been using, are marked as ***experimental*** and produce warnings that do not allow the compilation of the code. To use these features, these warnings must be ignored explicitly per project. The following is a list of these warnings and the affected projects:
+
+ - SKEXP0001: 
+   - `Encamina.Enmarcha.SemanticKernel`   
+ - SKEXP0003: 
+   - `Encamina.Enmarcha.SemanticKernel`
+   - `Encamina.Enmarcha.SemanticKernel.Abstractions`
+   - `Encamina.Enmarcha.SemanticKernel.Connectors.Memory`
+   - `Encamina.Enmarcha.SemanticKernel.Plugins.Memory`
+   - `Encamina.Enmarcha.SemanticKernel.Plugins.QuestionAnswering`
+ - SKEXP0011:
+   - `Encamina.Enmarcha.SemanticKernel.Connectors.Memory`
+ - SKEXP0026: 
+   - `Encamina.Enmarcha.SemanticKernel.Connectors.Memory`
+ - SKEXP0051:
+   - `Encamina.Enmarcha.SemanticKernel.Connectors.Document`
+
+ More information about these warnings is available here: https://github.com/microsoft/semantic-kernel/blob/main/dotnet/docs/EXPERIMENTS.md
+
+### Breaking Changes
+
+- Replaced class `Completition` for `Completion` in `Encamina.Enmarcha.AI.OpenAI.Abstractions`. It was misspelled.
+- Class `SemanticKernelOptions` does not exists anymore. It has been replaced by `AzureOpenAIOptions` from `Encamina.Enmarcha.AI.OpenAI.Abstractions`. 
+- The following references were updated due to changes in `Semantic Kernel` version `1.0.1`:
+ - Changed `IKernel` for `Kernel`.
+ - Changed `ISKFunction` for `KernelFunction` or `KernelPlugin`.
+ - Changed `SKFunction` for `KernelFunction`.
+ - Changed `ContextVariables` for `KernelArguments`.
+ - Changed `kernel.Functions.GetFunction(...)` for `kernel.Plugins[<name of plugin>][<name of function>]`.
+ - Changed `OpenAIRequestSettings` for `OpenAIPromptExecutionSettings`.
+- Removed extension methods for `SKContext` because that class does not exists anymore in `Semantic Kernel`.
+- Due to the breaking nature of the new version of `Semantic Kernel`, the following extension methods are not available any more and have been replace by new methods, and it was not possible to marked it as `Obsolete`:
+  - `GetSemanticFunctionPromptAsync` is replaced by `GetKernelFunctionPromptAsync`.
+  - `GetSemanticFunctionUsedTokensAsync` is replaced by `GetKernelFunctionUsedTokensAsync`.
+  - `ImportSemanticPluginsFromAssembly` is replaced by `ImportPromptFunctionsFromAssembly`.
+- Extension method `GetSemanticFunctionPromptAsync` is no longer available. It is replaced by `GetKernelFunctionPromptAsync`. 
+- Extension method `ImportQuestionAnsweringPlugin` has different signature.
+- Extension method `ImportQuestionAnsweringPluginWithMemory` has different signature.
+- Extension method `ImportChatWithHistoryPluginUsingCosmosDb` has different signature.
+- The format of prompt function configuration files `config.json` has been modified.
+
+### Major Changes
+
+- Updated `Semantic Kernel` from `1.0.0-beta8` to `1.1.0` (second final version of `Semantic Kernel`).
+- Updated `Azure.Core` from version `1.36.0` to `1.37.0`.
+- Updated `Azure.AI.OpenAI` from version `1.0.0-beta.6` to `1.0.0-beta.12`.
+- Updated `Bogus` from version `34.0.2` to `35.4.0`.
+- Updated `Microsoft.AspNetCore.Authentication.JwtBearer` from version `8.0.0` to `8.0.1`.
+- Updated `Microsoft.AspNetCore.Authentication.OpenIdConnect` from version `8.0.0` to `8.0.1`.
+- Updated `Microsoft.Azure.Cosmos` from version `3.37.0` to `3.37.1`.
+- Updated `Microsoft.EntityFrameworkCore` from version `8.0.0` to `8.0.1`.
+- Updated `Microsoft.Extensions.Options` from version `8.0.0` to `8.0.1`.
+- Updated `SharpToken` from version `1.2.12` to `1.2.14`.
+- Updated `xunit` from version `2.6.2` to `2.6.6`.
+- Updated `xunit.analyzers` from version `1.6.0` to `1.10.0`.
+- Updated `xunit.extensibility.core` from version `2.6.2` to `2.6.6`.
+- Updated `xunit.runner.visualstudio` from version `2.5.4` to `2.5.6`.
+- Updated `StyleCop.Analyzers` from version `1.2.0-beta.507` to `1.2.0-beta.556`.
+- Updated `System.Text.Json` from version `8.0.0` to `8.0.1`.
+- Updated version from `8.0.3` to `8.1.0` due to all the major and breaking changes.
+- Updated some `README.md` files changing `IKernel` for `Kernel`.
+- Updated and added new unit tests to cover the main "happy path" of implementations that use `Semantic Kernel`.
+
+### Minor Changes
+
+- Replaced reference `Microsoft.AspNetCore.Mvc.Versioning.ApiExplorer` (version `5.1.0`) for `Asp.Versioning.Mvc.ApiExplorer` (version `8.0.0`) which is the new name and implementation of the ASP.NET versioning libraries.
+- Updated prompt function configuration files (`config.json`) to new format.
+- Renamed files `IKernelExtensions` to `KernelExtensions.cs`.
+- Fixed token counting in `ChatWithHistoryPlugin.cs`.
+- Updated sample projects.
+- Fixed some typos and grammatical errors.
 
 ## [8.0.3]
 
@@ -28,12 +129,12 @@ Previous classification is not required if changes are simple or all belong to t
 
 ## [8.0.2]
 
-### **Major Changes**
+### Major Changes
  - In `Encamina.Enmarcha.SemanticKernel.Plugins.Text` Summarize Plugin, a new parameter `locale` has been added to control the output language of the generated summary. [(#34)](https://github.com/Encamina/enmarcha/issues/34)
 
 ## [8.0.1]
 
-### **Major Changes**
+### Major Changes
  - In `Encamina.Enmarcha.SemanticKernel.Abstractions.ILengthFunctions`, `GptEncoding` is now cached and reused to improve performance. [(#30)](https://github.com/Encamina/enmarcha/pull/30)
 
 ### Minor Changes

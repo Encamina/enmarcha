@@ -15,5 +15,5 @@ public class CompletionResult : IdentifiableBase<string>
     /// <summary>
     /// Gets the completions generated.
     /// </summary>
-    public IEnumerable<Completition> Completitions { get; init; }
+    public IEnumerable<Completion> Completitions { get; init; }
 }
