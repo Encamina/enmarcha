@@ -13,9 +13,15 @@ public static class IServiceCollectionExtensions
     /// Adds a default implementation of <see cref="IDocumentContentExtractor"/> to the specified <see cref="IServiceCollection"/> as a singleton service.
     /// </summary>
     /// <param name="services">The <see cref="IServiceCollection"/> to add services to.</param>
+    /// <param name="lengthFunction">A length function to use when extracting content from documents.</param>
     /// <returns>The <see cref="IServiceCollection"/> so that additional calls can be chained.</returns>
-    public static IServiceCollection AddDefaultDocumentContentExtractor(this IServiceCollection services)
+    public static IServiceCollection AddDefaultDocumentContentExtractor(this IServiceCollection services, Func<string, int> lengthFunction = null)
     {
+        if (lengthFunction is not null)
+        {
+            services.AddSingleton(lengthFunction);
+        }
+
         return services.AddSingleton<IDocumentContentExtractor, DefaultDocumentContentExtractor>();
     }
 
@@ -23,13 +29,13 @@ public static class IServiceCollectionExtensions
     /// Adds a default implementation of <see cref="IDocumentConnectorProvider"/> to the specified <see cref="IServiceCollection"/> as a singleton service.
     /// </summary>
     /// <param name="services">The <see cref="IServiceCollection"/> to add services to.</param>
-    /// <param name="lengthCountFunction">Function to count or calculate the length (or size) of a text.</param>
+    /// <param name="lengthFunction">A length function to use when extracting content from documents.</param>
     /// <returns>The <see cref="IServiceCollection"/> so that additional calls can be chained.</returns>
-    public static IServiceCollection AddDefaultDocumentConnectorProvider(this IServiceCollection services, Func<string, int> lengthCountFunction = null)
+    public static IServiceCollection AddDefaultDocumentConnectorProvider(this IServiceCollection services, Func<string, int> lengthFunction = null)
     {
-        if (lengthCountFunction is not null)
+        if (lengthFunction is not null)
         {
-            services.AddSingleton(lengthCountFunction);
+            services.AddSingleton(lengthFunction);
         }
 
         services.AddSingleton<IDocumentConnectorProvider, DefaultDocumentContentExtractor>();
