@@ -37,13 +37,13 @@ public static class IServiceCollectionExtensions
     /// This method registers the <see cref="MemoryManager"/> type as a transient service due to its dependency on <see cref="Kernel"/>, which is typically registered as transient or scoped (rarely as singleton).
     /// </remarks>
     /// <param name="services">The <see cref="IServiceCollection"/> to add services to.</param>
-    /// <param name="memoryStorageEventHandlerDelegate">A delegate to handle events from <see cref="IMemoryManager.MemoryStorageEvent"/>.</param>
+    /// <param name="memoryStorageEventHandler">A delegate to handle events from <see cref="IMemoryManager.MemoryStorageEvent"/>.</param>
     /// <returns>The <see cref="IServiceCollection"/> so that additional calls can be chained.</returns>
     public static IServiceCollection AddMemoryManager(
         this IServiceCollection services,
-        Action<string, MemoryStorageEventArgs> memoryStorageEventHandlerDelegate)
+        Action<string, MemoryStorageEventArgs> memoryStorageEventHandler)
     {
-        services.TryAddSingleton(memoryStorageEventHandlerDelegate);
+        services.TryAddSingleton(memoryStorageEventHandler);
         services.TryAddSingleton<IMemoryManager, MemoryManager>();
 
         return services;
