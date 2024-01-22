@@ -37,7 +37,8 @@ Previous classification is not required if changes are simple or all belong to t
 - Fixed some typos and grammatical errors (mostly on code comments).
 - Added new extension method `AddDefaultDocumentConnectorProvider` in `Encamina.Enmarcha.SemanticKernel.Connectors.Document` to get access to a default implementation of a `IDocumentConnector`.
 - Updated sample projects with latest changes.
-- Overloaded `AddDefaultDocumentConnectorProvider` and `AddDefaultDocumentContentExtractor` methods with a parameter for pass it a function to calculate the length of a text and inject it as a dependency.
+- Overloaded `AddDefaultDocumentConnectorProvider` and `AddDefaultDocumentContentExtractor` methods with a parameter to pass a function to calculate the length of a text and inject it as a dependency.
+- Added Readme file to all solution's projects.
 
 ## [8.1.1]
 
