@@ -10,9 +10,9 @@ public static class MemoryStorageEventExtensions
     /// <summary>
     /// Gets the enum description.
     /// </summary>
-    /// <param name="value"><see cref="MemoryStorageEventEnum"/> value.</param>
+    /// <param name="value"><see cref="MemoryStorageEventTypes"/> value.</param>
     /// <returns>Text description.</returns>
-    public static string GetEnumDescription(this MemoryStorageEventEnum value)
+    public static string GetEnumDescription(this MemoryStorageEventTypes value)
     {
         var fi = value.GetType().GetField(value.ToString());
 

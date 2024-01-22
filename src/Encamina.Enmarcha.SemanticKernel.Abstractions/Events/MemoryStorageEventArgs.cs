@@ -8,7 +8,7 @@ public sealed class MemoryStorageEventArgs : EventArgs
     /// <summary>
     /// Gets event type.
     /// </summary>
-    public MemoryStorageEventEnum EventType { get; init; }
+    public MemoryStorageEventTypes EventType { get; init; }
 
     /// <summary>
     /// Gets the memory identifier.

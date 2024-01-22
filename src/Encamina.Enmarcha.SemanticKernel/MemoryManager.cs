@@ -36,7 +36,7 @@ public class MemoryManager : IMemoryManager
 
         if (memoryStorageEventHandlerDelegate is not null)
         {
-            MemoryStorageEvent += (sender, args) => memoryStorageEventHandlerDelegate?.Invoke(sender?.ToString() ?? MemoryStorageEventEnum.Undefined.GetEnumDescription(), args);
+            MemoryStorageEvent += (sender, args) => memoryStorageEventHandlerDelegate?.Invoke(sender?.ToString() ?? MemoryStorageEventTypes.Undefined.GetEnumDescription(), args);
         }
     }
 
@@ -59,8 +59,8 @@ public class MemoryManager : IMemoryManager
         await SaveChunks(memoryId, collectionName, chunks, metadata, kernel, cancellationToken);
 
         MemoryStorageEvent?.Invoke(
-            MemoryStorageEventEnum.Upsert.GetEnumDescription(),
-            new() { EventType = MemoryStorageEventEnum.Upsert, MemoryId = memoryId, CollectionName = collectionName });
+            MemoryStorageEventTypes.Upsert.GetEnumDescription(),
+            new() { EventType = MemoryStorageEventTypes.Upsert, MemoryId = memoryId, CollectionName = collectionName });
     }
 
     /// <inheritdoc/>
@@ -73,8 +73,8 @@ public class MemoryManager : IMemoryManager
             await DeleteMemoryAsync(memoryId, collectionName, chunkSize, cancellationToken);
 
             MemoryStorageEvent?.Invoke(
-                MemoryStorageEventEnum.Delete.GetEnumDescription(),
-                new() { EventType = MemoryStorageEventEnum.Delete, MemoryId = memoryId, CollectionName = collectionName });
+                MemoryStorageEventTypes.Delete.GetEnumDescription(),
+                new() { EventType = MemoryStorageEventTypes.Delete, MemoryId = memoryId, CollectionName = collectionName });
         }
     }
 
@@ -92,8 +92,8 @@ public class MemoryManager : IMemoryManager
                                              .ToListAsync(cancellationToken);
 
         MemoryStorageEvent?.Invoke(
-            MemoryStorageEventEnum.Get.GetEnumDescription(),
-            new() { EventType = MemoryStorageEventEnum.Get, MemoryId = memoryId, CollectionName = collectionName });
+            MemoryStorageEventTypes.Get.GetEnumDescription(),
+            new() { EventType = MemoryStorageEventTypes.Get, MemoryId = memoryId, CollectionName = collectionName });
 
         return new MemoryContent
         {
@@ -131,8 +131,8 @@ public class MemoryManager : IMemoryManager
         await foreach (var item in memoryRecordsUniqueIdentifiers)
         {
             MemoryStorageEvent?.Invoke(
-                MemoryStorageEventEnum.UpsertBatch.GetEnumDescription(),
-                new() { EventType = MemoryStorageEventEnum.UpsertBatch, MemoryId = item, CollectionName = collectionName });
+                MemoryStorageEventTypes.UpsertBatch.GetEnumDescription(),
+                new() { EventType = MemoryStorageEventTypes.UpsertBatch, MemoryId = item, CollectionName = collectionName });
 
             logger.LogInformation(@"Processed memory record {item}.", item);
 

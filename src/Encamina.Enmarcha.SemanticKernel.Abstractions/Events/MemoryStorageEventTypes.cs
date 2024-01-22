@@ -5,7 +5,7 @@ namespace Encamina.Enmarcha.SemanticKernel.Abstractions.Events;
 /// <summary>
 /// <see cref="IMemoryManager.MemoryStorageEvent"/> types.
 /// </summary>
-public enum MemoryStorageEventEnum
+public enum MemoryStorageEventTypes
 {
     /// <summary>
     /// 'Undefined' event type.
