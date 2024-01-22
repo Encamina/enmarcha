@@ -17,7 +17,7 @@ public static class MemoryStorageEventExtensions
         var fi = value.GetType().GetField(value.ToString());
 
         return fi.GetCustomAttributes(typeof(DescriptionAttribute), false) is DescriptionAttribute[] attributes && attributes.Any()
-            ? attributes.First().Description
+            ? attributes[0].Description
             : value.ToString();
     }
 }
