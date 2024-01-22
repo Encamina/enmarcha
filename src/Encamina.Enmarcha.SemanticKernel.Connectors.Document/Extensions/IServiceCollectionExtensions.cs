@@ -13,16 +13,32 @@ public static class IServiceCollectionExtensions
     /// Adds a default implementation of <see cref="IDocumentContentExtractor"/> to the specified <see cref="IServiceCollection"/> as a singleton service.
     /// </summary>
     /// <param name="services">The <see cref="IServiceCollection"/> to add services to.</param>
+    /// <returns>The <see cref="IServiceCollection"/> so that additional calls can be chained.</returns>
+    public static IServiceCollection AddDefaultDocumentContentExtractor(this IServiceCollection services)
+    {
+        return services.AddSingleton<IDocumentContentExtractor, DefaultDocumentContentExtractor>();
+    }
+
+    /// <summary>
+    /// Adds a default implementation of <see cref="IDocumentContentExtractor"/> to the specified <see cref="IServiceCollection"/> as a singleton service.
+    /// </summary>
+    /// <param name="services">The <see cref="IServiceCollection"/> to add services to.</param>
     /// <param name="lengthFunction">A length function to use when extracting content from documents.</param>
     /// <returns>The <see cref="IServiceCollection"/> so that additional calls can be chained.</returns>
-    public static IServiceCollection AddDefaultDocumentContentExtractor(this IServiceCollection services, Func<string, int> lengthFunction = null)
+    public static IServiceCollection AddDefaultDocumentContentExtractor(this IServiceCollection services, Func<string, int> lengthFunction)
     {
-        if (lengthFunction is not null)
-        {
-            services.AddSingleton(lengthFunction);
-        }
+        services.AddSingleton(lengthFunction);
+        return services.AddDefaultDocumentContentExtractor();
+    }
 
-        return services.AddSingleton<IDocumentContentExtractor, DefaultDocumentContentExtractor>();
+    /// <summary>
+    /// Adds a default implementation of <see cref="IDocumentConnectorProvider"/> to the specified <see cref="IServiceCollection"/> as a singleton service.
+    /// </summary>
+    /// <param name="services">The <see cref="IServiceCollection"/> to add services to.</param>
+    /// <returns>The <see cref="IServiceCollection"/> so that additional calls can be chained.</returns>
+    public static IServiceCollection AddDefaultDocumentConnectorProvider(this IServiceCollection services)
+    {
+        return services.AddSingleton<IDocumentConnectorProvider, DefaultDocumentContentExtractor>();
     }
 
     /// <summary>
@@ -31,15 +47,9 @@ public static class IServiceCollectionExtensions
     /// <param name="services">The <see cref="IServiceCollection"/> to add services to.</param>
     /// <param name="lengthFunction">A length function to use when extracting content from documents.</param>
     /// <returns>The <see cref="IServiceCollection"/> so that additional calls can be chained.</returns>
-    public static IServiceCollection AddDefaultDocumentConnectorProvider(this IServiceCollection services, Func<string, int> lengthFunction = null)
+    public static IServiceCollection AddDefaultDocumentConnectorProvider(this IServiceCollection services, Func<string, int> lengthFunction)
     {
-        if (lengthFunction is not null)
-        {
-            services.AddSingleton(lengthFunction);
-        }
-
-        services.AddSingleton<IDocumentConnectorProvider, DefaultDocumentContentExtractor>();
-
-        return services;
+        services.AddSingleton(lengthFunction);
+        return services.AddDefaultDocumentConnectorProvider();
     }
 }
