@@ -1,4 +1,4 @@
-# Exsamples Guide
+#Example Guide
 This is an example guide to the semantic kernel plugins of the referenced projects.
 
 The Sample_SemanticKernel_QuestionAnswering project has two mock examples to know how to work the plugins.
