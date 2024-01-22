@@ -1,5 +1,7 @@
 ﻿// Ignore Spelling: Upsert
 
+using Encamina.Enmarcha.SemanticKernel.Abstractions.Events;
+
 using Microsoft.SemanticKernel;
 using Microsoft.SemanticKernel.Memory;
 
@@ -11,6 +13,11 @@ namespace Encamina.Enmarcha.SemanticKernel.Abstractions;
 public interface IMemoryManager
 {
     /// <summary>
+    /// <see cref="EventHandler{MemoryStorageEventArgs}"/> for memory storage events.
+    /// </summary>
+    event EventHandler<MemoryStorageEventArgs> MemoryStorageEvent;
+
+    /// <summary>
     /// Gets the instance of the memory store manage by this manager.
     /// </summary>
     IMemoryStore MemoryStore { get; }
@@ -21,8 +28,9 @@ public interface IMemoryManager
     /// <param name="memoryId">The memory unique identifier.</param>
     /// <param name="collectionName">Name of the collection where the content will be saved.</param>
     /// <param name="chunks">List of strings containing the content of the memory.</param>
-    /// <param name="cancellationToken">Cancellation token to cancel the operation.</param>
+    /// <param name="kernel"><see cref="Kernel"/> instance object.</param>
     /// <param name="metadata">Metadata of the memory.</param>
+    /// <param name="cancellationToken">Cancellation token to cancel the operation.</param>
     /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
     Task UpsertMemoryAsync(string memoryId, string collectionName, IEnumerable<string> chunks, Kernel kernel, IDictionary<string, string> metadata = null, CancellationToken cancellationToken = default);
 

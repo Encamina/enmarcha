@@ -39,6 +39,7 @@ Previous classification is not required if changes are simple or all belong to t
 - Updated sample projects with latest changes.
 - Overloaded `AddDefaultDocumentConnectorProvider` and `AddDefaultDocumentContentExtractor` methods with a parameter to pass a function to calculate the length of a text and inject it as a dependency.
 - Added Readme file to all solution's projects.
+- Added event handler for `MemoryManager` operations.
 
 ## [8.1.1]
 
