@@ -4,6 +4,10 @@
         <TargetFramework>netstandard2.1</TargetFramework>
     </PropertyGroup>
 
+    <PropertyGroup>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
+    </PropertyGroup>
+
     <ItemGroup>
         <PackageReference Include="Azure.AI.OpenAI" Version="1.0.0-beta.12" />
         <PackageReference Include="Microsoft.Extensions.Azure" Version="1.7.1" />
@@ -17,6 +21,10 @@
         <ProjectReference Include="..\Encamina.Enmarcha.AI.OpenAI.Abstractions\Encamina.Enmarcha.AI.OpenAI.Abstractions.csproj" />
         <ProjectReference Include="..\Encamina.Enmarcha.Core\Encamina.Enmarcha.Core.csproj" />
         <ProjectReference Include="..\Encamina.Enmarcha.Entities\Encamina.Enmarcha.Entities.csproj" />
+    </ItemGroup>
+    
+    <ItemGroup>
+        <None Include="README.md" Pack="true" PackagePath="\"/>
     </ItemGroup>
 
 </Project>
