@@ -23,26 +23,25 @@ public class MemoryManager : IMemoryManager
 
     private readonly ILogger logger;
 
-    /// <inheritdoc/>
-    public event EventHandler<MemoryStorageEventArgs> MemoryStorageEvent;
-
     /// <summary>
     /// Initializes a new instance of the <see cref="MemoryManager"/> class.
     /// </summary>
     /// <param name="memoryStore">A valid instance of a <see cref="IMemoryStore"/> to manage.</param>
     /// <param name="memoryStorageEventHandlerDelegate">A delegate to handle events from <see cref="MemoryStorageEvent"/>.</param>
     /// <param name="logger">Log service.</param>
-    public MemoryManager(IMemoryStore memoryStore, Action<string, MemoryStorageEventArgs> memoryStorageEventHandlerDelegate, ILogger<MemoryManager> logger)
+    public MemoryManager(IMemoryStore memoryStore, ILogger<MemoryManager> logger, Action<string, MemoryStorageEventArgs> memoryStorageEventHandlerDelegate)
     {
         MemoryStore = memoryStore;
+        this.logger = logger;
 
         if (memoryStorageEventHandlerDelegate is not null)
         {
             MemoryStorageEvent += (sender, args) => memoryStorageEventHandlerDelegate?.Invoke(sender?.ToString() ?? MemoryStorageEventEnum.Undefined.GetEnumDescription(), args);
         }
-
-        this.logger = logger;
     }
+
+    /// <inheritdoc/>
+    public event EventHandler<MemoryStorageEventArgs> MemoryStorageEvent;
 
     /// <inheritdoc/>
     public IMemoryStore MemoryStore { get; init; }
@@ -135,7 +134,7 @@ public class MemoryManager : IMemoryManager
                 MemoryStorageEventEnum.UpsertBatch.GetEnumDescription(),
                 new() { EventType = MemoryStorageEventEnum.UpsertBatch, MemoryId = item, CollectionName = collectionName });
 
-            logger.LogInformation($@"Processed memory record {item}.");
+            logger.LogInformation(@"Processed memory record {item}.", item);
 
             yield return item;
         }
