@@ -27,17 +27,11 @@ public class MemoryManager : IMemoryManager
     /// Initializes a new instance of the <see cref="MemoryManager"/> class.
     /// </summary>
     /// <param name="memoryStore">A valid instance of a <see cref="IMemoryStore"/> to manage.</param>
-    /// <param name="memoryStorageEventHandler">A delegate to handle events from <see cref="MemoryManagerEvent"/>.</param>
     /// <param name="logger">Log service.</param>
-    public MemoryManager(IMemoryStore memoryStore, ILogger<MemoryManager> logger, Action<object, MemoryManagerEventArgs> memoryStorageEventHandler)
+    public MemoryManager(IMemoryStore memoryStore, ILogger<MemoryManager> logger)
     {
         MemoryStore = memoryStore;
         this.logger = logger;
-
-        if (memoryStorageEventHandler is not null)
-        {
-            MemoryManagerEvent += (sender, args) => memoryStorageEventHandler?.Invoke(sender ?? nameof(MemoryManagerEventTypes.Undefined), args);
-        }
     }
 
     /// <inheritdoc/>
