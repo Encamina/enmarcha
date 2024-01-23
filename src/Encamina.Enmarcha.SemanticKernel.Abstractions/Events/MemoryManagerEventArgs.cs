@@ -1,14 +1,14 @@
 ﻿namespace Encamina.Enmarcha.SemanticKernel.Abstractions.Events;
 
 /// <summary>
-/// <see cref="IMemoryManager.MemoryStorageEvent"/> arguments.
+/// Represents the event arguments of an <see cref="IMemoryManager.MemoryManagerEvent"/>.
 /// </summary>
-public sealed class MemoryStorageEventArgs : EventArgs
+public sealed class MemoryManagerEventArgs : EventArgs
 {
     /// <summary>
     /// Gets event type.
     /// </summary>
-    public MemoryStorageEventTypes EventType { get; init; }
+    public MemoryManagerEventTypes EventType { get; init; }
 
     /// <summary>
     /// Gets the memory identifier.

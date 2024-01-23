@@ -13,9 +13,10 @@ namespace Encamina.Enmarcha.SemanticKernel.Abstractions;
 public interface IMemoryManager
 {
     /// <summary>
-    /// <see cref="EventHandler{MemoryStorageEventArgs}"/> for memory storage events.
+    /// This event is fired when <see cref="IMemoryManager"/> executes an action.
+    /// The event information is defined in the object <see cref="MemoryManagerEventArgs"/>, and the action types in the object <see cref="MemoryManagerEventTypes"/>.
     /// </summary>
-    event EventHandler<MemoryStorageEventArgs> MemoryStorageEvent;
+    event EventHandler<MemoryManagerEventArgs> MemoryManagerEvent;
 
     /// <summary>
     /// Gets the instance of the memory store manage by this manager.
