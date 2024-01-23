@@ -1,6 +1,5 @@
 ﻿using Encamina.Enmarcha.SemanticKernel;
 using Encamina.Enmarcha.SemanticKernel.Abstractions;
-using Encamina.Enmarcha.SemanticKernel.Abstractions.Events;
 using Encamina.Enmarcha.SemanticKernel.Options;
 
 using Microsoft.Extensions.Configuration;
@@ -25,25 +24,6 @@ public static class IServiceCollectionExtensions
     /// <returns>The <see cref="IServiceCollection"/> so that additional calls can be chained.</returns>
     public static IServiceCollection AddMemoryManager(this IServiceCollection services)
     {
-        services.TryAddSingleton<IMemoryManager, MemoryManager>();
-
-        return services;
-    }
-
-    /// <summary>
-    /// Adds and configures the <see cref="MemoryManager"/> type as transient service instance of the <see cref="IMemoryManager"/> service to the <see cref="IServiceCollection"/>.
-    /// </summary>
-    /// <remarks>
-    /// This method registers the <see cref="MemoryManager"/> type as a transient service due to its dependency on <see cref="Kernel"/>, which is typically registered as transient or scoped (rarely as singleton).
-    /// </remarks>
-    /// <param name="services">The <see cref="IServiceCollection"/> to add services to.</param>
-    /// <param name="memoryStorageEventHandler">A delegate to handle events from <see cref="IMemoryManager.MemoryManagerEvent"/>.</param>
-    /// <returns>The <see cref="IServiceCollection"/> so that additional calls can be chained.</returns>
-    public static IServiceCollection AddMemoryManager(
-        this IServiceCollection services,
-        Action<string, MemoryManagerEventArgs> memoryStorageEventHandler)
-    {
-        services.TryAddSingleton(memoryStorageEventHandler);
         services.TryAddSingleton<IMemoryManager, MemoryManager>();
 
         return services;
