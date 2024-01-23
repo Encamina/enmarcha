@@ -5,6 +5,7 @@ using System.Runtime.CompilerServices;
 using System.Text.Json;
 
 using Encamina.Enmarcha.SemanticKernel.Abstractions;
+using Encamina.Enmarcha.SemanticKernel.Abstractions.Events;
 
 using Microsoft.Extensions.Logging;
 using Microsoft.SemanticKernel;
@@ -26,11 +27,21 @@ public class MemoryManager : IMemoryManager
     /// Initializes a new instance of the <see cref="MemoryManager"/> class.
     /// </summary>
     /// <param name="memoryStore">A valid instance of a <see cref="IMemoryStore"/> to manage.</param>
-    public MemoryManager(IMemoryStore memoryStore, ILogger<MemoryManager> logger)
+    /// <param name="memoryStorageEventHandler">A delegate to handle events from <see cref="MemoryManagerEvent"/>.</param>
+    /// <param name="logger">Log service.</param>
+    public MemoryManager(IMemoryStore memoryStore, ILogger<MemoryManager> logger, Action<object, MemoryManagerEventArgs> memoryStorageEventHandler)
     {
-        this.logger = logger;
         MemoryStore = memoryStore;
+        this.logger = logger;
+
+        if (memoryStorageEventHandler is not null)
+        {
+            MemoryManagerEvent += (sender, args) => memoryStorageEventHandler?.Invoke(sender ?? nameof(MemoryManagerEventTypes.Undefined), args);
+        }
     }
+
+    /// <inheritdoc/>
+    public event EventHandler<MemoryManagerEventArgs> MemoryManagerEvent;
 
     /// <inheritdoc/>
     public IMemoryStore MemoryStore { get; init; }
@@ -46,6 +57,8 @@ public class MemoryManager : IMemoryManager
         }
 
         await SaveChunks(memoryId, collectionName, chunks, metadata, kernel, cancellationToken);
+
+        MemoryManagerEvent?.Invoke(this, new() { EventType = MemoryManagerEventTypes.Upsert, MemoryId = memoryId, CollectionName = collectionName });
     }
 
     /// <inheritdoc/>
@@ -56,6 +69,8 @@ public class MemoryManager : IMemoryManager
         if (chunkSize > 0)
         {
             await DeleteMemoryAsync(memoryId, collectionName, chunkSize, cancellationToken);
+
+            MemoryManagerEvent?.Invoke(this, new() { EventType = MemoryManagerEventTypes.Delete, MemoryId = memoryId, CollectionName = collectionName });
         }
     }
 
@@ -71,6 +86,8 @@ public class MemoryManager : IMemoryManager
 
         var memoryRecords = await MemoryStore.GetBatchAsync(collectionName, Enumerable.Range(0, chunkSize).Select(i => BuildMemoryIdentifier(memoryId, i)), cancellationToken: cancellationToken)
                                              .ToListAsync(cancellationToken);
+
+        MemoryManagerEvent?.Invoke(this, new() { EventType = MemoryManagerEventTypes.Get, MemoryId = memoryId, CollectionName = collectionName });
 
         return new MemoryContent
         {
@@ -107,7 +124,10 @@ public class MemoryManager : IMemoryManager
 
         await foreach (var item in memoryRecordsUniqueIdentifiers)
         {
-            logger.LogInformation($@"Processed memory record {item}.");
+            MemoryManagerEvent?.Invoke(this, new() { EventType = MemoryManagerEventTypes.UpsertBatch, MemoryId = item, CollectionName = collectionName });
+
+            logger.LogInformation(@"Processed memory record {item}.", item);
+
             yield return item;
         }
     }
