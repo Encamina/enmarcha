@@ -56,11 +56,9 @@ public static class KernelExtensions
             throw new InvalidOperationException(ExceptionMessages.ResourceManager.GetFormattedStringByCurrentCulture(nameof(ExceptionMessages.PromptTemplateFileNotFound), function.Name, pluginDirectory));
         }
 
-        return await InnerGetKernelFunctionPromptAsync(
+        return await GetKernelPromptAsync(
             kernel,
-            function.Name,
             await File.ReadAllTextAsync(promptTemplatePath, cancellationToken),
-            await File.ReadAllTextAsync(promptConfigPath, cancellationToken),
             arguments,
             promptTemplateFormat,
             promptTemplateFactory,
@@ -102,11 +100,9 @@ public static class KernelExtensions
             throw new InvalidOperationException(ExceptionMessages.ResourceManager.GetFormattedStringByCurrentCulture(nameof(ExceptionMessages.PromptEmbeddedResourcesNotFound), pluginName, function.Name, assembly.GetName().Name));
         }
 
-        return await InnerGetKernelFunctionPromptAsync(
+        return await GetKernelPromptAsync(
             kernel,
-            function.Name,
             ReadResource(assembly, promptTemplateResourceName),
-            ReadResource(assembly, promptConfigurationResourceName),
             arguments,
             promptTemplateFormat,
             promptTemplateFactory,
@@ -129,12 +125,22 @@ public static class KernelExtensions
     /// <returns>A string containing the generated prompt.</returns>
     public static Task<string> GetKernelPromptAsync(this Kernel kernel, string promptTemplate, KernelArguments arguments, string promptTemplateFormat = null, IPromptTemplateFactory promptTemplateFactory = null, CancellationToken cancellationToken = default)
     {
-        var factory = promptTemplateFactory ?? new KernelPromptTemplateFactory(kernel.LoggerFactory);
+        if (promptTemplateFactory is not null && string.IsNullOrWhiteSpace(promptTemplateFormat))
+        {
+            throw new ArgumentException($@"Template format is required when providing a `{nameof(promptTemplateFactory)}`!", nameof(promptTemplateFormat));
+        }
 
         var promptConfig = new PromptTemplateConfig(promptTemplate)
         {
             TemplateFormat = promptTemplateFormat ?? PromptTemplateConfig.SemanticKernelTemplateFormat,
         };
+
+        if (arguments.ExecutionSettings is not null)
+        {
+            promptConfig.ExecutionSettings = arguments.ExecutionSettings.ToDictionary(x => x.Key, x => x.Value);
+        }
+
+        var factory = promptTemplateFactory ?? new KernelPromptTemplateFactory(NullLoggerFactory.Instance);
 
         return factory.Create(promptConfig).RenderAsync(kernel, arguments, cancellationToken);
     }
@@ -246,7 +252,7 @@ public static class KernelExtensions
 
         var innerLoggerFactory = loggerFactory ?? NullLoggerFactory.Instance;
 
-        var factory = promptTemplateFactory ?? new KernelPromptTemplateFactory(innerLoggerFactory ?? NullLoggerFactory.Instance);
+        var factory = promptTemplateFactory ?? new KernelPromptTemplateFactory(innerLoggerFactory);
 
         foreach (var pluginsInfoGroup in pluginsInfoGroups)
         {
@@ -304,28 +310,6 @@ public static class KernelExtensions
 
     private static string GetResourceNameFromPluginInfoByFileName(IGrouping<(string PluginName, string FunctionName), (string ResourceName, string FileName)> pluginsInfoGroup, string fileName)
         => pluginsInfoGroup.Single(x => fileName.Equals(x.FileName, StringComparison.OrdinalIgnoreCase)).ResourceName;
-
-    private static async Task<string> InnerGetKernelFunctionPromptAsync(Kernel kernel, string functionName, string promptTemplate, string promptConfigJsonString, KernelArguments arguments, string templateFormat = null, IPromptTemplateFactory promptTemplateFactory = null, CancellationToken cancellationToken = default)
-    {
-        if (promptTemplateFactory is not null && string.IsNullOrWhiteSpace(templateFormat))
-        {
-            throw new ArgumentException($"Template format is required when providing a `{nameof(promptTemplateFactory)}`!", nameof(templateFormat));
-        }
-
-        var promptConfig = PromptTemplateConfig.FromJson(promptConfigJsonString);
-        promptConfig.Name = functionName;
-        promptConfig.Template = promptTemplate;
-        promptConfig.TemplateFormat = templateFormat ?? PromptTemplateConfig.SemanticKernelTemplateFormat;
-
-        if (arguments.ExecutionSettings is not null)
-        {
-            promptConfig.ExecutionSettings = arguments.ExecutionSettings.ToDictionary(x => x.Key, x => x.Value);
-        }
-
-        var factory = promptTemplateFactory ?? new KernelPromptTemplateFactory(NullLoggerFactory.Instance);
-
-        return await factory.Create(promptConfig).RenderAsync(kernel, arguments, cancellationToken);
-    }
 
     private static string ReadResource(Assembly assembly, string resourceName)
     {
