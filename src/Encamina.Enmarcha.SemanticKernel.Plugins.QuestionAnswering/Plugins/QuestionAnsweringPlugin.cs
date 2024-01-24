@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel;
 
 using Encamina.Enmarcha.AI.OpenAI.Abstractions;
+using Encamina.Enmarcha.SemanticKernel.Extensions;
 
 using Microsoft.SemanticKernel;
 using Microsoft.SemanticKernel.Connectors.OpenAI;
@@ -84,12 +85,13 @@ ALWAYS RESPOND with a FINAL ANSWER, DO NOT CONTINUE the conversation.
         // limits of the available tokens for the context argument of the «QuestionAnsweringFromContext» function.
 
         var modelMaxTokens = ModelInfo.GetById(modelName).MaxTokens; // Get this information early, to throw an exception if the model is not found (fail fast).
+        var questionAnsweringFunction = kernel.Plugins[PluginsInfo.QuestionAnsweringPlugin.Name][PluginsInfo.QuestionAnsweringPlugin.Functions.QuestionAnsweringFromContext.Name];
 
         var memoryQueryVariables = new KernelArguments()
         {
             [@"query"] = question,
             [@"collectionsStr"] = collectionsStr,
-            [@"responseTokenLimit"] = modelMaxTokens - QuestionAnsweringFromContextFunctionsUsedTokens(question),
+            [@"responseTokenLimit"] = modelMaxTokens - await GetQuestionAnsweringFromContextFunctionUsedTokensAsync(questionAnsweringFunction, question, cancellationToken),
             [@"minRelevance"] = minRelevance,
             [@"resultsLimit"] = resultsLimit,
             [@"collectionSeparator"] = collectionSeparator,
@@ -115,8 +117,7 @@ ALWAYS RESPOND with a FINAL ANSWER, DO NOT CONTINUE the conversation.
             [@"context"] = memoryQueryResult,
         };
 
-        var questionAnsweringFunctionResult = await kernel.Plugins[PluginsInfo.QuestionAnsweringPlugin.Name][PluginsInfo.QuestionAnsweringPlugin.Functions.QuestionAnsweringFromContext.Name]
-                                                          .InvokeAsync(kernel, questionAnsweringVariables, cancellationToken);
+        var questionAnsweringFunctionResult = await questionAnsweringFunction.InvokeAsync(kernel, questionAnsweringVariables, cancellationToken);
 
         return questionAnsweringFunctionResult.GetValue<string>();
     }
@@ -146,8 +147,13 @@ ALWAYS RESPOND with a FINAL ANSWER, DO NOT CONTINUE the conversation.
         return functionResult.GetValue<string>();
     }
 
-    private int QuestionAnsweringFromContextFunctionsUsedTokens(string input)
+    private Task<int> GetQuestionAnsweringFromContextFunctionUsedTokensAsync(KernelFunction questionAnsweringFromContextFunction, string input, CancellationToken cancellationToken)
     {
-        return tokenLengthFunction(QuestionAnsweringFromContextFunctionPrompt) + questionAnsweringFromContextFunctionExecutionSettings.MaxTokens.Value + tokenLengthFunction(input);
+        var functionArguments = new KernelArguments(questionAnsweringFromContextFunctionExecutionSettings)
+        {
+            [@"input"] = input,
+        };
+
+        return kernel.GetKernelFunctionUsedTokensFromPromptAsync(QuestionAnsweringFromContextFunctionPrompt, questionAnsweringFromContextFunction, functionArguments, tokenLengthFunction, cancellationToken: cancellationToken);
     }
 }
