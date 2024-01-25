@@ -5,6 +5,7 @@ using Encamina.Enmarcha.SemanticKernel.Extensions;
 using Encamina.Enmarcha.Testing;
 
 using Microsoft.SemanticKernel;
+using Microsoft.SemanticKernel.Connectors.OpenAI;
 
 namespace Encamina.Enmarcha.SemanticKernel.Tests;
 
@@ -36,7 +37,7 @@ public class KernelExtensionsTests : FakerProviderFixturedBase
     }
 
     [Fact]
-    public async Task GetKernelFunctionPromptAsync_FromPluginDirectory_Succeeds()
+    public async Task GetKernelFunctionPrompt_FromPluginDirectory_Succeeds()
     {
         // Arrange...
         var kernel = GivenAKernel();
@@ -57,7 +58,7 @@ public class KernelExtensionsTests : FakerProviderFixturedBase
     }
 
     [Fact]
-    public async Task GetKernelFunctionPromptAsync_FromAssembly_Succeeds()
+    public async Task GetKernelFunctionPrompt_FromAssembly_Succeeds()
     {
         // Arrange...
         var kernel = GivenAKernel();
@@ -78,7 +79,27 @@ public class KernelExtensionsTests : FakerProviderFixturedBase
     }
 
     [Fact]
-    public async Task GetKernelFunctionUsedTokensAsync_FromPluginDirectory_Succeeds()
+    public async Task GetKernelPrompt_FromInlinePrompt_Succeeds()
+    {
+        // Arrange...
+        var kernel = GivenAKernel();
+        const string promptTemplate = "This is a Prompt function for testing purposes {{$input}} {{$foo}} {{$bar}}";
+        var arguments = new KernelArguments()
+        {
+            ["input"] = "dummy",
+            ["foo"] = "foo value",
+            ["bar"] = "bar value"
+        };
+
+        // Act...
+        var prompt = await kernel.GetKernelPromptAsync(promptTemplate, arguments);
+
+        // Assert..
+        Assert.Equal("This is a Prompt function for testing purposes dummy foo value bar value", prompt);
+    }
+
+    [Fact]
+    public async Task GetKernelFunctionUsedTokens_FromPluginDirectory_Succeeds()
     {
         // Arrange...
         var kernel = GivenAKernel();
@@ -100,7 +121,7 @@ public class KernelExtensionsTests : FakerProviderFixturedBase
     }
 
     [Fact]
-    public async Task GetKernelFunctionUsedTokensAsync_FromAssembly_Succeeds()
+    public async Task GetKernelFunctionUsedTokens_FromAssembly_Succeeds()
     {
         // Arrange...
         var kernel = GivenAKernel();
@@ -118,6 +139,54 @@ public class KernelExtensionsTests : FakerProviderFixturedBase
 
         //Assert
         var expectedUsedTokens = "This is a Prompt function for testing purposes dummy foo value bar value".Length + 500; // prompt with arguments + config json max tokens
+        Assert.Equal(expectedUsedTokens, usedTokens);
+    }
+
+    [Fact]
+    public async Task GetKernelFunctionUsedTokens_FromInlinePromptFunction_Succeeds()
+    {
+        // Arrange...
+        var kernel = GivenAKernel();
+        const string promptTemplate = "This is a Prompt function for testing purposes {{$input}} {{$foo}} {{$bar}}";
+        var function = kernel.CreateFunctionFromPrompt(promptTemplate, new OpenAIPromptExecutionSettings() { MaxTokens = 500, Temperature = 0.4, TopP = 1 });
+        var arguments = new KernelArguments()
+        {
+            ["input"] = "dummy",
+            ["foo"] = "foo value",
+            ["bar"] = "bar value"
+        };
+
+        // Act...
+        var usedTokens = await kernel.GetKernelFunctionUsedTokensFromPromptAsync(promptTemplate, function, arguments, ILengthFunctions.LengthByCharacterCount);
+
+        //Assert
+        var expectedUsedTokens = "This is a Prompt function for testing purposes dummy foo value bar value".Length + 500; // prompt with arguments + config json max tokens
+        Assert.Equal(expectedUsedTokens, usedTokens);
+    }
+
+    [Fact]
+    public async Task GetKernelFunctionUsedTokens_PrioritizesKernelArgumentsMaxTokens_Succeeds()
+    {
+        // Arrange...
+        const int maxTokens = 1892;
+        var kernel = GivenAKernel();
+        const string promptTemplate = "This is a Prompt function for testing purposes {{$input}} {{$foo}} {{$bar}}";
+        var function = kernel.CreateFunctionFromPrompt(promptTemplate, new OpenAIPromptExecutionSettings() { MaxTokens = 500, Temperature = 0.4, TopP = 1 });
+        var arguments = new KernelArguments(new OpenAIPromptExecutionSettings()
+        {
+            MaxTokens = maxTokens
+        })
+        {
+            ["input"] = "dummy",
+            ["foo"] = "foo value",
+            ["bar"] = "bar value"
+        };
+
+        // Act...
+        var usedTokens = await kernel.GetKernelFunctionUsedTokensFromPromptAsync(promptTemplate, function, arguments, ILengthFunctions.LengthByCharacterCount);
+
+        //Assert
+        var expectedUsedTokens = "This is a Prompt function for testing purposes dummy foo value bar value".Length + maxTokens; // prompt with arguments + max tokens
         Assert.Equal(expectedUsedTokens, usedTokens);
     }
 
