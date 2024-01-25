@@ -18,6 +18,12 @@ Previous classification is not required if changes are simple or all belong to t
 
 ## [8.1.2]
 
+### Important
+
+This version updates the `Semantic Kernel` library from version `1.1.0` to `1.2.0`, which introduces minor changes in the code.
+
+More information about these warnings is available here: https://github.com/microsoft/semantic-kernel/releases/tag/dotnet-1.2.0
+
 ### Breaking Changes
 - Replace dependency with `IMemoryStore` for `IMemoryManager` in abstract class `MemoryStoreHandlerBase`. This affects internal types like the `EphemeralMemoryStoreHandler`.
 - Removed visibility modifiers in `IMemoryManager` interface.
