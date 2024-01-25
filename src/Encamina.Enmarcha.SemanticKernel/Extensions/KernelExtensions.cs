@@ -286,7 +286,7 @@ public static class KernelExtensions
         // Once the service settings are retrieved, get the value of the MaxTokens property from the MaxTokens property or extension data.
         // If the `max_tokens` property is found, check is a JsonElement and try to get its value as an integer.
         // Finally, if the value is an integer, return it.
-        // In any other case (if the service settings are not found, MaxTokens property is not found or the `max_tokens` property is not found, or the value is not an integer), throw an exception.
+        // In any other case (if the service settings are not found, MaxTokens property is not found or the `max_tokens` property is not found, or the value is not an integer), return 0.
         if (kernel.ServiceSelector.TrySelectAIService<IChatCompletionService>(kernel, function, arguments, out _, out var serviceSettings) ||
             kernel.ServiceSelector.TrySelectAIService<ITextGenerationService>(kernel, function, arguments, out _, out serviceSettings))
         {
