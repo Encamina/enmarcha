@@ -18,6 +18,12 @@ Previous classification is not required if changes are simple or all belong to t
 
 ## [8.1.2]
 
+### Important
+
+This version updates the `Semantic Kernel` library from version `1.1.0` to `1.2.0`, which introduces minor changes in the code.
+
+More information about these warnings is available here: https://github.com/microsoft/semantic-kernel/releases/tag/dotnet-1.2.0
+
 ### Breaking Changes
 - Replace dependency with `IMemoryStore` for `IMemoryManager` in abstract class `MemoryStoreHandlerBase`. This affects internal types like the `EphemeralMemoryStoreHandler`.
 - Removed visibility modifiers in `IMemoryManager` interface.
@@ -38,6 +44,12 @@ Previous classification is not required if changes are simple or all belong to t
 - Fixed some typos and grammatical errors (mostly on code comments).
 - Added new extension method `AddDefaultDocumentConnectorProvider` in `Encamina.Enmarcha.SemanticKernel.Connectors.Document` to get access to a default implementation of a `IDocumentConnector`.
 - Updated sample projects with latest changes.
+- Overloaded `AddDefaultDocumentConnectorProvider` and `AddDefaultDocumentContentExtractor` methods with a parameter to pass a function to calculate the length of a text and inject it as a dependency.
+- Added Readme file to all solution's projects.
+- Added event handler for `MemoryManager` operations.
+- Added new extension method `GetKernelPromptAsync` in `Encamina.Enmarcha.SemanticKernel.Extensions.KernelExtensions` to retrieve the final prompt for a given prompt using the arguments.
+- Added new extension method `GetKernelFunctionUsedTokensFromPromptAsync` in `Encamina.Enmarcha.SemanticKernel.Extensions.KernelExtensions` to obtain the total number of tokens used in generating a prompt from an inline prompt function.
+- Fixed `GetMaxTokensFromKernelFunction` in `Encamina.Enmarcha.SemanticKernel.Extensions.KernelExtensions`. Now, it considers whether the arguments are of type `OpenAIPromptExecutionSettings` when obtaining the MaxTokens.
 
 ## [8.1.1]
 
