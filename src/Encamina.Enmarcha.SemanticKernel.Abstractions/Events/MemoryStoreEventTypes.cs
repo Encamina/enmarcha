@@ -1,19 +1,19 @@
 ﻿namespace Encamina.Enmarcha.SemanticKernel.Abstractions.Events;
 
 /// <summary>
-/// Represents the specific type of operation from a <see cref="IMemoryManager"/>.
+/// Represents the specific type of operation from a <see cref="IMemoryStoreExtender"/>.
 /// </summary>
-public enum MemoryManagerEventTypes
+public enum MemoryStoreEventTypes
 {
     /// <summary>
-    /// 'Undefined' event type.
+    /// 'CreateCollection' event type.
     /// </summary>
-    Undefined = 0,
+    CreateCollection = 0,
 
     /// <summary>
-    /// 'Get' event type.
+    /// 'DeleteCollection' event type.
     /// </summary>
-    Get = 1,
+    DeleteCollection = 1,
 
     /// <summary>
     /// 'Upsert' event type.
@@ -21,12 +21,7 @@ public enum MemoryManagerEventTypes
     Upsert = 2,
 
     /// <summary>
-    /// 'UpsertBatch' event type.
-    /// </summary>
-    UpsertBatch = 3,
-
-    /// <summary>
     /// 'Delete' event type.
     /// </summary>
-    Delete = 4,
+    Delete = 3,
 }

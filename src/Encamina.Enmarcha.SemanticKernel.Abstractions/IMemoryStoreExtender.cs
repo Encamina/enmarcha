@@ -10,18 +10,24 @@ namespace Encamina.Enmarcha.SemanticKernel.Abstractions;
 /// <summary>
 /// Represents a memory manager (with some CRUD operations) over memories with multiple chunks from an <see cref="IMemoryStore"/>.
 /// </summary>
-public interface IMemoryManager
+public interface IMemoryStoreExtender
 {
     /// <summary>
-    /// This event is fired when <see cref="IMemoryManager"/> executes an action.
-    /// The event information is defined in the object <see cref="MemoryManagerEventArgs"/>, and the action types in the object <see cref="MemoryManagerEventTypes"/>.
+    /// This event is fired when <see cref="IMemoryStore"/> executes an action.
+    /// The event information is defined in the object <see cref="MemoryStoreEventArgs"/>, and the action types in the object <see cref="MemoryStoreEventTypes"/>.
     /// </summary>
-    event EventHandler<MemoryManagerEventArgs> MemoryManagerEvent;
+    event EventHandler<MemoryStoreEventArgs> MemoryStoreEvent;
 
     /// <summary>
-    /// Gets the instance of the memory store manage by this manager.
+    /// Gets the instance of the <see cref="IMemoryStore"/> object for this extender class.
     /// </summary>
     IMemoryStore MemoryStore { get; }
+
+    /// <summary>
+    /// This action fired a <see cref="MemoryStoreEvent"/> event when is invoked.
+    /// </summary>
+    /// <param name="e">The object <see cref="MemoryStoreEventArgs"/> contains the event arguments for this event.</param>
+    void OnMemoryStore(MemoryStoreEventArgs e);
 
     /// <summary>
     /// Upserts the memory content into a collection.
@@ -72,4 +78,10 @@ public interface IMemoryManager
     /// <param name="cancellationToken">Cancellation token to cancel the operation.</param>
     /// <returns>The unique identifiers for the memory records (not necessarily the same as the unique identifier of the memory content).</returns>
     IAsyncEnumerable<string> BatchUpsertMemoriesAsync(string collectionName, IDictionary<string, MemoryContent> memoryContents, Kernel kernel, CancellationToken cancellationToken);
+}
+
+/// <inheritdoc cref="IMemoryStoreExtender" />
+[Obsolete("This interface is obsolete and will be removed in a future version. Use the Encamina.Enmarcha.SemanticKernel.Abstractions.IMemoryStoreExtender interface instead.", false)]
+public interface IMemoryManager : IMemoryStoreExtender
+{
 }
