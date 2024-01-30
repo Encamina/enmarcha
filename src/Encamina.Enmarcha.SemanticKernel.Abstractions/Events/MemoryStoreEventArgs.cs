@@ -11,12 +11,12 @@ public sealed class MemoryStoreEventArgs : EventArgs
     public MemoryStoreEventTypes EventType { get; init; }
 
     /// <summary>
-    /// Gets the memory identifier.
+    /// Gets the memory identifiers.
     /// </summary>
-    public string MemoryId { get; init; }
+    public IEnumerable<string> Keys { get; init; } = [];
 
     /// <summary>
     /// Gets the collection name.
     /// </summary>
-    public string CollectionName { get; init; }
+    public string CollectionName { get; init; } = string.Empty;
 }

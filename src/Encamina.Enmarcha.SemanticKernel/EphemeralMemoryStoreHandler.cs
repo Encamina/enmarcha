@@ -65,8 +65,8 @@ internal sealed class EphemeralMemoryStoreHandler : MemoryStoreHandlerBase
                 foreach (var memoryStoreInfo in MemoryStoreCollectionInfo.Where(i => i.Value.LastAccessUtc < date).ToList())
                 {
                     MemoryStoreCollectionInfo.Remove(memoryStoreInfo.Key);
-                    await MemoryManager.MemoryStore.DeleteCollectionAsync(memoryStoreInfo.Value.CollectionName, cancellationToken);
-                    MemoryManager.OnMemoryStore(new() { EventType = MemoryStoreEventTypes.DeleteCollection, CollectionName = memoryStoreInfo.Value.CollectionName });
+                    await MemoryStoreExtender.MemoryStore.DeleteCollectionAsync(memoryStoreInfo.Value.CollectionName, cancellationToken);
+                    MemoryStoreExtender.RaiseMemoryStoreEvent(new() { EventType = MemoryStoreEventTypes.DeleteCollection, CollectionName = memoryStoreInfo.Value.CollectionName });
                 }
 
                 Thread.Sleep(TimeSpan.FromMinutes(options.InactivePollingTimeMinutes));

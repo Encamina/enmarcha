@@ -6,22 +6,47 @@
 public enum MemoryStoreEventTypes
 {
     /// <summary>
+    /// 'DoesCollectionExist' event type.
+    /// </summary>
+    DoesCollectionExist = 0,
+
+    /// <summary>
     /// 'CreateCollection' event type.
     /// </summary>
-    CreateCollection = 0,
+    CreateCollection = 1,
 
     /// <summary>
     /// 'DeleteCollection' event type.
     /// </summary>
-    DeleteCollection = 1,
+    DeleteCollection = 2,
 
     /// <summary>
-    /// 'Upsert' event type.
+    /// 'Get' event type.
     /// </summary>
-    Upsert = 2,
+    Get = 3,
 
     /// <summary>
-    /// 'Delete' event type.
+    /// 'UpsertMemory' event type.
     /// </summary>
-    Delete = 3,
+    UpsertMemory = 4,
+
+    /// <summary>
+    /// 'DeleteMemory' event type.
+    /// </summary>
+    DeleteMemory = 5,
+
+    /// <summary>
+    /// 'GetBatch' event type.
+    /// </summary>
+    GetBatch = 6,
+
+    /// <summary>
+    /// 'UpsertBatch' event type.
+    /// </summary>
+    UpsertBatch = 7,
+
+    /// <summary>
+    /// 'RemoveBatch' event type.
+    /// </summary>
+    RemoveBatch = 8,
 }

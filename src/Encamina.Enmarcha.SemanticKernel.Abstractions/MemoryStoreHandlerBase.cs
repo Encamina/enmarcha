@@ -65,10 +65,13 @@ public abstract class MemoryStoreHandlerBase : IMemoryStoreHandler
             LastAccessUtc = DateTime.UtcNow,
         };
 
-        if (!await MemoryStoreExtender.MemoryStore.DoesCollectionExistAsync(collectionName, cancellationToken))
+        var doesCollectionExist = await MemoryStoreExtender.MemoryStore.DoesCollectionExistAsync(collectionName, cancellationToken);
+        MemoryStoreExtender.RaiseMemoryStoreEvent(new() { EventType = Events.MemoryStoreEventTypes.DoesCollectionExist, CollectionName = collectionName });
+
+        if (!doesCollectionExist)
         {
             await MemoryStoreExtender.MemoryStore.CreateCollectionAsync(collectionName, cancellationToken);
-            MemoryStoreExtender.OnMemoryStore(new() { EventType = Events.MemoryStoreEventTypes.CreateCollection, CollectionName = collectionName });
+            MemoryStoreExtender.RaiseMemoryStoreEvent(new() { EventType = Events.MemoryStoreEventTypes.CreateCollection, CollectionName = collectionName });
         }
 
         return MemoryStoreCollectionInfo[collectionId].CollectionName;

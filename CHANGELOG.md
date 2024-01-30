@@ -49,7 +49,7 @@ More information about these warnings is available here: https://github.com/micr
 - Added new extension method `GetKernelPromptAsync` in `Encamina.Enmarcha.SemanticKernel.Extensions.KernelExtensions` to retrieve the final prompt for a given prompt using the arguments.
 - Added new extension method `GetKernelFunctionUsedTokensFromPromptAsync` in `Encamina.Enmarcha.SemanticKernel.Extensions.KernelExtensions` to obtain the total number of tokens used in generating a prompt from an inline prompt function.
 - Fixed `GetMaxTokensFromKernelFunction` in `Encamina.Enmarcha.SemanticKernel.Extensions.KernelExtensions`. Now, it considers whether the arguments are of type `OpenAIPromptExecutionSettings` when obtaining the MaxTokens.
-- Added `IMemoryStoreExtender` class. This class convert to obsolete the `IMemoryManager` class and their references.
+- New `IMemoryStoreExtender` type which obsoleces the `IMemoryManager` type and its references.
 
 ## [8.1.1]
 

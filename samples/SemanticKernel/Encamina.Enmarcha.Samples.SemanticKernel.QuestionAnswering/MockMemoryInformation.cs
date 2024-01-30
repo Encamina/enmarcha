@@ -19,8 +19,7 @@ internal class MockMemoryInformation
         var collectionName = "my-collection";
 
         await memoryStoreExtender.MemoryStore.CreateCollectionAsync(collectionName: collectionName, CancellationToken.None);
-
-        memoryStoreExtender.OnMemoryStore(new() { EventType = MemoryStoreEventTypes.CreateCollection, CollectionName = collectionName });
+        memoryStoreExtender.RaiseMemoryStoreEvent(new() { EventType = MemoryStoreEventTypes.CreateCollection, CollectionName = collectionName });
     }
 
     public async Task SaveDataMockAsync(Kernel kernel)

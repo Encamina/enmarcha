@@ -27,7 +27,7 @@ public interface IMemoryStoreExtender
     /// This action fired a <see cref="MemoryStoreEvent"/> event when is invoked.
     /// </summary>
     /// <param name="e">The object <see cref="MemoryStoreEventArgs"/> contains the event arguments for this event.</param>
-    void OnMemoryStore(MemoryStoreEventArgs e);
+    void RaiseMemoryStoreEvent(MemoryStoreEventArgs e);
 
     /// <summary>
     /// Upserts the memory content into a collection.

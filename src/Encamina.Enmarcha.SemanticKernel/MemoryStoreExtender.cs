@@ -1,5 +1,6 @@
 ﻿// Ignore Spelling: Upsert
 
+using System;
 using System.Collections.ObjectModel;
 using System.Runtime.CompilerServices;
 using System.Text.Json;
@@ -15,7 +16,7 @@ using Microsoft.SemanticKernel.Memory;
 namespace Encamina.Enmarcha.SemanticKernel;
 
 /// <summary>
-/// Extender that provides some CRUD operations over memories with multiple chunks that need to be extended by an <see cref="IMemoryStore"/>, using batch operations.
+/// This class provides some additional CRUD operations over memories with multiple chunks that extends operations from a <see cref="IMemoryStore"/>.
 /// </summary>
 public class MemoryStoreExtender : IMemoryStoreExtender
 {
@@ -34,37 +35,35 @@ public class MemoryStoreExtender : IMemoryStoreExtender
         this.logger = logger;
     }
 
-    /// <inheritdoc cref="IMemoryStoreExtender.MemoryStoreEvent" />
+    /// <inheritdoc/>
     public event EventHandler<MemoryStoreEventArgs> MemoryStoreEvent;
 
-    /// <inheritdoc cref="IMemoryStoreExtender.MemoryStore" />
+    /// <inheritdoc/>
     public IMemoryStore MemoryStore { get; init; }
 
-    /// <inheritdoc cref="IMemoryStoreExtender.OnMemoryStore(MemoryStoreEventArgs)" />
-    public void OnMemoryStore(MemoryStoreEventArgs e) => throw new NotImplementedException();
+    /// <inheritdoc/>
+    public void RaiseMemoryStoreEvent(MemoryStoreEventArgs e) => MemoryStoreEvent?.Invoke(this, e);
 
-    /// <inheritdoc cref="IMemoryStoreExtender.UpsertMemoryAsync(string, string, IEnumerable{string}, Kernel, IDictionary{string, string}, CancellationToken)" />
+    /// <inheritdoc/>
     public virtual async Task UpsertMemoryAsync(string memoryId, string collectionName, IEnumerable<string> chunks, Kernel kernel, IDictionary<string, string> metadata = null, CancellationToken cancellationToken = default)
     {
         await DeleteMemoryAsync(memoryId, collectionName, cancellationToken);
         await SaveChunks(memoryId, collectionName, chunks, metadata, kernel, cancellationToken);
-
-        OnMemoryStore(new() { EventType = MemoryStoreEventTypes.Upsert, MemoryId = memoryId, CollectionName = collectionName });
     }
 
-    /// <inheritdoc cref="IMemoryStoreExtender.DeleteMemoryAsync(string, string, CancellationToken)" />
+    /// <inheritdoc/>
     public virtual async Task DeleteMemoryAsync(string memoryId, string collectionName, CancellationToken cancellationToken)
     {
         var chunkSize = await GetChunkSize(memoryId, collectionName, cancellationToken);
         if (chunkSize > 0)
         {
-            await MemoryStore.RemoveBatchAsync(collectionName, Enumerable.Range(0, chunkSize).Select(i => BuildMemoryIdentifier(memoryId, i)), cancellationToken);
-
-            OnMemoryStore(new() { EventType = MemoryStoreEventTypes.Delete, MemoryId = memoryId, CollectionName = collectionName });
+            var keys = Enumerable.Range(0, chunkSize).Select(i => BuildMemoryIdentifier(memoryId, i));
+            await MemoryStore.RemoveBatchAsync(collectionName, keys, cancellationToken);
+            RaiseMemoryStoreEvent(new() { EventType = MemoryStoreEventTypes.RemoveBatch, Keys = keys, CollectionName = collectionName });
         }
     }
 
-    /// <inheritdoc cref="IMemoryStoreExtender.GetMemoryAsync(string, string, CancellationToken)" />
+    /// <inheritdoc/>
     public virtual async Task<MemoryContent> GetMemoryAsync(string memoryId, string collectionName, CancellationToken cancellationToken)
     {
         var chunkSize = await GetChunkSize(memoryId, collectionName, cancellationToken);
@@ -74,9 +73,9 @@ public class MemoryStoreExtender : IMemoryStoreExtender
             return null;
         }
 
-        var memoryRecords = await MemoryStore.GetBatchAsync(collectionName, Enumerable.Range(0, chunkSize)
-            .Select(i => BuildMemoryIdentifier(memoryId, i)), cancellationToken: cancellationToken)
-            .ToListAsync(cancellationToken);
+        var keys = Enumerable.Range(0, chunkSize).Select(i => BuildMemoryIdentifier(memoryId, i));
+        var memoryRecords = await MemoryStore.GetBatchAsync(collectionName, keys, cancellationToken: cancellationToken).ToListAsync(cancellationToken);
+        RaiseMemoryStoreEvent(new() { EventType = MemoryStoreEventTypes.GetBatch, Keys = keys, CollectionName = collectionName });
 
         return new MemoryContent
         {
@@ -85,7 +84,7 @@ public class MemoryStoreExtender : IMemoryStoreExtender
         };
     }
 
-    /// <inheritdoc cref="IMemoryStoreExtender.BatchUpsertMemoriesAsync(string, IDictionary{string, MemoryContent}, Kernel, CancellationToken)" />
+    /// <inheritdoc/>
     public virtual async IAsyncEnumerable<string> BatchUpsertMemoriesAsync(string collectionName, IDictionary<string, MemoryContent> memoryContents, Kernel kernel, [EnumeratorCancellation] CancellationToken cancellationToken)
     {
         var memoryRecords = new Collection<MemoryRecord>();
@@ -110,18 +109,15 @@ public class MemoryStoreExtender : IMemoryStoreExtender
             }
         }
 
-        var memoryRecordsUniqueIdentifiers = MemoryStore.UpsertBatchAsync(collectionName, memoryRecords, cancellationToken);
+        var asyncKeys = MemoryStore.UpsertBatchAsync(collectionName, memoryRecords, cancellationToken);
+        var keys = await asyncKeys.ToListAsync();
+        RaiseMemoryStoreEvent(new() { EventType = MemoryStoreEventTypes.UpsertBatch, Keys = keys, CollectionName = collectionName });
 
-        foreach (var memoryId in memoryContents.Select(content => content.Key))
+        await foreach (var key in asyncKeys)
         {
-            OnMemoryStore(new() { EventType = MemoryStoreEventTypes.Upsert, MemoryId = memoryId, CollectionName = collectionName });
-        }
+            logger.LogInformation(@"Processed memory record {item}.", key);
 
-        await foreach (var item in memoryRecordsUniqueIdentifiers)
-        {
-            logger.LogInformation(@"Processed memory record {item}.", item);
-
-            yield return item;
+            yield return key;
         }
     }
 
@@ -129,7 +125,9 @@ public class MemoryStoreExtender : IMemoryStoreExtender
 
     private async Task<int> GetChunkSize(string memoryId, string collectionName, CancellationToken cancellationToken)
     {
-        var fistMemoryChunk = await MemoryStore.GetAsync(collectionName, BuildMemoryIdentifier(memoryId, 0), cancellationToken: cancellationToken);
+        var key = BuildMemoryIdentifier(memoryId, 0);
+        var fistMemoryChunk = await MemoryStore.GetAsync(collectionName, key, cancellationToken: cancellationToken);
+        RaiseMemoryStoreEvent(new() { EventType = MemoryStoreEventTypes.Get, Keys = [key], CollectionName = collectionName });
 
         if (fistMemoryChunk == null)
         {
@@ -141,7 +139,7 @@ public class MemoryStoreExtender : IMemoryStoreExtender
         return int.Parse(metadata[ChunkSize]);
     }
 
-    private async Task SaveChunks(string memoryid, string collectionName, IEnumerable<string> chunks, IDictionary<string, string> metadata, Kernel kernel, CancellationToken cancellationToken)
+    private async Task SaveChunks(string memoryId, string collectionName, IEnumerable<string> chunks, IDictionary<string, string> metadata, Kernel kernel, CancellationToken cancellationToken)
     {
         metadata ??= new Dictionary<string, string>();
 
@@ -157,9 +155,11 @@ public class MemoryStoreExtender : IMemoryStoreExtender
         {
             var chunk = chunks.ElementAt(i);
             var embedding = await kernel.GetRequiredService<ITextEmbeddingGenerationService>().GenerateEmbeddingAsync(chunk, kernel, cancellationToken);
-            memoryRecords.Add(MemoryRecord.LocalRecord(BuildMemoryIdentifier(memoryid, i), chunk, null, embedding, metadataJson));
+            memoryRecords.Add(MemoryRecord.LocalRecord(BuildMemoryIdentifier(memoryId, i), chunk, null, embedding, metadataJson));
         }
 
         await MemoryStore.UpsertBatchAsync(collectionName, memoryRecords, cancellationToken).ToListAsync(cancellationToken: cancellationToken);
+        var keys = memoryRecords.Select(r => r.Key);
+        RaiseMemoryStoreEvent(new() { EventType = MemoryStoreEventTypes.UpsertBatch, Keys = keys, CollectionName = collectionName });
     }
 }
