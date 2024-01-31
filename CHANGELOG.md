@@ -30,6 +30,7 @@ More information about these warnings is available here: https://github.com/micr
 - Signature of `UpsertMemoryAsync` method has changed in `IMemoryManager` interface.
 - Signature of `BatchUpsertMemoriesAsync` method has changed in `IMemoryManager` interface.
 - Dependency with `Kernel` has been removed in `MemoryManager` class. Also, added dependency with `ILogger`.
+- Added method overloads to pass `Encamina.Enmarcha.AI.Abstractions.TextSplitterOptions` when splitting text in `Encamina.Enmarcha.AI.Abstractions.ITextSplitter` and its implementations.
 
 ### Major change
 - Method `GetDocumentConnector` in `DocumentContentExtractorBase` is now `public` instead of `protected`.

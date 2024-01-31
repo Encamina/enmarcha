@@ -5,7 +5,7 @@ using Microsoft.Extensions.Options;
 namespace Encamina.Enmarcha.AI.TextSplitters;
 
 /// <summary>
-/// The recomended implementation of <see cref="ITextSplitter"/> for generic texts. It splits texts in order until the chunks are small
+/// The recommended implementation of <see cref="ITextSplitter"/> for generic texts. It splits texts in order until the chunks are small
 /// enough (based on <see cref="ITextSplitter.ChunkSize"/>. It will try to keep all paragraphs (and then sentences, and then words) together
 /// as long as possible, since those would generically seem to be the strongest semantically related pieces of text that could be splitted.
 /// </summary>
@@ -20,13 +20,13 @@ public class RecursiveCharacterTextSplitter : TextSplitter
     }
 
     /// <inheritdoc/>
-    public override IEnumerable<string> Split(string text, Func<string, int> lengthFunction)
+    public override IEnumerable<string> Split(string text, Func<string, int> lengthFunction, TextSplitterOptions options)
     {
         var chunks = new List<string>();
 
         string separator = null;
 
-        foreach (var s in Separators)
+        foreach (var s in options.Separators)
         {
             if (s == string.Empty || text.Contains(s, StringComparison.OrdinalIgnoreCase))
             {
@@ -41,7 +41,7 @@ public class RecursiveCharacterTextSplitter : TextSplitter
 
         foreach (var split in splits)
         {
-            if (lengthFunction(split) < ChunkSize)
+            if (lengthFunction(split) < options.ChunkSize)
             {
                 goodSplits.Add(split);
             }
@@ -49,21 +49,20 @@ public class RecursiveCharacterTextSplitter : TextSplitter
             {
                 if (goodSplits.Any())
                 {
-                    chunks.AddRange(MergeSplits(goodSplits, separator, lengthFunction));
+                    chunks.AddRange(MergeSplits(goodSplits, separator, lengthFunction, options));
                     goodSplits = new List<string>();
                 }
 
-                var otherChunks = Split(split, lengthFunction);
+                var otherChunks = Split(split, lengthFunction, options);
                 chunks.AddRange(otherChunks);
             }
         }
 
         if (goodSplits.Any())
         {
-            chunks.AddRange(MergeSplits(goodSplits, separator, lengthFunction));
+            chunks.AddRange(MergeSplits(goodSplits, separator, lengthFunction, options));
         }
 
         return chunks;
     }
 }
-
