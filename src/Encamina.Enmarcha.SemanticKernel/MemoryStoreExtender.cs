@@ -112,15 +112,19 @@ public class MemoryStoreExtender : IMemoryStoreExtender
         }
 
         var asyncKeys = MemoryStore.UpsertBatchAsync(collectionName, memoryRecords, cancellationToken);
-        var keys = await asyncKeys.ToListAsync(cancellationToken: cancellationToken);
-        RaiseMemoryStoreEvent(new() { EventType = MemoryStoreEventTypes.UpsertBatch, Keys = keys, CollectionName = collectionName });
 
-        await foreach (var key in asyncKeys.WithCancellation(cancellationToken: cancellationToken))
+        List<string> keys = [];
+
+        await foreach (var key in asyncKeys)
         {
             logger.LogInformation(@"Processed memory record {item}.", key);
 
+            keys.Add(key);
+
             yield return key;
         }
+
+        RaiseMemoryStoreEvent(new() { EventType = MemoryStoreEventTypes.UpsertBatch, Keys = keys, CollectionName = collectionName });
     }
 
     private static string BuildMemoryIdentifier(string memoryId, int chunkIndex) => $@"{memoryId}-{chunkIndex}";
