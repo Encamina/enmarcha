@@ -87,8 +87,8 @@ public class MemoryStoreExtender : IMemoryStoreExtender
     /// <inheritdoc/>
     public virtual async IAsyncEnumerable<string> BatchUpsertMemoriesAsync(string collectionName, IDictionary<string, MemoryContent> memoryContents, Kernel kernel, [EnumeratorCancellation] CancellationToken cancellationToken)
     {
-        var memoryRecords = new Collection<MemoryRecord>();
-        var memoryIds = new List<string>();
+        var memoryRecords = new List<MemoryRecord>();
+        var textEmbeddingGenerationService = kernel.GetRequiredService<ITextEmbeddingGenerationService>();
 
         foreach (var memoryContentItem in memoryContents)
         {
@@ -100,20 +100,22 @@ public class MemoryStoreExtender : IMemoryStoreExtender
             {
                 memoryContent.Metadata.Add(Constants.MetadataTotalChunksCount, totalChunks.ToString());
 
-                for (var i = 0; i < totalChunks; i++)
+                var embeddingTasks = memoryContent.Chunks.Select(async (chunk, i) =>
                 {
-                    var chunk = memoryContent.Chunks.ElementAt(i);
-                    var embedding = await kernel.GetRequiredService<ITextEmbeddingGenerationService>().GenerateEmbeddingAsync(chunk, kernel, cancellationToken);
-                    memoryRecords.Add(MemoryRecord.LocalRecord($@"{memoryContentId}-{i}", chunk, null, embedding, JsonSerializer.Serialize(memoryContent.Metadata)));
-                }
+                    var embedding = await textEmbeddingGenerationService.GenerateEmbeddingAsync(chunk, kernel, cancellationToken);
+                    return MemoryRecord.LocalRecord($@"{memoryContentId}-{i}", chunk, null, embedding, JsonSerializer.Serialize(memoryContent.Metadata));
+                });
+
+                var records = await Task.WhenAll(embeddingTasks);
+                memoryRecords.AddRange(records);
             }
         }
 
         var asyncKeys = MemoryStore.UpsertBatchAsync(collectionName, memoryRecords, cancellationToken);
-        var keys = await asyncKeys.ToListAsync();
+        var keys = await asyncKeys.ToListAsync(cancellationToken: cancellationToken);
         RaiseMemoryStoreEvent(new() { EventType = MemoryStoreEventTypes.UpsertBatch, Keys = keys, CollectionName = collectionName });
 
-        await foreach (var key in asyncKeys)
+        await foreach (var key in asyncKeys.WithCancellation(cancellationToken: cancellationToken))
         {
             logger.LogInformation(@"Processed memory record {item}.", key);
 
