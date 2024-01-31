@@ -3,7 +3,7 @@
 namespace Encamina.Enmarcha.SemanticKernel.Abstractions;
 
 /// <summary>
-/// Represents types that helps working with memory stores (i.e., <see cref="IMemoryStore"/>) through a memory handler (<see cref="IMemoryManager"/>),
+/// Represents types that helps working with memory stores (i.e., <see cref="IMemoryStore"/>) through a memory handler (<see cref="IMemoryStoreExtender"/>),
 /// when sometimes it is necessary to centrally manage how some operations or actions are done.
 /// </summary>
 public interface IMemoryStoreHandler
@@ -21,7 +21,13 @@ public interface IMemoryStoreHandler
     /// <summary>
     /// Gets the <see cref="IMemoryManager"/> that manages the memory stored handled by this instance.
     /// </summary>
+    [Obsolete("This property is obsolete and will be removed in a future version. Use the Encamina.Enmarcha.SemanticKernel.Abstractions.IMemoryStoreHandler.MemoryStoreExtender property instead.", false)]
     IMemoryManager MemoryManager { get; }
+
+    /// <summary>
+    /// Gets the <see cref="IMemoryStoreExtender"/> that extend the memory stored handled by this instance.
+    /// </summary>
+    IMemoryStoreExtender MemoryStoreExtender { get; }
 
     /// <summary>
     /// Gets the name of a collection from its unique identifier.

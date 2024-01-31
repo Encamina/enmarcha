@@ -15,13 +15,27 @@ public abstract class MemoryStoreHandlerBase : IMemoryStoreHandler
     /// Initializes a new instance of the <see cref="MemoryStoreHandlerBase"/> class.
     /// </summary>
     /// <param name="memoryManager">A valid instance of <see cref="IMemoryManager"/> that manages the memory store handled by this instance.</param>
+    [Obsolete("This constructor is obsolete and will be removed in a future version. Use the Encamina.Enmarcha.SemanticKernel.Abstractions.MemoryStoreHandlerBase.MemoryStoreHandlerBase(IMemoryStoreExtender memoryStoreExtender) constructor instead.", false)]
     protected MemoryStoreHandlerBase(IMemoryManager memoryManager)
     {
-        MemoryManager = memoryManager;
+        MemoryStoreExtender = MemoryManager = memoryManager;
     }
 
-    /// <inheritdoc/>
+    /// <summary>
+    /// Initializes a new instance of the <see cref="MemoryStoreHandlerBase"/> class.
+    /// </summary>
+    /// <param name="memoryStoreExtender">A valid instance of <see cref="IMemoryStoreExtender"/> that extend the memory store handled by this instance.</param>
+    protected MemoryStoreHandlerBase(IMemoryStoreExtender memoryStoreExtender)
+    {
+        MemoryStoreExtender = memoryStoreExtender;
+    }
+
+    /// <inheritdoc cref="IMemoryManager" />
+    [Obsolete("This property is obsolete and will be removed in a future version. Use the Encamina.Enmarcha.SemanticKernel.Abstractions.MemoryStoreHandlerBase.MemoryStoreExtender property instead.", false)]
     public virtual IMemoryManager MemoryManager { get; }
+
+    /// <inheritdoc cref="IMemoryStoreExtender" />
+    public virtual IMemoryStoreExtender MemoryStoreExtender { get; }
 
     /// <inheritdoc/>
     public virtual string CollectionNamePostfix { get; init; }
@@ -51,9 +65,13 @@ public abstract class MemoryStoreHandlerBase : IMemoryStoreHandler
             LastAccessUtc = DateTime.UtcNow,
         };
 
-        if (!await MemoryManager.MemoryStore.DoesCollectionExistAsync(collectionName, cancellationToken))
+        var doesCollectionExist = await MemoryStoreExtender.MemoryStore.DoesCollectionExistAsync(collectionName, cancellationToken);
+        MemoryStoreExtender.RaiseMemoryStoreEvent(new() { EventType = Events.MemoryStoreEventTypes.DoesCollectionExist, CollectionName = collectionName });
+
+        if (!doesCollectionExist)
         {
-            await MemoryManager.MemoryStore.CreateCollectionAsync(collectionName, cancellationToken);
+            await MemoryStoreExtender.MemoryStore.CreateCollectionAsync(collectionName, cancellationToken);
+            MemoryStoreExtender.RaiseMemoryStoreEvent(new() { EventType = Events.MemoryStoreEventTypes.CreateCollection, CollectionName = collectionName });
         }
 
         return MemoryStoreCollectionInfo[collectionId].CollectionName;
