@@ -52,7 +52,7 @@ internal static class ExampleQuestionAnsweringFromMemory
                 return kernel;
             });
 
-            services.AddMemoryManager();
+            services.AddMemoryStoreExtender();
         });
 
         var host = hostBuilder.Build();
@@ -60,7 +60,7 @@ internal static class ExampleQuestionAnsweringFromMemory
         var kernel = host.Services.GetRequiredService<Kernel>();
 
         // Initialize mock memory
-        var mockMemoryInformation = new MockMemoryInformation(host.Services.GetRequiredService<IMemoryManager>(), host.Services.GetRequiredService<IMemoryStore>());
+        var mockMemoryInformation = new MockMemoryInformation(host.Services.GetRequiredService<IMemoryStoreExtender>());
         await mockMemoryInformation.CreateCollection();
         await mockMemoryInformation.SaveDataMockAsync(kernel);
 

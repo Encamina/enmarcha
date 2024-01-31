@@ -1,24 +1,25 @@
 ﻿using Encamina.Enmarcha.SemanticKernel.Abstractions;
+using Encamina.Enmarcha.SemanticKernel.Abstractions.Events;
 
 using Microsoft.SemanticKernel;
-using Microsoft.SemanticKernel.Memory;
 
 namespace Encamina.Enmarcha.Samples.SemanticKernel.QuestionAnswering;
 
 internal class MockMemoryInformation
 {
-    private readonly IMemoryManager memoryManager;
-    private readonly IMemoryStore memoryStore;
+    private readonly IMemoryStoreExtender memoryStoreExtender;
 
-    public MockMemoryInformation(IMemoryManager memoryManager, IMemoryStore memoryStore)
+    public MockMemoryInformation(IMemoryStoreExtender memoryStoreExtender)
     {
-        this.memoryManager = memoryManager;
-        this.memoryStore = memoryStore;
+        this.memoryStoreExtender = memoryStoreExtender;
     }
 
     public async Task CreateCollection()
     {
-        await memoryStore.CreateCollectionAsync(collectionName: "my-collection", CancellationToken.None);
+        var collectionName = "my-collection";
+
+        await memoryStoreExtender.MemoryStore.CreateCollectionAsync(collectionName: collectionName, CancellationToken.None);
+        memoryStoreExtender.RaiseMemoryStoreEvent(new() { EventType = MemoryStoreEventTypes.CreateCollection, CollectionName = collectionName });
     }
 
     public async Task SaveDataMockAsync(Kernel kernel)
@@ -34,6 +35,6 @@ internal class MockMemoryInformation
         Console.WriteLine($"# Second chunk: {secondChunkText}  \n");
         Console.WriteLine($"# Third chunk: {thirdChunkText}   \n");
 
-        await memoryManager.UpsertMemoryAsync(memoryId: memoryId, collectionName: "my-collection", chunks: new List<string> { firstChunkText, secondChunkText, thirdChunkText }, kernel, cancellationToken: CancellationToken.None);
+        await memoryStoreExtender.UpsertMemoryAsync(memoryId: memoryId, collectionName: "my-collection", chunks: new List<string> { firstChunkText, secondChunkText, thirdChunkText }, kernel, cancellationToken: CancellationToken.None);
     }
 }
