@@ -3,7 +3,7 @@
 namespace Encamina.Enmarcha.AI.Abstractions;
 
 /// <summary>
-/// Optiones for text splitters.
+/// Options for text splitters.
 /// </summary>
 public class TextSplitterOptions
 {
@@ -12,14 +12,14 @@ public class TextSplitterOptions
     /// </summary>
     [Required]
     [Range(0, int.MaxValue)]
-    public int ChunkOverlap { get; init; }
+    public int ChunkOverlap { get; init; } = 10;
 
     /// <summary>
     /// Gets the number of elements (characters, tokens, etc.) in each chunk.
     /// </summary>
     [Required]
     [Range(0, int.MaxValue)]
-    public int ChunkSize { get; init; }
+    public int ChunkSize { get; init; } = 100;
 
     /// <summary>
     /// Gets the collection of separator characters to use when splitting the text and creating chunks.

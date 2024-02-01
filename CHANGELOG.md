@@ -20,9 +20,11 @@ Previous classification is not required if changes are simple or all belong to t
 
 ### Important
 
-This version updates the `Semantic Kernel` library from version `1.1.0` to `1.2.0`, which introduces minor changes in the code.
+This version updates the `Semantic Kernel` library from version `1.1.0` to `1.3.0`, which introduces minor changes in the code, mostly internal dependencies.
 
-More information about these warnings is available here: https://github.com/microsoft/semantic-kernel/releases/tag/dotnet-1.2.0
+For more information about these changes, please visit the following links: 
+ - [Semantic Kernel release dotnet-1.2.0](https://github.com/microsoft/semantic-kernel/releases/tag/dotnet-1.2.0)
+ - [Semantic Kernel release dotnet-1.3.0](https://github.com/microsoft/semantic-kernel/releases/tag/dotnet-1.3.0)
 
 ### Breaking Changes
 - Replace dependency with `IMemoryStore` for `IMemoryManager` in abstract class `MemoryStoreHandlerBase`. This affects internal types like the `EphemeralMemoryStoreHandler`.
@@ -37,6 +39,16 @@ More information about these warnings is available here: https://github.com/micr
 - New `MemoryManager` property of type `IMemoryManager` in `IMemoryStoreHandler` interface to get read-only access to the underlaying memory manager.
 - New `MemoryStore` property of type `IMemoryStore` in `IMemoryManager` interface to get read-only access to the underlaying memory store.
 - Removed unnecessary `Guards` when adding a Memory Manager and the Ephemeral Memory Store Handler. The exceptions will be thrown by the DI engine itself.
+- Added new class `AzureAISearchOptions` to configure connection parameters for Azure AI Search.
+- Added new extension method `AddAzureAISearchMemoryStore` to add Azure AI Search as a valid vector database for a `IMemoryStore` instance.
+- Improved extensions methods for adding `IMemoryStore` to consider debouncing when monitoring changes in parameters.
+- Updated dependencies:
+  - Updated `Semantic Kernel` from `1.1.0` to `1.3.0` (third final version of `Semantic Kernel`).
+  - Updated `Microsoft.Azure.Cosmos` from version `3.37.1` to `3.38.0`.
+  - Updated `Microsoft.Bot.Builder.Azure` from version `4.21.2` to `4.22.0`.
+  - Updated `Microsoft.Bot.Builder.Azure.Blobs` from version `4.21.2` to `4.22.0`.
+  - Updated `Microsoft.Bot.Builder.Dialogs` from version `4.21.2` to `4.22.0`.
+  - Updated `Microsoft.Bot.Builder.Integration.ApplicationInsights.Core` from version `4.21.2` to `4.22.0`.
 
 ### Minor Changes
 - Properties `CollectionNamePostfix` and `CollectionNamePrefix` from `MemoryStoreHandlerBase` are now `virtual` instead of `abstract`.
@@ -45,12 +57,15 @@ More information about these warnings is available here: https://github.com/micr
 - Added new extension method `AddDefaultDocumentConnectorProvider` in `Encamina.Enmarcha.SemanticKernel.Connectors.Document` to get access to a default implementation of a `IDocumentConnector`.
 - Updated sample projects with latest changes.
 - Overloaded `AddDefaultDocumentConnectorProvider` and `AddDefaultDocumentContentExtractor` methods with a parameter to pass a function to calculate the length of a text and inject it as a dependency.
-- Added Readme file to all solution's projects.
+- Added `README.md` files to all projects in the solution when publishing to NuGet.org.
 - Added event handler for `IMemoryStore` operations.
 - Added new extension method `GetKernelPromptAsync` in `Encamina.Enmarcha.SemanticKernel.Extensions.KernelExtensions` to retrieve the final prompt for a given prompt using the arguments.
 - Added new extension method `GetKernelFunctionUsedTokensFromPromptAsync` in `Encamina.Enmarcha.SemanticKernel.Extensions.KernelExtensions` to obtain the total number of tokens used in generating a prompt from an inline prompt function.
 - Fixed `GetMaxTokensFromKernelFunction` in `Encamina.Enmarcha.SemanticKernel.Extensions.KernelExtensions`. Now, it considers whether the arguments are of type `OpenAIPromptExecutionSettings` when obtaining the MaxTokens.
-- New `IMemoryStoreExtender` type which obsoleces the `IMemoryManager` type and its references.
+- New `IMemoryStoreExtender` type which obsolesces the `IMemoryManager` type and its references. If you are using `IMemoryManager` start a plan to replace it with `IMemoryStoreExtender`.
+- Added default values for `TextSplitterOptions` to allow using it without explicit configuration.
+- Some code improvements to use .NET 8 and C# 12 features.
+- Added new `Debouncer` class to provide mechanisms to prevent multiple calls to a method or event.
 
 ## [8.1.1]
 
