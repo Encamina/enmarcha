@@ -1,10 +1,13 @@
 ﻿using Encamina.Enmarcha.AI.OpenAI.Azure;
+using Encamina.Enmarcha.Core;
+using Encamina.Enmarcha.Data.AzureAISearch;
 using Encamina.Enmarcha.Data.Qdrant.Abstractions;
 using Encamina.Enmarcha.Data.Qdrant.Abstractions.Extensions;
 
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
+using Microsoft.SemanticKernel.Connectors.AzureAISearch;
 using Microsoft.SemanticKernel.Connectors.OpenAI;
 using Microsoft.SemanticKernel.Connectors.Qdrant;
 using Microsoft.SemanticKernel.Memory;
@@ -18,6 +21,35 @@ namespace Microsoft.Extensions.DependencyInjection;
 public static class IServiceCollectionExtensions
 {
     /// <summary>
+    /// Adds Azure AI Search as vector database for a memory store (<see cref="IMemoryStore"/>) to the <see cref="IServiceCollection"/> as a singleton service.
+    /// </summary>
+    /// <remarks>
+    /// This extension methods requires a <see cref="AzureAISearchOptions"/> to be already configured.
+    /// </remarks>
+    /// <param name="services"> The <see cref="IServiceCollection"/> to add services to.</param>
+    /// <returns>The <see cref="IServiceCollection"/> so that additional calls can be chained.</returns>
+    public static IServiceCollection AddAzureAISearchMemoryStore(this IServiceCollection services)
+    {
+        return services.AddSingleton<IMemoryStore>(serviceProvider =>
+        {
+            var optionsMonitor = serviceProvider.GetRequiredService<IOptionsMonitor<AzureAISearchOptions>>();
+
+            static AzureAISearchMemoryStore Builder(AzureAISearchOptions options)
+            {
+                return new AzureAISearchMemoryStore(options.Endpoint.AbsoluteUri, options.Key);
+            }
+
+            var debouncedBuilder = Debouncer.Debounce<AzureAISearchOptions>(options => Builder(options), 300);
+
+            var memory = Builder(optionsMonitor.CurrentValue);
+
+            optionsMonitor.OnChange(debouncedBuilder);
+
+            return memory;
+        });
+    }
+
+    /// <summary>
     /// Adds Qdrant vector database as a memory store (<see cref="IMemoryStore"/>) to the <see cref="IServiceCollection"/> as a singleton service.
     /// </summary>
     /// <remarks>
@@ -29,22 +61,27 @@ public static class IServiceCollectionExtensions
     {
         return services.AddSingleton<IMemoryStore>(sp =>
         {
-            var qdrantOptionsMonitor = sp.GetRequiredService<IOptionsMonitor<QdrantOptions>>();
-            var qdrantOptions = qdrantOptionsMonitor.CurrentValue;
+            var optionsMonitor = sp.GetRequiredService<IOptionsMonitor<QdrantOptions>>();
 
-            var httpClientHandler = new HttpClientHandler()
+            var httpClient = new HttpClient(new HttpClientHandler()
             {
                 CheckCertificateRevocationList = true,
-            };
+            }, disposeHandler: false);
 
-            var httpClient = new HttpClient(httpClientHandler, disposeHandler: false).ConfigureHttpClientForQdrant(qdrantOptions);
-
-            qdrantOptionsMonitor.OnChange(newOptions =>
+            static QdrantMemoryStore Builder(IServiceProvider serviceProvider, HttpClient httpClient, QdrantOptions options)
             {
-                httpClient.ConfigureHttpClientForQdrant(qdrantOptions);
-            });
+                httpClient.ConfigureHttpClientForQdrant(options);
 
-            return new QdrantMemoryStore(httpClient, qdrantOptions.VectorSize, loggerFactory: sp.GetService<ILoggerFactory>());
+                return new QdrantMemoryStore(httpClient, options.VectorSize, loggerFactory: serviceProvider.GetService<ILoggerFactory>());
+            }
+
+            var debouncedBuilder = Debouncer.Debounce<QdrantOptions>(options => Builder(sp, httpClient, options), 300);
+
+            var memory = Builder(sp, httpClient, optionsMonitor.CurrentValue);
+
+            optionsMonitor.OnChange(debouncedBuilder);
+
+            return memory;
         });
     }
 
