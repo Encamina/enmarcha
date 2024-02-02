@@ -1,0 +1,11 @@
+The task is to EXTRACT JUST {{$topKeyphrases}} of the most significant keyphrases.
+ALWAYS return EXACTLY {{$topKeyphrases}} keyphares, no less and no more.
+DO NOT enumerate keyphrases.
+Each keyphrase MUST BE ALWAYS separated by a new line.
+
+[INPUT]
+{{$input}}
+
+[KEYPHRASES]
+
+Each keyphrase MUST BE ALWAYS in {{$locale}} language.

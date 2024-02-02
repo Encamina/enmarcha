@@ -48,5 +48,7 @@ internal static class Program
         await example.TestSummaryAsync();
 
         await example.TextKeyPhrasesAsync();
+
+        await example.TextKeyPhrasesLocaledAsync();
     }
 }

@@ -11,6 +11,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <EmbeddedResource Include="Plugins\TextPlugin\KeyPhrasesLocaled\config.json" />
+    <EmbeddedResource Include="Plugins\TextPlugin\KeyPhrasesLocaled\skprompt.txt" />
     <EmbeddedResource Include="Plugins\TextPlugin\KeyPhrases\config.json" />
     <EmbeddedResource Include="Plugins\TextPlugin\KeyPhrases\skprompt.txt" />
     <EmbeddedResource Include="Plugins\TextPlugin\Summarize\config.json" />
@@ -22,7 +24,7 @@
   </ItemGroup>
     
   <ItemGroup>
-    <None Include="README.md" Pack="true" PackagePath="\"/>
+    <None Include="README.md" Pack="true" PackagePath="\" />
   </ItemGroup>
 
 </Project>

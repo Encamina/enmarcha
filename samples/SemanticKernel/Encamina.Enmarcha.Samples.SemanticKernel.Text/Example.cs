@@ -14,14 +14,12 @@ internal class Example
         Alexandre acquired work with Louis - Philippe, Duke of Orléans, then as a writer, a career which led to early success.Decades later, after the election of Louis - Napoléon Bonaparte in 1851, Dumas fell from favour and left France for Belgium, where he stayed for several years. He moved to Russia for a few years and then to Italy.In 1861, he founded and published the newspaper L'Indépendent, which supported Italian unification. He returned to Paris in 1864.
         English playwright Watts Phillips, who knew Dumas in his later life, described him as ""the most generous, large - hearted being in the world.He also was the most delightfully amusing and egotistical creature on the face of the earth.His tongue was like a windmill – once set in motion, you never knew when he would stop, especially if the theme was himself.""";
 
-    /// <inheritdoc/>
     public Example(Kernel kernel)
     {
         this.kernel = kernel;
         Console.WriteLine($"# Context: {input} \n");
     }
 
-    /// <inheritdoc/>
     public async Task TestSummaryAsync()
     {
         var summaryArguments = new KernelArguments()
@@ -37,7 +35,6 @@ internal class Example
         Console.WriteLine($"# Summary: {result} \n");
     }
 
-    /// <inheritdoc/>
     public async Task TextKeyPhrasesAsync()
     {
         var keyPhrasesArguments = new KernelArguments()
@@ -46,10 +43,26 @@ internal class Example
             [PluginsInfo.TextPlugin.Functions.KeyPhrases.Parameters.TopKeyphrases] = 2,
         };
 
-        var functionSummarize = kernel.Plugins.GetFunction(PluginsInfo.TextPlugin.Name, PluginsInfo.TextPlugin.Functions.KeyPhrases.Name);
+        var functionKeyPhrases = kernel.Plugins.GetFunction(PluginsInfo.TextPlugin.Name, PluginsInfo.TextPlugin.Functions.KeyPhrases.Name);
 
-        var result = await kernel.InvokeAsync<string>(functionSummarize, keyPhrasesArguments);
+        var result = await kernel.InvokeAsync<string>(functionKeyPhrases, keyPhrasesArguments);
 
         Console.WriteLine($"# Key Phrases: {result} \n");
+    }
+
+    public async Task TextKeyPhrasesLocaledAsync()
+    {
+        var keyPhrasesArguments = new KernelArguments()
+        {
+            [PluginsInfo.TextPlugin.Functions.KeyPhrasesLocaled.Parameters.Input] = input,
+            [PluginsInfo.TextPlugin.Functions.KeyPhrasesLocaled.Parameters.Locale] = "Italian",
+            [PluginsInfo.TextPlugin.Functions.KeyPhrasesLocaled.Parameters.TopKeyphrases] = 3,
+        };
+
+        var functionKeyPhrasesLocaled = kernel.Plugins.GetFunction(PluginsInfo.TextPlugin.Name, PluginsInfo.TextPlugin.Functions.KeyPhrasesLocaled.Name);
+
+        var result = await kernel.InvokeAsync<string>(functionKeyPhrasesLocaled, keyPhrasesArguments);
+
+        Console.WriteLine($"# Key Phrases Localed: {result} \n");
     }
 }
