@@ -39,6 +39,7 @@ internal sealed class VersionSwaggerGenConfigureOptions : IConfigureOptions<Swag
             {
                 Title = $@"{versionSwaggerGenOptions.Title} {version}",
                 Version = version,
+                Description = versionSwaggerGenOptions.Description,
             });
         }
     }
