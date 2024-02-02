@@ -11,7 +11,7 @@ public class VersionSwaggerGenOptions
     public required string Title { get; set; } = @"REST API";
 
     /// <summary>
-    /// Gets or sets the description for the OpenAPI document.
+    /// Gets or sets the description for the OpenAPI document when using version support.
     /// </summary>
     public string Description { get; set; }
 }
