@@ -22,6 +22,8 @@ Previous classification is not required if changes are simple or all belong to t
 - Added `Description` property in `VersionSwaggerGenOptions`.
 - New text prompt function for extract KeyPhrases with specified locale, `KeyPhrasesLocaled`.
 - Added an example of using `KeyPhrasesLocaled` in `Encamina.Enmarcha.Samples.SemanticKernel.Text`.
+- New text prompt function for translate texts, `Translate`.
+- Added an example of using `Translate` in `Encamina.Enmarcha.Samples.SemanticKernel.Text`.
 
 ## [8.1.2]
 

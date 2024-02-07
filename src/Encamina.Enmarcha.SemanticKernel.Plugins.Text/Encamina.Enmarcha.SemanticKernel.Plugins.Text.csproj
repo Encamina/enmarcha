@@ -17,6 +17,8 @@
     <EmbeddedResource Include="Plugins\TextPlugin\KeyPhrases\skprompt.txt" />
     <EmbeddedResource Include="Plugins\TextPlugin\Summarize\config.json" />
     <EmbeddedResource Include="Plugins\TextPlugin\Summarize\skprompt.txt" />
+    <EmbeddedResource Include="Plugins\TextPlugin\Translate\config.json" />
+    <EmbeddedResource Include="Plugins\TextPlugin\Translate\skprompt.txt" />
   </ItemGroup>
 
   <ItemGroup>

@@ -110,6 +110,33 @@ public static class PluginsInfo
                     public static readonly string Locale = nameof(Locale).ToLowerInvariant();
                 }
             }
+
+            /// <summary>
+            /// Information about the «Translate» function.
+            /// </summary>
+            public static class Translate
+            {
+                /// <summary>
+                /// The name of the function.
+                /// </summary>
+                public static readonly string Name = nameof(Translate);
+
+                /// <summary>
+                /// Information about the function's parameters.
+                /// </summary>
+                public static class Parameters
+                {
+                    /// <summary>
+                    /// The name of the «input» parameter, which represents the text to translate.
+                    /// </summary>
+                    public static readonly string Input = nameof(Input).ToLowerInvariant();
+
+                    /// <summary>
+                    /// The name of the «locale» parameter, which represents the language in which the translation will be generated.
+                    /// </summary>
+                    public static readonly string Locale = nameof(Locale).ToLowerInvariant();
+                }
+            }
         }
     }
 }

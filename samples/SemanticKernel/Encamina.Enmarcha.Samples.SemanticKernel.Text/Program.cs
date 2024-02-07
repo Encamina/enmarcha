@@ -50,5 +50,7 @@ internal static class Program
         await example.TextKeyPhrasesAsync();
 
         await example.TextKeyPhrasesLocaledAsync();
+
+        await example.TextTranslateAsync();
     }
 }

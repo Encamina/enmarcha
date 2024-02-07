@@ -65,4 +65,19 @@ internal class Example
 
         Console.WriteLine($"# Key Phrases Localed: {result} \n");
     }
+
+    public async Task TextTranslateAsync()
+    {
+        var translateArguments = new KernelArguments()
+        {
+            [PluginsInfo.TextPlugin.Functions.Translate.Parameters.Input] = input,
+            [PluginsInfo.TextPlugin.Functions.Translate.Parameters.Locale] = "Spanish",
+        };
+
+        var functionTranslate = kernel.Plugins.GetFunction(PluginsInfo.TextPlugin.Name, PluginsInfo.TextPlugin.Functions.Translate.Name);
+
+        var result = await kernel.InvokeAsync<string>(functionTranslate, translateArguments);
+
+        Console.WriteLine($"# Translation: {result} \n");
+    }
 }

@@ -1,0 +1,11 @@
+Your task is TO TRANSLATE the INPUT text into the '{{$locale}}' language.
+If the INPUT text is already in the '{{$locale}}' language, you must return the INPUT text without altering it.
+MAKE SURE YOU ONLY USE '{{$locale}}' language.
+
+
+[INPUT]
+
+{{$input}}
+
+[TRANSLATION]
+
