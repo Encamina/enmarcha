@@ -24,6 +24,7 @@ Previous classification is not required if changes are simple or all belong to t
 - Added an example of using `KeyPhrasesLocaled` in `Encamina.Enmarcha.Samples.SemanticKernel.Text`.
 - New text prompt function for translate texts, `Translate`.
 - Added an example of using `Translate` in `Encamina.Enmarcha.Samples.SemanticKernel.Text`.
+- Bug fix: Temporary workaround for handling Http NotFound exception in `MemoryStoreExtender`. [(#72)](https://github.com/Encamina/enmarcha/issues/72)
 
 ## [8.1.2]
 
