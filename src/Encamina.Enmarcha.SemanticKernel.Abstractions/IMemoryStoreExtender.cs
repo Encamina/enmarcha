@@ -60,10 +60,19 @@ public interface IMemoryStoreExtender
     /// Gets the memory content from a collection.
     /// </summary>
     /// <param name="memoryId">The memory unique identifier.</param>
-    /// <param name="collectionName">Name of the collection where the content will be saved.</param>
+    /// <param name="collectionName">Name of the collection where the content will be retrieved.</param>
     /// <param name="cancellationToken">Cancellation token to cancel the operation.</param>
     /// <returns>A <see cref="Task"/> containing the <see cref="MemoryContent"/>, or <see langword="null"/> if the content could not be found.</returns>
     Task<MemoryContent> GetMemoryAsync(string memoryId, string collectionName, CancellationToken cancellationToken);
+
+    /// <summary>
+    /// Checks if the memory exists in a collection.
+    /// </summary>
+    /// <param name="memoryId">The memory unique identifier.</param>
+    /// <param name="collectionName">Name of the collection where the memoryId will be searched.</param>
+    /// <param name="cancellationToken">Cancellation token to cancel the operation.</param>
+    /// <returns><c>true</c> if the memory exists; otherwise, <c>false</c>.</returns>
+    Task<bool> ExistsMemoryAsync(string memoryId, string collectionName, CancellationToken cancellationToken);
 
     /// <summary>
     /// Upserts a batch of memory contents into a collection.

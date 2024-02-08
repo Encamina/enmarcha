@@ -87,6 +87,14 @@ public class MemoryStoreExtender : IMemoryStoreExtender
     }
 
     /// <inheritdoc/>
+    public async Task<bool> ExistsMemoryAsync(string memoryId, string collectionName, CancellationToken cancellationToken)
+    {
+        var chunkSize = await GetChunkSize(memoryId, collectionName, cancellationToken);
+
+        return chunkSize > 0;
+    }
+
+    /// <inheritdoc/>
     public virtual async IAsyncEnumerable<string> BatchUpsertMemoriesAsync(string collectionName, IDictionary<string, MemoryContent> memoryContents, Kernel kernel, [EnumeratorCancellation] CancellationToken cancellationToken)
     {
         var memoryRecords = new List<MemoryRecord>();
