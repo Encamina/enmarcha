@@ -61,7 +61,7 @@ public class MemoryStoreExtender : IMemoryStoreExtender
         {
             var keys = Enumerable.Range(0, chunkSize).Select(i => BuildMemoryIdentifier(memoryId, i));
             await MemoryStore.RemoveBatchAsync(collectionName, keys, cancellationToken);
-            RaiseMemoryStoreEvent(new() { EventType = MemoryStoreEventTypes.RemoveBatch, Keys = keys, CollectionName = collectionName });
+            RaiseMemoryStoreEvent(new() { EventType = MemoryStoreEventTypes.RemoveBatch, Keys = [memoryId], CollectionName = collectionName });
         }
     }
 
@@ -77,7 +77,7 @@ public class MemoryStoreExtender : IMemoryStoreExtender
 
         var keys = Enumerable.Range(0, chunkSize).Select(i => BuildMemoryIdentifier(memoryId, i));
         var memoryRecords = await MemoryStore.GetBatchAsync(collectionName, keys, cancellationToken: cancellationToken).ToListAsync(cancellationToken);
-        RaiseMemoryStoreEvent(new() { EventType = MemoryStoreEventTypes.GetBatch, Keys = keys, CollectionName = collectionName });
+        RaiseMemoryStoreEvent(new() { EventType = MemoryStoreEventTypes.GetMemory, Keys = [memoryId], CollectionName = collectionName });
 
         return new MemoryContent
         {
@@ -90,6 +90,8 @@ public class MemoryStoreExtender : IMemoryStoreExtender
     public async Task<bool> ExistsMemoryAsync(string memoryId, string collectionName, CancellationToken cancellationToken)
     {
         var chunkSize = await GetChunkSize(memoryId, collectionName, cancellationToken);
+
+        RaiseMemoryStoreEvent(new() { EventType = MemoryStoreEventTypes.ExistsMemory, Keys = [memoryId], CollectionName = collectionName });
 
         return chunkSize > 0;
     }
@@ -157,8 +159,6 @@ public class MemoryStoreExtender : IMemoryStoreExtender
 
             /* Do nothing */
         }
-
-        RaiseMemoryStoreEvent(new() { EventType = MemoryStoreEventTypes.Get, Keys = [key], CollectionName = collectionName });
 
         if (firstMemoryChunk == null)
         {

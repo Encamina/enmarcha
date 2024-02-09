@@ -26,6 +26,7 @@ Previous classification is not required if changes are simple or all belong to t
 - Added an example of using `Translate` in `Encamina.Enmarcha.Samples.SemanticKernel.Text`.
 - Bug fix: Temporary workaround for handling Http NotFound exception in `MemoryStoreExtender`. [(#72)](https://github.com/Encamina/enmarcha/issues/72)
 - Added new method `ExistsMemoryAsync` in `MemoryStoreExtender`.
+- Improved memory store event types, when they are raised and the data inside the arguments.
 
 ## [8.1.2]
 
