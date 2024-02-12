@@ -48,6 +48,11 @@ public static class PluginsInfo
                     /// The name of the «input» parameter, which represents the question to answer with information from the context (<see cref="Context"/>).
                     /// </summary>
                     public static readonly string Input = nameof(Input).ToLowerInvariant();
+
+                    /// <summary>
+                    /// The name of the «locale» parameter, which represents the language in which the response is generated. This parameter is optional. If not provided, the input (<see cref="Input"/>) language is used.
+                    /// </summary>
+                    public static readonly string Locale = nameof(Locale).ToLowerInvariant();
                 }
             }
 
@@ -99,6 +104,11 @@ public static class PluginsInfo
                     /// The name of the «resultsLimit» parameter, which represents the maximum number of results per queried collection.
                     /// </summary>
                     public static readonly string ResultsLimit = nameof(ResultsLimit).ToLowerInvariant();
+
+                    /// <summary>
+                    /// The name of the «locale» parameter, which represents the language in which the response is generated. This parameter is optional. If not provided, the question (<see cref="Question"/>) language is used.
+                    /// </summary>
+                    public static readonly string Locale = nameof(Locale).ToLowerInvariant();
                 }
             }
         }
