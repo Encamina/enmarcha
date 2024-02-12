@@ -57,6 +57,9 @@ var builder = WebApplication.CreateBuilder(new WebApplicationOptions
 
 // ...
 
+var tokenLengthFunction = ILengthFunctions.LengthByTokenCount;
+string cosmosContainer = "cosmosDbContainer"; // You probably want to save this in the appsettings or similar
+
 // Or others configuration providers...
 builder.Configuration.AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
 
@@ -67,9 +70,14 @@ builder.Services.AddOptions<SemanticKernelOptions>().Bind(builder.Configuration.
 builder.Services.AddOptions<ChatWithHistoryPluginOptions>().Bind(builder.Configuration.GetSection(nameof(ChatWithHistoryPluginOptions)))
     .ValidateDataAnnotations()
     .ValidateOnStart();
+builder.Services.AddOptions<ChatHistoryProviderOptions>().Bind(builder.Configuration.GetSection(nameof(ChatHistoryProviderOptions)))
+    .ValidateDataAnnotations()
+    .ValidateOnStart();
 
 // Requieres Encamina.Enmarcha.Data.Cosmos
 builder.Services.AddCosmos(builder.Configuration);
+
+builder.Services.AddCosmosChatHistoryProvider(cosmosContainer, tokenLengthFunction);
 
 builder.Services.AddScoped(sp =>
 {
@@ -81,9 +89,7 @@ builder.Services.AddScoped(sp =>
 
     // ...
 
-    string cosmosContainer = "cosmosDbContainer"; // You probably want to save this in the appsettings or similar
-
-    kernel.ImportChatWithHistoryPluginUsingCosmosDb(sp, cosmosContainer, ILengthFunctions.LengthByTokenCount);
+    kernel.ImportChatWithHistoryPlugin(sp, openAIOptions, tokenLengthFunction);
 
     return kernel;
 });

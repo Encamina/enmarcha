@@ -10,13 +10,6 @@ namespace Encamina.Enmarcha.SemanticKernel.Plugins.Chat.Plugins;
 public class ChatWithHistoryPluginOptions
 {
     /// <summary>
-    /// Gets the maximum number of messages to load from the chat history.
-    /// </summary>
-    [Required]
-    [Range(0, int.MaxValue)]
-    public virtual int HistoryMaxMessages { get; init; }
-
-    /// <summary>
     /// Gets a valid instance of <see cref="OpenAIPromptExecutionSettings"/> (from Semantic Kernel) with settings for the chat request.
     /// </summary>
     [Required]
