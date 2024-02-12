@@ -54,7 +54,8 @@ to vote.";
             [PluginsInfo.QuestionAnsweringPlugin.Functions.QuestionAnsweringFromMemoryQuery.Parameters.CollectionsStr] = "my-collection",
             [PluginsInfo.QuestionAnsweringPlugin.Functions.QuestionAnsweringFromMemoryQuery.Parameters.MinRelevance] = 0.8,
             [PluginsInfo.QuestionAnsweringPlugin.Functions.QuestionAnsweringFromMemoryQuery.Parameters.ResultsLimit] = 1,
-            [PluginsInfo.QuestionAnsweringPlugin.Functions.QuestionAnsweringFromMemoryQuery.Parameters.ResponseTokenLimit] = 300
+            [PluginsInfo.QuestionAnsweringPlugin.Functions.QuestionAnsweringFromMemoryQuery.Parameters.ResponseTokenLimit] = 300,
+            [PluginsInfo.QuestionAnsweringPlugin.Functions.QuestionAnsweringFromMemoryQuery.Parameters.Locale] = "Italian",
         };
 
         Console.WriteLine($"# Question: {input} \n");
