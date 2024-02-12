@@ -26,7 +26,12 @@ Previous classification is not required if changes are simple or all belong to t
 - Added an example of using `Translate` in `Encamina.Enmarcha.Samples.SemanticKernel.Text`.
 - Bug fix: Temporary workaround for handling Http NotFound exception in `MemoryStoreExtender`. [(#72)](https://github.com/Encamina/enmarcha/issues/72)
 - Added new method `ExistsMemoryAsync` in `MemoryStoreExtender`.
+- Added a new optional parameter `Locale` to the functions of `QuestionAnsweringPlugin`, to specify the language of the response.
 - Improved memory store event types, when they are raised and the data inside the arguments.
+- Added new package `Encamina.Enmarcha.AspNet.OpenApi` with some goodies for OpenAPI. Currently, it addes the following:
+    - `GroupNameKeyAuthorizationMiddleware` a middleware that provides key authorization for OpenAPI specifications based on the group name of an API.
+    - `GroupNameKeyAuthenticationOptions` an options class to configure the `GroupNameKeyAuthorizationMiddleware`.
+    - Extensions method on `IApplicationBuilder` to add the `GroupNameKeyAuthorizationMiddleware`. For more information, refer to the package `README.md`.
 
 ## [8.1.2]
 
