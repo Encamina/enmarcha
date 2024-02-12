@@ -155,7 +155,7 @@ ALWAYS RESPOND with a FINAL ANSWER, DO NOT CONTINUE the conversation.
 
     private static string GetAnswerLocale(string locale)
     {
-        return string.IsNullOrEmpty(locale)
+        return string.IsNullOrWhiteSpace(locale)
             ? "the SAME LANGUAGE as the QUESTION"
             : $"{locale} LANGUAGE";
     }
