@@ -2,6 +2,7 @@
 
 using Encamina.Enmarcha.AI.OpenAI.Abstractions;
 using Encamina.Enmarcha.SemanticKernel.Abstractions;
+using Encamina.Enmarcha.SemanticKernel.Plugins.Chat.Options;
 using Encamina.Enmarcha.SemanticKernel.Plugins.Chat.Plugins;
 
 using Microsoft.Extensions.DependencyInjection;

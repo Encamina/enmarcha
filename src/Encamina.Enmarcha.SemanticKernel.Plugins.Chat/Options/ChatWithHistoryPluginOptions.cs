@@ -1,8 +1,10 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
+using Encamina.Enmarcha.SemanticKernel.Plugins.Chat.Plugins;
+
 using Microsoft.SemanticKernel.Connectors.OpenAI;
 
-namespace Encamina.Enmarcha.SemanticKernel.Plugins.Chat.Plugins;
+namespace Encamina.Enmarcha.SemanticKernel.Plugins.Chat.Options;
 
 /// <summary>
 /// Configuration options for the <see cref="ChatWithHistoryPlugin"/>.

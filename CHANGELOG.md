@@ -20,9 +20,9 @@ Previous classification is not required if changes are simple or all belong to t
 
 ### Breaking Changes  
 - Removed `HistoryMaxMessages` property from `ChatWithHistoryPluginOptions` as part of a refactor to improve the configuration management of chat history. This property is now available within a new dedicated class `ChatHistoryProviderOptions`, which is designed to configure aspects of the `IChatHistoryProvider` implementation.
-- The `KernelExtensions.cs` file in `Encamina.Enmarcha.SemanticKernel.Plugins.Chat` has been moved to a new location to better align with the project's structure. 
 - The method `ImportChatWithHistoryPluginUsingCosmosDb` has been renamed to `ImportChatWithHistoryPlugin` to reflect its decoupling from the specific storage implementation and to align with the new `IChatHistoryProvider` abstraction. This change requires consumers to update their method calls to match the new signature, and to provide an instance of `IChatHistoryProvider` in the dependency container. You can use `AddCosmosChatHistoryProvider` to add an instance of `IChatHistoryProvider` that uses Azure Cosmos DB for storing chat histories.
 - Modified the `ChatAsync` method signature in `ChatWithHistoryPlugin` by changing the order of parameters and making `userName` and `locale` optional. This change requires consumers to update their method calls to match the new signature. 
+- The `KernelExtensions.cs` and `ChatWithHistoryPluginOptions.cs` files in `Encamina.Enmarcha.SemanticKernel.Plugins.Chat` had been moved to a new location to better align with the project's structure. 
 
 ### Major Changes
 - Introduced `IChatHistoryProvider` interface and its corresponding implementation `ChatHistoryProvider`. This new abstraction layer provides a more flexible and decoupled way to work with chat history.
