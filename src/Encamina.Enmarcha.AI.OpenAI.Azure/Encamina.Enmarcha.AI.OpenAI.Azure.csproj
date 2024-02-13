@@ -9,7 +9,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Azure.AI.OpenAI" Version="1.0.0-beta.12" />
+        <PackageReference Include="Azure.AI.OpenAI" Version="1.0.0-beta.13" />
         <PackageReference Include="Microsoft.Extensions.Azure" Version="1.7.1" />
         <PackageReference Include="Microsoft.Extensions.Hosting" Version="8.0.0" />
         <PackageReference Include="Microsoft.Extensions.Options" Version="8.0.1" />
@@ -24,7 +24,7 @@
     </ItemGroup>
     
     <ItemGroup>
-        <None Include="README.md" Pack="true" PackagePath="\"/>
+        <None Include="README.md" Pack="true" PackagePath="\" />
     </ItemGroup>
 
 </Project>

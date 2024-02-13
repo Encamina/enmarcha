@@ -144,7 +144,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Encamina.Enmarcha.AI.Tests"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Encamina.Enmarcha.SemanticKernel.Tests", "tst\Encamina.Enmarcha.SemanticKernel.Tests\Encamina.Enmarcha.SemanticKernel.Tests.csproj", "{7B6F4DC4-74E2-4013-8DBA-12B7AAAD5278}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Encamina.Enmarcha.Data.AzureAISearch", "src\Encamina.Enmarcha.Data.AzureAISearch\Encamina.Enmarcha.Data.AzureAISearch.csproj", "{120ABEF3-3E36-434D-8EC7-E3B3F1817EAA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Encamina.Enmarcha.Data.AzureAISearch", "src\Encamina.Enmarcha.Data.AzureAISearch\Encamina.Enmarcha.Data.AzureAISearch.csproj", "{120ABEF3-3E36-434D-8EC7-E3B3F1817EAA}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Encamina.Enmarcha.AspNet.OpenApi", "src\Encamina.Enmarcha.AspNet.OpenApi\Encamina.Enmarcha.AspNet.OpenApi.csproj", "{0EFAA5CF-7106-40E0-A427-1CFBFFAEA3EC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -364,6 +366,10 @@ Global
 		{120ABEF3-3E36-434D-8EC7-E3B3F1817EAA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{120ABEF3-3E36-434D-8EC7-E3B3F1817EAA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{120ABEF3-3E36-434D-8EC7-E3B3F1817EAA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0EFAA5CF-7106-40E0-A427-1CFBFFAEA3EC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0EFAA5CF-7106-40E0-A427-1CFBFFAEA3EC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0EFAA5CF-7106-40E0-A427-1CFBFFAEA3EC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0EFAA5CF-7106-40E0-A427-1CFBFFAEA3EC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
