@@ -24,7 +24,7 @@ First, [install .NET CLI](https://learn.microsoft.com/en-us/dotnet/core/tools/).
 
 #### GroupNameKeyAuthorizationMiddleware
 
-This middleware is used to block access to an OpenAPI document or specification b y using a pre-shared key that must be provided in the request header per specification.
+This middleware is used to block access to an OpenAPI document or specification by using a pre-shared key that must be provided in the request header per specification.
 
 To configure, use the `GroupNameKeyAuthenticationOptions` class.
 
