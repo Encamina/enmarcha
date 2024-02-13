@@ -11,7 +11,7 @@ public interface IChatHistoryProvider
     /// Loads chat history messages.
     /// </summary>
     /// <remarks>
-    /// The maximum number of messages to load is configured in ChatHistoryProviderOptions.HistoryMaxMessages.
+    /// The maximum number of messages to load is configured in <c>ChatHistoryProviderOptions.HistoryMaxMessages</c>.
     /// </remarks>
     /// <param name="chatHistory">The current chat history.</param>
     /// <param name="userId">The unique identifier of the user that is owner of the chat.</param>
