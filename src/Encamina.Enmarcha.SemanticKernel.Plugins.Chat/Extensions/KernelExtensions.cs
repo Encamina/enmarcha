@@ -1,10 +1,8 @@
 ﻿using CommunityToolkit.Diagnostics;
 
 using Encamina.Enmarcha.AI.OpenAI.Abstractions;
-using Encamina.Enmarcha.Data.Abstractions;
-using Encamina.Enmarcha.Data.Cosmos;
-
 using Encamina.Enmarcha.SemanticKernel.Abstractions;
+using Encamina.Enmarcha.SemanticKernel.Plugins.Chat.Options;
 using Encamina.Enmarcha.SemanticKernel.Plugins.Chat.Plugins;
 
 using Microsoft.Extensions.DependencyInjection;
@@ -12,7 +10,7 @@ using Microsoft.Extensions.Options;
 
 using Microsoft.SemanticKernel;
 
-namespace Encamina.Enmarcha.SemanticKernel.Plugins.Chat;
+namespace Encamina.Enmarcha.SemanticKernel.Plugins.Chat.Extensions;
 
 /// <summary>
 /// Extension methods on <see cref="Kernel"/> to import and configure plugins.
@@ -33,10 +31,9 @@ public static class KernelExtensions
     ///         </description>
     ///     </item>
     ///     <item>
-    ///         <term>ICosmosRepositoryFactory</term>
+    ///         <term>ChatHistoryProvider</term>
     ///         <description>
-    ///             A required dependency of type <see cref="ICosmosRepositoryFactory"/> used to create a <see cref="ICosmosRepository{T}"/> (which
-    ///             inherits from <see cref="IAsyncRepository{T}"/>) and manage chat history messages. Use the <c>AddCosmos</c> extension method to add this dependency.
+    ///             A required dependency of type <see cref="IChatHistoryProvider"/> used to create and manage chat history messages.
     ///         </description>
     ///     </item>
     /// </list>
@@ -44,21 +41,20 @@ public static class KernelExtensions
     /// <param name="kernel">The <see cref="Kernel"/> instance to add this plugin.</param>
     /// <param name="serviceProvider">A <see cref="IServiceProvider"/> to resolve the dependencies.</param>
     /// <param name="openAIOptions">Configuration options for OpenAI services.</param>
-    /// <param name="cosmosContainer">The name of the Cosmos DB container to store the chat history messages.</param>
     /// <param name="tokensLengthFunction">
     /// A function to calculate the length by tokens of the chat messages. These functions are usually available in the «mixin» interface <see cref="ILengthFunctions"/>.
     /// </param>
     /// <returns>A list of all the functions found in this plugin, indexed by function name.</returns>
-    public static KernelPlugin ImportChatWithHistoryPluginUsingCosmosDb(this Kernel kernel, IServiceProvider serviceProvider, OpenAIOptions openAIOptions, string cosmosContainer, Func<string, int> tokensLengthFunction)
+    public static KernelPlugin ImportChatWithHistoryPlugin(this Kernel kernel, IServiceProvider serviceProvider, OpenAIOptions openAIOptions, Func<string, int> tokensLengthFunction)
     {
         Guard.IsNotNull(serviceProvider);
+        Guard.IsNotNull(openAIOptions);
         Guard.IsNotNull(tokensLengthFunction);
-        Guard.IsNotNullOrWhiteSpace(cosmosContainer);
 
         var chatWithHistoryPluginOptions = serviceProvider.GetRequiredService<IOptionsMonitor<ChatWithHistoryPluginOptions>>();
-        var chatMessagesHistoryRepository = serviceProvider.GetRequiredService<ICosmosRepositoryFactory>().Create<ChatMessageHistoryRecord>(cosmosContainer);
+        var chatHistoryProvider = serviceProvider.GetRequiredService<IChatHistoryProvider>();
 
-        var chatWithHistoryPlugin = new ChatWithHistoryPlugin(kernel, openAIOptions.ChatModelName, tokensLengthFunction, chatMessagesHistoryRepository, chatWithHistoryPluginOptions);
+        var chatWithHistoryPlugin = new ChatWithHistoryPlugin(kernel, openAIOptions.ChatModelName, tokensLengthFunction, chatHistoryProvider, chatWithHistoryPluginOptions);
 
         return kernel.ImportPluginFromObject(chatWithHistoryPlugin, PluginsInfo.ChatWithHistoryPlugin.Name);
     }

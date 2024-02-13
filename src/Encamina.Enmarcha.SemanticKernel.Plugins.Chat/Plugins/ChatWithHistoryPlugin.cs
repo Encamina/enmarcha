@@ -1,7 +1,8 @@
 ﻿using System.ComponentModel;
 
 using Encamina.Enmarcha.AI.OpenAI.Abstractions;
-using Encamina.Enmarcha.Data.Abstractions;
+using Encamina.Enmarcha.SemanticKernel.Abstractions;
+using Encamina.Enmarcha.SemanticKernel.Plugins.Chat.Options;
 
 using Microsoft.Extensions.Options;
 
@@ -16,7 +17,7 @@ namespace Encamina.Enmarcha.SemanticKernel.Plugins.Chat.Plugins;
 public class ChatWithHistoryPlugin
 {
     private readonly string chatModelName;
-    private readonly IAsyncRepository<ChatMessageHistoryRecord> chatMessagesHistoryRepository;
+    private readonly IChatHistoryProvider chatHistoryProvider;
     private readonly Kernel kernel;
     private readonly Func<string, int> tokensLengthFunction;
 
@@ -28,13 +29,13 @@ public class ChatWithHistoryPlugin
     /// <param name="kernel">The instance of the semantic kernel to work with in this plugin.</param>
     /// <param name="chatModelName">The name of the chat model used by this plugin.</param>
     /// <param name="tokensLengthFunction">Function to calculate the length of a string (usually the chat messages) in tokens.</param>
-    /// <param name="chatMessagesHistoryRepository">A valid instance of an asynchronous repository pattern implementation.</param>
+    /// <param name="chatHistoryProvider">A valid instance of a chat history provider.</param>
     /// <param name="options">Configuration options for this plugin.</param>
-    public ChatWithHistoryPlugin(Kernel kernel, string chatModelName, Func<string, int> tokensLengthFunction, IAsyncRepository<ChatMessageHistoryRecord> chatMessagesHistoryRepository, IOptionsMonitor<ChatWithHistoryPluginOptions> options)
+    public ChatWithHistoryPlugin(Kernel kernel, string chatModelName, Func<string, int> tokensLengthFunction, IChatHistoryProvider chatHistoryProvider, IOptionsMonitor<ChatWithHistoryPluginOptions> options)
     {
         this.kernel = kernel;
         this.chatModelName = chatModelName;
-        this.chatMessagesHistoryRepository = chatMessagesHistoryRepository;
+        this.chatHistoryProvider = chatHistoryProvider;
         this.options = options.CurrentValue;
         this.tokensLengthFunction = tokensLengthFunction;
 
@@ -51,26 +52,37 @@ public class ChatWithHistoryPlugin
     /// <summary>
     /// Allows users to chat and ask questions to an Artificial Intelligence.
     /// </summary>
+    /// <param name="cancellationToken">A cancellation token that can be used to receive notice of cancellation.</param>
     /// <param name="ask">What the user says or asks when chatting.</param>
     /// <param name="userId">A unique identifier for the user when chatting.</param>
     /// <param name="userName">The name of the user.</param>
     /// <param name="locale">The preferred language of the user while chatting.</param>
-    /// <param name="cancellationToken">A cancellation token that can be used to receive notice of cancellation.</param>
     /// <returns>A string representing the response from the Artificial Intelligence.</returns>
     [KernelFunction]
     [Description(@"Allows users to chat and ask questions to an Artificial Intelligence.")]
+    [System.Diagnostics.CodeAnalysis.SuppressMessage(@"Design", @"CA1068:CancellationToken parameters must come last", Justification = @"We want to have optional parameters")]
     public virtual async Task<string> ChatAsync(
+        CancellationToken cancellationToken,
         [Description(@"What the user says or asks when chatting")] string ask,
         [Description(@"A unique identifier for the user when chatting")] string userId,
-        [Description(@"The name of the user")] string userName,
-        [Description(@"The preferred language of the user while chatting")] string locale,
-        CancellationToken cancellationToken)
+        [Description(@"The name of the user")] string userName = null,
+        [Description(@"The preferred language of the user while chatting")] string locale = null)
     {
-        var systemPrompt = $@"{SystemPrompt} The name of the user is {userName}. The user prefers responses using the language identified as {locale}. Always answer using {locale} as language.";
+        var systemPrompt = SystemPrompt;
+
+        if (!string.IsNullOrWhiteSpace(userName))
+        {
+            systemPrompt += $@" The name of the user is {userName}.";
+        }
+
+        if (!string.IsNullOrWhiteSpace(locale))
+        {
+            systemPrompt += $@" The user prefers responses using the language identified as {locale}. Always answer using {locale} as language.";
+        }
 
         var chatModelMaxTokens = ModelInfo.GetById(chatModelName).MaxTokens;
-        var askTokens = GetChatMessageTokenCount(AuthorRole.User, ask);
-        var systemPromptTokens = GetChatMessageTokenCount(AuthorRole.System, systemPrompt);
+        var askTokens = ILengthFunctions.LengthChatMessage(ask, AuthorRole.User, tokensLengthFunction);
+        var systemPromptTokens = ILengthFunctions.LengthChatMessage(systemPrompt, AuthorRole.System, tokensLengthFunction);
 
         var remainingTokens = chatModelMaxTokens - askTokens - systemPromptTokens - (options.ChatRequestSettings.MaxTokens ?? 0);
 
@@ -81,15 +93,15 @@ public class ChatWithHistoryPlugin
             return await GetErrorMessageAsync(chatHistory, locale, systemPromptTokens, askTokens, chatModelMaxTokens, cancellationToken);
         }
 
-        await LoadChatHistoryAsync(chatHistory, userId, remainingTokens, cancellationToken);
+        await chatHistoryProvider.LoadChatMessagesHistoryAsync(chatHistory, userId, remainingTokens, cancellationToken);
 
         chatHistory.AddUserMessage(ask);
 
         var chatMessage = await kernel.GetRequiredService<IChatCompletionService>().GetChatMessageContentAsync(chatHistory, options.ChatRequestSettings, kernel, cancellationToken);
         var response = chatMessage.Content;
 
-        await SaveChatMessagesHistory(userId, AuthorRole.User.ToString(), ask, cancellationToken);               // Save in chat history the user message (a.k.a. ask).
-        await SaveChatMessagesHistory(userId, AuthorRole.Assistant.ToString(), response, cancellationToken);     // Save in chat history the assistant message (a.k.a. response).
+        await chatHistoryProvider.SaveChatMessagesHistoryAsync(userId, AuthorRole.User.ToString(), ask, cancellationToken);               // Save in chat history the user message (a.k.a. ask).
+        await chatHistoryProvider.SaveChatMessagesHistoryAsync(userId, AuthorRole.Assistant.ToString(), response, cancellationToken);     // Save in chat history the assistant message (a.k.a. response).
 
         return response;
     }
@@ -113,109 +125,5 @@ public class ChatWithHistoryPlugin
         var chatMessage = await kernel.GetRequiredService<IChatCompletionService>().GetChatMessageContentAsync(chatHistory, options.ChatRequestSettings, kernel, cancellationToken);
 
         return chatMessage.Content;
-    }
-
-    /// <summary>
-    /// Loads chat history messages.
-    /// </summary>
-    /// <remarks>
-    /// The maximum number of messages to load is configured in <see cref="ChatWithHistoryPluginOptions.HistoryMaxMessages"/>.
-    /// </remarks>
-    /// <param name="chatHistory">The current chat history.</param>
-    /// <param name="userId">The unique identifier of the user that is owner of the chat.</param>
-    /// <param name="remainingTokens">The total remaining tokens available for loading messages from the chat history.</param>
-    /// <param name="cancellationToken">A cancellation token that can be used to receive notice of cancellation.</param>
-    /// <returns>A <see cref="Task"/> that on completion indicates the asynchronous operation has executed.</returns>
-    protected virtual async Task LoadChatHistoryAsync(ChatHistory chatHistory, string userId, int remainingTokens, CancellationToken cancellationToken)
-    {
-        if (options.HistoryMaxMessages <= 0 || remainingTokens <= 0)
-        {
-            return;
-        }
-
-        // Obtain the chat history for the user, ordered by timestamps descending to get the most recent messages first, and then take 'N' messages.
-        // This means that the first elements in the list are the most recent or newer messages, and the last elements in the list are the oldest messages.
-        var result = (await chatMessagesHistoryRepository.GetAllAsync(chatMessages => chatMessages.Where(chatMessage => chatMessage.UserId == userId)
-                                                                                                  .OrderByDescending(chatMessage => chatMessage.TimestampUtc)
-                                                                                                  .Take(options.HistoryMaxMessages), cancellationToken)).ToList();
-
-        // Previous lines loads into `result` a list of chat history messages like this (U = stands for `User`; A = stands for `Assistant`, a message from the AI):
-        // Newer Messages -------> Older Messages
-        // A10 U10 A9 U9 A8 U8 A7 U7 A6 U6 A5 U5 A4 U4 A3 U3 A2 U2 A1 U1
-
-        var assistantRoleName = AuthorRole.Assistant.ToString(); // Get this here to slightly improve performance...
-
-        result.TakeWhile(item =>
-        {
-            var itemRole = item.RoleName == assistantRoleName ? AuthorRole.Assistant : AuthorRole.User;
-            var tokensHistoryMessage = GetChatMessageTokenCount(itemRole, item.Message);
-
-            if (tokensHistoryMessage <= remainingTokens)
-            {
-                remainingTokens -= tokensHistoryMessage;
-                return true;
-            }
-
-            return false;
-
-            // The `TakeWhile` will reduce the number of chat history messages, taking the most recent messages until the remaining tokens are less than the tokens of the current message.
-            // Newer Messages -------> Older Messages
-            // A10 U10 A9 U9 A8 U8 A7 U7 A6 U6
-        }).Reverse().ToList().ForEach(item =>
-        {
-            // The (previous) `Reverse` will invert the order of the messages, so the oldest messages are the first elements in the list.
-            // This is required because the `ChatHistory` class stacks messages in the order they were received.
-            // The oldest came first, and the newest came last in the stack of messages.
-            // Older Messages -------> Newer Messages
-            // U6 A6 U7 A7 U8 A8 U9 A9 U10 A10
-
-            // In some scenarios, empty messages might be retrieved as `null` and serialized as such when creating the request message for the LLM resulting in an HTTP 400 error.
-            // Prevent this by setting the message as an empty string if the message is `null`.
-            var msg = item.Message ?? string.Empty;
-
-            if (item.RoleName == assistantRoleName)
-            {
-                chatHistory.AddAssistantMessage(msg);
-            }
-            else
-            {
-                chatHistory.AddUserMessage(msg);
-            }
-        });
-    }
-
-    /// <summary>
-    /// Saves a chat message into the conversation history.
-    /// </summary>
-    /// <param name="userId">The user's unique identifier.</param>
-    /// <param name="roleName">The name of the role associated with the chat message. For example the `user`, the `assistant` or the `system`.</param>
-    /// <param name="message">The message.</param>
-    /// <param name="cancellationToken">A cancellation token that can be used to receive notice of cancellation.</param>
-    /// <returns>A <see cref="Task"/> that on completion indicates the asynchronous operation has executed.</returns>
-    protected virtual async Task SaveChatMessagesHistory(string userId, string roleName, string message, CancellationToken cancellationToken)
-    {
-        await chatMessagesHistoryRepository.AddAsync(new ChatMessageHistoryRecord()
-        {
-            Id = Guid.NewGuid().ToString(),
-            UserId = userId,
-            RoleName = roleName,
-            Message = message,
-            TimestampUtc = DateTime.UtcNow,
-        }, cancellationToken);
-    }
-
-    /// <summary>
-    /// Gets a rough token count of a message for the <see cref="ChatHistory"/> by following the syntax defined by <see href="https://learn.microsoft.com/en-us/azure/ai-services/openai/reference#chatmessage">Azure OpenAI's ChatMessage</see> object.
-    /// </summary>
-    /// <remarks>
-    /// The code of this method is based on <a href="https://github.com/microsoft/chat-copilot/blob/6a744cf50fca3a8d0d1aa1af39bf1069757b9bfb/webapi/Plugins/Utils/TokenUtils.cs#L117C8-L117C8" />.
-    /// </remarks>
-    /// <param name="authorRole">Author role of the message.</param>
-    /// <param name="content">Content of the message.</param>
-    /// <returns>The calculated token count for the given message.</returns>
-    protected virtual int GetChatMessageTokenCount(AuthorRole authorRole, string content)
-    {
-        var tokenCount = authorRole == AuthorRole.System ? tokensLengthFunction("\n") : 0;
-        return tokenCount + tokensLengthFunction($"role:{authorRole.Label}") + tokensLengthFunction($"content:{content}");
     }
 }

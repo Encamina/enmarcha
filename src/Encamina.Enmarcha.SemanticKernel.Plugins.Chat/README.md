@@ -20,8 +20,8 @@ First, [install .NET CLI](https://learn.microsoft.com/en-us/dotnet/core/tools/).
 
 ## How to use
 
-To use [ChatWithHistoryPlugin](/Plugins/ChatWithHistoryPlugin.cs), the usual approach is to import it as a plugin within Semantic Kernel. The simplest way to do this is by using the extension method [ImportChatWithHistoryPluginUsingCosmosDb](/KernelExtensions.cs), which handles the import of the Plugin into Semantic Kernel. However, some previous configuration is required before importing it. 
-First, you need to add the [SemanticKernelOptions](../Encamina.Enmarcha.SemanticKernel.Abstractions/SemanticKernelOptions.cs) and [ChatWithHistoryPluginOptions](./Plugins/ChatWithHistoryPluginOptions.cs) to your project configuration. You can achieve this by using any [configuration provider](https://learn.microsoft.com/en-us/dotnet/core/extensions/configuration). The followng code is an example of how the settings should look like using the `appsettings.json` file:
+To use [ChatWithHistoryPlugin](/Plugins/ChatWithHistoryPlugin.cs), the usual approach is to import it as a plugin within Semantic Kernel. The simplest way to do this is by using the extension method [ImportChatWithHistoryPlugin](/Extensions/KernelExtensions.cs), which handles the import of the Plugin into Semantic Kernel. However, some previous configuration is required before importing it. 
+First, you need to add the [SemanticKernelOptions](../Encamina.Enmarcha.SemanticKernel.Abstractions/SemanticKernelOptions.cs), [ChatWithHistoryPluginOptions](./Options/ChatWithHistoryPluginOptions.cs) and [ChatHistoryProviderOptions](./Options/ChatHistoryProviderOptions.cs) to your project configuration. You can achieve this by using any [configuration provider](https://learn.microsoft.com/en-us/dotnet/core/extensions/configuration). The followng code is an example of how the settings should look like using the `appsettings.json` file:
 
 ```json
   {
@@ -35,13 +35,15 @@ First, you need to add the [SemanticKernelOptions](../Encamina.Enmarcha.Semantic
         "Key": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx", // Key credential used to authenticate to an LLM resource
     },
     "ChatWithHistoryPluginOptions": {
-        "HistoryMaxMessages": "gpt-35-turbo", // Name (sort of a unique identifier) of the model to use for chat
         "ChatRequestSettings": {
             "MaxTokens": 1000, // Maximum number of tokens to generate in the completion
             "Temperature": 0.8, // Controls the randomness of the completion. The higher the temperature, the more random the completion
             "TopP": 0.5, // Controls the diversity of the completion. The higher the TopP, the more diverse the completion.
         }
     },
+    "ChatHistoryProviderOptions": {
+        HistoryMaxMessages": 12,
+    }
     // ...
   }
 ```
@@ -57,6 +59,9 @@ var builder = WebApplication.CreateBuilder(new WebApplicationOptions
 
 // ...
 
+var tokenLengthFunction = ILengthFunctions.LengthByTokenCount;
+string cosmosContainer = "cosmosDbContainer"; // You probably want to save this in the appsettings or similar
+
 // Or others configuration providers...
 builder.Configuration.AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
 
@@ -67,9 +72,14 @@ builder.Services.AddOptions<SemanticKernelOptions>().Bind(builder.Configuration.
 builder.Services.AddOptions<ChatWithHistoryPluginOptions>().Bind(builder.Configuration.GetSection(nameof(ChatWithHistoryPluginOptions)))
     .ValidateDataAnnotations()
     .ValidateOnStart();
+builder.Services.AddOptions<ChatHistoryProviderOptions>().Bind(builder.Configuration.GetSection(nameof(ChatHistoryProviderOptions)))
+    .ValidateDataAnnotations()
+    .ValidateOnStart();
 
 // Requieres Encamina.Enmarcha.Data.Cosmos
 builder.Services.AddCosmos(builder.Configuration);
+
+builder.Services.AddCosmosChatHistoryProvider(cosmosContainer, tokenLengthFunction);
 
 builder.Services.AddScoped(sp =>
 {
@@ -81,9 +91,7 @@ builder.Services.AddScoped(sp =>
 
     // ...
 
-    string cosmosContainer = "cosmosDbContainer"; // You probably want to save this in the appsettings or similar
-
-    kernel.ImportChatWithHistoryPluginUsingCosmosDb(sp, cosmosContainer, ILengthFunctions.LengthByTokenCount);
+    kernel.ImportChatWithHistoryPlugin(sp, openAIOptions, tokenLengthFunction);
 
     return kernel;
 });
@@ -118,17 +126,15 @@ public class MyClass
 
 ### Advanced configurations
 
-Take into consideration that the above code uses a Cosmos DB implementation as IAsyncRepository as an example. You can use other implementations.
-
-If you want to disable chat history, simply configure the [HistoryMaxMessages de ChatWithHistoryPluginOptions](/Plugins/ChatWithHistoryPluginOptions.cs) with a value of 0.
+If you want to disable chat history, simply configure the [HistoryMaxMessages of ChatHistoryProviderOptions](/Options/ChatHistoryProviderOptions.cs) with a value of 0.
 
 You can also inherit from the ChatWithHistoryPlugin class and add the customizations you need.
 
 ```csharp
 public class MyCustomChatWithHistoryPlugin : ChatWithHistoryPlugin
 {
-    public MyCustomChatWithHistoryPlugin(Kernel kernel, string chatModelName, Func<string, int> tokensLengthFunction, IAsyncRepository<ChatMessageHistoryRecord> chatMessagesHistoryRepository, IOptionsMonitor<ChatWithHistoryPluginOptions> options)
-        : base(kernel, chatModelName, tokensLengthFunction, chatMessagesHistoryRepository, options)
+    public MyCustomChatWithHistoryPlugin(Kernel kernel, string chatModelName, Func<string, int> tokensLengthFunction, IChatHistoryProvider chatHistoryProvider, IOptionsMonitor<ChatWithHistoryPluginOptions> options)
+        : base(kernel, chatModelName, tokensLengthFunction, chatHistoryProvider, options)
     {
     }
 

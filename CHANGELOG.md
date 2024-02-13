@@ -18,7 +18,17 @@ Previous classification is not required if changes are simple or all belong to t
 
 ## [8.1.3]
 
-### Major change
+### Breaking Changes  
+- Removed `HistoryMaxMessages` property from `ChatWithHistoryPluginOptions` as part of a refactor to improve the configuration management of chat history. This property is now available within a new dedicated class `ChatHistoryProviderOptions`, which is designed to configure aspects of the `IChatHistoryProvider` implementation.
+- The method `ImportChatWithHistoryPluginUsingCosmosDb` has been renamed to `ImportChatWithHistoryPlugin` to reflect its decoupling from the specific storage implementation and to align with the new `IChatHistoryProvider` abstraction. This change requires consumers to update their method calls to match the new signature, and to provide an instance of `IChatHistoryProvider` in the dependency container. You can use `AddCosmosChatHistoryProvider` to add an instance of `IChatHistoryProvider` that uses Azure Cosmos DB for storing chat histories.
+- Modified the `ChatAsync` method signature in `ChatWithHistoryPlugin` by changing the order of parameters and making `userName` and `locale` optional. This change requires consumers to update their method calls to match the new signature. 
+- The `KernelExtensions.cs` and `ChatWithHistoryPluginOptions.cs` files in `Encamina.Enmarcha.SemanticKernel.Plugins.Chat` had been moved to a new location to better align with the project's structure. 
+
+### Major Changes
+- Introduced `IChatHistoryProvider` interface and its corresponding implementation `ChatHistoryProvider`. This new abstraction layer provides a more flexible and decoupled way to work with chat history.
+- Added a new extension method `AddCosmosChatHistoryProvider` to the service collection extensions. This method streamlines the setup and registration of `IChatHistoryProvider` that uses Azure Cosmos DB for storing chat histories.
+- Removed direct dependency on `IAsyncRepository<ChatMessageHistoryRecord>` in `ChatWithHistoryPlugin`, now relying on `IChatHistoryProvider` for chat history management.  
+- Added new calculation methods `LengthChatMessage` and `LengthChatMessageWithEncoding` in `ILengthFunctions` to determine the length of chat messages considering the author's role.  
 - Updated dependencies:
   - Updated `Azure.AI.OpenAI` from `1.0.0-beta12` to `1.0.0-beta13` (which provides some fixes for Function Calling).
   - Updated `Azure.Data.Tables` from `12.8.2` to `12.8.3`.
@@ -48,6 +58,7 @@ Previous classification is not required if changes are simple or all belong to t
     - `GroupNameKeyAuthorizationMiddleware` a middleware that provides key authorization for OpenAPI specifications based on the group name of an API.
     - `GroupNameKeyAuthenticationOptions` an options class to configure the `GroupNameKeyAuthorizationMiddleware`.
     - Extensions method on `IApplicationBuilder` to add the `GroupNameKeyAuthorizationMiddleware`. For more information, refer to the package `README.md`.
+- Adjusted package references in `Encamina.Enmarcha.SemanticKernel.csproj` to include `Encamina.Enmarcha.Data.Abstractions`.  
 
 ## [8.1.2]
 

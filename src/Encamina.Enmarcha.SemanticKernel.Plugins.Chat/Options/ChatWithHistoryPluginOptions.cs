@@ -1,21 +1,16 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
+using Encamina.Enmarcha.SemanticKernel.Plugins.Chat.Plugins;
+
 using Microsoft.SemanticKernel.Connectors.OpenAI;
 
-namespace Encamina.Enmarcha.SemanticKernel.Plugins.Chat.Plugins;
+namespace Encamina.Enmarcha.SemanticKernel.Plugins.Chat.Options;
 
 /// <summary>
 /// Configuration options for the <see cref="ChatWithHistoryPlugin"/>.
 /// </summary>
 public class ChatWithHistoryPluginOptions
 {
-    /// <summary>
-    /// Gets the maximum number of messages to load from the chat history.
-    /// </summary>
-    [Required]
-    [Range(0, int.MaxValue)]
-    public virtual int HistoryMaxMessages { get; init; }
-
     /// <summary>
     /// Gets a valid instance of <see cref="OpenAIPromptExecutionSettings"/> (from Semantic Kernel) with settings for the chat request.
     /// </summary>

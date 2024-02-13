@@ -25,6 +25,7 @@
 
     <ItemGroup>
         <ProjectReference Include="..\Encamina.Enmarcha.Core\Encamina.Enmarcha.Core.csproj" />
+        <ProjectReference Include="..\Encamina.Enmarcha.Data.Abstractions\Encamina.Enmarcha.Data.Abstractions.csproj" />
         <ProjectReference Include="..\Encamina.Enmarcha.SemanticKernel.Abstractions\Encamina.Enmarcha.SemanticKernel.Abstractions.csproj" PrivateAssets="none" />
     </ItemGroup>
 
@@ -44,7 +45,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <None Include="README.md" Pack="true" PackagePath="\"/>
+        <None Include="README.md" Pack="true" PackagePath="\" />
     </ItemGroup>
 
 </Project>

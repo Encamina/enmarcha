@@ -46,7 +46,7 @@ public static class IServiceCollectionExtensions
         services.TryAddSingleton<ICosmosInitializer, CosmosInitializer>();
         services.TryAddSingleton<ICosmosRepositoryFactory, CosmosRepositoryFactory>();
 
-        // Repositories should be ephemeral, therefore they shoud be created as they are needed!
+        // Repositories should be ephemeral, therefore they should be created as they are needed!
         services.TryAddScoped(typeof(ICosmosRepository<>), typeof(CosmosRepository<>));
         services.TryAddScoped(typeof(IAsyncRepository<>), typeof(CosmosRepository<>));
     }
