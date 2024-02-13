@@ -34,6 +34,9 @@ public class ChatHistoryProvider : IChatHistoryProvider
     }
 
     /// <inheritdoc/>
+    /// <remarks>
+    /// The maximum number of messages to load is configured in <c>ChatHistoryProviderOptions.HistoryMaxMessages</c>.
+    /// </remarks>
     public async Task LoadChatMessagesHistoryAsync(ChatHistory chatHistory, string userId, int remainingTokens, CancellationToken cancellationToken)
     {
         if (options.HistoryMaxMessages <= 0 || remainingTokens <= 0)
