@@ -13,7 +13,13 @@ public sealed class MemoryStoreEventArgs : EventArgs
     /// <summary>
     /// Gets the memory identifiers.
     /// </summary>
-    public IEnumerable<string> Keys { get; init; } = [];
+    [Obsolete(@"This property is obsolete and will be removed in a future version. Please use `MemoryIds` instead.")]
+    public IEnumerable<string> Keys => MemoryIds;
+
+    /// <summary>
+    /// Gets the memory identifiers.
+    /// </summary>
+    public IEnumerable<string> MemoryIds { get; init; } = [];
 
     /// <summary>
     /// Gets the collection name.
