@@ -15,7 +15,7 @@ public static class IApplicationBuilderExtensions
     /// <param name="app">A valid instance of <see cref="IApplicationBuilder"/> as the application's request pipeline builder.</param>
     /// <param name="setupAction">An optional setup action for the <see cref="GroupNameKeyAuthenticationOptions"/>.</param>
     /// <returns>The <see cref="IApplicationBuilder"/> so that additional calls can be chained.</returns>
-    public static IApplicationBuilder UseOpenApiGroupNameKeyAuthorization(this IApplicationBuilder app, Action<GroupNameKeyAuthenticationOptions> setupAction = null)
+    public static IApplicationBuilder UseOpenApiGroupNameKeyAuthorization(this IApplicationBuilder app, Action<GroupNameKeyAuthenticationOptions> setupAction)
     {
         GroupNameKeyAuthenticationOptions options;
 
