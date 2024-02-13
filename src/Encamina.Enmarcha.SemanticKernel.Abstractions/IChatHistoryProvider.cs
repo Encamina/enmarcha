@@ -18,7 +18,7 @@ public interface IChatHistoryProvider
     /// <param name="remainingTokens">The total remaining tokens available for loading messages from the chat history.</param>
     /// <param name="cancellationToken">A cancellation token that can be used to receive notice of cancellation.</param>
     /// <returns>A <see cref="Task"/> that on completion indicates the asynchronous operation has executed.</returns>
-    public Task LoadChatMessagesHistoryAsync(ChatHistory chatHistory, string userId, int remainingTokens, CancellationToken cancellationToken);
+    Task LoadChatMessagesHistoryAsync(ChatHistory chatHistory, string userId, int remainingTokens, CancellationToken cancellationToken);
 
     /// <summary>
     /// Saves a chat message into the conversation history.
@@ -28,5 +28,5 @@ public interface IChatHistoryProvider
     /// <param name="message">The message.</param>
     /// <param name="cancellationToken">A cancellation token that can be used to receive notice of cancellation.</param>
     /// <returns>A <see cref="Task"/> that on completion indicates the asynchronous operation has executed.</returns>
-    public Task SaveChatMessagesHistoryAsync(string userId, string roleName, string message, CancellationToken cancellationToken);
+    Task SaveChatMessagesHistoryAsync(string userId, string roleName, string message, CancellationToken cancellationToken);
 }
