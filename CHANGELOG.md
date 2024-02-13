@@ -18,6 +18,22 @@ Previous classification is not required if changes are simple or all belong to t
 
 ## [8.1.3]
 
+### Major change
+- Updated dependencies:
+  - Updated `Azure.AI.OpenAI` from `1.0.0-beta12` to `1.0.0-beta13` (which provides some fixes for Function Calling).
+  - Updated `Azure.Data.Tables` from `12.8.2` to `12.8.3`.
+  - Updated `Microsoft.Bot.Builder.Azure` from `4.22.0` to `4.22.1`.
+  - Updated `Microsoft.Bot.Builder.Azure.Blobs` from `4.22.0` to `4.22.1`.
+  - Updated `Microsoft.Bot.Builder.Dialogs` from `4.22.0` to `4.22.1`.
+  - Updated `Microsoft.Bot.Builder.Integration.ApplicationInsights.Core` from `4.22.0` to `4.22.1`.
+  - Updated `MMicrosoft.Bot.Builder.Integration.AspNet.Core` from `4.22.0` to `4.22.1`.
+  - Updated `Microsoft.Semantic Kernel` from `1.3.0` to `1.3.1`.
+  - Updated `Microsoft.SemanticKernel.Connectors.AzureAISearch` from `1.3.0-alpha` to `1.3.1-alpha`. **Important**: this does not fix the issue detected by ENMARCHA and reported in [Issue 72](https://github.com/Encamina/enmarcha/issues/72).
+  - Updated `Microsoft.SemanticKernel.Connectors.Qdrant` from `1.3.0-alpha` to `1.3.1-alpha`.
+  - Updated `Microsoft.SemanticKernel.Plugins.Document` from `1.3.0-alpha` to `1.3.1-alpha`.
+  - Updated `Microsoft.SemanticKernel.Plugins.Memory` from `1.3.0-alpha` to `1.3.1-alpha`.
+  - Updated `SharpToken` from `1.2.14` to `1.2.15`.
+
 ### Minor Changes
 - Added `Description` property in `VersionSwaggerGenOptions`.
 - New text prompt function for extract KeyPhrases with specified locale, `KeyPhrasesLocaled`.
