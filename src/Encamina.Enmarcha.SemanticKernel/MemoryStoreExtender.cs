@@ -1,11 +1,8 @@
 ﻿// Ignore Spelling: Upsert
 
 using System.Collections.ObjectModel;
-using System.Net;
 using System.Runtime.CompilerServices;
 using System.Text.Json;
-
-using Azure;
 
 using Encamina.Enmarcha.SemanticKernel.Abstractions;
 using Encamina.Enmarcha.SemanticKernel.Abstractions.Events;
@@ -144,21 +141,7 @@ public class MemoryStoreExtender : IMemoryStoreExtender
     private async Task<int> GetChunkSize(string memoryId, string collectionName, CancellationToken cancellationToken)
     {
         var key = BuildMemoryIdentifier(memoryId, 0);
-        MemoryRecord firstMemoryChunk = null;
-
-        try
-        {
-            firstMemoryChunk = await MemoryStore.GetAsync(collectionName, key, cancellationToken: cancellationToken);
-        }
-        catch (RequestFailedException e) when (e.Status == (int)HttpStatusCode.NotFound)
-        {
-            // At this point, we need to catch the NotFound exception. This is necessary because, in the case of Azure AI Search Memory Store,
-            // if the element does not exist, it throws an exception instead of returning a null value, which would be the expected behavior.
-            // We have opened an issue in Semantic Kernel and also an issue in ENMARCHA to track the progress of this issue and remove this try/catch block once it is resolved.
-            // Issue ENMARCHA: https://github.com/Encamina/enmarcha/issues/72
-
-            /* Do nothing */
-        }
+        var firstMemoryChunk = await MemoryStore.GetAsync(collectionName, key, cancellationToken: cancellationToken);
 
         if (firstMemoryChunk == null)
         {
