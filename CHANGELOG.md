@@ -16,6 +16,28 @@ Also, any bug fix must start with the prefix �Bug fix:� followed by the desc
 
 Previous classification is not required if changes are simple or all belong to the same category.
 
+## [8.1.4]
+
+### Major Changes
+- Updated dependencies:
+  - Updated `Microsoft.AspNetCore.Authentication.JwtBearer` from `8.0.1` to `8.0.2`.
+  - Updated `Microsoft.AspNetCore.Authentication.OpenIdConnect` from `8.0.1` to `8.0.2`.
+  - Updated `Microsoft.Azure.Cosmos` from `3.38.0` to `3.38.1`.
+  - Updated `Microsoft.EntityFrameworkCore` from `8.0.1` to `8.0.2`.
+  - Updated `Microsoft.EntityFrameworkCore.SqlServer` from `8.0.1` to `8.0.2`.
+  - Updated `Microsoft.Extensions.Azure` from `1.7.1` to `1.7.2`.  
+  - Updated `Microsoft.Extensions.Options` from `8.0.1` to `8.0.2`.
+  - Updated `Microsoft.NET.Test.Sdk` from `17.8.0` to `17.9.0`.
+  - Updated `Microsoft.SemanticKernel.Abstractions` from `1.3.1` to `1.4.0`.
+  - Updated `Microsoft.SemanticKernel.Connectors.AzureAISearch` from `1.3.1-alpha` to `1.4.0-alpha`. This does fix the [Issue 72](https://github.com/Encamina/enmarcha/issues/72).
+  - Updated `Microsoft.SemanticKernel.Connectors.OpenAI` from `1.3.1` to `1.4.0`.
+  - Updated `Microsoft.SemanticKernel.Connectors.Qdrant` from `1.3.1-alpha` to `1.4.0-alpha`.
+  - Updated `Microsoft.SemanticKernel.Core` from `1.3.1` to `1.4.0`.
+  - Updated `Microsoft.SemanticKernel.Plugins.Document` from `1.3.1-alpha` to `1.4.0-alpha`.
+  - Updated `Microsoft.SemanticKernel.Plugins.Memory` from `1.3.1-alpha` to `1.4.0-alpha`.
+  - Updated `System.Text.Json` from `8.0.1` to `8.0.2`.
+- Bug fix ([Issue 72](https://github.com/Encamina/enmarcha/issues/72)). Removed `MemoryStoreExtender` workaround after updating to `Microsoft.SemanticKernel.Connectors.AzureAISearch` version `1.4.0-alpha` which resolves the issue.
+
 ## [8.1.3]
 
 ### Breaking Changes  
