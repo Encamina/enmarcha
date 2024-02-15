@@ -36,10 +36,7 @@ Previous classification is not required if changes are simple or all belong to t
   - Updated `Microsoft.SemanticKernel.Plugins.Document` from `1.3.1-alpha` to `1.4.0-alpha`.
   - Updated `Microsoft.SemanticKernel.Plugins.Memory` from `1.3.1-alpha` to `1.4.0-alpha`.
   - Updated `System.Text.Json` from `8.0.1` to `8.0.2`.
-
-### Major Changes
 - Bug fix ([Issue 72](https://github.com/Encamina/enmarcha/issues/72)). Removed `MemoryStoreExtender` workaround after updating to `Microsoft.SemanticKernel.Connectors.AzureAISearch` version `1.4.0-alpha` which resolves the issue.
-
 
 ## [8.1.3]
 
