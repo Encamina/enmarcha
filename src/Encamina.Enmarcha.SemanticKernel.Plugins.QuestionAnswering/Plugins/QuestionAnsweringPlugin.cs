@@ -14,19 +14,35 @@ namespace Encamina.Enmarcha.SemanticKernel.Plugins.QuestionAnswering.Plugins;
 public class QuestionAnsweringPlugin
 {
     private const string QuestionAnsweringFromContextFunctionPrompt = @"
-You ANSWER questions with information from the CONTEXT.
-ONLY USE information from CONTEXT
-The ANSWER MUST BE ALWAYS in {{$locale}}. 
-If you are unable to find the answer or do not know it, simply say ""I don't know"". 
-The ""I don't know"" response MUST BE TRANSLATED ALWAYS to {{$locale}}. 
-If presented with a logic question about the CONTEXT, attempt to calculate the answer. 
-ALWAYS RESPOND with a FINAL ANSWER, DO NOT CONTINUE the conversation.
-
 [CONTEXT]
+
 {{$context}}
 
+[END CONTEXT]
+
+[INSTRUCTIONS]
+
+1. You ANSWER questions with information from the [CONTEXT].
+2. ONLY USE information from [CONTEXT].
+3. If you are unable to find the answer or do not know it, simply say ""I don't know"". 
+4. The ""I don't know"" response MUST BE TRANSLATED ALWAYS to {{$locale}}. 
+5. If presented with a logic question about the [CONTEXT], attempt to calculate the answer. 
+6. ALWAYS RESPOND with a FINAL ANSWER, DO NOT CONTINUE the conversation.
+7. The [ANSWER] MUST BE ALWAYS in {{$locale}}.
+
+[END INSTRUCTIONS]
+
 [QUESTION]
+
 {{$input}}
+
+[END QUESTION]
+
+[IMPORTANT]
+
+- Remember, your [ANSWER] MUST ALWAYS BE in {{$locale}}.
+
+[END IMPORTANT]
 
 [ANSWER]
 
@@ -106,12 +122,6 @@ ALWAYS RESPOND with a FINAL ANSWER, DO NOT CONTINUE the conversation.
 
         var memoryQueryResult = memoryQueryFunctionResult.GetValue<string>();
 
-        // If the «QueryMemory» function from the «MemoryQueryPlugin» does not return any result, there is no point in trying to answering the question. In such a case, `null` is returned.
-        if (string.IsNullOrWhiteSpace(memoryQueryResult))
-        {
-            return null;
-        }
-
         // Return to the context of the response function and set the result of the memory query.
         var questionAnsweringVariables = new KernelArguments()
         {
@@ -157,7 +167,7 @@ ALWAYS RESPOND with a FINAL ANSWER, DO NOT CONTINUE the conversation.
     {
         return string.IsNullOrWhiteSpace(locale)
             ? "the SAME LANGUAGE as the QUESTION"
-            : $"{locale} LANGUAGE";
+            : $"\"{locale}\" LANGUAGE";
     }
 
     private Task<int> GetQuestionAnsweringFromContextFunctionUsedTokensAsync(KernelFunction questionAnsweringFromContextFunction, string input, string locale, CancellationToken cancellationToken)

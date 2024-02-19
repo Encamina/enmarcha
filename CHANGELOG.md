@@ -16,6 +16,14 @@ Also, any bug fix must start with the prefix �Bug fix:� followed by the desc
 
 Previous classification is not required if changes are simple or all belong to the same category.
 
+## [8.1.5]
+
+### Breaking Changes 
+In the `QuestionAnsweringFromMemoryQuery` function of the `QuestionAnsweringPlugin`, null is no longer returned when there are no relevant memory results. Instead, the execution flow continues, prompting a message with an empty context information, ultimately resulting in a response such as "I don't know" or a similar message.
+
+### Minor Changes
+- Changes in the prompt of `QuestionAnsweringPlugin` to enhance language detection in the response.
+
 ## [8.1.4]
 
 ### Major Changes
