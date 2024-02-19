@@ -122,12 +122,6 @@ public class QuestionAnsweringPlugin
 
         var memoryQueryResult = memoryQueryFunctionResult.GetValue<string>();
 
-        // If the «QueryMemory» function from the «MemoryQueryPlugin» does not return any result, there is no point in trying to answering the question. In such a case, `null` is returned.
-        if (string.IsNullOrWhiteSpace(memoryQueryResult))
-        {
-            return null;
-        }
-
         // Return to the context of the response function and set the result of the memory query.
         var questionAnsweringVariables = new KernelArguments()
         {
