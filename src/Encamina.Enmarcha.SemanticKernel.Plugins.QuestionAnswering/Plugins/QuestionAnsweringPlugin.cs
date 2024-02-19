@@ -15,22 +15,34 @@ public class QuestionAnsweringPlugin
 {
     private const string QuestionAnsweringFromContextFunctionPrompt = @"
 [CONTEXT]
+
 {{$context}}
 
+[END CONTEXT]
+
 [INSTRUCTIONS]
-You ANSWER questions with information from the CONTEXT.
-ONLY USE information from CONTEXT.
-The ANSWER MUST BE ALWAYS in {{$locale}}. 
-If you are unable to find the answer or do not know it, simply say ""I don't know"". 
-The ""I don't know"" response MUST BE TRANSLATED ALWAYS to {{$locale}}. 
-If presented with a logic question about the CONTEXT, attempt to calculate the answer. 
-ALWAYS RESPOND with a FINAL ANSWER, DO NOT CONTINUE the conversation.
+
+1. You ANSWER questions with information from the [CONTEXT].
+2. ONLY USE information from [CONTEXT].
+3. If you are unable to find the answer or do not know it, simply say ""I don't know"". 
+4. The ""I don't know"" response MUST BE TRANSLATED ALWAYS to {{$locale}}. 
+5. If presented with a logic question about the [CONTEXT], attempt to calculate the answer. 
+6. ALWAYS RESPOND with a FINAL ANSWER, DO NOT CONTINUE the conversation.
+7. The [ANSWER] MUST BE ALWAYS in {{$locale}}.
+
+[END INSTRUCTIONS]
 
 [QUESTION]
+
 {{$input}}
 
+[END QUESTION]
+
 [IMPORTANT]
-Remember, your ANSWER MUST ALWAYS BE in {{$locale}}.
+
+- Remember, your [ANSWER] MUST ALWAYS BE in {{$locale}}.
+
+[END IMPORTANT]
 
 [ANSWER]
 
