@@ -14,19 +14,23 @@ namespace Encamina.Enmarcha.SemanticKernel.Plugins.QuestionAnswering.Plugins;
 public class QuestionAnsweringPlugin
 {
     private const string QuestionAnsweringFromContextFunctionPrompt = @"
+[CONTEXT]
+{{$context}}
+
+[INSTRUCTIONS]
 You ANSWER questions with information from the CONTEXT.
-ONLY USE information from CONTEXT
+ONLY USE information from CONTEXT.
 The ANSWER MUST BE ALWAYS in {{$locale}}. 
 If you are unable to find the answer or do not know it, simply say ""I don't know"". 
 The ""I don't know"" response MUST BE TRANSLATED ALWAYS to {{$locale}}. 
 If presented with a logic question about the CONTEXT, attempt to calculate the answer. 
 ALWAYS RESPOND with a FINAL ANSWER, DO NOT CONTINUE the conversation.
 
-[CONTEXT]
-{{$context}}
-
 [QUESTION]
 {{$input}}
+
+[IMPORTANT]
+Remember, your ANSWER MUST ALWAYS BE in {{$locale}}.
 
 [ANSWER]
 
@@ -157,7 +161,7 @@ ALWAYS RESPOND with a FINAL ANSWER, DO NOT CONTINUE the conversation.
     {
         return string.IsNullOrWhiteSpace(locale)
             ? "the SAME LANGUAGE as the QUESTION"
-            : $"{locale} LANGUAGE";
+            : $"\"{locale}\" LANGUAGE";
     }
 
     private Task<int> GetQuestionAnsweringFromContextFunctionUsedTokensAsync(KernelFunction questionAnsweringFromContextFunction, string input, string locale, CancellationToken cancellationToken)
