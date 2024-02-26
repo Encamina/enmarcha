@@ -27,7 +27,7 @@ public static class PluginsInfo
         public static class Functions
         {
             /// <summary>
-            /// Informnation about the «Query Memory» function.
+            /// Information about the «Query Memory» function.
             /// </summary>
             public static class QueryMemory
             {

@@ -13,44 +13,9 @@ namespace Encamina.Enmarcha.SemanticKernel.Plugins.QuestionAnswering.Plugins;
 /// </summary>
 public class QuestionAnsweringPlugin
 {
-    private const string QuestionAnsweringFromContextFunctionPrompt = @"
-[CONTEXT]
-
-{{$context}}
-
-[END CONTEXT]
-
-[INSTRUCTIONS]
-
-1. You ANSWER questions with information from the [CONTEXT].
-2. ONLY USE information from [CONTEXT].
-3. If you are unable to find the answer or do not know it, simply say ""I don't know"". 
-4. The ""I don't know"" response MUST BE TRANSLATED ALWAYS to {{$locale}}. 
-5. If presented with a logic question about the [CONTEXT], attempt to calculate the answer. 
-6. ALWAYS RESPOND with a FINAL ANSWER, DO NOT CONTINUE the conversation.
-7. The [ANSWER] MUST BE ALWAYS in {{$locale}}.
-
-[END INSTRUCTIONS]
-
-[QUESTION]
-
-{{$input}}
-
-[END QUESTION]
-
-[IMPORTANT]
-
-- Remember, your [ANSWER] MUST ALWAYS BE in {{$locale}}.
-
-[END IMPORTANT]
-
-[ANSWER]
-
-";
-
     private readonly Kernel kernel;
     private readonly string modelName;
-    private readonly Func<string, int> tokenLengthFunction;
+    private readonly Func<string, int> tokensLengthFunction;
     private readonly OpenAIPromptExecutionSettings questionAnsweringFromContextFunctionExecutionSettings = new()
     {
         MaxTokens = 1000,
@@ -70,8 +35,49 @@ public class QuestionAnsweringPlugin
     {
         this.kernel = kernel;
         this.modelName = modelName;
-        this.tokenLengthFunction = tokensLengthFunction;
+        this.tokensLengthFunction = tokensLengthFunction;
     }
+
+    /// <summary>
+    /// Gets additional instructions to be added to the prompt for the question answering function.
+    /// </summary>
+    protected virtual string AdditionalInstructions => string.Empty;
+
+    private string QuestionAnsweringFromContextFunctionPrompt => $@"
+[CONTEXT]
+
+{{$context}}
+
+[END CONTEXT]
+
+[INSTRUCTIONS]
+
+1. You ANSWER questions with information from the [CONTEXT].
+2. ONLY USE information from [CONTEXT].
+3. If you are unable to find the answer or do not know it, simply say ""I don't know"". 
+4. The ""I don't know"" response MUST BE TRANSLATED ALWAYS to {{{{$locale}}}}. 
+5. If presented with a logic question about the [CONTEXT], attempt to calculate the answer. 
+6. ALWAYS RESPOND with a FINAL ANSWER, DO NOT CONTINUE the conversation.
+7. The [ANSWER] MUST BE ALWAYS in {{{{$locale}}}}.
+{AdditionalInstructions}
+
+[END INSTRUCTIONS]
+
+[QUESTION]
+
+{{{{$input}}}}
+
+[END QUESTION]
+
+[IMPORTANT]
+
+- Remember, your [ANSWER] MUST ALWAYS BE in {{{{$locale}}}}.
+
+[END IMPORTANT]
+
+[ANSWER]
+
+";
 
     /// <summary>
     /// Answer questions using information obtained from a memory. The given question is used as query to search from a list (usually comma-separated) of collections.
@@ -178,6 +184,6 @@ public class QuestionAnsweringPlugin
             [@"locale"] = GetAnswerLocale(locale),
         };
 
-        return kernel.GetKernelFunctionUsedTokensFromPromptAsync(QuestionAnsweringFromContextFunctionPrompt, questionAnsweringFromContextFunction, functionArguments, tokenLengthFunction, cancellationToken: cancellationToken);
+        return kernel.GetKernelFunctionUsedTokensFromPromptAsync(QuestionAnsweringFromContextFunctionPrompt, questionAnsweringFromContextFunction, functionArguments, tokensLengthFunction, cancellationToken: cancellationToken);
     }
 }

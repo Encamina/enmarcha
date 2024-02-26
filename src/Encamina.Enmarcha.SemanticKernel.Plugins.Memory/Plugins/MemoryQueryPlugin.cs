@@ -65,20 +65,32 @@ public class MemoryQueryPlugin
 
         var memorySnippets = new StringBuilder();
 
-        foreach (var memoryText in relevantMemories.OrderByDescending(m => m.Relevance).Select(m => m.Metadata.Text))
+        foreach (var memoryResult in relevantMemories.OrderByDescending(m => m.Relevance))
         {
-            var memoryTokenCount = tokenLengthFunction(memoryText);
+            var parsedMemoryResult = ParseMemoryQueryResult(memoryResult);
+
+            var memoryTokenCount = tokenLengthFunction(parsedMemoryResult.Metadata.Text);
 
             if (responseTokenLimit - memoryTokenCount < 0)
             {
                 break;
             }
 
-            memorySnippets.AppendLine(memoryText);
+            memorySnippets.AppendLine(parsedMemoryResult.Metadata.Text);
             responseTokenLimit -= memoryTokenCount;
         }
 
         return memorySnippets.ToString();
+    }
+
+    /// <summary>
+    /// Parse the memory query result.
+    /// </summary>
+    /// <param name="memoryQueryResult">A memory query result to parse.</param>
+    /// <returns>A parsed memory query result.</returns>
+    protected virtual MemoryQueryResult ParseMemoryQueryResult(MemoryQueryResult memoryQueryResult)
+    {
+        return memoryQueryResult;
     }
 }
 
