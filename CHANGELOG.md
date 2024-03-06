@@ -20,7 +20,7 @@ Previous classification is not required if changes are simple or all belong to t
 
 ### Breaking Changes 
 
- - In `AzureOpenAIOptions` the default value of `ServiceVersion` changes from `V2023_12_01_Preview` to `V2023_05_15` since the former is **deprecated**.
+ - In `AzureOpenAIOptions` the default value of `ServiceVersion` changes from `V2023_12_01_Preview` to `V2024_02_15_Preview` since the former is **deprecated**.
  - In the `QuestionAnsweringFromMemoryQuery` function of the `QuestionAnsweringPlugin`, a `null` value is no longer returned when there are no relevant memory results. Instead, the execution flow continues, prompting a message with an empty context information, ultimately resulting in a response such as "I don't know" or a similar message.
 
 ### Major Changes

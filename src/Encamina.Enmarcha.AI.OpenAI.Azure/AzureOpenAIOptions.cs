@@ -16,7 +16,7 @@ public sealed class AzureOpenAIOptions : OpenAIOptions
     /// <summary>
     /// Gets the Azure OpenAI API service version.
     /// </summary>
-    public OpenAIClientOptions.ServiceVersion ServiceVersion { get; init; } = OpenAIClientOptions.ServiceVersion.V2023_05_15;
+    public OpenAIClientOptions.ServiceVersion ServiceVersion { get; init; } = OpenAIClientOptions.ServiceVersion.V2024_02_15_Preview;
 
     /// <summary>
     /// Gets the <see cref="System.Uri "/> for an LLM resource (like OpenAI). This should include protocol and host name.
