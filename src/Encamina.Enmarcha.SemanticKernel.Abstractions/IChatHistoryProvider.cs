@@ -8,6 +8,14 @@ namespace Encamina.Enmarcha.SemanticKernel.Abstractions;
 public interface IChatHistoryProvider
 {
     /// <summary>
+    /// Deletes all chat history messages for a specific user.
+    /// </summary>
+    /// <param name="userId">The unique identifier of the user that is owner of the chat.</param>
+    /// <param name="cancellationToken">A cancellation token that can be used to receive notice of cancellation.</param>
+    /// <returns>A <see cref="Task"/> that on completion indicates the asynchronous operation has executed.</returns>
+    Task DeleteChatMessagesHistoryAsync(string userId, CancellationToken cancellationToken);
+
+    /// <summary>
     /// Loads chat history messages.
     /// </summary>
     /// <param name="chatHistory">The current chat history.</param>

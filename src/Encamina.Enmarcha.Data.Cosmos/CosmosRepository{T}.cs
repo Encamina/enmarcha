@@ -317,7 +317,7 @@ internal sealed class CosmosRepository<T> : ICosmosRepository<T>
     public async Task AddBatchAsync(IEnumerable<T> entities, CancellationToken cancellationToken) => await AddOrUpdateBulkAsync(entities, cancellationToken);
 
     /// <inheritdoc/>
-    public async Task DeleteAsync<TEntityId>(TEntityId id, CancellationToken cancellationToken) => await DeleteAsync(id.ToString(), null, cancellationToken);
+    public async Task DeleteAsync<TEntityId>(TEntityId id, CancellationToken cancellationToken) => await DeleteAsync(id is string idString ? idString : id.ToString(), null, cancellationToken);
 
     private static async Task<(IQueryable<TEntity> Results, string ContinuationToken)> BuildResult<TEntity>(FeedIterator<TEntity> feedIterator, CancellationToken cancellationToken)
     {

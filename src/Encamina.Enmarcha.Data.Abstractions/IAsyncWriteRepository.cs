@@ -5,7 +5,7 @@ namespace Encamina.Enmarcha.Data.Abstractions;
 /// <summary>
 /// Represents an asynchronous repository pattern specifically for write operations.
 /// </summary>
-/// <typeparam name="TEntity">The type of (data) entity handled by this asychronous write repository.</typeparam>
+/// <typeparam name="TEntity">The type of (data) entity handled by this asynchronous write repository.</typeparam>
 public interface IAsyncWriteRepository<in TEntity>
 {
     /// <summary>
