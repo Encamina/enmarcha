@@ -34,9 +34,9 @@ public class ChatHistoryProvider : IChatHistoryProvider
     }
 
     /// <inheritdoc/>
-    public async Task DeleteChatMessagesHistoryAsync(string userId, CancellationToken cancellationToken)
+    public Task DeleteChatMessagesHistoryAsync(string userId, CancellationToken cancellationToken)
     {
-        await chatMessagesHistoryRepository.DeleteAsync(userId, cancellationToken);
+        return chatMessagesHistoryRepository.DeleteAsync(userId, cancellationToken);
     }
 
     /// <inheritdoc/>

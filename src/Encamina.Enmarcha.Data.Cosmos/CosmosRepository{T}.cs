@@ -3,6 +3,7 @@ using System.Linq.Expressions;
 using System.Net;
 
 using Encamina.Enmarcha.Core.Extensions;
+using Encamina.Enmarcha.Entities.Abstractions;
 
 using Microsoft.Azure.Cosmos;
 using Microsoft.Azure.Cosmos.Linq;
@@ -317,7 +318,26 @@ internal sealed class CosmosRepository<T> : ICosmosRepository<T>
     public async Task AddBatchAsync(IEnumerable<T> entities, CancellationToken cancellationToken) => await AddOrUpdateBulkAsync(entities, cancellationToken);
 
     /// <inheritdoc/>
-    public async Task DeleteAsync<TEntityId>(TEntityId id, CancellationToken cancellationToken) => await DeleteAsync(id is string idString ? idString : id.ToString(), null, cancellationToken);
+    /// <remarks>
+    /// From the point of view of Cosmos DB, the <paramref name="id"/> is the partition key value.
+    /// </remarks>
+    public async Task DeleteAsync<TEntityId>(TEntityId id, CancellationToken cancellationToken)
+    {
+        var partitionKey = GeneratePartition(id is string idString ? idString : id.ToString());
+
+        var resultSet = container.GetItemQueryIterator<CosmosDbItem>(new QueryDefinition(@"SELECT c.id FROM c"), requestOptions: new QueryRequestOptions()
+        {
+            PartitionKey = partitionKey,
+        });
+
+        while (resultSet.HasMoreResults)
+        {
+            foreach (var item in await resultSet.ReadNextAsync(cancellationToken))
+            {
+                await container.DeleteItemAsync<CosmosDbItem>(item.Id, partitionKey, cancellationToken: cancellationToken);
+            }
+        }
+    }
 
     private static async Task<(IQueryable<TEntity> Results, string ContinuationToken)> BuildResult<TEntity>(FeedIterator<TEntity> feedIterator, CancellationToken cancellationToken)
     {
@@ -342,6 +362,15 @@ internal sealed class CosmosRepository<T> : ICosmosRepository<T>
 
     private static PartitionKey GeneratePartition(string partitionKey)
     {
-        return string.IsNullOrWhiteSpace(partitionKey) ? default : new PartitionKey(partitionKey);
+        return string.IsNullOrWhiteSpace(partitionKey)
+            ? throw new ArgumentNullException(nameof(partitionKey))
+            : new PartitionKey(partitionKey);
+    }
+
+    /// <summary>
+    /// Auxiliary type to retrieve items from Cosmos DB with just the unique identifier.
+    /// </summary>
+    private sealed class CosmosDbItem : IdentifiableBase<string>
+    {
     }
 }

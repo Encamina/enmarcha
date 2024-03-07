@@ -26,6 +26,7 @@ Previous classification is not required if changes are simple or all belong to t
 ### Major Changes
 
 - In interface type `IChatHistoryProvider` added new method `DeleteChatMessagesHistoryAsync` to delete a user's chat history messages. This method is implemented in `ChatHistoryProvider`.
+- Fixed `DeleteAsync<TEntityId>` method in `CosmosRepository<T>`. This method was always throwing exceptions because the partition key value was always `null`. It is fixed by considering the `Id` to delete the whole partition. If a specific item in the partition should be removed, then use the `DeleteAsync` on-generic method.
 - Updated dependencies:
   - Updated `Bogus` from `35.4.0` to `35.4.1`.
   - Updated `Azure.Core` from `1.37.0` to `1.38.0`.
