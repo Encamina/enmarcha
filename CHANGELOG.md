@@ -51,6 +51,8 @@ Previous classification is not required if changes are simple or all belong to t
   - Updated `xunit.analyzers` from `1.10.0` to `1.11.0`.
   - Updated `xunit.extensibility.core` from `2.6.6` to `2.7.0`.
   - Updated `xunit.runner.visualstudio` from `2.5.6` to `2.5.7`.
+- Added new interface `Encamina.Enmarcha.AI.Abstractions.ISemanticTextSplitter` and its implementations `Encamina.Enmarcha.AI.SemanticTextSplitter` to split a text into meaningful chunks based on embeddings.
+- Added a new utility class for mathematical operations `Encamina.Enmarcha.Core.MathUtils`.
 
 ### Minor Changes
 
