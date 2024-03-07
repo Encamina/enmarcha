@@ -20,7 +20,7 @@ First, [install NuGet](http://docs.nuget.org/docs/start-here/installing-nuget). 
 
 ## How to use
 
-First, you need to add the [QdrantOptions](../Encamina.Enmarcha.Data.Qdrant.Abstractions/QdrantOptions.cs) to your project configuration. You can achieve this by using any [configuration provider](https://learn.microsoft.com/en-us/dotnet/core/extensions/configuration). The followng code is an example of how the settings would appear using the `appsettings.json` file:
+First, if you want use Qdrant memory provider you need to add the [QdrantOptions](../Encamina.Enmarcha.Data.Qdrant.Abstractions/QdrantOptions.cs) to your project configuration. You can achieve this by using any [configuration provider](https://learn.microsoft.com/en-us/dotnet/core/extensions/configuration). The followng code is an example of how the settings would appear using the `appsettings.json` file:
 
 ```json
 // ...
@@ -32,6 +32,21 @@ First, you need to add the [QdrantOptions](../Encamina.Enmarcha.Data.Qdrant.Abst
   },
 // ...
 ```
+
+if you want to use Azure AI Search as a memory provider, you need to add the [AzureSearchOptions](../Encamina.Enmarcha.Data.AzureAISearch.Abstractions/AzureAISearchOptions.cs) to your project configuration. You can achieve this by using any [configuration provider](https://learn.microsoft.com/en-us/dotnet/core/extensions/configuration). The following code is an example of how the settings would appear using the `appsettings.json` file:
+
+```json
+// ...
+  "AzureSearchOptions": {
+    "Endpoint": "https://sample-searchendpoint/", // Endpoint
+    "Key": "xxxxxxxxxx" // API Key used by Azure Search AI as a form of client authentication.
+  },
+// ...
+```
+
+
+```json
+
 
 Next, in `Program.cs` or a similar entry point file in your project, add the following code:
 
@@ -53,7 +68,22 @@ builder.Services.AddOptions<QdrantOptions>().Bind(builder.Configuration.GetSecti
 
 // Adds Qdrant as IMemoryStore
 services.AddQdrantMemoryStore();
+
+// Or adds Azure AI Search as IMemoryStore
+services.AddAzureAISearchMemoryStore();
+
 ```
+
+If you need add both memory providers, you can use the following code:
+
+```csharp
+
+   
+   services.AddAzureAISearchNamedMemoryStore("AzureAISearchMemoryStore");  //AzureAISearchMemoryStore is the name of the memory store that you can use in the future to inject the IMemoryStore
+   services.AddQdrantNamedMemoryStore("QdrantMemoryStore"); //QdrantMemoryStore is the name of the memory store that you can use in the future to inject the IMemoryStore
+
+```
+
 
 In the previous code, it can be observed that in the first part is necessary to add certain [Qdrant configurations](../Encamina.Enmarcha.Data.Qdrant.Abstractions/QdrantOptions.cs) that are available in the [Encamina.Enmarcha.Data.Qdrant.Abstractions](../Encamina.Enmarcha.Data.Qdrant.Abstractions/README.md) nuget package. The last line of code corresponds to an extension method that will add the specified implementation of the [IMemoryStore](https://github.com/microsoft/semantic-kernel/blob/76db027273371ea81e6db66afcb1d888cc53b459/dotnet/src/SemanticKernel.Abstractions/Memory/IMemoryStore.cs#L13) interface as a singleton. With this, you have Qdrant configured as the storage to save and retrieve embeddings.
 
@@ -114,4 +144,31 @@ public class MyClass
             .ToListAsync(); // ToListAsync method is provided by System.Linq.Async nuget https://www.nuget.org/packages/System.Linq.Async
     }
 }
+```
+
+
+If use NamedKeys, you can use the following code:
+
+```csharp
+
+    internal class YourClassWithAzureSearch 
+    {
+        private readonly Kernel kernel;
+
+        public YourClass([FromKeyedServices("Your Provider Name , fe: 'AzureAISearchMemoryStore'")]Kernel kernel)
+        {
+            this.kernel = kernel;
+        }
+    }
+
+    internal class YourClassWithQdrant
+    {
+        private readonly Kernel kernel;
+
+        public YourClass([FromKeyedServices("Your Provider Name , fe: 'QdrantMemoryStore'")]Kernel kernel)
+        {
+            this.kernel = kernel;
+        }
+    }
+
 ```
