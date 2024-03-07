@@ -114,11 +114,11 @@ public static class IServiceCollectionExtensions
     /// This extension methods requires a <see cref="AzureAISearchOptions"/> to be already configured.
     /// </remarks>
     /// <param name="services"> The <see cref="IServiceCollection"/> to add services to.</param>
-    /// <param name="memoryProviderName">name of the memory provider.</param>
+    /// <param name="memoryProviderName">The name or key for the memory provider.</param>
     /// <returns>The <see cref="IServiceCollection"/> so that additional calls can be chained.</returns>
     public static IServiceCollection AddAzureAISearchNamedMemoryStore(this IServiceCollection services, string memoryProviderName)
     {
-        return services.AddKeyedSingleton<IMemoryStore>(memoryProviderName, (serviceProvider, k) =>
+        return services.AddKeyedSingleton<IMemoryStore>(memoryProviderName, (serviceProvider, _) =>
         {
             var optionsMonitor = serviceProvider.GetRequiredService<IOptionsMonitor<AzureAISearchOptions>>();
 
@@ -144,13 +144,13 @@ public static class IServiceCollectionExtensions
     /// This extension methods requires a <see cref="QdrantOptions"/> to be already configured.
     /// </remarks>
     /// <param name="services"> The <see cref="IServiceCollection"/> to add services to.</param>
-    /// <param name="memoryProviderName">name of the memory provider.</param>
+    /// <param name="memoryProviderName">The name or key for the memory provider.</param>
     /// <returns>The <see cref="IServiceCollection"/> so that additional calls can be chained.</returns>
     public static IServiceCollection AddQdrantNamedMemoryStore(this IServiceCollection services, string memoryProviderName)
     {
-        return services.AddKeyedSingleton<IMemoryStore>(memoryProviderName, (sp, k) =>
+        return services.AddKeyedSingleton<IMemoryStore>(memoryProviderName, (serviceProvider, _) =>
         {
-            var optionsMonitor = sp.GetRequiredService<IOptionsMonitor<QdrantOptions>>();
+            var optionsMonitor = serviceProvider.GetRequiredService<IOptionsMonitor<QdrantOptions>>();
 
             var httpClient = new HttpClient(new HttpClientHandler()
             {
@@ -164,9 +164,9 @@ public static class IServiceCollectionExtensions
                 return new QdrantMemoryStore(httpClient, options.VectorSize, loggerFactory: serviceProvider.GetService<ILoggerFactory>());
             }
 
-            var debouncedBuilder = Debouncer.Debounce<QdrantOptions>(options => Builder(sp, httpClient, options), 300);
+            var debouncedBuilder = Debouncer.Debounce<QdrantOptions>(options => Builder(serviceProvider, httpClient, options), 300);
 
-            var memory = Builder(sp, httpClient, optionsMonitor.CurrentValue);
+            var memory = Builder(serviceProvider, httpClient, optionsMonitor.CurrentValue);
 
             optionsMonitor.OnChange(debouncedBuilder);
 

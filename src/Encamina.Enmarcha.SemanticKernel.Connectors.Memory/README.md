@@ -33,7 +33,7 @@ First, if you want use Qdrant memory provider you need to add the [QdrantOptions
 // ...
 ```
 
-if you want to use Azure AI Search as a memory provider, you need to add the [AzureSearchOptions](../Encamina.Enmarcha.Data.AzureAISearch.Abstractions/AzureAISearchOptions.cs) to your project configuration. You can achieve this by using any [configuration provider](https://learn.microsoft.com/en-us/dotnet/core/extensions/configuration). The following code is an example of how the settings would appear using the `appsettings.json` file:
+If you want to use Azure AI Search as a memory provider, you need to add the [AzureSearchOptions](../Encamina.Enmarcha.Data.AzureAISearch.Abstractions/AzureAISearchOptions.cs) to your project configuration. You can achieve this by using any [configuration provider](https://learn.microsoft.com/en-us/dotnet/core/extensions/configuration). The following code is an example of how the settings would appear using the `appsettings.json` file:
 
 ```json
 // ...
