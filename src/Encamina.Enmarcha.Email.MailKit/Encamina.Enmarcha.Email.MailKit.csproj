@@ -9,7 +9,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="MailKit" Version="4.3.0" />
+        <PackageReference Include="MailKit" Version="4.4.0" />
         <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="8.0.0" />
         <PackageReference Include="Microsoft.Extensions.Hosting" Version="8.0.0" />
         <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="8.0.0" />
@@ -25,7 +25,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <None Include="README.md" Pack="true" PackagePath="\"/>
+        <None Include="README.md" Pack="true" PackagePath="\" />
     </ItemGroup>
 
 </Project>

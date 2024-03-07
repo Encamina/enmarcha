@@ -34,6 +34,12 @@ public class ChatHistoryProvider : IChatHistoryProvider
     }
 
     /// <inheritdoc/>
+    public async Task DeleteChatMessagesHistoryAsync(string userId, CancellationToken cancellationToken)
+    {
+        await chatMessagesHistoryRepository.DeleteAsync(userId, cancellationToken);
+    }
+
+    /// <inheritdoc/>
     /// <remarks>
     /// The maximum number of messages to load is configured in <c>ChatHistoryProviderOptions.HistoryMaxMessages</c>.
     /// </remarks>

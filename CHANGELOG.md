@@ -19,11 +19,19 @@ Previous classification is not required if changes are simple or all belong to t
 ## [8.1.5]
 
 ### Breaking Changes 
-In the `QuestionAnsweringFromMemoryQuery` function of the `QuestionAnsweringPlugin`, null is no longer returned when there are no relevant memory results. Instead, the execution flow continues, prompting a message with an empty context information, ultimately resulting in a response such as "I don't know" or a similar message.
+
+ - In `AzureOpenAIOptions` the default value of `ServiceVersion` changes from `V2023_12_01_Preview` to `V2024_02_15_Preview` since the former is **deprecated**.
+ - In the `QuestionAnsweringFromMemoryQuery` function of the `QuestionAnsweringPlugin`, a `null` value is no longer returned when there are no relevant memory results. Instead, the execution flow continues, prompting a message with an empty context information, ultimately resulting in a response such as "I don't know" or a similar message.
 
 ### Major Changes
+
+- In interface type `IChatHistoryProvider` added new method `DeleteChatMessagesHistoryAsync` to delete a user's chat history messages. This method is implemented in `ChatHistoryProvider`.
 - Updated dependencies:
+  - Updated `Bogus` from `35.4.0` to `35.4.1`.
   - Updated `Azure.Core` from `1.37.0` to `1.38.0`.
+  - Updated `Azure.OpenAI` from `1.0.0-beta13` to `1.0.0-beta14`.
+  - Updated `MailKit` from `4.3.0` to `4.4.0`.
+  - Updated `MimeKit` from `4.3.0` to `4.4.0`.
   - Updated `Microsoft.Bot.Builder.Azure` from `4.22.1` to `4.22.2`.
   - Updated `Microsoft.Bot.Builder.Azure.Blobs` from `4.22.1` to `4.22.2`.
   - Updated `Microsoft.Bot.Builder.Dialogs` from `4.22.1` to `4.22.2`.
@@ -44,7 +52,11 @@ In the `QuestionAnsweringFromMemoryQuery` function of the `QuestionAnsweringPlug
   - Updated `xunit.runner.visualstudio` from `2.5.6` to `2.5.7`.
 
 ### Minor Changes
+
 - Changes in the prompt of `QuestionAnsweringPlugin` to enhance language detection in the response.
+- Slight improvement in the `DeleteAsync` method in `CosmosRepository`.
+- Some boy scouting and typo fixes in comments.
+- Added new extension method to add Qdrant and Azure Search AI as Keyed Memory Store.
 
 ## [8.1.4]
 
