@@ -32,7 +32,7 @@ public sealed class SemanticTextSplitterTests
             });
 
         // Act...
-        var splits = (await semanticTextSplitter.SplitAsync(text, embeddingsGeneratorMock.Object)).ToList();
+        var splits = (await semanticTextSplitter.SplitAsync(text, embeddingsGeneratorMock.Object, CancellationToken.None)).ToList();
 
         // Assert...
         Assert.Equal(2, splits.Count);
@@ -50,7 +50,7 @@ public sealed class SemanticTextSplitterTests
         var semanticTextSplitter = new SemanticTextSplitter(optionsMonitor);
 
         // Act...
-        var splits = (await semanticTextSplitter.SplitAsync(singleSentence, embeddingsGeneratorMock.Object)).ToList();
+        var splits = (await semanticTextSplitter.SplitAsync(singleSentence, embeddingsGeneratorMock.Object, CancellationToken.None)).ToList();
 
         // Assert...
         Assert.Single(splits);

@@ -31,7 +31,7 @@ public class SemanticTextSplitter : ISemanticTextSplitter
     }
 
     /// <inheritdoc/>
-    public async Task<IEnumerable<string>> SplitAsync(string text, Func<IList<string>, CancellationToken, Task<IList<ReadOnlyMemory<float>>>> embeddingsGenerator, CancellationToken cancellationToken = default)
+    public async Task<IEnumerable<string>> SplitAsync(string text, Func<IList<string>, CancellationToken, Task<IList<ReadOnlyMemory<float>>>> embeddingsGenerator, CancellationToken cancellationToken)
     {
         // Code inspired by
         // https://github.com/run-llama/llama_index/blob/8ed753df970f068f6afc8a83fd51a1f40880de9e/llama-index-packs/llama-index-packs-node-parser-semantic-chunking/llama_index/packs/node_parser_semantic_chunking/base.py
