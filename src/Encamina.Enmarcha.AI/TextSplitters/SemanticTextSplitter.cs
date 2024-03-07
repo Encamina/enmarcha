@@ -76,7 +76,7 @@ public class SemanticTextSplitter : ISemanticTextSplitter
     /// <param name="sentences">The list of sentences to be combined.</param>
     /// <param name="bufferSize">The number of sentences to include on each side of the current sentence within the buffer size.</param>
     /// <returns>A list of combined sentences.</returns>
-    private static List<string> CreateCombinedSentences(IReadOnlyList<string> sentences, int bufferSize)
+    private static List<string> CreateCombinedSentences(IList<string> sentences, int bufferSize)
     {
         var combinedSentences = new List<string>(sentences.Count);
 
@@ -167,7 +167,7 @@ public class SemanticTextSplitter : ISemanticTextSplitter
     /// <param name="sentences">The list of sentences to be sliced.</param>
     /// <param name="indexes">The list of indexes indicating breakpoints in the sentences.</param>
     /// <returns>A list of sliced text chunks.</returns>
-    private static IEnumerable<string> SliceSentences(IReadOnlyCollection<string> sentences, List<int> indexes)
+    private static IEnumerable<string> SliceSentences(IList<string> sentences, List<int> indexes)
     {
         var chunks = new List<string>();
         var startIndex = 0;

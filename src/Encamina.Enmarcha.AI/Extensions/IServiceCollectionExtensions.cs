@@ -12,7 +12,7 @@ namespace Microsoft.Extensions.DependencyInjection;
 public static class IServiceCollectionExtensions
 {
     /// <summary>
-    /// Adds a defult cognitive service provider to the <see cref="IServiceCollection"/> as singleton.
+    /// Adds a default cognitive service provider to the <see cref="IServiceCollection"/> as singleton.
     /// </summary>
     /// <param name="services">The <see cref="IServiceCollection"/> to add services to.</param>
     /// <returns>The <see cref="IServiceCollection"/> so that additional calls can be chained.</returns>
@@ -44,5 +44,15 @@ public static class IServiceCollectionExtensions
     public static IServiceCollection AddRecursiveCharacterTextSplitter(this IServiceCollection services)
     {
         return services.AddSingleton<ITextSplitter, RecursiveCharacterTextSplitter>();
+    }
+
+    /// <summary>
+    /// Adds a «Semantic Text Splitter» service as singleton instance of <see cref="ISemanticTextSplitter"/> to the <see cref="IServiceCollection"/>.
+    /// </summary>
+    /// <param name="services">The <see cref="IServiceCollection"/> to add services to.</param>
+    /// <returns>The <see cref="IServiceCollection"/> so that additional calls can be chained.</returns>
+    public static IServiceCollection AddSemanticTextSplitter(this IServiceCollection services)
+    {
+        return services.AddSingleton<ISemanticTextSplitter, SemanticTextSplitter>();
     }
 }
