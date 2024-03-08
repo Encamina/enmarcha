@@ -107,6 +107,23 @@ public class ChatWithHistoryPlugin
     }
 
     /// <summary>
+    /// Deletes the chat message history when a user asks to forget previous conversations or to start over again.
+    /// </summary>
+    /// <param name="userId">The unique identifier of the user owner of the chat history.</param>
+    /// <param name="cancellationToken">A cancellation token that can be used to cancel the operation.</param>
+    /// <returns>A Task representing the asynchronous operation.</returns>
+    [KernelFunction]
+    [Description(@"Deletes the chat message history when a user asks to forget previous conversations or to start all over again.")]
+    public async Task DeleteChatMessagesHistoryAsync(
+        [Description(@"A unique identifier of the user")] string userId,
+        CancellationToken cancellationToken)
+    {
+        ArgumentException.ThrowIfNullOrWhiteSpace(userId);
+
+        await chatHistoryProvider.DeleteChatMessagesHistoryAsync(userId, cancellationToken);
+    }
+
+    /// <summary>
     /// Sometimes the chat history is too long and the chat model cannot process it. For those cases, will create an error message for the user.
     /// </summary>
     /// <param name="chatHistory">The current chat history.</param>

@@ -60,6 +60,7 @@ Previous classification is not required if changes are simple or all belong to t
 - Slight improvement in the `DeleteAsync` method in `CosmosRepository`.
 - Some boy scouting and typo fixes in comments.
 - Added new extension method to add Qdrant and Azure Search AI as Keyed Memory Store.
+- Added new function to delete chat messages history in `ChatWithHistoryPlugin`.
 
 ## [8.1.4]
 
