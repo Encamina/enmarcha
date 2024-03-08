@@ -26,6 +26,9 @@ Previous classification is not required if changes are simple or all belong to t
 ### Major Changes
 
 - In interface type `IChatHistoryProvider` added new method `DeleteChatMessagesHistoryAsync` to delete a user's chat history messages. This method is implemented in `ChatHistoryProvider`.
+- Added new interface `Encamina.Enmarcha.AI.Abstractions.ISemanticTextSplitter` and its implementations `Encamina.Enmarcha.AI.SemanticTextSplitter` to split a text into meaningful chunks based on embeddings.
+- Added a new utility class for mathematical operations `Encamina.Enmarcha.Core.MathUtils`.
+- Fixed `DeleteAsync<TEntityId>` method in `CosmosRepository<T>`. This method was always throwing exceptions because the partition key value was always `null`. It is fixed by considering the `Id` to delete the whole partition. If a specific item in the partition should be removed, then use the `DeleteAsync` on-generic method.
 - Updated dependencies:
   - Updated `Bogus` from `35.4.0` to `35.4.1`.
   - Updated `Azure.Core` from `1.37.0` to `1.38.0`.
@@ -50,8 +53,6 @@ Previous classification is not required if changes are simple or all belong to t
   - Updated `xunit.analyzers` from `1.10.0` to `1.11.0`.
   - Updated `xunit.extensibility.core` from `2.6.6` to `2.7.0`.
   - Updated `xunit.runner.visualstudio` from `2.5.6` to `2.5.7`.
-- Added new interface `Encamina.Enmarcha.AI.Abstractions.ISemanticTextSplitter` and its implementations `Encamina.Enmarcha.AI.SemanticTextSplitter` to split a text into meaningful chunks based on embeddings.
-- Added a new utility class for mathematical operations `Encamina.Enmarcha.Core.MathUtils`.
 
 ### Minor Changes
 
