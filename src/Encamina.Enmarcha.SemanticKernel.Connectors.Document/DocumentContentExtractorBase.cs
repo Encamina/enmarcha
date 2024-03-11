@@ -41,5 +41,13 @@ public abstract class DocumentContentExtractorBase : IDocumentConnectorProvider,
     }
 
     /// <inheritdoc/>
+    public Task<IEnumerable<string>> GetDocumentContentAsync(Stream stream, string fileExtension, CancellationToken cancellationToken)
+    {
+        // Using Task.Run instead of Task.FromResult because the operation in GetDocumentContent is potentially slow,
+        // and Task.Run ensures it is executed on a separate thread, maintaining responsiveness.
+        return Task.Run(() => GetDocumentContent(stream, fileExtension), cancellationToken);
+    }
+
+    /// <inheritdoc/>
     public abstract IDocumentConnector GetDocumentConnector(string fileExtension);
 }

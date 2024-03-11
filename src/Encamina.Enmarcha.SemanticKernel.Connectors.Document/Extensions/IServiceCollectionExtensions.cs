@@ -20,6 +20,27 @@ public static class IServiceCollectionExtensions
     }
 
     /// <summary>
+    /// Adds a default implementation of Semantic <see cref="IDocumentContentExtractor"/> to the specified <see cref="IServiceCollection"/> as a singleton service.
+    /// </summary>
+    /// <param name="services">The <see cref="IServiceCollection"/> to add services to.</param>
+    /// <returns>The <see cref="IServiceCollection"/> so that additional calls can be chained.</returns>
+    public static IServiceCollection AddDefaultDocumentContentSemanticExtractor(this IServiceCollection services)
+    {
+        return services.AddDefaultDocumentContentSemanticExtractor(ServiceLifetime.Singleton);
+    }
+
+    /// <summary>
+    /// Adds a default implementation of Semantic <see cref="IDocumentContentExtractor"/> to the specified <see cref="IServiceCollection"/>.
+    /// </summary>
+    /// <param name="services">The <see cref="IServiceCollection"/> to add services to.</param>
+    /// <returns>The <see cref="IServiceCollection"/> so that additional calls can be chained.</returns>
+    /// <param name="serviceLifetime">The lifetime for the registered services.</param>
+    public static IServiceCollection AddDefaultDocumentContentSemanticExtractor(this IServiceCollection services, ServiceLifetime serviceLifetime)
+    {
+        return services.AddType<IDocumentContentExtractor, DefaultDocumentContentSemanticExtractor>(serviceLifetime);
+    }
+
+    /// <summary>
     /// Adds a default implementation of <see cref="IDocumentContentExtractor"/> to the specified <see cref="IServiceCollection"/> as a singleton service.
     /// </summary>
     /// <param name="services">The <see cref="IServiceCollection"/> to add services to.</param>
