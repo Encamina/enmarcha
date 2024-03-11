@@ -14,7 +14,7 @@ public abstract class DocumentContentSemanticExtractorBase : IDocumentConnectorP
     /// </summary>
     /// <param name="semanticTextSplitter">A valid instance of <see cref="ISemanticTextSplitter"/> to use when extracting semantic content from documents.</param>
     /// <param name="embeddingsGeneratorFunction">An embeddings function to use when extracting semantic content from documents.</param>
-    public DocumentContentSemanticExtractorBase(ISemanticTextSplitter semanticTextSplitter, Func<IList<string>, CancellationToken, Task<IList<ReadOnlyMemory<float>>>> embeddingsGeneratorFunction)
+    protected DocumentContentSemanticExtractorBase(ISemanticTextSplitter semanticTextSplitter, Func<IList<string>, CancellationToken, Task<IList<ReadOnlyMemory<float>>>> embeddingsGeneratorFunction)
     {
         SemanticTextSplitter = semanticTextSplitter;
         EmbeddingsGeneratorFunction = embeddingsGeneratorFunction;

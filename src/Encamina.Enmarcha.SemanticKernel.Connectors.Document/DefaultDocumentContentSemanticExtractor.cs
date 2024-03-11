@@ -25,7 +25,7 @@ internal sealed class DefaultDocumentContentSemanticExtractor : DocumentContentS
     /// </summary>
     /// <param name="semanticTextSplitter">A valid instance of <see cref="ISemanticTextSplitter"/> to use when extracting semantic content from documents.</param>
     /// <param name="embeddingsGeneratorFunction">An embeddings function to use when extracting semantic content from documents.</param>
-    public DefaultDocumentContentSemanticExtractor(ISemanticTextSplitter semanticTextSplitter, Func<IList<string>, CancellationToken, Task<IList<ReadOnlyMemory<float>>>> embeddingsGeneratorFunction) : base(semanticTextSplitter, embeddingsGeneratorFunction)
+    protected DefaultDocumentContentSemanticExtractor(ISemanticTextSplitter semanticTextSplitter, Func<IList<string>, CancellationToken, Task<IList<ReadOnlyMemory<float>>>> embeddingsGeneratorFunction) : base(semanticTextSplitter, embeddingsGeneratorFunction)
     {
     }
 
