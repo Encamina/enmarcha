@@ -35,6 +35,7 @@ public class MathUtilsTests
     [InlineData(new double[] { 1, 15, 19, 64 }, 33.5)]
     [InlineData(new double[] { 10, 20, 30, 40, 50, 60 }, 30)]
     [InlineData(new double[] { 0.1, 0.2, 0.3, 0.4, 0.5 }, 0.3)]
+    [InlineData(new double[] { 0.3, 0.5, 0.4, 0.2, 0.1 }, 0.3)]
     public void Calculate_InterquartileRange_Succeeds(double[] values, double expected)
     {
         var result = MathUtils.InterquartileRange(values);

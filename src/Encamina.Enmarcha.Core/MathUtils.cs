@@ -45,11 +45,11 @@ public static class MathUtils
     /// <returns>A tuple containing the first quartile (Q1) and third quartile (Q3).</returns>
     public static (double Q1, double Q3) Quartiles(IEnumerable<double> values)
     {
-        var listValues = values.ToList();
-        var count = listValues.Count;
+        var sortedValues = values.OrderBy(x => x).ToList();
+        var count = sortedValues.Count;
 
-        var q1 = CalculateMedian(listValues.Take(count / 2));
-        var q3 = CalculateMedian(listValues.Skip((count + 1) / 2));
+        var q1 = CalculateMedian(sortedValues.Take(count / 2));
+        var q3 = CalculateMedian(sortedValues.Skip((count + 1) / 2));
 
         return (q1, q3);
     }
