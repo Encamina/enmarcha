@@ -1,12 +1,6 @@
-﻿using System.Text;
-
-using Encamina.Enmarcha.AI.Abstractions;
-using Encamina.Enmarcha.Core.Extensions;
-using Encamina.Enmarcha.SemanticKernel.Connectors.Document.Connectors;
-using Encamina.Enmarcha.SemanticKernel.Connectors.Document.Resources;
+﻿using Encamina.Enmarcha.AI.Abstractions;
 
 using Microsoft.SemanticKernel.Plugins.Document;
-using Microsoft.SemanticKernel.Plugins.Document.OpenXml;
 
 namespace Encamina.Enmarcha.SemanticKernel.Connectors.Document;
 
@@ -26,6 +20,11 @@ namespace Encamina.Enmarcha.SemanticKernel.Connectors.Document;
 /// </remarks>
 internal sealed class DefaultDocumentContentExtractor : DocumentContentExtractorBase
 {
+    /// <summary>
+    /// Initializes a new instance of the <see cref="DefaultDocumentContentExtractor"/> class.
+    /// </summary>
+    /// <param name="textSplitter">The text splitter used by this instance.</param>
+    /// <param name="lengthFunction">The function for determining the length of a string.</param>
     public DefaultDocumentContentExtractor(ITextSplitter textSplitter, Func<string, int> lengthFunction) : base(textSplitter, lengthFunction)
     {
     }
@@ -33,15 +32,6 @@ internal sealed class DefaultDocumentContentExtractor : DocumentContentExtractor
     /// <inheritdoc/>
     public override IDocumentConnector GetDocumentConnector(string fileExtension)
     {
-        return fileExtension.ToUpperInvariant() switch
-        {
-            @".DOCX" => new WordDocumentConnector(),
-            @".PDF" => new CleanPdfDocumentConnector(),
-            @".PPTX" => new ParagraphPptxDocumentConnector(),
-            @".TXT" => new TxtDocumentConnector(Encoding.UTF8),
-            @".MD" => new TxtDocumentConnector(Encoding.UTF8),
-            @".VTT" => new VttDocumentConnector(Encoding.UTF8),
-            _ => throw new NotSupportedException(ExceptionMessages.ResourceManager.GetFormattedStringByCurrentCulture(nameof(ExceptionMessages.FileExtensionNotSupported), fileExtension)),
-        };
+        return IDocumentConnectorUtils.GetDefaultDocumentConnector(fileExtension);
     }
 }

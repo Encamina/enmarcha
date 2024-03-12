@@ -8,7 +8,7 @@ namespace Encamina.Enmarcha.SemanticKernel.Connectors.Document;
 public interface IDocumentConnectorProvider
 {
     /// <summary>
-    /// Determines the most appropriate document connector from an specified file extension.
+    /// Determines the most appropriate document connector from a specified file extension.
     /// </summary>
     /// <param name="fileExtension">The file extension.</param>
     /// <returns>A valid instance of <see cref="IDocumentConnector"/> that could handle documents from the given file extension.</returns>

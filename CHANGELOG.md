@@ -22,6 +22,7 @@ Previous classification is not required if changes are simple or all belong to t
 
  - In `AzureOpenAIOptions` the default value of `ServiceVersion` changes from `V2023_12_01_Preview` to `V2024_02_15_Preview` since the former is **deprecated**.
  - In the `QuestionAnsweringFromMemoryQuery` function of the `QuestionAnsweringPlugin`, a `null` value is no longer returned when there are no relevant memory results. Instead, the execution flow continues, prompting a message with an empty context information, ultimately resulting in a response such as "I don't know" or a similar message.
+ - Added a new method `GetDocumentContentAsync` to the `IDocumentContentExtractor` interface, which is now required to be implemented.
 
 ### Major Changes
 
@@ -29,6 +30,8 @@ Previous classification is not required if changes are simple or all belong to t
 - Added new interface `Encamina.Enmarcha.AI.Abstractions.ISemanticTextSplitter` and its implementations `Encamina.Enmarcha.AI.SemanticTextSplitter` to split a text into meaningful chunks based on embeddings.
 - Added a new utility class for mathematical operations `Encamina.Enmarcha.Core.MathUtils`.
 - Fixed `DeleteAsync<TEntityId>` method in `CosmosRepository<T>`. This method was always throwing exceptions because the partition key value was always `null`. It is fixed by considering the `Id` to delete the whole partition. If a specific item in the partition should be removed, then use the `DeleteAsync` on-generic method.
+- Added `DefaultDocumentContentSemanticExtractor` to retrieve semantic chunks from documents.
+- Bug fix in the `MathUtils.Quartiles` method.
 - Updated dependencies:
   - Updated `Bogus` from `35.4.0` to `35.4.1`.
   - Updated `Azure.Core` from `1.37.0` to `1.38.0`.
