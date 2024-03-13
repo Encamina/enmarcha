@@ -16,6 +16,37 @@ Also, any bug fix must start with the prefix �Bug fix:� followed by the desc
 
 Previous classification is not required if changes are simple or all belong to the same category.
 
+## [8.1.6]
+
+### Major Changes
+
+- Update Dependencies:
+    - Updated `Microsoft.SemanticKernel.Abstractions`  from `1.5.0` to `1.6.1`
+    - Updated `Microsoft.SemanticKernel.Core`  from `1.5.0` to `1.6.1`
+    - Updated `Microsoft.SemanticKernel.Connectors.OpenAI`  from `1.5.0` to `1.6.1`
+    - Updated `Microsoft.SemanticKernel.Connectors.AzureAISearch`  from `1.5.0-alpha` to `1.6.1-alpha`
+    - Updated `Microsoft.SemanticKernel.Connectors.Qdrant`  from `1.5.0-alpha` to `1.6.1-alpha`
+    - Updated `Microsoft.SemanticKernel.Plugins.Document`  from `1.5.0-alpha` to `1.6.1-alpha`
+    - Updated `Microsoft.SemanticKernel.Plugins.Memory`  from `1.5.0-alpha` to `1.6.1-alpha`
+
+### Important
+
+Some features from `Semantic Kernel` that we might have been using, are marked as ***experimental*** and produce warnings that do not allow the compilation of the code. To use these features, these warnings must be ignored explicitly per project. The following is a list of these warnings and the affected projects:
+- SKEXP0001:
+    - `Encamina.Enmarcha.SemanticKernel.Abstractions`
+    - `Encamina.Enmarcha.SemanticKernel.Connectors.Memory`
+    - `Encamina.Enmarcha.SemanticKernel.Plugins.Memory`
+    - `Encamina.Enmarcha.SemanticKernel.Plugins.QuestionAnswering`
+    - `Encamina.Enmarcha.Samples.SemanticKernel.QuestionAnswering`
+- SKEXP0010:
+    - `Encamina.Enmarcha.SemanticKernel.Connectors.Memory`
+    - `Encamina.Enmarcha.Samples.SemanticKernel.QuestionAnswering`
+- SKEXP0020:
+    - `Encamina.Enmarcha.SemanticKernel.Connectors.Memory`
+- SKEXP0050:
+    - `Encamina.Enmarcha.SemanticKernel.Connectors.Document`
+    - `Encamina.Enmarcha.Samples.SemanticKernel.QuestionAnswering`
+
 ## [8.1.5]
 
 ### Breaking Changes 

@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
         <TargetFramework>net8.0</TargetFramework>
@@ -7,11 +7,11 @@
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-      <NoWarn>1701;1702;SKEXP0003;SKEXP0011;SKEXP0021;SKEXP0026</NoWarn>
+      <NoWarn>1701;1702;SKEXP0001;SKEXP0003;SKEXP0010;SKEXP0011;SKEXP0020;SKEXP0021;SKEXP0026</NoWarn>
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-      <NoWarn>1701;1702;SKEXP0003;SKEXP0011;SKEXP0021;SKEXP0026</NoWarn>
+      <NoWarn>1701;1702;SKEXP0001;SKEXP0003;SKEXP0010;SKEXP0011;SKEXP0020;SKEXP0021;SKEXP0026</NoWarn>
     </PropertyGroup>
 
     <PropertyGroup>
@@ -21,8 +21,8 @@
     <ItemGroup>
         <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.0" />
         <PackageReference Include="Microsoft.Extensions.Http" Version="8.0.0" />
-        <PackageReference Include="Microsoft.SemanticKernel.Connectors.AzureAISearch" Version="1.5.0-alpha" />
-        <PackageReference Include="Microsoft.SemanticKernel.Connectors.Qdrant" Version="1.5.0-alpha" />
+        <PackageReference Include="Microsoft.SemanticKernel.Connectors.AzureAISearch" Version="1.6.1-alpha" />
+        <PackageReference Include="Microsoft.SemanticKernel.Connectors.Qdrant" Version="1.6.1-alpha" />
     </ItemGroup>
 
     <ItemGroup>
