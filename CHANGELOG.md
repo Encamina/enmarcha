@@ -86,6 +86,26 @@ Some features from `Semantic Kernel` that we might have been using, are marked a
     - `Encamina.Enmarcha.SemanticKernel.Connectors.Document`
     - `Encamina.Enmarcha.Samples.SemanticKernel.QuestionAnswering`
 
+Some warnings have also been removed with the new `Semantic Kernel` updates.
+- SKEXP0003:
+    - `Encamina.Enmarcha.Samples.SemanticKernel.QuestionAnswering`
+    - `Encamina.Enmarcha.SemanticKernel`
+    - `Encamina.Enmarcha.SemanticKernel.Abstractions`
+    - `Encamina.Enmarcha.SemanticKernel.Connectors.Memory`
+    - `Encamina.Enmarcha.SemanticKernel.Plugins.Memory`
+    - `Encamina.Enmarcha.SemanticKernel.Plugins.QuestionAnswering`
+- SKEXP0011:
+    - `Encamina.Enmarcha.Samples.SemanticKernel.QuestionAnswering`
+    - `Encamina.Enmarcha.SemanticKernel.Connectors.Memory`
+- SKEXP0021:
+    - `Encamina.Enmarcha.SemanticKernel.Connectors.Memory`
+- SKEXP0026:
+    - `Encamina.Enmarcha.SemanticKernel.Connectors.Memory` 
+- SKEXP0051:
+    - `Encamina.Enmarcha.SemanticKernel.Connectors.Document`
+- SKEXP0052:
+    - `Encamina.Enmarcha.Samples.SemanticKernel.QuestionAnswering`
+
 
 ## [8.1.4]
 
