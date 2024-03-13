@@ -141,7 +141,7 @@ jobs:
         run: |
           gh release create "$tag" \
               --repo="$GITHUB_REPOSITORY" \
-              --title="${GITHUB_REPOSITORY#*/} ${tag#v}" \
+              --title="$title" \
               --generate-notes
 
       - name: Upload Release Assets
@@ -150,4 +150,4 @@ jobs:
             releaseAssetName: enmarcha-libraries-${{ steps.PassOutputReleaseVersion.outputs.RELEASE_VERSION }}.zip
         run: |
             mv nupkg.zip $releaseAssetName
-            gh release upload ${{github.event.release.tag_name}} $releaseAssetName
+            gh release upload "${{github.event.release.tag_name}}" "$releaseAssetName" --repo="$GITHUB_REPOSITORY"
