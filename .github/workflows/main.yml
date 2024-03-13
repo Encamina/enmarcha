@@ -37,7 +37,7 @@ jobs:
             java-version: '21'
         
       - name: Using .NET from 'global.json'
-        uses: actions/setup-dotnet@v3
+        uses: actions/setup-dotnet@v4
         with:
           global-json-file: global.json
         
@@ -63,7 +63,7 @@ jobs:
         run: ./tools/reportgenerator -reports:./**/coverage.cobertura.xml -targetdir:coverage/Cobertura -reporttypes:'MarkdownSummaryGithub;Cobertura'
 
       - name: Publish Coverage Report
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: code-coverage-report
           path: coverage/Cobertura/
@@ -87,7 +87,7 @@ jobs:
           mv ./nupkg.zip ${{ github.workspace }}
                 
       - name: Upload Libraries for Continuous Deployment
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: enmarcha-libraries-${{ github.run_number }}
           path: nupkg.zip
@@ -111,7 +111,7 @@ jobs:
           echo "RELEASE_VERSION=$release_version" >> $env:GITHUB_OUTPUT
 
       - name: Download Libraries for Continuous Deployment
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: enmarcha-libraries-${{ github.run_number }}
           path: ./
@@ -121,6 +121,8 @@ jobs:
           cd ${{ github.workspace }}
           unzip nupkg.zip -d nupkg
 
+      # Use --skip-duplicate to prevent errors if a package with the same version already exists.
+      # When retrying a failed workflow, already published packages will be skipped without error.
       - name: Push Libraries to NuGet.org
         run: dotnet nuget push **/*.nupkg --api-key ${{ secrets.NUGET_KEY }} --source https://api.nuget.org/v3/index.json --skip-duplicate
       
@@ -132,21 +134,21 @@ jobs:
         
       - name: Create Release
         id: create_release
-        uses: actions/create-release@v1.1.4
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tag_name: "v${{ steps.PassOutputReleaseVersion.outputs.RELEASE_VERSION }}"
-          release_name: "Release ${{ steps.PassOutputReleaseVersion.outputs.RELEASE_VERSION }}"
-          draft: false
-          prerelease: false
+          tag: "v${{ steps.PassOutputReleaseVersion.outputs.RELEASE_VERSION }}"
+          title: "Release ${{ steps.PassOutputReleaseVersion.outputs.RELEASE_VERSION }}"
+        run: |
+          gh release create "$tag" \
+              --repo="$GITHUB_REPOSITORY" \
+              --title="$title" \
+              --generate-notes
 
       - name: Upload Release Assets
-        uses: actions/upload-release-asset@v1.0.1
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./nupkg.zip
-          asset_name: enmarcha-libraries-${{ steps.PassOutputReleaseVersion.outputs.RELEASE_VERSION }}.zip
-          asset_content_type: application/zip
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+            releaseAssetName: enmarcha-libraries-${{ steps.PassOutputReleaseVersion.outputs.RELEASE_VERSION }}.zip
+            tag: "v${{ steps.PassOutputReleaseVersion.outputs.RELEASE_VERSION }}"
+        run: |
+            mv nupkg.zip $releaseAssetName
+            gh release upload "$tag" "$releaseAssetName" --repo="$GITHUB_REPOSITORY"
