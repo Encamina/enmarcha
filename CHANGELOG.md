@@ -16,12 +16,15 @@ Also, any bug fix must start with the prefix �Bug fix:� followed by the desc
 
 Previous classification is not required if changes are simple or all belong to the same category.
 
+
+
 ## [8.1.5]
 
 ### Breaking Changes 
 
  - In `AzureOpenAIOptions` the default value of `ServiceVersion` changes from `V2023_12_01_Preview` to `V2024_02_15_Preview` since the former is **deprecated**.
  - In the `QuestionAnsweringFromMemoryQuery` function of the `QuestionAnsweringPlugin`, a `null` value is no longer returned when there are no relevant memory results. Instead, the execution flow continues, prompting a message with an empty context information, ultimately resulting in a response such as "I don't know" or a similar message.
+ - Added a new method `GetDocumentContentAsync` to the `IDocumentContentExtractor` interface, which is now required to be implemented.
 
 ### Major Changes
 
@@ -29,6 +32,9 @@ Previous classification is not required if changes are simple or all belong to t
 - Added new interface `Encamina.Enmarcha.AI.Abstractions.ISemanticTextSplitter` and its implementations `Encamina.Enmarcha.AI.SemanticTextSplitter` to split a text into meaningful chunks based on embeddings.
 - Added a new utility class for mathematical operations `Encamina.Enmarcha.Core.MathUtils`.
 - Fixed `DeleteAsync<TEntityId>` method in `CosmosRepository<T>`. This method was always throwing exceptions because the partition key value was always `null`. It is fixed by considering the `Id` to delete the whole partition. If a specific item in the partition should be removed, then use the `DeleteAsync` on-generic method.
+- Added `DefaultDocumentContentSemanticExtractor` to retrieve semantic chunks from documents.
+- Bug fix in the `MathUtils.Quartiles` method.
+- Enhanced `SplitAsync` in `Encamina.Enmarcha.AI.SemanticTextSplitter` to iteratively split chunks exceeding `options.MaxChunkSize` with a retry limit of `options.ChunkSplitRetryLimit`.
 - Updated dependencies:
   - Updated `Bogus` from `35.4.0` to `35.4.1`.
   - Updated `Azure.Core` from `1.37.0` to `1.38.0`.
@@ -40,20 +46,20 @@ Previous classification is not required if changes are simple or all belong to t
   - Updated `Microsoft.Bot.Builder.Dialogs` from `4.22.1` to `4.22.2`.
   - Updated `Microsoft.Bot.Builder.Integration.ApplicationInsights.Core` from `4.22.1` to `4.22.2`.
   - Updated `MMicrosoft.Bot.Builder.Integration.AspNet.Core` from `4.22.1` to `4.22.2`.
-  - Updated `Microsoft.SemanticKernel.Abstractions` from `1.4.0` to `1.5.0`.
-  - Updated `Microsoft.SemanticKernel.Connectors.AzureAISearch` from `1.4.0-alpha` to `1.5.0-alpha`. This does fix the [Issue 72](https://github.com/Encamina/enmarcha/issues/72).
-  - Updated `Microsoft.SemanticKernel.Connectors.OpenAI` from `1.4.0` to `1.5.0`.
-  - Updated `Microsoft.SemanticKernel.Connectors.Qdrant` from `1.4.0-alpha` to `1.5.0-alpha`.
-  - Updated `Microsoft.SemanticKernel.Core` from `1.4.0` to `1.5.0`.
-  - Updated `Microsoft.SemanticKernel.Plugins.Document` from `1.4.0-alpha` to `1.5.0-alpha`.
-  - Updated `Microsoft.SemanticKernel.Plugins.Memory` from `1.4.0-alpha` to `1.5.0-alpha`.
+  - Updated `Microsoft.SemanticKernel.Abstractions` from `1.4.0` to `1.6.1`.
+  - Updated `Microsoft.SemanticKernel.Connectors.AzureAISearch` from `1.4.0-alpha` to `1.6.1-alpha`. This does fix the [Issue 72](https://github.com/Encamina/enmarcha/issues/72).
+  - Updated `Microsoft.SemanticKernel.Connectors.OpenAI` from `1.4.0` to `1.6.1`.
+  - Updated `Microsoft.SemanticKernel.Connectors.Qdrant` from `1.4.0-alpha` to `1.6.1-alpha`.
+  - Updated `Microsoft.SemanticKernel.Core` from `1.4.0` to `1.6.1`.
+  - Updated `Microsoft.SemanticKernel.Plugins.Document` from `1.4.0-alpha` to `1.6.1-alpha`.
+  - Updated `Microsoft.SemanticKernel.Plugins.Memory` from `1.4.0-alpha` to `1.6.1-alpha`.
   - Updated `SharpToken` from `1.2.15` to `1.2.17`.
   - Updated `coverlet.collector` from `6.0.0` to `6.0.1`.
   - Updated `xunit` from `2.6.6` to `2.7.0`.
   - Updated `xunit.analyzers` from `1.10.0` to `1.11.0`.
   - Updated `xunit.extensibility.core` from `2.6.6` to `2.7.0`.
   - Updated `xunit.runner.visualstudio` from `2.5.6` to `2.5.7`.
-
+  
 ### Minor Changes
 
 - Changes in the prompt of `QuestionAnsweringPlugin` to enhance language detection in the response.
@@ -61,6 +67,45 @@ Previous classification is not required if changes are simple or all belong to t
 - Some boy scouting and typo fixes in comments.
 - Added new extension method to add Qdrant and Azure Search AI as Keyed Memory Store.
 - Added new function to delete chat messages history in `ChatWithHistoryPlugin`.
+
+### Important
+
+Some features from `Semantic Kernel` that we might have been using, are marked as ***experimental*** and produce warnings that do not allow the compilation of the code. To use these features, these warnings must be ignored explicitly per project. The following is a list of these warnings and the affected projects:
+- SKEXP0001:
+    - `Encamina.Enmarcha.SemanticKernel.Abstractions`
+    - `Encamina.Enmarcha.SemanticKernel.Connectors.Memory`
+    - `Encamina.Enmarcha.SemanticKernel.Plugins.Memory`
+    - `Encamina.Enmarcha.SemanticKernel.Plugins.QuestionAnswering`
+    - `Encamina.Enmarcha.Samples.SemanticKernel.QuestionAnswering`
+- SKEXP0010:
+    - `Encamina.Enmarcha.SemanticKernel.Connectors.Memory`
+    - `Encamina.Enmarcha.Samples.SemanticKernel.QuestionAnswering`
+- SKEXP0020:
+    - `Encamina.Enmarcha.SemanticKernel.Connectors.Memory`
+- SKEXP0050:
+    - `Encamina.Enmarcha.SemanticKernel.Connectors.Document`
+    - `Encamina.Enmarcha.Samples.SemanticKernel.QuestionAnswering`
+
+Some warnings have also been removed with the new `Semantic Kernel` updates.
+- SKEXP0003:
+    - `Encamina.Enmarcha.Samples.SemanticKernel.QuestionAnswering`
+    - `Encamina.Enmarcha.SemanticKernel`
+    - `Encamina.Enmarcha.SemanticKernel.Abstractions`
+    - `Encamina.Enmarcha.SemanticKernel.Connectors.Memory`
+    - `Encamina.Enmarcha.SemanticKernel.Plugins.Memory`
+    - `Encamina.Enmarcha.SemanticKernel.Plugins.QuestionAnswering`
+- SKEXP0011:
+    - `Encamina.Enmarcha.Samples.SemanticKernel.QuestionAnswering`
+    - `Encamina.Enmarcha.SemanticKernel.Connectors.Memory`
+- SKEXP0021:
+    - `Encamina.Enmarcha.SemanticKernel.Connectors.Memory`
+- SKEXP0026:
+    - `Encamina.Enmarcha.SemanticKernel.Connectors.Memory` 
+- SKEXP0051:
+    - `Encamina.Enmarcha.SemanticKernel.Connectors.Document`
+- SKEXP0052:
+    - `Encamina.Enmarcha.Samples.SemanticKernel.QuestionAnswering`
+
 
 ## [8.1.4]
 

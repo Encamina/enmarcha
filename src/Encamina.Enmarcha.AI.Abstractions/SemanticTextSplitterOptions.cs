@@ -38,4 +38,17 @@ public class SemanticTextSplitterOptions
     /// </remarks>
     [Required]
     public float BreakpointThresholdAmount { get; init; } = 95;
+
+    /// <summary>
+    /// Gets maximum allowed size for each chunk. If specified, the text will be split into chunks with a maximum size as defined by this property.
+    /// </summary>
+    [Range(0, int.MaxValue)]
+    public int? MaxChunkSize { get; init; }
+
+    /// <summary>
+    /// Gets maximum number of attempts to split a chunk if its length exceeds the defined maximum chunk size.
+    /// If specified, the splitter will make multiple attempts to split the chunk while respecting the size limit.
+    /// </summary>
+    [Range(0, int.MaxValue)]
+    public int? ChunkSplitRetryLimit { get; init; }
 }

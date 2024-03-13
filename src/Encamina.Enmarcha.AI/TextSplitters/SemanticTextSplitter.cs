@@ -17,14 +17,18 @@ public class SemanticTextSplitter : ISemanticTextSplitter
 {
     private static readonly Regex SentenceSplitRegex = new(@"(?<=[.?!])\s+", RegexOptions.Compiled, TimeSpan.FromSeconds(30));
 
+    private readonly Func<string, int> lengthFunction;
+
     private SemanticTextSplitterOptions options;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="SemanticTextSplitter"/> class.
     /// </summary>
     /// <param name="options">The options to use when configuring the semantic text splitter.</param>
-    public SemanticTextSplitter(IOptionsMonitor<SemanticTextSplitterOptions> options)
+    /// <param name="lengthFunction">A function to use to calculate the length (or size) of each split.</param>
+    public SemanticTextSplitter(IOptionsMonitor<SemanticTextSplitterOptions> options, Func<string, int> lengthFunction)
     {
+        this.lengthFunction = lengthFunction;
         this.options = options.CurrentValue;
 
         options.OnChange(newOptions => this.options = newOptions);
@@ -32,6 +36,44 @@ public class SemanticTextSplitter : ISemanticTextSplitter
 
     /// <inheritdoc/>
     public async Task<IEnumerable<string>> SplitAsync(string text, Func<IList<string>, CancellationToken, Task<IList<ReadOnlyMemory<float>>>> embeddingsGenerator, CancellationToken cancellationToken)
+    {
+        var chunks = (await InternalSplitAsync(text, options, embeddingsGenerator, cancellationToken)).ToList();
+
+        if (options.MaxChunkSize.HasValue && options.ChunkSplitRetryLimit.HasValue)
+        {
+            // Iterate through each chunk and split it further if its length exceeds the maximum allowed chunk size.
+            for (var i = 0; i < chunks.Count; i++)
+            {
+                var chunk = chunks[i];
+                var attempts = 0;
+
+                while (lengthFunction(chunk) > options.MaxChunkSize && attempts < options.ChunkSplitRetryLimit)
+                {
+                    var additionalChunks = (await InternalSplitAsync(chunk, options, embeddingsGenerator, cancellationToken)).ToList();
+
+                    chunks.InsertRange(i + 1, additionalChunks);
+
+                    chunks.RemoveAt(i);
+
+                    chunk = chunks[i] ?? string.Empty;
+
+                    attempts++;
+                }
+            }
+        }
+
+        return chunks;
+    }
+
+    /// <summary>
+    /// Splits the input text based on semantic content.
+    /// </summary>
+    /// <param name="text">The input text to be split.</param>
+    /// <param name="options">The options to use when configuring the semantic text splitter.</param>
+    /// <param name="embeddingsGenerator">A function for generating embeddings for a list of sentences.</param>
+    /// <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
+    /// <returns>An enumerable collection of strings representing the split chunks of sentences.</returns>
+    private static async Task<IEnumerable<string>> InternalSplitAsync(string text, SemanticTextSplitterOptions options, Func<IList<string>, CancellationToken, Task<IList<ReadOnlyMemory<float>>>> embeddingsGenerator, CancellationToken cancellationToken)
     {
         // Code inspired by
         // https://github.com/run-llama/llama_index/blob/8ed753df970f068f6afc8a83fd51a1f40880de9e/llama-index-packs/llama-index-packs-node-parser-semantic-chunking/llama_index/packs/node_parser_semantic_chunking/base.py
@@ -167,7 +209,7 @@ public class SemanticTextSplitter : ISemanticTextSplitter
     /// <param name="sentences">The list of sentences to be sliced.</param>
     /// <param name="indexes">The list of indexes indicating breakpoints in the sentences.</param>
     /// <returns>A list of sliced text chunks.</returns>
-    private static IEnumerable<string> SliceSentences(IList<string> sentences, List<int> indexes)
+    private static IEnumerable<string> SliceSentences(ICollection<string> sentences, List<int> indexes)
     {
         var chunks = new List<string>();
         var startIndex = 0;
