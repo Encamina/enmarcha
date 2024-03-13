@@ -148,6 +148,7 @@ jobs:
         env:
             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
             releaseAssetName: enmarcha-libraries-${{ steps.PassOutputReleaseVersion.outputs.RELEASE_VERSION }}.zip
+            tag: "v${{ steps.PassOutputReleaseVersion.outputs.RELEASE_VERSION }}"
         run: |
             mv nupkg.zip $releaseAssetName
-            gh release upload "${{github.event.release.tag_name}}" "$releaseAssetName" --repo="$GITHUB_REPOSITORY"
+            gh release upload "$tag" "$releaseAssetName" --repo="$GITHUB_REPOSITORY"
