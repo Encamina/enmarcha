@@ -146,17 +146,6 @@ jobs:
 
       - name: Upload Release Assets
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          tag: "v${{ steps.PassOutputReleaseVersion.outputs.RELEASE_VERSION }}"
-          title: "Release v${{ steps.PassOutputReleaseVersion.outputs.RELEASE_VERSION }}"
-        run: |
-          gh release create "$tag" \
-              --repo="$GITHUB_REPOSITORY" \
-              --title="$title" \
-              --generate-notes
-
-      - name: Upload Release Assets
-        env:
             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
             releaseAssetName: enmarcha-libraries-${{ steps.PassOutputReleaseVersion.outputs.RELEASE_VERSION }}.zip
         run: |
