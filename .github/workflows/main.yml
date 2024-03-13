@@ -145,7 +145,6 @@ jobs:
               --generate-notes
 
       - name: Upload Release Assets
-        id: create_release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           tag: "v${{ steps.PassOutputReleaseVersion.outputs.RELEASE_VERSION }}"
