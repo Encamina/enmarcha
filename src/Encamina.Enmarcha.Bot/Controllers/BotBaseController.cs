@@ -36,6 +36,9 @@ public abstract class BotBaseController : ControllerBase
     /// <summary>
     /// Handles a request for the bot.
     /// </summary>
+    /// <remarks>
+    /// This method does not uses a `CancellationToken` because Azure Bot Service would cancel the request if it did not receive a response within 15 seconds.
+    /// </remarks>
     /// <returns>
     /// A <see cref="Task"/> that represents the asynchronous operation of handling the request for the bot.
     /// </returns>
