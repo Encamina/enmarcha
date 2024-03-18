@@ -46,13 +46,13 @@ Previous classification is not required if changes are simple or all belong to t
   - Updated `Microsoft.Bot.Builder.Dialogs` from `4.22.1` to `4.22.2`.
   - Updated `Microsoft.Bot.Builder.Integration.ApplicationInsights.Core` from `4.22.1` to `4.22.2`.
   - Updated `MMicrosoft.Bot.Builder.Integration.AspNet.Core` from `4.22.1` to `4.22.2`.
-  - Updated `Microsoft.SemanticKernel.Abstractions` from `1.4.0` to `1.6.1`.
-  - Updated `Microsoft.SemanticKernel.Connectors.AzureAISearch` from `1.4.0-alpha` to `1.6.1-alpha`. This does fix the [Issue 72](https://github.com/Encamina/enmarcha/issues/72).
-  - Updated `Microsoft.SemanticKernel.Connectors.OpenAI` from `1.4.0` to `1.6.1`.
-  - Updated `Microsoft.SemanticKernel.Connectors.Qdrant` from `1.4.0-alpha` to `1.6.1-alpha`.
-  - Updated `Microsoft.SemanticKernel.Core` from `1.4.0` to `1.6.1`.
-  - Updated `Microsoft.SemanticKernel.Plugins.Document` from `1.4.0-alpha` to `1.6.1-alpha`.
-  - Updated `Microsoft.SemanticKernel.Plugins.Memory` from `1.4.0-alpha` to `1.6.1-alpha`.
+  - Updated `Microsoft.SemanticKernel.Abstractions` from `1.4.0` to `1.6.2`.
+  - Updated `Microsoft.SemanticKernel.Connectors.AzureAISearch` from `1.4.0-alpha` to `1.6.2-alpha`. This does fix the [Issue 72](https://github.com/Encamina/enmarcha/issues/72).
+  - Updated `Microsoft.SemanticKernel.Connectors.OpenAI` from `1.4.0` to `1.6.2`.
+  - Updated `Microsoft.SemanticKernel.Connectors.Qdrant` from `1.4.0-alpha` to `1.6.2-alpha`.
+  - Updated `Microsoft.SemanticKernel.Core` from `1.4.0` to `1.6.2`.
+  - Updated `Microsoft.SemanticKernel.Plugins.Document` from `1.4.0-alpha` to `1.6.2-alpha`.
+  - Updated `Microsoft.SemanticKernel.Plugins.Memory` from `1.4.0-alpha` to `1.6.2-alpha`.
   - Updated `SharpToken` from `1.2.15` to `1.2.17`.
   - Updated `coverlet.collector` from `6.0.0` to `6.0.1`.
   - Updated `xunit` from `2.6.6` to `2.7.0`.
