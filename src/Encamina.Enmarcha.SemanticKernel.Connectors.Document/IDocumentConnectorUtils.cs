@@ -12,7 +12,7 @@ namespace Encamina.Enmarcha.SemanticKernel.Connectors.Document;
 /// <summary>
 /// Utility class providing methods for working with document connectors.
 /// </summary>
-internal static class IDocumentConnectorUtils
+public static class IDocumentConnectorUtils
 {
     /// <summary>
     /// Gets the default document connector based on the specified file extension.
@@ -20,7 +20,7 @@ internal static class IDocumentConnectorUtils
     /// <param name="fileExtension">The file extension for which to retrieve the connector.</param>
     /// <returns>An instance of the default document connector for the specified file extension.</returns>
     /// <exception cref="NotSupportedException">Thrown when the file extension is not supported.</exception>
-    internal static IDocumentConnector GetDefaultDocumentConnector(string fileExtension)
+    public static IDocumentConnector GetDefaultDocumentConnector(string fileExtension)
     {
         return fileExtension.ToUpperInvariant() switch
         {

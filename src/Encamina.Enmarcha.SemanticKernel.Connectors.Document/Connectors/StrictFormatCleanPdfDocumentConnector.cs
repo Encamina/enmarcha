@@ -51,7 +51,12 @@ public class StrictFormatCleanPdfDocumentConnector : CleanPdfDocumentConnector
         return sb.ToString();
     }
 
-    private static IEnumerable<TextBlock> GetTextBlocks(Page page)
+    /// <summary>
+    /// Extracts <see cref="TextBlock"/> from a given page of a PDF document.
+    /// </summary>
+    /// <param name="page">The page from which to extract text blocks.</param>
+    /// <returns>An enumerable collection of <see cref="TextBlock" /> extracted from the page.</returns>
+    protected static IEnumerable<TextBlock> GetTextBlocks(Page page)
     {
         // 1. Extract words
         var words = NearestNeighbourWordExtractor.Instance.GetWords(page.Letters);
@@ -70,7 +75,13 @@ public class StrictFormatCleanPdfDocumentConnector : CleanPdfDocumentConnector
         return orderedTextBlocks;
     }
 
-    private static IEnumerable<TextBlock> CleanTextBlocks(PdfDocument document, IEnumerable<TextBlock> textBlocks)
+    /// <summary>
+    /// Cleans the extracted text blocks from a PDF document by removing common words that overlap across pages and excluding non-horizontal text.
+    /// </summary>
+    /// <param name="document">The PDF document.</param>
+    /// <param name="textBlocks">The extracted text blocks.</param>
+    /// <returns>The cleaned text blocks.</returns>
+    protected static IEnumerable<TextBlock> CleanTextBlocks(PdfDocument document, IEnumerable<TextBlock> textBlocks)
     {
         var horizontalTextBlocks = textBlocks
             .Where(tb => tb.TextOrientation == TextOrientation.Horizontal)
