@@ -67,6 +67,7 @@ Previous classification is not required if changes are simple or all belong to t
 - Some boy scouting and typo fixes in comments.
 - Added new extension method to add Qdrant and Azure Search AI as Keyed Memory Store.
 - Added new function to delete chat messages history in `ChatWithHistoryPlugin`.
+- Added new model `gpt-4-turbo` to `ModelInfo`.
 
 ### Important
 
