@@ -1,5 +1,7 @@
-﻿using Encamina.Enmarcha.SemanticKernel;
+﻿using Encamina.Enmarcha.AI.Abstractions;
+using Encamina.Enmarcha.SemanticKernel;
 using Encamina.Enmarcha.SemanticKernel.Abstractions;
+using Encamina.Enmarcha.SemanticKernel.Internals;
 using Encamina.Enmarcha.SemanticKernel.Options;
 
 using Microsoft.Extensions.Configuration;
@@ -57,5 +59,15 @@ public static class IServiceCollectionExtensions
         services.TryAddSingleton<IMemoryStoreHandler, EphemeralMemoryStoreHandler>();
 
         return services;
+    }
+
+    /// <summary>
+    /// Adds the <see cref="SemanticKernelCosineStringSimilarityComparer"/> implementation of <see cref="IStringSimilarityComparer"/> to the specified <see cref="IServiceCollection"/> as a scoped service.
+    /// </summary>
+    /// <param name="services">The <see cref="IServiceCollection"/> to add services to.</param>
+    /// <returns>The <see cref="IServiceCollection"/> so that additional calls can be chained.</returns>
+    public static IServiceCollection AddSemanticKernelCosineStringSimilarityComparer(this IServiceCollection services)
+    {
+        return services.AddScoped<IStringSimilarityComparer, SemanticKernelCosineStringSimilarityComparer>();
     }
 }
