@@ -1,5 +1,6 @@
 ﻿using System.Text;
 
+using DocumentFormat.OpenXml;
 using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Spreadsheet;
 
@@ -37,70 +38,47 @@ public class ExcelDocumentConnector : IDocumentConnector
     {
         var resultSb = new StringBuilder();
 
-        using (var doc = SpreadsheetDocument.Open(stream, false))
+        using var doc = SpreadsheetDocument.Open(stream, false);
+        var sheets = doc.WorkbookPart?.Workbook.Sheets?.OfType<Sheet>().ToList();
+        if (sheets == null)
         {
-            var sheets = doc.WorkbookPart?.Workbook.Sheets?.OfType<Sheet>().ToList();
-            if (sheets == null)
+            return resultSb.ToString();
+        }
+
+        var rowSb = new StringBuilder();
+        var sharedStrings = doc.WorkbookPart?.SharedStringTablePart?.SharedStringTable.Elements<SharedStringItem>().ToList() ?? [];
+
+        foreach (var sheet in sheets)
+        {
+            if (sheet.Id?.Value == null)
             {
-                return resultSb.ToString();
+                continue;
             }
 
-            var rowSb = new StringBuilder();
-            var sharedStrings = doc.WorkbookPart?.SharedStringTablePart?.SharedStringTable.Elements<SharedStringItem>().ToList() ?? [];
+            var worksheet = (doc.WorkbookPart!.GetPartById(sheet.Id.Value) as WorksheetPart)?.Worksheet;
+            var rows = worksheet?.GetFirstChild<SheetData>()?.Descendants<Row>();
 
-            foreach (var sheet in sheets)
+            if (rows == null)
             {
-                if (sheet.Id?.Value == null)
-                {
-                    continue;
-                }
-
-                var worksheet = (doc.WorkbookPart!.GetPartById(sheet.Id.Value) as WorksheetPart)?.Worksheet;
-                var rows = worksheet?.GetFirstChild<SheetData>()?.Descendants<Row>();
-
-                if (rows == null)
-                {
-                    continue;
-                }
-
-                if (WithWorksheetName)
-                {
-                    rowSb.AppendLine(WorksheetTemplateName(sheet.Name));
-                }
-
-                foreach (var row in rows)
-                {
-                    var cells = row.Descendants<Cell>().Where(r => r.CellValue != null).ToList();
-
-                    for (var i = 0; i < cells.Count; i++)
-                    {
-                        var cellValue = GetCellValue(sharedStrings, cells[i]);
-
-                        if (WithQuotes && cellValue.IsText)
-                        {
-                            rowSb.Append('"')
-                                 .Append(cellValue.Value)
-                                 .Append('"');
-                        }
-                        else
-                        {
-                            rowSb.Append(cellValue.Value);
-                        }
-
-                        if (i < cells.Count - 1)
-                        {
-                            rowSb.Append(ColumnSeparator);
-                        }
-                    }
-
-                    rowSb.AppendLine();
-                }
-
-                resultSb.AppendLine(rowSb.ToString().Trim())
-                      .AppendLine();
-
-                rowSb.Clear();
+                continue;
             }
+
+            if (WithWorksheetName)
+            {
+                rowSb.AppendLine(WorksheetTemplateName(sheet.Name));
+            }
+
+            foreach (var row in rows)
+            {
+                var rowValue = GetRowValue(row, sharedStrings);
+
+                rowSb.AppendLine(rowValue);
+            }
+
+            resultSb.AppendLine(rowSb.ToString().Trim())
+                    .AppendLine();
+
+            rowSb.Clear();
         }
 
         return resultSb.ToString().Trim();
@@ -126,5 +104,34 @@ public class ExcelDocumentConnector : IDocumentConnector
         }
 
         return (cell.CellValue?.InnerText, false);
+    }
+
+    private string GetRowValue(OpenXmlElement row, IReadOnlyCollection<SharedStringItem> sharedStrings)
+    {
+        var cells = row.Descendants<Cell>().Where(r => r.CellValue != null).ToList();
+
+        var rowSb = new StringBuilder();
+        for (var i = 0; i < cells.Count; i++)
+        {
+            var cellValue = GetCellValue(sharedStrings, cells[i]);
+
+            if (WithQuotes && cellValue.IsText)
+            {
+                rowSb.Append('"')
+                    .Append(cellValue.Value)
+                    .Append('"');
+            }
+            else
+            {
+                rowSb.Append(cellValue.Value);
+            }
+
+            if (i < cells.Count - 1)
+            {
+                rowSb.Append(ColumnSeparator);
+            }
+        }
+
+        return rowSb.ToString();
     }
 }
