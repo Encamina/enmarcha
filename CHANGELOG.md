@@ -35,6 +35,7 @@ Previous classification is not required if changes are simple or all belong to t
 - Added `DefaultDocumentContentSemanticExtractor` to retrieve semantic chunks from documents.
 - Bug fix in the `MathUtils.Quartiles` method.
 - Enhanced `SplitAsync` in `Encamina.Enmarcha.AI.SemanticTextSplitter` to iteratively split chunks exceeding `options.MaxChunkSize` with a retry limit of `options.ChunkSplitRetryLimit`.
+- Added new document connector to read Excel files (xlsx) `ExcelDocumentConnector`.
 - Updated dependencies:
   - Updated `Bogus` from `35.4.0` to `35.4.1`.
   - Updated `Azure.Core` from `1.37.0` to `1.38.0`.
