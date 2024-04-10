@@ -30,6 +30,7 @@ public static class IDocumentConnectorUtils
             @".TXT" => new TxtDocumentConnector(Encoding.UTF8),
             @".MD" => new TxtDocumentConnector(Encoding.UTF8),
             @".VTT" => new VttDocumentConnector(Encoding.UTF8),
+            @".XLSX" => new ExcelDocumentConnector(),
             _ => throw new NotSupportedException(ExceptionMessages.ResourceManager.GetFormattedStringByCurrentCulture(nameof(ExceptionMessages.FileExtensionNotSupported), fileExtension)),
         };
     }
