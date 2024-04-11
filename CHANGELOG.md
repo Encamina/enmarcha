@@ -59,7 +59,6 @@ Previous classification is not required if changes are simple or all belong to t
   - Updated `xunit.analyzers` from `1.10.0` to `1.11.0`.
   - Updated `xunit.extensibility.core` from `2.6.6` to `2.7.0`.
   - Updated `xunit.runner.visualstudio` from `2.5.6` to `2.5.7`.
-- Added `SemanticKernelCosineStringSimilarityComparer` in `Encamina.Enmarcha.SemanticKernel` to compare two strings using cosine similarity algorithm.
   
 ### Minor Changes
 
@@ -69,6 +68,7 @@ Previous classification is not required if changes are simple or all belong to t
 - Added new extension method to add Qdrant and Azure Search AI as Keyed Memory Store.
 - Added new function to delete chat messages history in `ChatWithHistoryPlugin`.
 - Added new model `gpt-4-turbo` to `ModelInfo`.
+- Added `SemanticKernelCosineStringSimilarityComparer` in `Encamina.Enmarcha.SemanticKernel` to compare two strings using cosine similarity algorithm.
 
 ### Important
 
