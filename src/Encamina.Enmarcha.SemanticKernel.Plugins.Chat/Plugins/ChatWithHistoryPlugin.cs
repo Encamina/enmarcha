@@ -2,6 +2,7 @@
 
 using Encamina.Enmarcha.AI.OpenAI.Abstractions;
 using Encamina.Enmarcha.SemanticKernel.Abstractions;
+using Encamina.Enmarcha.SemanticKernel.Plugins.Chat.Abstractions;
 using Encamina.Enmarcha.SemanticKernel.Plugins.Chat.Options;
 
 using Microsoft.Extensions.Options;
@@ -54,8 +55,10 @@ public class ChatWithHistoryPlugin
     /// </summary>
     /// <param name="cancellationToken">A cancellation token that can be used to receive notice of cancellation.</param>
     /// <param name="ask">What the user says or asks when chatting.</param>
-    /// <param name="userId">A unique identifier for the user when chatting.</param>
+    /// <param name="indexerId">The unique identifier of the indexer of the conversation. It can be the conversation id or the user id.</param>
     /// <param name="userName">The name of the user.</param>
+    /// <param name="userId">A unique identifier for the user when chatting.</param>
+    /// <param name="conversationId">A unique identifier for the conversation when chatting.</param>
     /// <param name="locale">The preferred language of the user while chatting.</param>
     /// <returns>A string representing the response from the Artificial Intelligence.</returns>
     [KernelFunction]
@@ -64,8 +67,10 @@ public class ChatWithHistoryPlugin
     public virtual async Task<string> ChatAsync(
         CancellationToken cancellationToken,
         [Description(@"What the user says or asks when chatting")] string ask,
-        [Description(@"A unique identifier for the user when chatting")] string userId,
+        [Description(@"The unique identifier of the indexer of the conversation. It can be the conversation id or the user id")] string indexerId,
         [Description(@"The name of the user")] string userName = null,
+        [Description(@"A unique identifier for the user when chatting")] string userId = null,
+        [Description(@"A unique identifier for the conversation when chatting.")] string conversationId = null,
         [Description(@"The preferred language of the user while chatting")] string locale = null)
     {
         var systemPrompt = SystemPrompt;
@@ -93,15 +98,15 @@ public class ChatWithHistoryPlugin
             return await GetErrorMessageAsync(chatHistory, locale, systemPromptTokens, askTokens, chatModelMaxTokens, cancellationToken);
         }
 
-        await chatHistoryProvider.LoadChatMessagesHistoryAsync(chatHistory, userId, remainingTokens, cancellationToken);
+        await chatHistoryProvider.LoadChatMessagesHistoryAsync(chatHistory, indexerId, remainingTokens, cancellationToken);
 
         chatHistory.AddUserMessage(ask);
 
         var chatMessage = await kernel.GetRequiredService<IChatCompletionService>().GetChatMessageContentAsync(chatHistory, options.ChatRequestSettings, kernel, cancellationToken);
         var response = chatMessage.Content;
 
-        await chatHistoryProvider.SaveChatMessagesHistoryAsync(userId, AuthorRole.User.ToString(), ask, cancellationToken);               // Save in chat history the user message (a.k.a. ask).
-        await chatHistoryProvider.SaveChatMessagesHistoryAsync(userId, AuthorRole.Assistant.ToString(), response, cancellationToken);     // Save in chat history the assistant message (a.k.a. response).
+        await chatHistoryProvider.SaveChatMessagesHistoryAsync(conversationId ?? indexerId, userId ?? indexerId, AuthorRole.User.ToString(), ask, cancellationToken);               // Save in chat history the user message (a.k.a. ask).
+        await chatHistoryProvider.SaveChatMessagesHistoryAsync(conversationId ?? indexerId, userId ?? indexerId, AuthorRole.Assistant.ToString(), response, cancellationToken);     // Save in chat history the assistant message (a.k.a. response).
 
         return response;
     }

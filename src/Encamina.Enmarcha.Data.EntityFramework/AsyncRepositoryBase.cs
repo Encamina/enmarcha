@@ -5,8 +5,6 @@ using CommunityToolkit.Diagnostics;
 using Encamina.Enmarcha.Data.Abstractions;
 using Encamina.Enmarcha.Data.EntityFramework.Internals;
 
-using Encamina.Enmarcha.Entities.Abstractions;
-
 using Microsoft.EntityFrameworkCore;
 
 namespace Encamina.Enmarcha.Data.EntityFramework;

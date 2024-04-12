@@ -4,8 +4,9 @@ using Encamina.Enmarcha.Data.Abstractions;
 using Encamina.Enmarcha.Data.Cosmos;
 
 using Encamina.Enmarcha.SemanticKernel.Abstractions;
+using Encamina.Enmarcha.SemanticKernel.Plugins.Chat.Abstractions;
+using Encamina.Enmarcha.SemanticKernel.Plugins.Chat.Enums;
 using Encamina.Enmarcha.SemanticKernel.Plugins.Chat.Options;
-using Encamina.Enmarcha.SemanticKernel.Plugins.Chat.Plugins;
 
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
@@ -30,6 +31,7 @@ public static class IServiceCollectionExtensions
     /// <param name="tokensLengthFunction">
     /// A function to calculate the length by tokens of the chat messages. These functions are usually available in the «mixin» interface <see cref="ILengthFunctions"/>.
     /// </param>
+    /// <param name="chatHistoryPartitionKey">The partition key in the Cosmos DB container to store the chat history messages.</param>
     /// <remarks>
     /// This extension method uses a «Service Location» pattern provided by the <see cref="IServiceProvider"/> to resolve the following dependencies:
     /// <list type="bullet">
@@ -50,7 +52,7 @@ public static class IServiceCollectionExtensions
     /// </list>
     /// </remarks>
     /// <returns>The <see cref="IServiceCollection"/> so that additional calls can be chained.</returns>
-    public static IServiceCollection AddCosmosChatHistoryProvider(this IServiceCollection services, string cosmosContainer, Func<string, int> tokensLengthFunction)
+    public static IServiceCollection AddCosmosChatHistoryProvider(this IServiceCollection services, string cosmosContainer, Func<string, int> tokensLengthFunction, ChatHistoryPrimaryKey chatHistoryPartitionKey)
     {
         Guard.IsNotNullOrWhiteSpace(cosmosContainer);
         Guard.IsNotNull(tokensLengthFunction);
@@ -60,7 +62,7 @@ public static class IServiceCollectionExtensions
             var chatMessagesHistoryRepository = sp.GetRequiredService<ICosmosRepositoryFactory>().Create<ChatMessageHistoryRecord>(cosmosContainer);
             var chatHistoryProviderOptions = sp.GetRequiredService<IOptionsMonitor<ChatHistoryProviderOptions>>();
 
-            return new ChatHistoryProvider(tokensLengthFunction, chatMessagesHistoryRepository, chatHistoryProviderOptions);
+            return new ChatHistoryProvider(tokensLengthFunction, chatMessagesHistoryRepository, chatHistoryProviderOptions, chatHistoryPartitionKey);
         });
 
         services.AddSingleton<IChatHistoryProvider, ChatHistoryProvider>(sp => sp.GetRequiredService<ChatHistoryProvider>());

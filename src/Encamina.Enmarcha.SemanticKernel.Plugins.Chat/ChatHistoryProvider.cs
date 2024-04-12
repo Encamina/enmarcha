@@ -1,8 +1,9 @@
 ﻿using Encamina.Enmarcha.Data.Abstractions;
 
 using Encamina.Enmarcha.SemanticKernel.Abstractions;
+using Encamina.Enmarcha.SemanticKernel.Plugins.Chat.Abstractions;
+using Encamina.Enmarcha.SemanticKernel.Plugins.Chat.Enums;
 using Encamina.Enmarcha.SemanticKernel.Plugins.Chat.Options;
-using Encamina.Enmarcha.SemanticKernel.Plugins.Chat.Plugins;
 
 using Microsoft.Extensions.Options;
 
@@ -15,6 +16,7 @@ public class ChatHistoryProvider : IChatHistoryProvider
 {
     private readonly IAsyncRepository<ChatMessageHistoryRecord> chatMessagesHistoryRepository;
     private readonly Func<string, int> tokensLengthFunction;
+    private readonly ChatHistoryPrimaryKey chatHistoryPrimaryKey;
 
     private ChatHistoryProviderOptions options;
 
@@ -24,26 +26,45 @@ public class ChatHistoryProvider : IChatHistoryProvider
     /// <param name="tokensLengthFunction">Function to calculate the length of a string (usually the chat messages) in tokens.</param>
     /// <param name="chatMessagesHistoryRepository">A valid instance of an asynchronous repository pattern implementation.</param>
     /// <param name="options">Configuration options for this provider.</param>
-    public ChatHistoryProvider(Func<string, int> tokensLengthFunction, IAsyncRepository<ChatMessageHistoryRecord> chatMessagesHistoryRepository, IOptionsMonitor<ChatHistoryProviderOptions> options)
+    /// <param name="chatHistoryPrimaryKey">The primary key to use for the chat history.</param>
+    public ChatHistoryProvider(Func<string, int> tokensLengthFunction, IAsyncRepository<ChatMessageHistoryRecord> chatMessagesHistoryRepository, IOptionsMonitor<ChatHistoryProviderOptions> options, ChatHistoryPrimaryKey chatHistoryPrimaryKey)
     {
         this.tokensLengthFunction = tokensLengthFunction;
         this.chatMessagesHistoryRepository = chatMessagesHistoryRepository;
+        this.chatHistoryPrimaryKey = chatHistoryPrimaryKey;
         this.options = options.CurrentValue;
 
         options.OnChange((newOptions) => this.options = newOptions);
     }
 
-    /// <inheritdoc/>
-    public Task DeleteChatMessagesHistoryAsync(string userId, CancellationToken cancellationToken)
+    /// <summary>
+    /// Gets the filter predicate based on the chat history primary key.
+    /// </summary>
+    /// <value>The filter predicate.</value>
+    protected virtual Func<ChatMessageHistoryRecord, string, bool> FilterPredicate
     {
-        return chatMessagesHistoryRepository.DeleteAsync(userId, cancellationToken);
+        get
+        {
+            return chatHistoryPrimaryKey switch
+            {
+                ChatHistoryPrimaryKey.ConversationId => (record, value) => record.ConversationId == value,
+                ChatHistoryPrimaryKey.UserId => (record, value) => record.UserId == value,
+                _ => throw new ArgumentException("Invalid primary key for chat history", nameof(chatHistoryPrimaryKey)),
+            };
+        }
+    }
+
+    /// <inheritdoc/>
+    public Task DeleteChatMessagesHistoryAsync(string indexerId, CancellationToken cancellationToken)
+    {
+        return chatMessagesHistoryRepository.DeleteAsync(indexerId, cancellationToken);
     }
 
     /// <inheritdoc/>
     /// <remarks>
     /// The maximum number of messages to load is configured in <c>ChatHistoryProviderOptions.HistoryMaxMessages</c>.
     /// </remarks>
-    public async Task LoadChatMessagesHistoryAsync(ChatHistory chatHistory, string userId, int remainingTokens, CancellationToken cancellationToken)
+    public async Task LoadChatMessagesHistoryAsync(ChatHistory chatHistory, string indexerId, int remainingTokens, CancellationToken cancellationToken)
     {
         if (options.HistoryMaxMessages <= 0 || remainingTokens <= 0)
         {
@@ -52,7 +73,7 @@ public class ChatHistoryProvider : IChatHistoryProvider
 
         // Obtain the chat history for the user, ordered by timestamps descending to get the most recent messages first, and then take 'N' messages.
         // This means that the first elements in the list are the most recent or newer messages, and the last elements in the list are the oldest messages.
-        var result = (await chatMessagesHistoryRepository.GetAllAsync(chatMessages => chatMessages.Where(chatMessage => chatMessage.UserId == userId)
+        var result = (await chatMessagesHistoryRepository.GetAllAsync(chatMessages => chatMessages.Where(message => FilterPredicate(message, indexerId))
                                                                                                   .OrderByDescending(chatMessage => chatMessage.TimestampUtc)
                                                                                                   .Take(options.HistoryMaxMessages), cancellationToken)).ToList();
 
@@ -102,12 +123,18 @@ public class ChatHistoryProvider : IChatHistoryProvider
     }
 
     /// <inheritdoc/>
-    public async Task SaveChatMessagesHistoryAsync(string userId, string roleName, string message, CancellationToken cancellationToken)
+    public async Task SaveChatMessagesHistoryAsync(string conversationId, string userId, string roleName, string message, CancellationToken cancellationToken)
     {
+        if (string.IsNullOrWhiteSpace(conversationId))
+        {
+            conversationId = userId;
+        }
+
         await chatMessagesHistoryRepository.AddAsync(new ChatMessageHistoryRecord()
         {
             Id = Guid.NewGuid().ToString(),
             UserId = userId,
+            ConversationId = conversationId,
             RoleName = roleName,
             Message = message,
             TimestampUtc = DateTime.UtcNow,

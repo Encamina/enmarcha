@@ -4,7 +4,7 @@ using Encamina.Enmarcha.Entities.Abstractions;
 
 using Newtonsoft.Json;
 
-namespace Encamina.Enmarcha.SemanticKernel.Plugins.Chat.Plugins;
+namespace Encamina.Enmarcha.SemanticKernel.Plugins.Chat;
 
 /// <summary>
 /// Represents an chat message historical record.
@@ -22,6 +22,13 @@ public class ChatMessageHistoryRecord : IIdentifiable<string>
     [JsonProperty(@"userId")]
     [JsonPropertyName(@"userId")]
     public virtual string UserId { get; init; }
+
+    /// <summary>
+    /// Gets the unique identifier of the conversation.
+    /// </summary>
+    [JsonProperty(@"conversationId")]
+    [JsonPropertyName(@"conversationId")]
+    public virtual string ConversationId { get; init; }
 
     /// <summary>
     /// Gets the name of the role associated with the chat message.
