@@ -34,16 +34,16 @@ public class ChatHistoryProvider : IChatHistoryProvider
     }
 
     /// <inheritdoc/>
-    public Task DeleteChatMessagesHistoryAsync(string userId, CancellationToken cancellationToken)
+    public Task DeleteChatMessagesHistoryAsync(string indexerId, CancellationToken cancellationToken)
     {
-        return chatMessagesHistoryRepository.DeleteAsync(userId, cancellationToken);
+        return chatMessagesHistoryRepository.DeleteAsync(indexerId, cancellationToken);
     }
 
     /// <inheritdoc/>
     /// <remarks>
     /// The maximum number of messages to load is configured in <c>ChatHistoryProviderOptions.HistoryMaxMessages</c>.
     /// </remarks>
-    public async Task LoadChatMessagesHistoryAsync(ChatHistory chatHistory, string userId, int remainingTokens, CancellationToken cancellationToken)
+    public async Task LoadChatMessagesHistoryAsync(ChatHistory chatHistory, string indexerId, int remainingTokens, CancellationToken cancellationToken)
     {
         if (options.HistoryMaxMessages <= 0 || remainingTokens <= 0)
         {
@@ -52,7 +52,7 @@ public class ChatHistoryProvider : IChatHistoryProvider
 
         // Obtain the chat history for the user, ordered by timestamps descending to get the most recent messages first, and then take 'N' messages.
         // This means that the first elements in the list are the most recent or newer messages, and the last elements in the list are the oldest messages.
-        var result = (await chatMessagesHistoryRepository.GetAllAsync(chatMessages => chatMessages.Where(chatMessage => chatMessage.UserId == userId)
+        var result = (await chatMessagesHistoryRepository.GetAllAsync(chatMessages => chatMessages.Where(chatMessage => chatMessage.IndexerId == indexerId)
                                                                                                   .OrderByDescending(chatMessage => chatMessage.TimestampUtc)
                                                                                                   .Take(options.HistoryMaxMessages), cancellationToken)).ToList();
 
@@ -102,12 +102,12 @@ public class ChatHistoryProvider : IChatHistoryProvider
     }
 
     /// <inheritdoc/>
-    public async Task SaveChatMessagesHistoryAsync(string userId, string roleName, string message, CancellationToken cancellationToken)
+    public async Task SaveChatMessagesHistoryAsync(string indexerId, string roleName, string message, CancellationToken cancellationToken)
     {
         await chatMessagesHistoryRepository.AddAsync(new ChatMessageHistoryRecord()
         {
             Id = Guid.NewGuid().ToString(),
-            UserId = userId,
+            IndexerId = indexerId,
             RoleName = roleName,
             Message = message,
             TimestampUtc = DateTime.UtcNow,
