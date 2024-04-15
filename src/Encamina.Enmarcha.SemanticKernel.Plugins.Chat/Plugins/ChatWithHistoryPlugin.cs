@@ -54,7 +54,7 @@ public class ChatWithHistoryPlugin
     /// </summary>
     /// <param name="cancellationToken">A cancellation token that can be used to receive notice of cancellation.</param>
     /// <param name="ask">What the user says or asks when chatting.</param>
-    /// <param name="userId">A unique identifier for the user when chatting.</param>
+    /// <param name="chatIndexerId">The unique identifier of the chat history indexer.</param>
     /// <param name="userName">The name of the user.</param>
     /// <param name="locale">The preferred language of the user while chatting.</param>
     /// <returns>A string representing the response from the Artificial Intelligence.</returns>
@@ -64,7 +64,7 @@ public class ChatWithHistoryPlugin
     public virtual async Task<string> ChatAsync(
         CancellationToken cancellationToken,
         [Description(@"What the user says or asks when chatting")] string ask,
-        [Description(@"A unique identifier for the user when chatting")] string userId,
+        [Description(@"The unique identifier of the chat history indexer")] string chatIndexerId,
         [Description(@"The name of the user")] string userName = null,
         [Description(@"The preferred language of the user while chatting")] string locale = null)
     {
@@ -93,15 +93,15 @@ public class ChatWithHistoryPlugin
             return await GetErrorMessageAsync(chatHistory, locale, systemPromptTokens, askTokens, chatModelMaxTokens, cancellationToken);
         }
 
-        await chatHistoryProvider.LoadChatMessagesHistoryAsync(chatHistory, userId, remainingTokens, cancellationToken);
+        await chatHistoryProvider.LoadChatMessagesHistoryAsync(chatHistory, chatIndexerId, remainingTokens, cancellationToken);
 
         chatHistory.AddUserMessage(ask);
 
         var chatMessage = await kernel.GetRequiredService<IChatCompletionService>().GetChatMessageContentAsync(chatHistory, options.ChatRequestSettings, kernel, cancellationToken);
         var response = chatMessage.Content;
 
-        await chatHistoryProvider.SaveChatMessagesHistoryAsync(userId, AuthorRole.User.ToString(), ask, cancellationToken);               // Save in chat history the user message (a.k.a. ask).
-        await chatHistoryProvider.SaveChatMessagesHistoryAsync(userId, AuthorRole.Assistant.ToString(), response, cancellationToken);     // Save in chat history the assistant message (a.k.a. response).
+        await chatHistoryProvider.SaveChatMessagesHistoryAsync(chatIndexerId, AuthorRole.User.ToString(), ask, cancellationToken);               // Save in chat history the user message (a.k.a. ask).
+        await chatHistoryProvider.SaveChatMessagesHistoryAsync(chatIndexerId, AuthorRole.Assistant.ToString(), response, cancellationToken);     // Save in chat history the assistant message (a.k.a. response).
 
         return response;
     }
@@ -109,18 +109,18 @@ public class ChatWithHistoryPlugin
     /// <summary>
     /// Deletes the chat message history when a user asks to forget previous conversations or to start over again.
     /// </summary>
-    /// <param name="userId">The unique identifier of the user owner of the chat history.</param>
+    /// <param name="chatIndexerId">The unique identifier of the chat history indexer.</param>
     /// <param name="cancellationToken">A cancellation token that can be used to cancel the operation.</param>
     /// <returns>A Task representing the asynchronous operation.</returns>
     [KernelFunction]
     [Description(@"Deletes the chat message history when a user asks to forget previous conversations or to start all over again.")]
     public async Task DeleteChatMessagesHistoryAsync(
-        [Description(@"A unique identifier of the user")] string userId,
+        [Description(@"The unique identifier of the chat history indexer")] string chatIndexerId,
         CancellationToken cancellationToken)
     {
-        ArgumentException.ThrowIfNullOrWhiteSpace(userId);
+        ArgumentException.ThrowIfNullOrWhiteSpace(chatIndexerId);
 
-        await chatHistoryProvider.DeleteChatMessagesHistoryAsync(userId, cancellationToken);
+        await chatHistoryProvider.DeleteChatMessagesHistoryAsync(chatIndexerId, cancellationToken);
     }
 
     /// <summary>

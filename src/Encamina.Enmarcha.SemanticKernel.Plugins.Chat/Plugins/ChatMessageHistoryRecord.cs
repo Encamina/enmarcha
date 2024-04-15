@@ -17,11 +17,14 @@ public class ChatMessageHistoryRecord : IIdentifiable<string>
     public virtual string Id { get; init; }
 
     /// <summary>
-    /// Gets the unique identifier of the user owner of the chat.
+    /// Gets the unique identifier of the chat history indexer.
     /// </summary>
-    [JsonProperty(@"userId")]
-    [JsonPropertyName(@"userId")]
-    public virtual string UserId { get; init; }
+    /// <remarks>
+    /// Identifier that relates several messages. This could be, for example, a conversationId, a userId, or any other relevant identifier.
+    /// </remarks>
+    [JsonProperty(@"indexerId")]
+    [JsonPropertyName(@"indexerId")]
+    public virtual string IndexerId { get; init; }
 
     /// <summary>
     /// Gets the name of the role associated with the chat message.
