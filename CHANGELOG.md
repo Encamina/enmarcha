@@ -16,7 +16,12 @@ Also, any bug fix must start with the prefix �Bug fix:� followed by the desc
 
 Previous classification is not required if changes are simple or all belong to the same category.
 
+## [8.1.6]
 
+### Breaking Changes 
+
+ - Renamed `UserId` to `IndexerId` in `ChatMessageHistoryRecord`. This change requires consumers to update their database to match the new property name. 
+    - In case of using Cosmos DB, `IndexerId` should be the new partition key of the collection. You can learn how to change the partition key and do the data migration [here](https://learn.microsoft.com/en-us/azure/cosmos-db/nosql/change-partition-key).
 
 ## [8.1.5]
 
