@@ -23,6 +23,11 @@ Previous classification is not required if changes are simple or all belong to t
  - Renamed `UserId` to `IndexerId` in `ChatMessageHistoryRecord`. This change requires consumers to update their database to match the new property name. 
     - In case of using Cosmos DB, `IndexerId` should be the new partition key of the collection. You can learn how to change the partition key and do the data migration [here](https://learn.microsoft.com/en-us/azure/cosmos-db/nosql/change-partition-key).
 
+### Minor Changes
+
+ - Added `SemanticKernelCosineStringSimilarityComparer` in `Encamina.Enmarcha.SemanticKernel` to compare two strings using cosine similarity algorithm.
+
+
 ## [8.1.5]
 
 ### Breaking Changes 
@@ -73,7 +78,6 @@ Previous classification is not required if changes are simple or all belong to t
 - Added new extension method to add Qdrant and Azure Search AI as Keyed Memory Store.
 - Added new function to delete chat messages history in `ChatWithHistoryPlugin`.
 - Added new model `gpt-4-turbo` to `ModelInfo`.
-- Added `SemanticKernelCosineStringSimilarityComparer` in `Encamina.Enmarcha.SemanticKernel` to compare two strings using cosine similarity algorithm.
 
 ### Important
 
