@@ -1,4 +1,7 @@
-﻿using Encamina.Enmarcha.AI.Abstractions;
+﻿using System.Numerics.Tensors;
+
+using Encamina.Enmarcha.AI.Abstractions;
+
 using Microsoft.SemanticKernel;
 using Microsoft.SemanticKernel.Embeddings;
 
@@ -44,18 +47,7 @@ internal sealed class SemanticKernelCosineStringSimilarityComparer : IStringSimi
             throw new Exception($"Vector size should be the same: {vec1.Length} != {vec2.Length}");
         }
 
-        var size = vec1.Length;
-        var dot = 0.0d;
-        var m1 = 0.0d;
-        var m2 = 0.0d;
-        for (var n = 0; n < size; n++)
-        {
-            dot += v1[n] * v2[n];
-            m1 += Math.Pow(v1[n], 2);
-            m2 += Math.Pow(v2[n], 2);
-        }
-
-        var cosineSimilarity = dot / (Math.Sqrt(m1) * Math.Sqrt(m2));
+        var cosineSimilarity = TensorPrimitives.CosineSimilarity(v1, v2);
         return cosineSimilarity;
     }
 }
