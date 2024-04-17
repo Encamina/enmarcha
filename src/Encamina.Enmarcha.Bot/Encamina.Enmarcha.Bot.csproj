@@ -22,11 +22,11 @@
           <TreatAsUsed>true</TreatAsUsed>
           <!-- This project needs this package reference to fix warning NU1701 -->
         </PackageReference>
-        <PackageReference Include="Microsoft.Bot.Builder.Azure" Version="4.22.2" />
-        <PackageReference Include="Microsoft.Bot.Builder.Azure.Blobs" Version="4.22.2" />
-        <PackageReference Include="Microsoft.Bot.Builder.Dialogs" Version="4.22.2" />
-        <PackageReference Include="Microsoft.Bot.Builder.Integration.ApplicationInsights.Core" Version="4.22.2" />
-        <PackageReference Include="Microsoft.Bot.Builder.Integration.AspNet.Core" Version="4.22.2" />
+        <PackageReference Include="Microsoft.Bot.Builder.Azure" Version="4.22.3" />
+        <PackageReference Include="Microsoft.Bot.Builder.Azure.Blobs" Version="4.22.3" />
+        <PackageReference Include="Microsoft.Bot.Builder.Dialogs" Version="4.22.3" />
+        <PackageReference Include="Microsoft.Bot.Builder.Integration.ApplicationInsights.Core" Version="4.22.3" />
+        <PackageReference Include="Microsoft.Bot.Builder.Integration.AspNet.Core" Version="4.22.3" />
         <PackageReference Include="System.Linq.Async" Version="6.0.1" />
     </ItemGroup>
 
