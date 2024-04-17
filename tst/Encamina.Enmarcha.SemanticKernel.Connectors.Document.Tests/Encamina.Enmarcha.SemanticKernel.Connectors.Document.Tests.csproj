@@ -14,7 +14,19 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="TestUtilities\Files\TestFileWithEmptyRowAndColumn.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestUtilities\Files\TestFileWithFontStyle.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="TestUtilities\Files\TestFile.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestUtilities\Files\TestFileWithFormatValues.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestUtilities\Files\TestFileWithHiddenSheet.xlsx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="TestUtilities\Files\TestFileWithTwoWorksheets.xlsx">
