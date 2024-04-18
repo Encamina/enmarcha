@@ -13,12 +13,12 @@
     </PropertyGroup>
 
     <ItemGroup>      
-      <PackageReference Include="Asp.Versioning.Mvc.ApiExplorer" Version="8.0.0" />
+      <PackageReference Include="Asp.Versioning.Mvc.ApiExplorer" Version="8.1.0" />
       <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="6.5.0" />
     </ItemGroup>
     
     <ItemGroup>
-        <None Include="README.md" Pack="true" PackagePath="\"/>
+        <None Include="README.md" Pack="true" PackagePath="\" />
     </ItemGroup>
 
 </Project>
