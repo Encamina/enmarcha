@@ -20,6 +20,11 @@ internal class Cell
     public string FormattedText { get; private init; }
 
     /// <summary>
+    /// Gets a value indicating whether the text in the cell is null, empty or white space.
+    /// </summary>
+    public bool IsNullOrWhiteSpace { get; private init; }
+
+    /// <summary>
     /// Gets the reference of the cell. Such us A1, B2, etc.
     /// </summary>
     public string Reference { get; private init; }
@@ -35,11 +40,6 @@ internal class Cell
     public bool IsItalic { get; private init; }
 
     /// <summary>
-    /// Gets a value indicating whether the cell is empty.
-    /// </summary>
-    public bool IsEmpty { get; private init; }
-
-    /// <summary>
     /// Creates a Cell object from a <see cref="DocumentFormat.OpenXml.Spreadsheet.Cell"/> object and a <see cref="WorkbookPart"/> object.
     /// </summary>
     /// <param name="cell">The <see cref="DocumentFormat.OpenXml.Spreadsheet.Cell"/> object representing the cell in the Excel worksheet.</param>
@@ -48,11 +48,14 @@ internal class Cell
     public static Cell Create(DocumentFormat.OpenXml.Spreadsheet.Cell cell, WorkbookPart workbookPart)
     {
         var cellFont = cell.GetCellFont(workbookPart);
+        var text = cell.GetCellTextValue(workbookPart);
+        var formattedText = cell.GetCellFormattedTextValue(workbookPart);
 
         return new Cell
         {
-            Text = cell.GetCellTextValue(workbookPart),
-            FormattedText = cell.GetCellFormattedTextValue(workbookPart),
+            Text = text,
+            FormattedText = formattedText,
+            IsNullOrWhiteSpace = string.IsNullOrWhiteSpace(text) && string.IsNullOrWhiteSpace(formattedText),
             Reference = cell.CellReference,
             IsBold = cellFont.IsBold,
             IsItalic = cellFont.IsItalic,
@@ -68,7 +71,7 @@ internal class Cell
     {
         return new Cell
         {
-            IsEmpty = true,
+            IsNullOrWhiteSpace = true,
             Reference = reference,
         };
     }

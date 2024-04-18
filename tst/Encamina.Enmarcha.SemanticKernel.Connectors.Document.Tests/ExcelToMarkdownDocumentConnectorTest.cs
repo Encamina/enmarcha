@@ -10,6 +10,7 @@ public class ExcelToMarkdownDocumentConnectorTest
     private const string ExcelFileWithFormatValues = "TestFileWithFormatValues.xlsx";
     private const string ExcelFileWithFontStyles = "TestFileWithFontStyle.xlsx";
     private const string ExcelFileWithEmptyRowAndColumn = "TestFileWithEmptyRowAndColumn.xlsx";
+    private const string ExcelFileMiscellaneous = "TestFileMiscellaneous.xlsx";
 
     [Fact]
     public void CreateMarkdownTable_Succeeds()
@@ -84,7 +85,10 @@ public class ExcelToMarkdownDocumentConnectorTest
         var excelStream = GivenAnExcelStream(ExcelFileWithHiddenSheet);
         var excelConnector = new ExcelToMarkdownDocumentConnector()
         {
-            WithHiddenWorksheets = true,
+            ExcelLoadOptions =             
+            {
+                LoadHiddenSheets = true,
+            },
             WithHeaderSeparator = true,
             WorksheetSeparator = "---",
             WithWorksheetName = true,
@@ -114,7 +118,10 @@ public class ExcelToMarkdownDocumentConnectorTest
         var excelStream = GivenAnExcelStream(ExcelFileWithHiddenSheet);
         var excelConnector = new ExcelToMarkdownDocumentConnector()
         {
-            WithHiddenWorksheets = false,
+            ExcelLoadOptions =
+            {
+                LoadHiddenSheets = false,
+            },
             WithHeaderSeparator = true,
             WorksheetSeparator = "---",
             WithWorksheetName = true,
@@ -166,7 +173,7 @@ public class ExcelToMarkdownDocumentConnectorTest
         };
 
         var result = excelConnector.ReadText(excelStream);
-        
+
         const string expectedResult = """
                                       |-0.24393949618802505|-0.24|0.24|
                                       |---|---|---|
@@ -223,10 +230,13 @@ public class ExcelToMarkdownDocumentConnectorTest
     public void CreateMarkdownTable_With_EmptyRowsAndColumns()
     {
         var excelStream = GivenAnExcelStream(ExcelFileWithEmptyRowAndColumn);
-        var excelConnector = new ExcelToMarkdownDocumentConnector()
+        var excelConnector = new ExcelToMarkdownDocumentConnector
         {
-            WithEmptyRows = true,
-            WithEmptyColumns = true,
+            ExcelLoadOptions =
+            {
+                ExcludeEmptyColumns = false,
+                ExcludeEmptyRows = false
+            }
         };
 
         var result = excelConnector.ReadText(excelStream);
@@ -248,10 +258,13 @@ public class ExcelToMarkdownDocumentConnectorTest
     public void CreateMarkdownTable_Without_EmptyRows()
     {
         var excelStream = GivenAnExcelStream(ExcelFileWithEmptyRowAndColumn);
-        var excelConnector = new ExcelToMarkdownDocumentConnector()
+        var excelConnector = new ExcelToMarkdownDocumentConnector
         {
-            WithEmptyRows = false,
-            WithEmptyColumns = true,
+            ExcelLoadOptions =
+            {
+                ExcludeEmptyRows = true,
+                ExcludeEmptyColumns = false,
+            }
         };
 
         var result = excelConnector.ReadText(excelStream);
@@ -272,10 +285,13 @@ public class ExcelToMarkdownDocumentConnectorTest
     public void CreateMarkdownTable_Without_EmptyColumns()
     {
         var excelStream = GivenAnExcelStream(ExcelFileWithEmptyRowAndColumn);
-        var excelConnector = new ExcelToMarkdownDocumentConnector()
+        var excelConnector = new ExcelToMarkdownDocumentConnector
         {
-            WithEmptyColumns = false,
-            WithEmptyRows = true,
+            ExcelLoadOptions =
+            {
+                ExcludeEmptyColumns = true,
+                ExcludeEmptyRows = false,
+            }
         };
 
         var result = excelConnector.ReadText(excelStream);
@@ -297,10 +313,13 @@ public class ExcelToMarkdownDocumentConnectorTest
     public void CreateMarkdownTable_Without_EmptyRowsAndColumns()
     {
         var excelStream = GivenAnExcelStream(ExcelFileWithEmptyRowAndColumn);
-        var excelConnector = new ExcelToMarkdownDocumentConnector()
+        var excelConnector = new ExcelToMarkdownDocumentConnector
         {
-            WithEmptyRows = false,
-            WithEmptyColumns = false,
+            ExcelLoadOptions =
+            {
+                ExcludeEmptyRows = true,
+                ExcludeEmptyColumns = true,
+            }
         };
 
         var result = excelConnector.ReadText(excelStream);
@@ -315,6 +334,52 @@ public class ExcelToMarkdownDocumentConnectorTest
                                       """;
 
         Assert.Equal(expectedResult, result);
+    }
+
+    [Theory]
+    [InlineData("<br>", "This is a text<br>with several<br>line breaks")]
+    [InlineData(" ", "This is a text with several line breaks")]
+    public void CreateMarkdownTable_And_ReplaceLineBreaks(string lineBreakReplacement, string expectedReplacementText)
+    {
+        var excelStream = GivenAnExcelStream(ExcelFileMiscellaneous);
+        var excelConnector = new ExcelToMarkdownDocumentConnector()
+        {
+            LineBreakReplacement = lineBreakReplacement,
+        };
+
+        var result = excelConnector.ReadText(excelStream);
+
+        Assert.Contains(expectedReplacementText, result);
+    }
+
+    [Fact]
+    public void CreateMarkdownTable_WithValidFontStyle_WhenExistsLeadingAndTrailingSpaces()
+    {
+        var excelStream = GivenAnExcelStream(ExcelFileMiscellaneous);
+        var excelConnector = new ExcelToMarkdownDocumentConnector();
+
+        var result = excelConnector.ReadText(excelStream);
+
+        Assert.Contains("    **This is text with spaces at the beginning and end and in bold**     ", result);
+        Assert.Contains("    *This is text with spaces at the beginning in italic*", result);
+        Assert.Contains("***This is text with spaces at the beginning and end and in bold and italic***        ", result);
+    }
+
+    [Fact]
+    public void CreateMarkdownTable_And_NotApplyFontStyleToEmptyOrWhiteSpaces()
+    {
+        var excelStream = GivenAnExcelStream(ExcelFileMiscellaneous);
+        var excelConnector = new ExcelToMarkdownDocumentConnector();
+
+        var result = excelConnector.ReadText(excelStream);
+
+        Assert.DoesNotContain("|****|", result);
+        Assert.DoesNotContain("|**|", result);
+        Assert.DoesNotContain("|******|", result);
+        Assert.DoesNotContain("|*** ***|", result);
+        Assert.DoesNotContain("| ******|", result);
+        Assert.DoesNotContain("|****** |", result);
+
     }
 
     private static FileStream GivenAnExcelStream(string fileName)

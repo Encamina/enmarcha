@@ -12,14 +12,20 @@ namespace Encamina.Enmarcha.SemanticKernel.Connectors.Document.Connectors;
 public class ExcelToMarkdownDocumentConnector : IDocumentConnector
 {
     /// <summary>
-    /// Gets a value indicating whether empty rows should be included in the result.
+    /// Gets the options for loading the Excel document.
     /// </summary>
-    public bool WithEmptyRows { get; init; } = true;
+    public ExcelLoadOptions ExcelLoadOptions { get; } = new()
+    {
+        LoadHiddenSheets = false,
+        LoadOnlyCellsRangeWithText = true,
+        ExcludeEmptyColumns = false,
+        ExcludeEmptyRows = false,
+    };
 
     /// <summary>
-    /// Gets a value indicating whether empty columns should be included in the result.
+    /// Gets the value used to replace line breaks.
     /// </summary>
-    public bool WithEmptyColumns { get; init; } = true;
+    public string LineBreakReplacement { get; init; } = "<br>";
 
     /// <summary>
     /// Gets a value indicating whether cell values should be read with formatted.
@@ -30,11 +36,6 @@ public class ExcelToMarkdownDocumentConnector : IDocumentConnector
     /// Gets a value indicating whether a separator should be added between the header and the data.
     /// </summary>
     public bool WithHeaderSeparator { get; init; } = true;
-
-    /// <summary>
-    /// Gets a value indicating whether hidden sheets should be included in the result.
-    /// </summary>
-    public bool WithHiddenWorksheets { get; init; }
 
     /// <summary>
     /// Gets a value indicating whether styling (e.g., bold, italic) should be preserved.
@@ -61,11 +62,9 @@ public class ExcelToMarkdownDocumentConnector : IDocumentConnector
     {
         var resultSb = new StringBuilder();
 
-        var excelDocument = ExcelDocument.Create(stream);
+        var excelDocument = ExcelDocument.Create(stream, ExcelLoadOptions);
 
-        var worksheets = excelDocument.Worksheets
-            .Where(worksheet => WithHiddenWorksheets || !worksheet.IsHidden)
-            .ToList();
+        var worksheets = excelDocument.Worksheets.ToList();
 
         var rowSb = new StringBuilder();
 
@@ -77,14 +76,6 @@ public class ExcelToMarkdownDocumentConnector : IDocumentConnector
             }
 
             var rows = worksheet.Rows;
-
-            rows = WithEmptyColumns
-                ? worksheet.Rows
-                : RemoveEmptyColumnsFromRows(rows);
-
-            rows = WithEmptyRows
-                ? rows
-                : rows.Where(row => row.Any(cell => !cell.IsEmpty)).ToList();
 
             foreach (var row in rows)
             {
@@ -123,50 +114,51 @@ public class ExcelToMarkdownDocumentConnector : IDocumentConnector
     {
         // Intentionally not implemented to comply with the Liskov Substitution Principle...
     }
-
-    private static IReadOnlyList<IReadOnlyList<Cell>> RemoveEmptyColumnsFromRows(IReadOnlyList<IReadOnlyList<Cell>> rows)
-    {
-        if (rows.Count == 0 || rows[0].Count == 0)
-        {
-            return rows;
-        }
-
-        var numColumns = rows[0].Count;
-        var modifiedRows = rows.Select(row => row.ToList()).ToList();
-
-        for (var columnIndex = 0; columnIndex < numColumns; columnIndex++)
-        {
-            var allCellsAreEmpty = modifiedRows.All(row => row[columnIndex].IsEmpty);
-
-            if (allCellsAreEmpty)
-            {
-                // Remove the columnIndex column from all modified rows
-                foreach (var row in modifiedRows)
-                {
-                    row.RemoveAt(columnIndex);
-                }
-
-                // After removing a column, adjust the index backwards
-                columnIndex--;
-                numColumns--;
-            }
-        }
-
-        // Convert the modified rows back
-        return modifiedRows.Select(row => row.AsReadOnly()).ToList().AsReadOnly();
-    }
-
+    
     private string GetCellTextValue(Cell cell)
     {
-        var style = string.Empty;
+        // Get the cell value with or without formatting
+        var cellValue = WithFormattedValues ? cell.FormattedText : cell.Text;
+        
+        // Replace line breaks with the specified replacement
+        cellValue = cellValue?.ReplaceLineEndings(LineBreakReplacement);
+
+        // Apply styles to the cell value
         if (WithStyling)
         {
-            style = cell.IsBold ? "**" : string.Empty;
-            style += cell.IsItalic ? "*" : string.Empty;
+            cellValue = ApplyStyles(cellValue, cell.IsBold, cell.IsItalic);
         }
 
-        return WithFormattedValues
-            ? $"{style}{cell.FormattedText}{style}"
-            : $"{style}{cell.Text}{style}";
+        return cellValue;
+    }
+
+    private static string ApplyStyles(string value, bool bold, bool italic)
+    {
+        if (string.IsNullOrWhiteSpace(value))
+        {
+            return value;
+        }
+
+        var style = bold ? "**" : string.Empty;
+        style += italic ? "*" : string.Empty;
+
+        if(string.IsNullOrEmpty(style))
+        {
+            return value;
+        }
+
+        // Find the index of the first non-space character
+        var firstNonSpaceIndex = value.TakeWhile(char.IsWhiteSpace).Count();
+
+        // Apply styles at the beginning of the text
+        value = value.Insert(firstNonSpaceIndex, style);
+
+        // Find the index of the last non-space character
+        var lastNonSpaceIndex = value.Length - value.Reverse().TakeWhile(char.IsWhiteSpace).Count();
+
+        // Apply styles at the end of the text
+        value = value.Insert(lastNonSpaceIndex, style);
+
+        return value;
     }
 }

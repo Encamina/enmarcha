@@ -10,24 +10,39 @@ public class ExcelDocumentTest
     private const string ExcelFileWithFormatValues = "TestFileWithFormatValues.xlsx";
     private const string ExcelFileWithFontStyles = "TestFileWithFontStyle.xlsx";
     private const string ExcelFileWithEmptyRowAndColumn = "TestFileWithEmptyRowAndColumn.xlsx";
+    private const string ExcelFileWithRangeWithEmptyCells = "TestFileWithRangeWithEmptyCells.xlsx";
 
     [Fact]
-    public void ReadExcelFile_With_MultipleWorksheets()
+    public void CreateExcelDocument_With_MultipleWorksheets()
     {
         var excelStream = GivenAnExcelStream(ExcelFileWithTwoWorksheets);
+        var excelOptions = new ExcelLoadOptions();
 
-        var result = ExcelDocument.Create(excelStream);
+        var result = ExcelDocument.Create(excelStream, excelOptions);
 
         Assert.Equal(2, result.Worksheets.Count);
+    }
+
+    [Fact]
+    public void CreateExcelDocument_Without_HiddenWorksheets()
+    {
+        var excelStream = GivenAnExcelStream(ExcelFileWithHiddenSheet);
+        var excelOptions = new ExcelLoadOptions() { LoadHiddenSheets = false };
+
+        var result = ExcelDocument.Create(excelStream, excelOptions);
+
+        var worksheet = Assert.Single(result.Worksheets);
+        Assert.False(worksheet.IsHidden);
     }
 
     [Fact]
     public void CreateExcelDocument_With_HiddenWorksheets()
     {
         var excelStream = GivenAnExcelStream(ExcelFileWithHiddenSheet);
+        var excelOptions = new ExcelLoadOptions() { LoadHiddenSheets = true };
 
-        var result = ExcelDocument.Create(excelStream);
-        
+        var result = ExcelDocument.Create(excelStream, excelOptions);
+
         Assert.Equal(2, result.Worksheets.Count);
         Assert.False(result.Worksheets[0].IsHidden);
         Assert.True(result.Worksheets[1].IsHidden);
@@ -37,8 +52,9 @@ public class ExcelDocumentTest
     public void CreateExcelDocument_With_CellReferences()
     {
         var excelStream = GivenAnExcelStream(ExcelFile);
+        var excelOptions = new ExcelLoadOptions();
 
-        var result = ExcelDocument.Create(excelStream);
+        var result = ExcelDocument.Create(excelStream, excelOptions);
 
         var worksheet = Assert.Single(result.Worksheets);
 
@@ -59,8 +75,9 @@ public class ExcelDocumentTest
     public void CreateExcelDocument_With_CellFontProperties()
     {
         var excelStream = GivenAnExcelStream(ExcelFileWithFontStyles);
+        var excelOptions = new ExcelLoadOptions();
 
-        var result = ExcelDocument.Create(excelStream);
+        var result = ExcelDocument.Create(excelStream, excelOptions);
 
         var worksheet = Assert.Single(result.Worksheets);
 
@@ -83,8 +100,9 @@ public class ExcelDocumentTest
     public void CreateExcelDocument_With_CellFormattedTexts()
     {
         var excelStream = GivenAnExcelStream(ExcelFileWithFormatValues);
+        var excelOptions = new ExcelLoadOptions();
 
-        var result = ExcelDocument.Create(excelStream);
+        var result = ExcelDocument.Create(excelStream, excelOptions);
 
         var worksheet = Assert.Single(result.Worksheets);
 
@@ -109,8 +127,9 @@ public class ExcelDocumentTest
     public void CreateExcelDocument_With_CellRawTexts()
     {
         var excelStream = GivenAnExcelStream(ExcelFileWithFormatValues);
+        var excelOptions = new ExcelLoadOptions();
 
-        var result = ExcelDocument.Create(excelStream);
+        var result = ExcelDocument.Create(excelStream, excelOptions);
 
         var worksheet = Assert.Single(result.Worksheets);
 
@@ -134,63 +153,149 @@ public class ExcelDocumentTest
     }
 
     [Fact]
-    public void ReadExcelFile_With_EmptyRowAndColumn_FillAllRangeUsed()
+    public void CreateExcelDocument_With_EmptyRowAndColumn_FillAllRangeUsed()
     {
         var excelStream = GivenAnExcelStream(ExcelFileWithEmptyRowAndColumn);
+        var excelOptions = new ExcelLoadOptions();
 
-        var result = ExcelDocument.Create(excelStream);
+        var result = ExcelDocument.Create(excelStream, excelOptions);
 
         var worksheet = Assert.Single(result.Worksheets);
 
         Assert.Equal(6, worksheet.Rows.Count);
+        Assert.All(worksheet.Rows, row => Assert.Equal(6, row.Count));
 
-        Assert.Equal(6, worksheet.Rows[0].Count);
-        Assert.False(worksheet.Rows[0][0].IsEmpty);
-        Assert.False(worksheet.Rows[0][1].IsEmpty);
-        Assert.True(worksheet.Rows[0][2].IsEmpty);
-        Assert.True(worksheet.Rows[0][3].IsEmpty);
-        Assert.True(worksheet.Rows[0][4].IsEmpty);
-        Assert.True(worksheet.Rows[0][5].IsEmpty);
+        var firstCell = worksheet.Rows.First().First();
+        Assert.Equal("B2", firstCell.Reference);
+        Assert.False(firstCell.IsNullOrWhiteSpace);
 
-        Assert.Equal(6, worksheet.Rows[1].Count);
-        Assert.False(worksheet.Rows[1][0].IsEmpty);
-        Assert.False(worksheet.Rows[1][1].IsEmpty);
-        Assert.True(worksheet.Rows[1][2].IsEmpty);
-        Assert.True(worksheet.Rows[1][3].IsEmpty);
-        Assert.True(worksheet.Rows[1][4].IsEmpty);
-        Assert.True(worksheet.Rows[1][5].IsEmpty);
+        var lastCell = worksheet.Rows.Last().Last();
+        Assert.Equal("G7", lastCell.Reference);
+        Assert.True(lastCell.IsNullOrWhiteSpace);
+    }
 
-        Assert.Equal(6, worksheet.Rows[2].Count);
-        Assert.True(worksheet.Rows[2][0].IsEmpty);
-        Assert.False(worksheet.Rows[2][1].IsEmpty);
-        Assert.True(worksheet.Rows[2][2].IsEmpty);
-        Assert.True(worksheet.Rows[2][3].IsEmpty);
-        Assert.True(worksheet.Rows[2][4].IsEmpty);
-        Assert.True(worksheet.Rows[2][5].IsEmpty);
+    [Fact]
+    public void CreateExcelDocument_With_EmptyRange_FillOnlyUsedCellsRange()
+    {
+        var excelStream = GivenAnExcelStream(ExcelFileWithRangeWithEmptyCells);
+        var excelOptions = new ExcelLoadOptions()
+        {
+            LoadOnlyCellsRangeWithText = true,
+        };
 
-        Assert.Equal(6, worksheet.Rows[3].Count);
-        Assert.True(worksheet.Rows[3][0].IsEmpty);
-        Assert.True(worksheet.Rows[3][1].IsEmpty);
-        Assert.True(worksheet.Rows[3][2].IsEmpty);
-        Assert.True(worksheet.Rows[3][3].IsEmpty);
-        Assert.True(worksheet.Rows[3][4].IsEmpty);
-        Assert.True(worksheet.Rows[3][5].IsEmpty);
+        var result = ExcelDocument.Create(excelStream, excelOptions);
 
-        Assert.Equal(6, worksheet.Rows[4].Count);
-        Assert.True(worksheet.Rows[4][0].IsEmpty);
-        Assert.True(worksheet.Rows[4][1].IsEmpty);
-        Assert.True(worksheet.Rows[4][2].IsEmpty);
-        Assert.False(worksheet.Rows[4][3].IsEmpty);
-        Assert.False(worksheet.Rows[4][4].IsEmpty);
-        Assert.False(worksheet.Rows[4][5].IsEmpty);
+        var worksheet = Assert.Single(result.Worksheets);
 
-        Assert.Equal(6, worksheet.Rows[5].Count);
-        Assert.True(worksheet.Rows[5][0].IsEmpty);
-        Assert.True(worksheet.Rows[5][1].IsEmpty);
-        Assert.True(worksheet.Rows[5][2].IsEmpty);
-        Assert.False(worksheet.Rows[5][3].IsEmpty);
-        Assert.False(worksheet.Rows[5][4].IsEmpty);
-        Assert.True(worksheet.Rows[5][5].IsEmpty);
+        Assert.Equal(2, worksheet.Rows.Count);
+        Assert.All(worksheet.Rows, row => Assert.Equal(3, row.Count));
+
+        Assert.Equal("C3", worksheet.Rows.First().First().Reference);
+        Assert.Equal("E4", worksheet.Rows.Last().Last().Reference);
+    }
+
+    [Fact]
+    public void CreateExcelDocument_With_EmptyRange_FillAllUsedCellsRange()
+    {
+        var excelStream = GivenAnExcelStream(ExcelFileWithRangeWithEmptyCells);
+        var excelOptions = new ExcelLoadOptions()
+        {
+            LoadOnlyCellsRangeWithText = false,
+        };
+
+        var result = ExcelDocument.Create(excelStream, excelOptions);
+
+        var worksheet = Assert.Single(result.Worksheets);
+
+        Assert.Equal(19, worksheet.Rows.Count);
+        Assert.All(worksheet.Rows, row => Assert.Equal(16, row.Count));
+
+        Assert.Equal("A1", worksheet.Rows.First().First().Reference);
+        Assert.Equal("P19", worksheet.Rows.Last().Last().Reference);
+    }
+
+    [Fact]
+    public void CreateExcelDocument_With_EmptyRowsAndColumns()
+    {
+        var excelStream = GivenAnExcelStream(ExcelFileWithEmptyRowAndColumn);
+        var excelOptions = new ExcelLoadOptions()
+        {
+            ExcludeEmptyColumns = false,
+            ExcludeEmptyRows = false,
+        };
+
+        var result = ExcelDocument.Create(excelStream, excelOptions);
+
+        var worksheet = Assert.Single(result.Worksheets);
+
+        Assert.Equal(6, worksheet.Rows.Count);
+        Assert.All(worksheet.Rows, row => Assert.Equal(6, row.Count));
+
+        Assert.Equal("B2", worksheet.Rows.First().First().Reference);
+        Assert.Equal("G7", worksheet.Rows.Last().Last().Reference);
+    }
+
+    [Fact]
+    public void CreateExcelDocument_Without_EmptyRows()
+    {
+        var excelStream = GivenAnExcelStream(ExcelFileWithEmptyRowAndColumn);
+        var excelOptions = new ExcelLoadOptions()
+        {
+            ExcludeEmptyRows = true,
+            ExcludeEmptyColumns = false,
+        };
+
+        var result = ExcelDocument.Create(excelStream, excelOptions);
+
+        var worksheet = Assert.Single(result.Worksheets);
+
+        Assert.Equal(5, worksheet.Rows.Count);
+        Assert.All(worksheet.Rows, row => Assert.Equal(6, row.Count));
+
+        Assert.Equal("B2", worksheet.Rows.First().First().Reference);
+        Assert.Equal("G7", worksheet.Rows.Last().Last().Reference);
+    }
+
+    [Fact]
+    public void CreateMarkdownTable_Without_EmptyColumns()
+    {
+        var excelStream = GivenAnExcelStream(ExcelFileWithEmptyRowAndColumn);
+        var excelOptions = new ExcelLoadOptions()
+        {
+            ExcludeEmptyColumns = true,
+            ExcludeEmptyRows = false,
+        };
+
+        var result = ExcelDocument.Create(excelStream, excelOptions);
+
+        var worksheet = Assert.Single(result.Worksheets);
+
+        Assert.Equal(6, worksheet.Rows.Count);
+        Assert.All(worksheet.Rows, row => Assert.Equal(5, row.Count));
+
+        Assert.Equal("B2", worksheet.Rows.First().First().Reference);
+        Assert.Equal("G7", worksheet.Rows.Last().Last().Reference);
+    }
+
+    [Fact]
+    public void CreateMarkdownTable_Without_EmptyRowsAndColumns()
+    {
+        var excelStream = GivenAnExcelStream(ExcelFileWithEmptyRowAndColumn);
+        var excelOptions = new ExcelLoadOptions()
+        {
+            ExcludeEmptyColumns = true,
+            ExcludeEmptyRows = true,
+        };
+
+        var result = ExcelDocument.Create(excelStream, excelOptions);
+
+        var worksheet = Assert.Single(result.Worksheets);
+
+        Assert.Equal(5, worksheet.Rows.Count);
+        Assert.All(worksheet.Rows, row => Assert.Equal(5, row.Count));
+
+        Assert.Equal("B2", worksheet.Rows.First().First().Reference);
+        Assert.Equal("G7", worksheet.Rows.Last().Last().Reference);
     }
 
     private static FileStream GivenAnExcelStream(string fileName)

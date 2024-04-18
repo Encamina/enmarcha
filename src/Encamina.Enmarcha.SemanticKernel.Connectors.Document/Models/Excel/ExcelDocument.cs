@@ -17,18 +17,25 @@ internal class ExcelDocument
     /// Creates an ExcelDocument object from a stream.
     /// </summary>
     /// <param name="stream">The stream containing the Excel document data.</param>
+    /// <param name="excelLoadOptions">Options for loading the Excel document</param>
     /// <returns>An ExcelDocument object representing the Excel document in the stream.</returns>
-    public static ExcelDocument Create(Stream stream)
+    public static ExcelDocument Create(Stream stream, ExcelLoadOptions excelLoadOptions)
     {
         var excelDocumentResult = new ExcelDocument();
 
         using var doc = SpreadsheetDocument.Open(stream, false);
 
         var sheets = doc.WorkbookPart?.Workbook.Sheets?.Elements<Sheet>().ToList() ?? [];
-
+        
         foreach (var sheet in sheets)
         {
-            excelDocumentResult.Worksheets.Add(Worksheet.Create(sheet, doc.WorkbookPart));
+            var worksheet = Worksheet.Create(sheet);
+
+            if (excelLoadOptions.LoadHiddenSheets || !worksheet.IsHidden)
+            {
+                worksheet.LoadRows(sheet, doc.WorkbookPart, excelLoadOptions);
+                excelDocumentResult.Worksheets.Add(worksheet);
+            }
         }
 
         return excelDocumentResult;
