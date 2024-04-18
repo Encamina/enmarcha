@@ -12,16 +12,16 @@ namespace Encamina.Enmarcha.SemanticKernel.Internals;
 /// <summary>
 /// An implementation of the <see cref="IStringSimilarityComparer"/> interface that uses cosine similarity algorithm, using semantic kernel to generate the embeddings.
 /// </summary>
-internal sealed class SemanticKernelCosineStringSimilarityComparer : IStringSimilarityComparer
+internal sealed class CosineStringSimilarityComparer : IStringSimilarityComparer
 {
     private readonly Kernel kernel;
     private readonly ITextEmbeddingGenerationService textEmbeddingGenerationService;
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="SemanticKernelCosineStringSimilarityComparer"/> class.
+    /// Initializes a new instance of the <see cref="CosineStringSimilarityComparer"/> class.
     /// </summary>
     /// <param name="kernel">A valid instance of a <see cref="Kernel"/>.</param>
-    public SemanticKernelCosineStringSimilarityComparer(Kernel kernel)
+    public CosineStringSimilarityComparer(Kernel kernel)
     {
         this.kernel = kernel;
 
@@ -44,11 +44,10 @@ internal sealed class SemanticKernelCosineStringSimilarityComparer : IStringSimi
 
         if (vec1.Length != vec2.Length)
         {
-            throw new Exception($"Vector size should be the same: {vec1.Length} != {vec2.Length}");
+            throw new ArgumentException($"Vector size should be the same: {vec1.Length} != {vec2.Length}");
         }
 
-        var cosineSimilarity = TensorPrimitives.CosineSimilarity(v1, v2);
-        return cosineSimilarity;
+        return TensorPrimitives.CosineSimilarity(v1, v2);
     }
 }
 

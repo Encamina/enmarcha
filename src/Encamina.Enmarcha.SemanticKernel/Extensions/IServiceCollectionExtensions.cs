@@ -62,12 +62,12 @@ public static class IServiceCollectionExtensions
     }
 
     /// <summary>
-    /// Adds the <see cref="SemanticKernelCosineStringSimilarityComparer"/> implementation of <see cref="IStringSimilarityComparer"/> to the specified <see cref="IServiceCollection"/> as a scoped service.
+    /// Adds the <see cref="CosineStringSimilarityComparer"/> implementation of <see cref="IStringSimilarityComparer"/> to the specified <see cref="IServiceCollection"/> as a scoped service.
     /// </summary>
     /// <param name="services">The <see cref="IServiceCollection"/> to add services to.</param>
     /// <returns>The <see cref="IServiceCollection"/> so that additional calls can be chained.</returns>
-    public static IServiceCollection AddSemanticKernelCosineStringSimilarityComparer(this IServiceCollection services)
+    public static IServiceCollection AddCosineStringSimilarityComparer(this IServiceCollection services)
     {
-        return services.AddScoped<IStringSimilarityComparer, SemanticKernelCosineStringSimilarityComparer>();
+        return services.AddScoped<IStringSimilarityComparer, CosineStringSimilarityComparer>();
     }
 }

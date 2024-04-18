@@ -25,7 +25,7 @@ Previous classification is not required if changes are simple or all belong to t
 
 ### Minor Changes
 
- - Added `SemanticKernelCosineStringSimilarityComparer` in `Encamina.Enmarcha.SemanticKernel` to compare two strings using cosine similarity algorithm.
+ - Added `CosineStringSimilarityComparer` in `Encamina.Enmarcha.SemanticKernel` to compare two strings using cosine similarity algorithm.
 
 
 ## [8.1.5]
