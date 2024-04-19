@@ -29,6 +29,9 @@
     <None Update="TestUtilities\Files\TestFileWithFormatValues.xlsx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="TestUtilities\Files\TestFileWithHiddenRowsAndColumns.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="TestUtilities\Files\TestFileWithHiddenSheet.xlsx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

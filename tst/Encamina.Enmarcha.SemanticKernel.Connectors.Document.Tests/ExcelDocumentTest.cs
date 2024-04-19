@@ -11,6 +11,7 @@ public class ExcelDocumentTest
     private const string ExcelFileWithFontStyles = "TestFileWithFontStyle.xlsx";
     private const string ExcelFileWithEmptyRowAndColumn = "TestFileWithEmptyRowAndColumn.xlsx";
     private const string ExcelFileWithRangeWithEmptyCells = "TestFileWithRangeWithEmptyCells.xlsx";
+    private const string ExcelFileWithHiddenRowsAndColumns = "TestFileWithHiddenRowsAndColumns.xlsx";
 
     [Fact]
     public void CreateExcelDocument_With_MultipleWorksheets()
@@ -27,7 +28,7 @@ public class ExcelDocumentTest
     public void CreateExcelDocument_Without_HiddenWorksheets()
     {
         var excelStream = GivenAnExcelStream(ExcelFileWithHiddenSheet);
-        var excelOptions = new ExcelLoadOptions() { LoadHiddenSheets = false };
+        var excelOptions = new ExcelLoadOptions() { ExcludeHiddenSheets = true };
 
         var result = ExcelDocument.Create(excelStream, excelOptions);
 
@@ -39,7 +40,7 @@ public class ExcelDocumentTest
     public void CreateExcelDocument_With_HiddenWorksheets()
     {
         var excelStream = GivenAnExcelStream(ExcelFileWithHiddenSheet);
-        var excelOptions = new ExcelLoadOptions() { LoadHiddenSheets = true };
+        var excelOptions = new ExcelLoadOptions() { ExcludeHiddenSheets = false };
 
         var result = ExcelDocument.Create(excelStream, excelOptions);
 
@@ -257,7 +258,7 @@ public class ExcelDocumentTest
     }
 
     [Fact]
-    public void CreateMarkdownTable_Without_EmptyColumns()
+    public void CreateExcelDocument_Without_EmptyColumns()
     {
         var excelStream = GivenAnExcelStream(ExcelFileWithEmptyRowAndColumn);
         var excelOptions = new ExcelLoadOptions()
@@ -278,7 +279,7 @@ public class ExcelDocumentTest
     }
 
     [Fact]
-    public void CreateMarkdownTable_Without_EmptyRowsAndColumns()
+    public void CreateExcelDocument_Without_EmptyRowsAndColumns()
     {
         var excelStream = GivenAnExcelStream(ExcelFileWithEmptyRowAndColumn);
         var excelOptions = new ExcelLoadOptions()
@@ -296,6 +297,82 @@ public class ExcelDocumentTest
 
         Assert.Equal("B2", worksheet.Rows.First().First().Reference);
         Assert.Equal("G7", worksheet.Rows.Last().Last().Reference);
+    }
+
+    [Fact]
+    public void CreateExcelDocument_Without_HiddenRows()
+    {
+        var excelStream = GivenAnExcelStream(ExcelFileWithHiddenRowsAndColumns);
+        var excelOptions = new ExcelLoadOptions()
+        {
+            ExcludeHiddenRows = true,
+        };
+
+        var result = ExcelDocument.Create(excelStream, excelOptions);
+
+        var worksheet = Assert.Single(result.Worksheets);
+
+        var allCellTexts = worksheet.Rows.SelectMany(r => r.Select(c => c.Text)).ToList();
+        Assert.DoesNotContain("This is a hidden row", allCellTexts);
+        Assert.DoesNotContain("This is another hidden row", allCellTexts);
+        Assert.DoesNotContain("Another hidden row", allCellTexts);
+    }
+
+    [Fact]
+    public void CreateExcelDocument_With_HiddenRows()
+    {
+        var excelStream = GivenAnExcelStream(ExcelFileWithHiddenRowsAndColumns);
+        var excelOptions = new ExcelLoadOptions()
+        {
+            ExcludeHiddenRows = false,
+        };
+
+        var result = ExcelDocument.Create(excelStream, excelOptions);
+
+        var worksheet = Assert.Single(result.Worksheets);
+
+        var allCellTexts = worksheet.Rows.SelectMany(r => r.Select(c => c.Text)).ToList();
+        Assert.Contains("This is a hidden row", allCellTexts);
+        Assert.Contains("This is another hidden row", allCellTexts);
+        Assert.Contains("Another hidden row", allCellTexts);
+    }
+
+    [Fact]
+    public void CreateExcelDocument_Without_HiddenColumns()
+    {
+        var excelStream = GivenAnExcelStream(ExcelFileWithHiddenRowsAndColumns);
+        var excelOptions = new ExcelLoadOptions()
+        {
+            ExcludeHiddenColumns = true,
+        };
+
+        var result = ExcelDocument.Create(excelStream, excelOptions);
+
+        var worksheet = Assert.Single(result.Worksheets);
+
+        var allCellTexts = worksheet.Rows.SelectMany(r => r.Select(c => c.Text)).ToList();
+        Assert.DoesNotContain("This is a hidden column", allCellTexts);
+        Assert.DoesNotContain("This is another hidden column", allCellTexts);
+        Assert.DoesNotContain("Another hidden column", allCellTexts);
+    }
+
+    [Fact]
+    public void CreateExcelDocument_With_HiddenColumns()
+    {
+        var excelStream = GivenAnExcelStream(ExcelFileWithHiddenRowsAndColumns);
+        var excelOptions = new ExcelLoadOptions()
+        {
+            ExcludeHiddenColumns = false,
+        };
+
+        var result = ExcelDocument.Create(excelStream, excelOptions);
+
+        var worksheet = Assert.Single(result.Worksheets);
+
+        var allCellTexts = worksheet.Rows.SelectMany(r => r.Select(c => c.Text)).ToList();
+        Assert.Contains("This is a hidden column", allCellTexts);
+        Assert.Contains("This is another hidden column", allCellTexts);
+        Assert.Contains("Another hidden column", allCellTexts);
     }
 
     private static FileStream GivenAnExcelStream(string fileName)

@@ -16,7 +16,7 @@ public class ExcelToMarkdownDocumentConnector : IDocumentConnector
     /// </summary>
     public ExcelLoadOptions ExcelLoadOptions { get; } = new()
     {
-        LoadHiddenSheets = false,
+        ExcludeHiddenSheets = true,
         LoadOnlyCellsRangeWithText = true,
         ExcludeEmptyColumns = false,
         ExcludeEmptyRows = false,

@@ -87,7 +87,7 @@ public class ExcelToMarkdownDocumentConnectorTest
         {
             ExcelLoadOptions =             
             {
-                LoadHiddenSheets = true,
+                ExcludeHiddenSheets = false,
             },
             WithHeaderSeparator = true,
             WorksheetSeparator = "---",
@@ -120,7 +120,7 @@ public class ExcelToMarkdownDocumentConnectorTest
         {
             ExcelLoadOptions =
             {
-                LoadHiddenSheets = false,
+                ExcludeHiddenSheets = true,
             },
             WithHeaderSeparator = true,
             WorksheetSeparator = "---",

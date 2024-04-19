@@ -18,10 +18,19 @@ public class ExcelLoadOptions
     public bool ExcludeEmptyColumns { get; set; }
 
     /// <summary>
-    /// Specifies whether to load hidden sheets or not.
-    /// Default is true.
+    /// Specifies whether hidden rows should be excluded.
     /// </summary>
-    public bool LoadHiddenSheets { get; set; } = true;
+    public bool ExcludeHiddenRows { get; set; }
+
+    /// <summary>
+    /// Specifies whether hidden columns should be excluded.
+    /// </summary>
+    public bool ExcludeHiddenColumns { get; set; }
+
+    /// <summary>
+    /// Specifies whether hidden worksheets should be excluded.
+    /// </summary>
+    public bool ExcludeHiddenSheets { get; set; }
 
     /// <summary>
     /// Specifies whether to load only the cells range with text.

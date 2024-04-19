@@ -67,13 +67,26 @@ internal class Worksheet
         }
 
         var (startCell, endCell) = GetRangeUsed(worksheet);
-        
+
+        var hiddenRows = excelLoadOptions.ExcludeHiddenRows ? GetHiddenRows(worksheet) : [];
+        var hiddenColumns = excelLoadOptions.ExcludeHiddenColumns ? GetHiddenColumns(worksheet) : [];
+
         for (var row = startCell.Row; row <= endCell.Row; row++)
         {
+            if (excelLoadOptions.ExcludeHiddenRows && hiddenRows.Contains(row))
+            {
+                continue;
+            }
+
             var rowCells = new List<Cell>();
 
             for (var column = startCell.Column; column <= endCell.Column; column++)
             {
+                if (excelLoadOptions.ExcludeHiddenColumns && hiddenColumns.Contains(column))
+                {
+                    continue;
+                }
+
                 var cellReference = CellReferenceConverter.CoordinatesToCellReference(row, column);
 
                 var cell = cells.FirstOrDefault(c => c.CellReference == cellReference);
@@ -125,10 +138,36 @@ internal class Worksheet
     }
 
     /// <summary>
-    /// 
+    /// Gets the hidden rows in the worksheet.
     /// </summary>
-    /// <param name="rows"></param>
-    /// <returns></returns>
+    /// <param name="worksheet">The <see cref="WorkbookPart"/> object containing the rows.</param>
+    /// <returns>A list of integers representing the indices of hidden rows.</returns>
+    private static IReadOnlyList<int> GetHiddenRows(DocumentFormat.OpenXml.Spreadsheet.Worksheet worksheet)
+    {
+        return worksheet.Descendants<Row>()
+            .Where((r) => r.Hidden != null && r.Hidden.Value && r.RowIndex?.Value is not null)
+            .Select(r => (int)r.RowIndex.Value)
+            .ToList();
+    }
+
+    /// <summary>
+    /// Gets the hidden columns in the worksheet.
+    /// </summary>
+    /// <param name="worksheet">The <see cref="WorkbookPart"/> object containing the columns.</param>
+    /// <returns>A list of integers representing the indices of hidden columns.</returns>
+    private static IReadOnlyList<int> GetHiddenColumns(DocumentFormat.OpenXml.Spreadsheet.Worksheet worksheet)
+    {
+        return worksheet.Descendants<Column>()
+            .Where(c => c.Hidden != null && c.Hidden.Value && c.Min != null && c.Max != null)
+            .SelectMany(c => Enumerable.Range((int)c.Min.Value, (int)c.Max.Value - (int)c.Min.Value + 1))
+            .ToList();
+    }
+
+    /// <summary>
+    /// Removes empty columns from the given list of rows.
+    /// </summary>
+    /// <param name="rows">The list of rows where empty columns are to be removed.</param>
+    /// <returns>The list of rows with empty columns removed.</returns>
     private static List<List<Cell>> RemoveEmptyColumnsFromRows(List<List<Cell>> rows)
     {
         if (rows.Count == 0 || rows[0].Count == 0)

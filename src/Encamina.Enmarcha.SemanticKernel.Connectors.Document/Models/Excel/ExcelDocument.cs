@@ -31,11 +31,13 @@ internal class ExcelDocument
         {
             var worksheet = Worksheet.Create(sheet);
 
-            if (excelLoadOptions.LoadHiddenSheets || !worksheet.IsHidden)
+            if (excelLoadOptions.ExcludeHiddenSheets && worksheet.IsHidden)
             {
-                worksheet.LoadRows(sheet, doc.WorkbookPart, excelLoadOptions);
-                excelDocumentResult.Worksheets.Add(worksheet);
+                continue;
             }
+
+            worksheet.LoadRows(sheet, doc.WorkbookPart, excelLoadOptions);
+            excelDocumentResult.Worksheets.Add(worksheet);
         }
 
         return excelDocumentResult;
