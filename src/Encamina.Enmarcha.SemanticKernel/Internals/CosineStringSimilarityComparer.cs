@@ -7,8 +7,6 @@ using Microsoft.SemanticKernel.Embeddings;
 
 namespace Encamina.Enmarcha.SemanticKernel.Internals;
 
-#pragma warning disable SKEXP0001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
-
 /// <summary>
 /// An implementation of the <see cref="IStringSimilarityComparer"/> interface that uses cosine similarity algorithm, using semantic kernel to generate the embeddings.
 /// </summary>
@@ -51,4 +49,3 @@ internal sealed class CosineStringSimilarityComparer : IStringSimilarityComparer
     }
 }
 
-#pragma warning restore SKEXP0001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
