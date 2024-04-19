@@ -20,6 +20,8 @@ public class ExcelToMarkdownDocumentConnector : IDocumentConnector
         LoadOnlyCellsRangeWithText = true,
         ExcludeEmptyColumns = false,
         ExcludeEmptyRows = false,
+        ExcludeHiddenColumns = true,
+        ExcludeHiddenRows = true,
     };
 
     /// <summary>
