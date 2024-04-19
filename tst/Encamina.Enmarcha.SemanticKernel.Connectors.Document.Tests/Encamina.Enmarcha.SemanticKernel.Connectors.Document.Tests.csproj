@@ -14,31 +14,31 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="TestUtilities\Files\TestFileMiscellaneous.xlsx">
+    <None Update="TestUtilities\ExcelFiles\Miscellaneous.xlsx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="TestUtilities\Files\TestFileWithEmptyRowAndColumn.xlsx">
+    <None Update="TestUtilities\ExcelFiles\EmptyRowAndColumn.xlsx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="TestUtilities\Files\TestFileWithFontStyle.xlsx">
+    <None Update="TestUtilities\ExcelFiles\FontStyle.xlsx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="TestUtilities\Files\TestFile.xlsx">
+    <None Update="TestUtilities\ExcelFiles\Test.xlsx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="TestUtilities\Files\TestFileWithFormatValues.xlsx">
+    <None Update="TestUtilities\ExcelFiles\FormatValues.xlsx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="TestUtilities\Files\TestFileWithHiddenRowsAndColumns.xlsx">
+    <None Update="TestUtilities\ExcelFiles\HiddenRowsAndColumns.xlsx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="TestUtilities\Files\TestFileWithHiddenSheet.xlsx">
+    <None Update="TestUtilities\ExcelFiles\HiddenSheet.xlsx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="TestUtilities\Files\TestFileWithRangeWithEmptyCells.xlsx">
+    <None Update="TestUtilities\ExcelFiles\RangeWithEmptyCells.xlsx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="TestUtilities\Files\TestFileWithTwoWorksheets.xlsx">
+    <None Update="TestUtilities\ExcelFiles\TwoWorksheets.xlsx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>

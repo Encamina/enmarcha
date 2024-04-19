@@ -4,14 +4,14 @@ namespace Encamina.Enmarcha.SemanticKernel.Connectors.Document.Tests;
 
 public class ExcelDocumentTest
 {
-    private const string ExcelFile = "TestFile.xlsx";
-    private const string ExcelFileWithTwoWorksheets = "TestFileWithTwoWorksheets.xlsx";
-    private const string ExcelFileWithHiddenSheet = "TestFileWithHiddenSheet.xlsx";
-    private const string ExcelFileWithFormatValues = "TestFileWithFormatValues.xlsx";
-    private const string ExcelFileWithFontStyles = "TestFileWithFontStyle.xlsx";
-    private const string ExcelFileWithEmptyRowAndColumn = "TestFileWithEmptyRowAndColumn.xlsx";
-    private const string ExcelFileWithRangeWithEmptyCells = "TestFileWithRangeWithEmptyCells.xlsx";
-    private const string ExcelFileWithHiddenRowsAndColumns = "TestFileWithHiddenRowsAndColumns.xlsx";
+    private const string ExcelFile = "Test.xlsx";
+    private const string ExcelFileWithTwoWorksheets = "TwoWorksheets.xlsx";
+    private const string ExcelFileWithHiddenSheet = "HiddenSheet.xlsx";
+    private const string ExcelFileWithFormatValues = "FormatValues.xlsx";
+    private const string ExcelFileWithFontStyles = "FontStyle.xlsx";
+    private const string ExcelFileWithEmptyRowAndColumn = "EmptyRowAndColumn.xlsx";
+    private const string ExcelFileWithRangeWithEmptyCells = "RangeWithEmptyCells.xlsx";
+    private const string ExcelFileWithHiddenRowsAndColumns = "HiddenRowsAndColumns.xlsx";
 
     [Fact]
     public void CreateExcelDocument_With_MultipleWorksheets()
@@ -377,6 +377,6 @@ public class ExcelDocumentTest
 
     private static FileStream GivenAnExcelStream(string fileName)
     {
-        return File.OpenRead($"{Directory.GetCurrentDirectory()}/TestUtilities/Files/{fileName}");
+        return File.OpenRead($"{Directory.GetCurrentDirectory()}/TestUtilities/ExcelFiles/{fileName}");
     }
 }
