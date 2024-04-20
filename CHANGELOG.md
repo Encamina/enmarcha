@@ -25,6 +25,7 @@ Previous classification is not required if changes are simple or all belong to t
 
 ### Major Changes
 
+- Added new document connector to read Excel files (xlsx) `ExcelToMarkdownDocumentConnector`.
 - Updated dependencies:
   - Updated `Asp.Versioning.Mvc.ApiExplorer` from `8.0.0` to `8.1.0`.
   - Updated `Azure.AI.OpenAI` from `1.0.0-beta14` to `1.0.0-beta16`.
@@ -76,7 +77,6 @@ Previous classification is not required if changes are simple or all belong to t
 - Added `DefaultDocumentContentSemanticExtractor` to retrieve semantic chunks from documents.
 - Bug fix in the `MathUtils.Quartiles` method.
 - Enhanced `SplitAsync` in `Encamina.Enmarcha.AI.SemanticTextSplitter` to iteratively split chunks exceeding `options.MaxChunkSize` with a retry limit of `options.ChunkSplitRetryLimit`.
-- Added new document connector to read Excel files (xlsx) `ExcelDocumentConnector`.
 - Updated dependencies:
   - Updated `Bogus` from `35.4.0` to `35.4.1`.
   - Updated `Azure.Core` from `1.37.0` to `1.38.0`.
