@@ -16,7 +16,48 @@ Also, any bug fix must start with the prefix �Bug fix:� followed by the desc
 
 Previous classification is not required if changes are simple or all belong to the same category.
 
+## [8.1.6]
 
+### Breaking Changes 
+
+ - Renamed `UserId` to `IndexerId` in `ChatMessageHistoryRecord`. This change requires consumers to update their database to match the new property name. 
+    - In case of using Cosmos DB, `IndexerId` should be the new partition key of the collection. You can learn how to change the partition key and do the data migration [here](https://learn.microsoft.com/en-us/azure/cosmos-db/nosql/change-partition-key).
+
+### Major Changes
+
+- Updated dependencies:
+  - Updated `Asp.Versioning.Mvc.ApiExplorer` from `8.0.0` to `8.1.0`.
+  - Updated `Azure.AI.OpenAI` from `1.0.0-beta14` to `1.0.0-beta16`.
+  - Updated `Bogus` from `35.4.1` to `35.`5.0`.
+  - Updated `MailKit` from `4.4.0` to `4.5.0`.
+  - Updated `MimeKit` from `4.4.0` to `4.5.0`.
+  - Updated `Microsoft.AspNetCore.Authentication.JwtBearer` from `8.0.2` to `8.0.4`.
+  - Updated `Microsoft.AspNetCore.Authentication.OpenIdConnect` from `8.0.2` to `8.0.4`.
+  - Updated `Microsoft.Bot.Builder.Azure` from `4.22.2` to `4.22.3`.
+  - Updated `Microsoft.Bot.Builder.Azure.Blobs` from `4.22.2` to `4.22.3`.
+  - Updated `Microsoft.Bot.Builder.Dialogs` from `4.22.2` to `4.22.3`.
+  - Updated `Microsoft.Bot.Builder.Integration.ApplicationInsights.Core` from `4.22.2` to `4.22.3`.
+  - Updated `MMicrosoft.Bot.Builder.Integration.AspNet.Core` from `4.22.2` to `4.22.3`.
+  - Updated `Microsoft.Azure.Cosmos` from `3.38.1` to `3.39.0`.
+  - Updated `Microsoft.EntityFrameworkCore` from `8.0.2` to `8.0.4`.
+  - Updated `Microsoft.EntityFrameworkCore.SqlServer` from `8.0.2` to `8.0.4`.
+  - Updated `Microsoft.Extensions.Logging.Abstractions` from `8.0.0` to `8.0.1`.
+  - Updated `Microsoft.Extensions.Azure` from `1.7.2` to `1.7.3`.
+  - Updated `Microsoft.Extensions.DependencyInjection.Abstractions` from `8.0.0` to `8.0.1`.
+  - Updated `Microsoft.SemanticKernel.Abstractions` from `1.6.2` to `1.7.1`.
+  - Updated `Microsoft.SemanticKernel.Connectors.AzureAISearch` from `1.6.2-alpha` to `1.7.1-alpha`. This does fix the [Issue 72](https://github.com/Encamina/enmarcha/issues/72).
+  - Updated `Microsoft.SemanticKernel.Connectors.OpenAI` from `1.6.2` to `1.7.1`.
+  - Updated `Microsoft.SemanticKernel.Connectors.Qdrant` from `1.6.2-alpha` to `1.7.1-alpha`.
+  - Updated `Microsoft.SemanticKernel.Core` from `1.6.2` to `1.7.1`.
+  - Updated `Microsoft.SemanticKernel.Plugins.Document` from `1.6.2-alpha` to `1.7.1-alpha`.
+  - Updated `Microsoft.SemanticKernel.Plugins.Memory` from `1.6.2-alpha` to `1.7.1-alpha`.
+  - Updated `SharpToken` from `1.2.17` to `2.0.2`.
+  - Updated `System.Text.Json` from `8.0.2` to `8.0.3`.
+  - Updated `coverlet.collector` from `6.0.1` to `6.0.2`.
+  - Updated `xunit` from `2.7.0` to `2.7.1`.
+  - Updated `xunit.analyzers` from `1.11.0` to `1.12.0`.
+  - Updated `xunit.extensibility.core` from `2.7.0` to `2.7.1`.
+  - Updated `xunit.runner.visualstudio` from `2.5.7` to `2.5.8`.
 
 ## [8.1.5]
 
