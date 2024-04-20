@@ -118,20 +118,20 @@ public class ExcelToMarkdownDocumentConnector : IDocumentConnector
     /// <inheritdoc/>
     public void Initialize(Stream stream)
     {
-        // Intentionally not implemented to comply with the Liskov Substitution Principle...
+        // Intentionally not implemented to comply with the Liskov Substitution Principle
     }
 
     /// <inheritdoc/>
     public void AppendText(Stream stream, string text)
     {
-        // Intentionally not implemented to comply with the Liskov Substitution Principle...
+        // Intentionally not implemented to comply with the Liskov Substitution Principle
     }
     
     private string GetCellTextValue(Cell cell)
     {
         // Get the cell value with or without formatting
         var cellValue = WithFormattedValues ? cell.FormattedText : cell.Text;
-        
+
         // Replace line breaks with the specified replacement
         cellValue = cellValue?.ReplaceLineEndings(LineBreakReplacement);
 
@@ -154,7 +154,7 @@ public class ExcelToMarkdownDocumentConnector : IDocumentConnector
         var style = bold ? "**" : string.Empty;
         style += italic ? "*" : string.Empty;
 
-        if(string.IsNullOrEmpty(style))
+        if (string.IsNullOrEmpty(style))
         {
             return value;
         }

@@ -39,7 +39,7 @@ internal class Worksheet
             Name = sheet.Name,
             IsHidden = sheet.State != null && (sheet.State == SheetStateValues.Hidden || sheet.State == SheetStateValues.VeryHidden),
         };
-        
+
         return worksheetResult;
     }
 
@@ -99,12 +99,12 @@ internal class Worksheet
             rows.Add(rowCells);
         }
 
-        if(excelLoadOptions.MergeEmptyRowsRules != null)
+        if (excelLoadOptions.MergeEmptyRowsRules != null)
         {
             rows = MergeEmptyRows(rows, excelLoadOptions.MergeEmptyRowsRules);
         }
 
-        if(excelLoadOptions.MergeEmptyColumnsRules != null)
+        if (excelLoadOptions.MergeEmptyColumnsRules != null)
         {
             rows = MergeEmptyColumns(rows, excelLoadOptions.MergeEmptyColumnsRules);
         }
@@ -142,8 +142,8 @@ internal class Worksheet
 
         var range = dimensionsReference.Split(':').Select(CellReferenceConverter.CellReferenceToCoordinates).ToArray();
 
-        return range.Length == 1 
-            ? (range[0], range[0]) 
+        return range.Length == 1
+            ? (range[0], range[0])
             : (range[0], range[1]);
     }
 
@@ -161,7 +161,7 @@ internal class Worksheet
         for (var i = 0; i < rows.Count; i++)
         {
             if (rows[i].All(r => r.IsNullOrWhiteSpace))
-            {            
+            {
                 // Found the start of a potential empty row range
                 if (start == -1)
                 {
@@ -175,6 +175,7 @@ internal class Worksheet
                 {
                     trimmedRanges.Add((start + mergeEmptyRowsRules.ResultingElementsFromMerge, (i) - (start + mergeEmptyRowsRules.ResultingElementsFromMerge)));
                 }
+
                 start = -1;
             }
         }
@@ -205,6 +206,7 @@ internal class Worksheet
                 {
                     trimmedRanges.Add((start + mergeEmptyColumnsRules.ResultingElementsFromMerge, i - (start + mergeEmptyColumnsRules.ResultingElementsFromMerge)));
                 }
+
                 start = -1;
             }
         }
@@ -276,7 +278,7 @@ internal class Worksheet
         var lastNonEmptyRowIndex = rows.IndexOf(rows.LastOrDefault(r => r.Any(c => !c.IsNullOrWhiteSpace)));
 
         var columnsRange = Enumerable.Range(0, rows[0].Count).ToList();
-        
+
         var firstNonEmptyColumnIndex = columnsRange.FirstOrDefault(j => rows.Any(row => !row[j].IsNullOrWhiteSpace));
         var lastNonEmptyColumnIndex = columnsRange.LastOrDefault(j => rows.Any(row => !row[j].IsNullOrWhiteSpace));
 

@@ -26,7 +26,7 @@ internal class ExcelDocument
         using var doc = SpreadsheetDocument.Open(stream, false);
 
         var sheets = doc.WorkbookPart?.Workbook.Sheets?.Elements<Sheet>().ToList() ?? [];
-        
+
         foreach (var sheet in sheets)
         {
             var worksheet = Worksheet.Create(sheet);
