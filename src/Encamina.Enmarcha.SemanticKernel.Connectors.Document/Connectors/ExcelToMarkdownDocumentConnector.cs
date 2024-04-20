@@ -22,6 +22,16 @@ public class ExcelToMarkdownDocumentConnector : IDocumentConnector
         ExcludeEmptyRows = false,
         ExcludeHiddenColumns = true,
         ExcludeHiddenRows = true,
+        MergeEmptyRowsRules = new MergeEmptyElementsRules()
+        {
+            MinimumElementsToMerge = 10,
+            ResultingElementsFromMerge = 5
+        },
+        MergeEmptyColumnsRules = new MergeEmptyElementsRules()
+        {
+            MinimumElementsToMerge = 10,
+            ResultingElementsFromMerge = 5
+        }
     };
 
     /// <summary>

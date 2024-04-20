@@ -1,4 +1,5 @@
 ﻿using Encamina.Enmarcha.SemanticKernel.Connectors.Document.Connectors;
+using Encamina.Enmarcha.SemanticKernel.Connectors.Document.Models.Excel;
 
 namespace Encamina.Enmarcha.SemanticKernel.Connectors.Document.Tests;
 
@@ -11,6 +12,7 @@ public class ExcelToMarkdownDocumentConnectorTest
     private const string ExcelFileWithFontStyles = "FontStyle.xlsx";
     private const string ExcelFileWithEmptyRowAndColumn = "EmptyRowAndColumn.xlsx";
     private const string ExcelFileMiscellaneous = "Miscellaneous.xlsx";
+    private const string ExcelFileLargeEmptyRowsAndColumns = "LargeEmptyRowsAndColumns.xlsx";
 
     [Fact]
     public void CreateMarkdownTable_Succeeds()
@@ -380,6 +382,45 @@ public class ExcelToMarkdownDocumentConnectorTest
         Assert.DoesNotContain("| ******|", result);
         Assert.DoesNotContain("|****** |", result);
 
+    }
+
+    [Fact]
+    public void CreateMarkdownTable_And_MergeEmptyColumnsAndRows()
+    {
+        var excelStream = GivenAnExcelStream(ExcelFileLargeEmptyRowsAndColumns);
+        var excelConnector = new ExcelToMarkdownDocumentConnector()
+        {
+            ExcelLoadOptions =
+            {
+                MergeEmptyColumnsRules = new MergeEmptyElementsRules
+                {
+                    MinimumElementsToMerge = 2,
+                    ResultingElementsFromMerge = 1,
+                },
+                MergeEmptyRowsRules = new MergeEmptyElementsRules
+                {
+                    MinimumElementsToMerge = 2,
+                    ResultingElementsFromMerge = 1,
+                },
+            }
+        };
+
+        var result = excelConnector.ReadText(excelStream);
+
+        const string expectedResult = """
+                                      |COLUMN 1|COLUMN 2|||||||
+                                      |---|---|---|---|---|---|---|---|
+                                      |Value 1|Value 2|||||||
+                                      ||Value 3|||||||
+                                      |||||||||
+                                      ||||||||x|
+                                      |||||||||
+                                      ||||||xx|||
+                                      |||||||||
+                                      ||||xxx|||||
+                                      """;
+
+        Assert.Equal(expectedResult, result);
     }
 
     private static FileStream GivenAnExcelStream(string fileName)

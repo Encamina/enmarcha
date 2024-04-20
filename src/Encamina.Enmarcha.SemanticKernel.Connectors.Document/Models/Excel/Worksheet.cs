@@ -99,6 +99,16 @@ internal class Worksheet
             rows.Add(rowCells);
         }
 
+        if(excelLoadOptions.MergeEmptyRowsRules != null)
+        {
+            rows = MergeEmptyRows(rows, excelLoadOptions.MergeEmptyRowsRules);
+        }
+
+        if(excelLoadOptions.MergeEmptyColumnsRules != null)
+        {
+            rows = MergeEmptyColumns(rows, excelLoadOptions.MergeEmptyColumnsRules);
+        }
+
         if (excelLoadOptions.ExcludeEmptyRows)
         {
             rows = rows.Where(row => row.Any(cell => !cell.IsNullOrWhiteSpace)).ToList();
@@ -114,7 +124,7 @@ internal class Worksheet
             rows = GetOnlyCellsRangeWithText(rows);
         }
     }
-   
+
     /// <summary>
     /// Gets the range used in the worksheet.
     /// </summary>
@@ -135,6 +145,72 @@ internal class Worksheet
         return range.Length == 1 
             ? (range[0], range[0]) 
             : (range[0], range[1]);
+    }
+
+    /// <summary>
+    /// Merges empty rows based on the specified rules.
+    /// </summary>
+    /// <param name="rows">The list of rows to be processed.</param>
+    /// <param name="mergeEmptyRowsRules">The rules for merging empty rows.</param>
+    /// <returns>The list of rows after merging empty rows.</returns>
+    private static List<List<Cell>> MergeEmptyRows(IReadOnlyList<List<Cell>> rows, MergeEmptyElementsRules mergeEmptyRowsRules)
+    {
+        // Identify ranges of consecutive empty rows to be merged
+        var trimmedRanges = new List<(int Start, int Count)>();
+        var start = 0;
+        for (var i = 0; i < rows.Count; i++)
+        {
+            if (rows[i].All(r => r.IsNullOrWhiteSpace))
+            {            
+                // Found the start of a potential empty row range
+                if (start == -1)
+                {
+                    start = i;
+                }
+            }
+            else
+            {
+                // End of an empty row range, add it to trimmedRanges if it meets merge conditions
+                if (start != -1 && i - start >= mergeEmptyRowsRules.MinimumElementsToMerge)
+                {
+                    trimmedRanges.Add((start + mergeEmptyRowsRules.ResultingElementsFromMerge, (i) - (start + mergeEmptyRowsRules.ResultingElementsFromMerge)));
+                }
+                start = -1;
+            }
+        }
+
+        // Filter the identified empty row ranges from the rows list
+        return rows.Where((_, index) => !trimmedRanges.Any(range => index >= range.Start && index < range.Start + range.Count)).ToList();
+    }
+
+    private static List<List<Cell>> MergeEmptyColumns(IReadOnlyList<List<Cell>> rows, MergeEmptyElementsRules mergeEmptyColumnsRules)
+    {
+        // Identify ranges of consecutive empty columns to be merged
+        var trimmedRanges = new List<(int Start, int Count)>();
+        var start = 0;
+        for (var i = 0; i < rows[0].Count; i++)
+        {
+            if (rows.All(r => r[i].IsNullOrWhiteSpace))
+            {
+                // Found the start of a potential empty column range
+                if (start == -1)
+                {
+                    start = i;
+                }
+            }
+            else
+            {
+                // End of an empty column range, add it to trimmedRanges if it meets merge conditions
+                if (start != -1 && i - start >= mergeEmptyColumnsRules.MinimumElementsToMerge)
+                {
+                    trimmedRanges.Add((start + mergeEmptyColumnsRules.ResultingElementsFromMerge, i - (start + mergeEmptyColumnsRules.ResultingElementsFromMerge)));
+                }
+                start = -1;
+            }
+        }
+
+        // Reassign 'rows' with a new list of rows, where each row is a new list of cells excluding the cells in the ranges specified by trimmedRanges
+        return rows.Select(row => row.Where((_, index) => !trimmedRanges.Any(range => index >= range.Start && index < range.Start + range.Count)).ToList()).ToList();
     }
 
     /// <summary>

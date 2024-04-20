@@ -14,6 +14,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="TestUtilities\ExcelFiles\LargeEmptyRowsAndColumns.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="TestUtilities\ExcelFiles\Miscellaneous.xlsx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

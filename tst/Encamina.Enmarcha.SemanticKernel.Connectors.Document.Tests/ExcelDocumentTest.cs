@@ -12,6 +12,7 @@ public class ExcelDocumentTest
     private const string ExcelFileWithEmptyRowAndColumn = "EmptyRowAndColumn.xlsx";
     private const string ExcelFileWithRangeWithEmptyCells = "RangeWithEmptyCells.xlsx";
     private const string ExcelFileWithHiddenRowsAndColumns = "HiddenRowsAndColumns.xlsx";
+    private const string ExcelFileLargeEmptyRowsAndColumns = "LargeEmptyRowsAndColumns.xlsx";
 
     [Fact]
     public void CreateExcelDocument_With_MultipleWorksheets()
@@ -373,6 +374,77 @@ public class ExcelDocumentTest
         Assert.Contains("This is a hidden column", allCellTexts);
         Assert.Contains("This is another hidden column", allCellTexts);
         Assert.Contains("Another hidden column", allCellTexts);
+    }
+
+    [Fact]
+    public void CreateExcelDocument_With_CompressedEmptyRows()
+    {
+        var excelStream = GivenAnExcelStream(ExcelFileLargeEmptyRowsAndColumns);
+        var excelOptions = new ExcelLoadOptions()
+        {
+            MergeEmptyRowsRules = new MergeEmptyElementsRules
+            {
+                MinimumElementsToMerge = 3,
+                ResultingElementsFromMerge = 2,
+            },
+        };
+
+        var result = ExcelDocument.Create(excelStream, excelOptions);
+
+        var worksheet = Assert.Single(result.Worksheets);
+
+        Assert.Equal("x", worksheet.Rows[5][18].Text);
+        Assert.Equal("xx", worksheet.Rows[8][16].Text);
+        Assert.Equal("xxx", worksheet.Rows[11][11].Text);
+    }
+
+    [Fact]
+    public void CreateExcelDocument_With_CompressedEmptyColumns()
+    {
+        var excelStream = GivenAnExcelStream(ExcelFileLargeEmptyRowsAndColumns);
+        var excelOptions = new ExcelLoadOptions()
+        {
+            MergeEmptyColumnsRules = new MergeEmptyElementsRules
+            {
+                MinimumElementsToMerge = 3,
+                ResultingElementsFromMerge = 2,
+            },
+        };
+
+        var result = ExcelDocument.Create(excelStream, excelOptions);
+
+        var worksheet = Assert.Single(result.Worksheets);
+
+        Assert.Equal("x", worksheet.Rows[5][9].Text);
+        Assert.Equal("xx", worksheet.Rows[15][7].Text);
+        Assert.Equal("xxx", worksheet.Rows[27][4].Text);
+    }
+
+    [Fact]
+    public void CreateExcelDocument_With_CompressedEmptyColumnsAndRows()
+    {
+        var excelStream = GivenAnExcelStream(ExcelFileLargeEmptyRowsAndColumns);
+        var excelOptions = new ExcelLoadOptions()
+        {
+            MergeEmptyColumnsRules = new MergeEmptyElementsRules
+            {
+                MinimumElementsToMerge = 3,
+                ResultingElementsFromMerge = 2,
+            },
+            MergeEmptyRowsRules = new MergeEmptyElementsRules
+            {
+                MinimumElementsToMerge = 3,
+                ResultingElementsFromMerge = 2,
+            },
+        };
+
+        var result = ExcelDocument.Create(excelStream, excelOptions);
+
+        var worksheet = Assert.Single(result.Worksheets);
+
+        Assert.Equal("x", worksheet.Rows[5][9].Text);
+        Assert.Equal("xx", worksheet.Rows[8][7].Text);
+        Assert.Equal("xxx", worksheet.Rows[11][4].Text);
     }
 
     private static FileStream GivenAnExcelStream(string fileName)

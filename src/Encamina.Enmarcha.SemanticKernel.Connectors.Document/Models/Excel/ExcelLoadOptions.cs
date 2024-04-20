@@ -38,4 +38,30 @@ public class ExcelLoadOptions
     /// For example, if the range is A1:C3, but only A1, B1, C1, A2 contains text, and this property is set to true, only the range A1:C2 is loaded.
     /// </summary>
     public bool LoadOnlyCellsRangeWithText { get; set; }
+
+    /// <summary>
+    /// Specifies the rules for merging empty columns.
+    /// </summary>
+    public MergeEmptyElementsRules MergeEmptyColumnsRules { get; set; }
+
+    /// <summary>
+    /// Specifies the rules for merging empty rows.
+    /// </summary>
+    public MergeEmptyElementsRules MergeEmptyRowsRules { get; set; }
+}
+
+/// <summary>
+/// Represents the rules for merging empty elements.
+/// </summary>
+public class MergeEmptyElementsRules
+{
+    /// <summary>
+    /// Specifies the minimum number of elements to merge.
+    /// </summary>
+    public int MinimumElementsToMerge { get; set; }
+
+    /// <summary>
+    /// Specifies the resulting number of elements from the merge.
+    /// </summary>
+    public int ResultingElementsFromMerge { get; set; }
 }
