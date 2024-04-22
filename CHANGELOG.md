@@ -69,7 +69,7 @@ Previous classification is not required if changes are simple or all belong to t
 ### Minor Changes
 
 - Added `CosineStringSimilarityComparer` in `Encamina.Enmarcha.SemanticKernel` to compare two strings using cosine similarity algorithm.
-- Class `SlidePptxDocumentConnector` is not `public` instead of `internal`.
+- Class `SlidePptxDocumentConnector` is now `public` instead of `internal`.
  
 ## [8.1.5]
 
