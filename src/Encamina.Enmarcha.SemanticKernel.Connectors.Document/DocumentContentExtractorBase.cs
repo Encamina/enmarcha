@@ -1,13 +1,11 @@
 ﻿using Encamina.Enmarcha.AI.Abstractions;
 
-using Microsoft.SemanticKernel.Plugins.Document;
-
 namespace Encamina.Enmarcha.SemanticKernel.Connectors.Document;
 
 /// <summary>
 /// Base class for document content extractors.
 /// </summary>
-public abstract class DocumentContentExtractorBase : IDocumentConnectorProvider, IDocumentContentExtractor
+public class DocumentContentExtractorBase : DocumentConnectorProviderBase, IDocumentContentExtractor
 {
     /// <summary>
     /// Initializes a new instance of the <see cref="DocumentContentExtractorBase"/> class.
@@ -41,13 +39,10 @@ public abstract class DocumentContentExtractorBase : IDocumentConnectorProvider,
     }
 
     /// <inheritdoc/>
-    public Task<IEnumerable<string>> GetDocumentContentAsync(Stream stream, string fileExtension, CancellationToken cancellationToken)
+    public virtual Task<IEnumerable<string>> GetDocumentContentAsync(Stream stream, string fileExtension, CancellationToken cancellationToken)
     {
         // Using Task.Run instead of Task.FromResult because the operation in GetDocumentContent is potentially slow,
         // and Task.Run ensures it is executed on a separate thread, maintaining responsiveness.
         return Task.Run(() => GetDocumentContent(stream, fileExtension), cancellationToken);
     }
-
-    /// <inheritdoc/>
-    public abstract IDocumentConnector GetDocumentConnector(string fileExtension);
 }

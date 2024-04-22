@@ -28,10 +28,4 @@ internal sealed class DefaultDocumentContentExtractor : DocumentContentExtractor
     public DefaultDocumentContentExtractor(ITextSplitter textSplitter, Func<string, int> lengthFunction) : base(textSplitter, lengthFunction)
     {
     }
-
-    /// <inheritdoc/>
-    public override IDocumentConnector GetDocumentConnector(string fileExtension)
-    {
-        return IDocumentConnectorUtils.GetDefaultDocumentConnector(fileExtension);
-    }
 }
