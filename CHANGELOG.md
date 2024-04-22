@@ -59,6 +59,10 @@ Previous classification is not required if changes are simple or all belong to t
   - Updated `xunit.extensibility.core` from `2.7.0` to `2.7.1`.
   - Updated `xunit.runner.visualstudio` from `2.5.7` to `2.5.8`.
 
+### Minor Changes
+
+- Added `CosineStringSimilarityComparer` in `Encamina.Enmarcha.SemanticKernel` to compare two strings using cosine similarity algorithm.
+
 ## [8.1.5]
 
 ### Breaking Changes 
