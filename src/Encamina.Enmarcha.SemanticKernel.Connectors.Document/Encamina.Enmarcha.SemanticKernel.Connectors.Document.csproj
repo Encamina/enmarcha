@@ -17,7 +17,7 @@
   <PropertyGroup>
     <PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>
-
+    
   <ItemGroup>
     <PackageReference Include="Microsoft.SemanticKernel.Plugins.Document" Version="1.7.1-alpha" />
     <PackageReference Include="PdfPig" Version="0.1.8" />

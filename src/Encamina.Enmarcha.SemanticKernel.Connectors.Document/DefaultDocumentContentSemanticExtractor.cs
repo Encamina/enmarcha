@@ -28,10 +28,4 @@ internal sealed class DefaultDocumentContentSemanticExtractor : DocumentContentS
     public DefaultDocumentContentSemanticExtractor(ISemanticTextSplitter semanticTextSplitter, Func<IList<string>, CancellationToken, Task<IList<ReadOnlyMemory<float>>>> embeddingsGeneratorFunction) : base(semanticTextSplitter, embeddingsGeneratorFunction)
     {
     }
-
-    /// <inheritdoc/>
-    public override IDocumentConnector GetDocumentConnector(string fileExtension)
-    {
-        return IDocumentConnectorUtils.GetDefaultDocumentConnector(fileExtension);
-    }
 }

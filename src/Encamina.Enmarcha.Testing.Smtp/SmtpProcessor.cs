@@ -210,7 +210,7 @@ internal sealed class SmtpProcessor
                 }
                 else
                 {
-                    logger.LogError(@"Socket exception different than code `10060`!", socketException);
+                    logger.LogError(socketException, @"Socket exception different than code `10060`!");
                 }
 
                 isRunning = false;
@@ -218,7 +218,7 @@ internal sealed class SmtpProcessor
             }
             catch (Exception exception)
             {
-                logger.LogError(@"Unexpected exception processing commands!", exception);
+                logger.LogError(exception, @"Unexpected exception processing commands!");
 
                 isRunning = false;
                 context.Socket.Dispose();
@@ -281,8 +281,6 @@ internal sealed class SmtpProcessor
         header.Append(MagicStrings.EOL);
 
         rawSmtpMessage.Raw.Append(header.ToString());
-
-        ////header.Length = 0;
 
         var line = context.ReadLine();
         while (line is not null && !line.Equals(@"."))
