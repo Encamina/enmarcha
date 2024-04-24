@@ -48,7 +48,7 @@ internal class Worksheet
     /// </summary>
     /// <param name="sheet">The <see cref="Sheet"/> object representing the worksheet in the Excel document.</param>
     /// <param name="workbookPart">The <see cref="WorkbookPart"/> object containing the Sheet object.</param>
-    /// <param name="excelLoadOptions">Options for loading the Excel document</param>
+    /// <param name="excelLoadOptions">Options for loading the Excel document.</param>
     public void LoadRows(Sheet sheet, WorkbookPart workbookPart, ExcelLoadOptions excelLoadOptions)
     {
         rows.Clear();
@@ -89,7 +89,7 @@ internal class Worksheet
 
                 var cellReference = CellReferenceConverter.CoordinatesToCellReference(row, column);
 
-                var cell = cells.FirstOrDefault(c => c.CellReference == cellReference);
+                var cell = cells.Find(c => c.CellReference == cellReference);
 
                 rowCells.Add(cell != null
                     ? Cell.Create(cell, workbookPart)
@@ -99,6 +99,65 @@ internal class Worksheet
             rows.Add(rowCells);
         }
 
+        rows = ApplyFilterToRows(rows, excelLoadOptions);
+    }
+
+    /// <summary>
+    /// Gets the range used in the worksheet.
+    /// </summary>
+    /// <param name="worksheet">The <see cref="WorkbookPart"/> object containing the SheetDimension object.</param>
+    /// <returns>A tuple representing the start and end coordinates of the used range.</returns>
+    private static ((int Row, int Column) Start, (int Row, int Column) End) GetRangeUsed(DocumentFormat.OpenXml.Spreadsheet.Worksheet worksheet)
+    {
+        var sheetDimension = worksheet.GetFirstChild<SheetDimension>();
+        var dimensionsReference = sheetDimension?.Reference?.Value;
+
+        if (dimensionsReference == null)
+        {
+            return ((0, 0), (0, 0));
+        }
+
+        var range = dimensionsReference.Split(':').Select(CellReferenceConverter.CellReferenceToCoordinates).ToArray();
+
+        return range.Length == 1
+            ? (range[0], range[0])
+            : (range[0], range[1]);
+    }
+
+    /// <summary>
+    /// Gets the hidden rows in the worksheet.
+    /// </summary>
+    /// <param name="worksheet">The <see cref="WorkbookPart"/> object containing the rows.</param>
+    /// <returns>A list of integers representing the indices of hidden rows.</returns>
+    private static IReadOnlyList<int> GetHiddenRows(DocumentFormat.OpenXml.Spreadsheet.Worksheet worksheet)
+    {
+        return worksheet.Descendants<Row>()
+            .Where((r) => r.Hidden != null && r.Hidden.Value && r.RowIndex?.Value is not null)
+            .Select(r => (int)r.RowIndex.Value)
+            .ToList();
+    }
+
+    /// <summary>
+    /// Gets the hidden columns in the worksheet.
+    /// </summary>
+    /// <param name="worksheet">The <see cref="WorkbookPart"/> object containing the columns.</param>
+    /// <returns>A list of integers representing the indices of hidden columns.</returns>
+    private static IReadOnlyList<int> GetHiddenColumns(DocumentFormat.OpenXml.Spreadsheet.Worksheet worksheet)
+    {
+        return worksheet.Descendants<Column>()
+            .Where(c => c.Hidden != null && c.Hidden.Value && c.Min != null && c.Max != null)
+            .SelectMany(c => Enumerable.Range((int)c.Min.Value, (int)c.Max.Value - (int)c.Min.Value + 1))
+            .ToList();
+    }
+
+    /// <summary>
+    /// Apply filters to Excel cell rows based on specified options.
+    /// </summary>
+    /// <param name="rows">List of Excel cell rows.</param>
+    /// <param name="excelLoadOptions">Excel loading options specifying the filters to apply.</param>
+    /// <returns>List of Excel cell rows after applying the filters.</returns>
+    private static List<List<Cell>> ApplyFilterToRows(List<List<Cell>> rows, ExcelLoadOptions excelLoadOptions)
+    {
         if (excelLoadOptions.MergeEmptyRowsRules != null)
         {
             rows = MergeEmptyRows(rows, excelLoadOptions.MergeEmptyRowsRules);
@@ -123,28 +182,8 @@ internal class Worksheet
         {
             rows = GetOnlyCellsRangeWithText(rows);
         }
-    }
 
-    /// <summary>
-    /// Gets the range used in the worksheet.
-    /// </summary>
-    /// <param name="worksheet">The <see cref="WorkbookPart"/> object containing the SheetDimension object.</param>
-    /// <returns></returns>
-    private static ((int Row, int Column) Start, (int Row, int Column) End) GetRangeUsed(DocumentFormat.OpenXml.Spreadsheet.Worksheet worksheet)
-    {
-        var sheetDimension = worksheet.GetFirstChild<SheetDimension>();
-        var dimensionsReference = sheetDimension?.Reference?.Value;
-
-        if (dimensionsReference == null)
-        {
-            return ((0, 0), (0, 0));
-        }
-
-        var range = dimensionsReference.Split(':').Select(CellReferenceConverter.CellReferenceToCoordinates).ToArray();
-
-        return range.Length == 1
-            ? (range[0], range[0])
-            : (range[0], range[1]);
+        return rows;
     }
 
     /// <summary>
@@ -181,7 +220,7 @@ internal class Worksheet
         }
 
         // Filter the identified empty row ranges from the rows list
-        return rows.Where((_, index) => !trimmedRanges.Any(range => index >= range.Start && index < range.Start + range.Count)).ToList();
+        return rows.Where((_, index) => !trimmedRanges.Exists(range => index >= range.Start && index < range.Start + range.Count)).ToList();
     }
 
     private static List<List<Cell>> MergeEmptyColumns(IReadOnlyList<List<Cell>> rows, MergeEmptyElementsRules mergeEmptyColumnsRules)
@@ -214,33 +253,7 @@ internal class Worksheet
         // Reassign 'rows' with a new list of rows, where each row is a new list of cells excluding the cells in the ranges specified by trimmedRanges
         return rows.Select(row => row.Where((_, index) => !trimmedRanges.Any(range => index >= range.Start && index < range.Start + range.Count)).ToList()).ToList();
     }
-
-    /// <summary>
-    /// Gets the hidden rows in the worksheet.
-    /// </summary>
-    /// <param name="worksheet">The <see cref="WorkbookPart"/> object containing the rows.</param>
-    /// <returns>A list of integers representing the indices of hidden rows.</returns>
-    private static IReadOnlyList<int> GetHiddenRows(DocumentFormat.OpenXml.Spreadsheet.Worksheet worksheet)
-    {
-        return worksheet.Descendants<Row>()
-            .Where((r) => r.Hidden != null && r.Hidden.Value && r.RowIndex?.Value is not null)
-            .Select(r => (int)r.RowIndex.Value)
-            .ToList();
-    }
-
-    /// <summary>
-    /// Gets the hidden columns in the worksheet.
-    /// </summary>
-    /// <param name="worksheet">The <see cref="WorkbookPart"/> object containing the columns.</param>
-    /// <returns>A list of integers representing the indices of hidden columns.</returns>
-    private static IReadOnlyList<int> GetHiddenColumns(DocumentFormat.OpenXml.Spreadsheet.Worksheet worksheet)
-    {
-        return worksheet.Descendants<Column>()
-            .Where(c => c.Hidden != null && c.Hidden.Value && c.Min != null && c.Max != null)
-            .SelectMany(c => Enumerable.Range((int)c.Min.Value, (int)c.Max.Value - (int)c.Min.Value + 1))
-            .ToList();
-    }
-
+    
     /// <summary>
     /// Removes empty columns from the given list of rows.
     /// </summary>

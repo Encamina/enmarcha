@@ -17,7 +17,7 @@ internal class ExcelDocument
     /// Creates an ExcelDocument object from a stream.
     /// </summary>
     /// <param name="stream">The stream containing the Excel document data.</param>
-    /// <param name="excelLoadOptions">Options for loading the Excel document</param>
+    /// <param name="excelLoadOptions">Options for loading the Excel document.</param>
     /// <returns>An ExcelDocument object representing the Excel document in the stream.</returns>
     public static ExcelDocument Create(Stream stream, ExcelLoadOptions excelLoadOptions)
     {

@@ -104,7 +104,7 @@ public class ExcelToMarkdownDocumentConnector : IDocumentConnector
 
             resultSb.AppendLine(rowSb.ToString().Trim());
 
-            if (worksheet != worksheets.Last())
+            if (worksheet != worksheets[worksheets.Count - 1])
             {
                 resultSb.Append(WorksheetSeparator).AppendLine();
             }
@@ -125,23 +125,6 @@ public class ExcelToMarkdownDocumentConnector : IDocumentConnector
     public void AppendText(Stream stream, string text)
     {
         // Intentionally not implemented to comply with the Liskov Substitution Principle
-    }
-    
-    private string GetCellTextValue(Cell cell)
-    {
-        // Get the cell value with or without formatting
-        var cellValue = WithFormattedValues ? cell.FormattedText : cell.Text;
-
-        // Replace line breaks with the specified replacement
-        cellValue = cellValue?.ReplaceLineEndings(LineBreakReplacement);
-
-        // Apply styles to the cell value
-        if (WithStyling)
-        {
-            cellValue = ApplyStyles(cellValue, cell.IsBold, cell.IsItalic);
-        }
-
-        return cellValue;
     }
 
     private static string ApplyStyles(string value, bool bold, bool italic)
@@ -172,5 +155,22 @@ public class ExcelToMarkdownDocumentConnector : IDocumentConnector
         value = value.Insert(lastNonSpaceIndex, style);
 
         return value;
+    }
+
+    private string GetCellTextValue(Cell cell)
+    {
+        // Get the cell value with or without formatting
+        var cellValue = WithFormattedValues ? cell.FormattedText : cell.Text;
+
+        // Replace line breaks with the specified replacement
+        cellValue = cellValue?.ReplaceLineEndings(LineBreakReplacement);
+
+        // Apply styles to the cell value
+        if (WithStyling)
+        {
+            cellValue = ApplyStyles(cellValue, cell.IsBold, cell.IsItalic);
+        }
+
+        return cellValue;
     }
 }

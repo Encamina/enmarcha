@@ -1,4 +1,6 @@
-﻿namespace Encamina.Enmarcha.SemanticKernel.Connectors.Document.Utils;
+﻿using System.Text;
+
+namespace Encamina.Enmarcha.SemanticKernel.Connectors.Document.Utils;
 
 /// <summary>
 /// Class that provides methods to convert between row and column coordinates and cell references in spreadsheet format.
@@ -13,15 +15,16 @@ public static class CellReferenceConverter
     /// <returns>Cell reference in spreadsheet format (e.g., "A1", "B2", etc.).</returns>
     public static string CoordinatesToCellReference(int row, int column)
     {
-        var columnString = string.Empty;
+        var columnSb = new StringBuilder();
+
         while (column > 0)
         {
             var remainder = (column - 1) % 26;
-            columnString = (char)('A' + remainder) + columnString;
+            columnSb.Insert(0, (char)('A' + remainder));
             column = (column - 1) / 26;
         }
 
-        return $"{columnString}{row}";
+        return columnSb.ToString() + row;
     }
 
     /// <summary>
