@@ -66,6 +66,23 @@ internal class Worksheet
             return;
         }
 
+        rows = LoadRows(workbookPart, worksheet, cells, excelLoadOptions);
+
+        rows = ApplyFilterToRows(rows, excelLoadOptions);
+    }
+
+    /// <summary>
+    /// Loads rows of cells from the specified worksheet and applies filtering based on the provided options.
+    /// </summary>
+    /// <param name="workbookPart">The WorkbookPart containing the worksheet.</param>
+    /// <param name="worksheet">The worksheet from which to load rows of cells.</param>
+    /// <param name="cells">The list of cells to load.</param>
+    /// <param name="excelLoadOptions">The options for loading Excel data.</param>
+    /// <returns>A list of rows, where each row is represented as a list of Cell objects.</returns>
+    private static List<List<Cell>> LoadRows(WorkbookPart workbookPart, DocumentFormat.OpenXml.Spreadsheet.Worksheet worksheet, List<DocumentFormat.OpenXml.Spreadsheet.Cell> cells, ExcelLoadOptions excelLoadOptions)
+    {
+        var rows = new List<List<Cell>>();
+
         var (startCell, endCell) = GetRangeUsed(worksheet);
 
         var hiddenRows = excelLoadOptions.ExcludeHiddenRows ? GetHiddenRows(worksheet) : [];
@@ -99,7 +116,7 @@ internal class Worksheet
             rows.Add(rowCells);
         }
 
-        rows = ApplyFilterToRows(rows, excelLoadOptions);
+        return rows;
     }
 
     /// <summary>
@@ -170,7 +187,7 @@ internal class Worksheet
 
         if (excelLoadOptions.ExcludeEmptyRows)
         {
-            rows = rows.Where(row => row.Any(cell => !cell.IsNullOrWhiteSpace)).ToList();
+            rows = rows.Where(row => row.Exists(cell => !cell.IsNullOrWhiteSpace)).ToList();
         }
 
         if (excelLoadOptions.ExcludeEmptyColumns)
@@ -199,7 +216,7 @@ internal class Worksheet
         var start = 0;
         for (var i = 0; i < rows.Count; i++)
         {
-            if (rows[i].All(r => r.IsNullOrWhiteSpace))
+            if (rows[i].TrueForAll(r => r.IsNullOrWhiteSpace))
             {
                 // Found the start of a potential empty row range
                 if (start == -1)
@@ -212,7 +229,7 @@ internal class Worksheet
                 // End of an empty row range, add it to trimmedRanges if it meets merge conditions
                 if (start != -1 && i - start >= mergeEmptyRowsRules.MinimumElementsToMerge)
                 {
-                    trimmedRanges.Add((start + mergeEmptyRowsRules.ResultingElementsFromMerge, (i) - (start + mergeEmptyRowsRules.ResultingElementsFromMerge)));
+                    trimmedRanges.Add((start + mergeEmptyRowsRules.ResultingElementsFromMerge, i - (start + mergeEmptyRowsRules.ResultingElementsFromMerge)));
                 }
 
                 start = -1;
@@ -251,9 +268,9 @@ internal class Worksheet
         }
 
         // Reassign 'rows' with a new list of rows, where each row is a new list of cells excluding the cells in the ranges specified by trimmedRanges
-        return rows.Select(row => row.Where((_, index) => !trimmedRanges.Any(range => index >= range.Start && index < range.Start + range.Count)).ToList()).ToList();
+        return rows.Select(row => row.Where((_, index) => !trimmedRanges.Exists(range => index >= range.Start && index < range.Start + range.Count)).ToList()).ToList();
     }
-    
+
     /// <summary>
     /// Removes empty columns from the given list of rows.
     /// </summary>
@@ -271,7 +288,7 @@ internal class Worksheet
 
         for (var columnIndex = 0; columnIndex < numColumns; columnIndex++)
         {
-            if (rows.All(row => row[columnIndex].IsNullOrWhiteSpace))
+            if (rows.TrueForAll(row => row[columnIndex].IsNullOrWhiteSpace))
             {
                 emptyColumnsIndex.Add(columnIndex);
             }
@@ -287,12 +304,12 @@ internal class Worksheet
     /// <returns>A list of rows, each containing a list of cells, representing the range of cells with text.</returns>
     private static List<List<Cell>> GetOnlyCellsRangeWithText(IList<List<Cell>> rows)
     {
-        var firstNonEmptyRowIndex = rows.IndexOf(rows.FirstOrDefault(r => r.Any(c => !c.IsNullOrWhiteSpace)));
-        var lastNonEmptyRowIndex = rows.IndexOf(rows.LastOrDefault(r => r.Any(c => !c.IsNullOrWhiteSpace)));
+        var firstNonEmptyRowIndex = rows.IndexOf(rows.FirstOrDefault(r => r.Exists(c => !c.IsNullOrWhiteSpace)));
+        var lastNonEmptyRowIndex = rows.IndexOf(rows.LastOrDefault(r => r.Exists(c => !c.IsNullOrWhiteSpace)));
 
         var columnsRange = Enumerable.Range(0, rows[0].Count).ToList();
 
-        var firstNonEmptyColumnIndex = columnsRange.FirstOrDefault(j => rows.Any(row => !row[j].IsNullOrWhiteSpace));
+        var firstNonEmptyColumnIndex = columnsRange.Find(j => rows.Any(row => !row[j].IsNullOrWhiteSpace));
         var lastNonEmptyColumnIndex = columnsRange.LastOrDefault(j => rows.Any(row => !row[j].IsNullOrWhiteSpace));
 
         // Return only the rows and columns with non-empty cells
