@@ -22,6 +22,7 @@ public class DocumentConnectorProviderBase : IDocumentConnectorProvider
         { @".TXT", new TxtDocumentConnector(Encoding.UTF8) },
         { @".MD", new TxtDocumentConnector(Encoding.UTF8) },
         { @".VTT", new VttDocumentConnector(Encoding.UTF8) },
+        { @".XLSX", new ExcelToMarkdownDocumentConnector() },
     };
 
     /// <inheritdoc/>
