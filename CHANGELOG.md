@@ -27,7 +27,6 @@ Previous classification is not required if changes are simple or all belong to t
 
 ### Major Changes
 
-- Added new document connector to read Excel files (xlsx) `ExcelToMarkdownDocumentConnector`.
 - Updated dependencies:
   - Updated `Asp.Versioning.Mvc.ApiExplorer` from `8.0.0` to `8.1.0`.
   - Updated `Azure.AI.OpenAI` from `1.0.0-beta14` to `1.0.0-beta16`.
@@ -66,6 +65,7 @@ Previous classification is not required if changes are simple or all belong to t
   - New method `SupportedFileExtension` to check if a file extension is supported by the current instance of the `IDocumentConnectorProvider`.
   - New method `AddDocumentConnector` to add (or replace) a document connector in the current instance of the `IDocumentConnectorProvider` for a specific file extension.
 - Added new class `DocumentConnectorProviderBase` which provides a default base implementation of `IDocumentConnectorProvider`.
+- Added new document connector to read Excel files (xlsx) `ExcelToMarkdownDocumentConnector`.
 
 ### Minor Changes
 
