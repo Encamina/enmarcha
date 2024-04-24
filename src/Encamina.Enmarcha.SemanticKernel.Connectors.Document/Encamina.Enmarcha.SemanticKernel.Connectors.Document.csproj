@@ -17,7 +17,7 @@
   <PropertyGroup>
     <PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>
-
+    
   <ItemGroup>
     <PackageReference Include="ExcelNumberFormat" Version="1.1.0" />
     <PackageReference Include="Microsoft.SemanticKernel.Plugins.Document" Version="1.7.1-alpha" />

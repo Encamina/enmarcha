@@ -21,6 +21,7 @@
         <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="8.0.0" />
         <PackageReference Include="Microsoft.Extensions.Options.DataAnnotations" Version="8.0.0" />
         <PackageReference Include="System.Linq.Async" Version="6.0.1" />
+        <PackageReference Include="System.Numerics.Tensors" Version="8.0.0" />
     </ItemGroup>
 
     <ItemGroup>

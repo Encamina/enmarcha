@@ -7,7 +7,7 @@ namespace Encamina.Enmarcha.SemanticKernel.Connectors.Document;
 /// <summary>
 /// Base class for document content semantic extractors.
 /// </summary>
-public abstract class DocumentContentSemanticExtractorBase : IDocumentConnectorProvider, IDocumentContentExtractor
+public abstract class DocumentContentSemanticExtractorBase : DocumentConnectorProviderBase, IDocumentContentExtractor
 {
     /// <summary>
     /// Initializes a new instance of the <see cref="DocumentContentSemanticExtractorBase"/> class.
@@ -46,7 +46,4 @@ public abstract class DocumentContentSemanticExtractorBase : IDocumentConnectorP
 
         return SemanticTextSplitter.SplitAsync(content, EmbeddingsGeneratorFunction, cancellationToken);
     }
-
-    /// <inheritdoc/>
-    public abstract IDocumentConnector GetDocumentConnector(string fileExtension);
 }
