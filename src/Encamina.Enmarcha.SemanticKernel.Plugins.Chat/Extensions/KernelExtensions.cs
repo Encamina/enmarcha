@@ -45,7 +45,7 @@ public static class KernelExtensions
     /// A function to calculate the length by tokens of the chat messages. These functions are usually available in the «mixin» interface <see cref="ILengthFunctions"/>.
     /// </param>
     /// <returns>A list of all the functions found in this plugin, indexed by function name.</returns>
-    public static KernelPlugin ImportChatWithHistoryPlugin(this Kernel kernel, IServiceProvider serviceProvider, OpenAIOptions openAIOptions, Func<string, int> tokensLengthFunction)
+    public static KernelPlugin ImportChatWithHistoryPlugin(this Kernel kernel, IServiceProvider serviceProvider, OpenAIOptionsBase openAIOptions, Func<string, int> tokensLengthFunction)
     {
         Guard.IsNotNull(serviceProvider);
         Guard.IsNotNull(openAIOptions);
