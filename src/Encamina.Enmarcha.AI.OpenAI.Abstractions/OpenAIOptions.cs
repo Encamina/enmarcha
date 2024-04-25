@@ -79,13 +79,13 @@ public class OpenAIOptions
     public string Key { get; init; }
 
     /// <summary>
-    /// Gets or sets a value indicating whether Token Credential authentication should be used.
+    /// Gets a value indicating whether Token Credential authentication should be used.
     /// If set to true, the value of the <see cref="Key"/> property is ignored.
     /// </summary>
     public bool UseTokenCredentialAuthentication { get; init; }
 
     /// <summary>
-    /// Gets the token credentials options to authenticate to an LLM resource.
+    /// Gets or sets the token credentials options to authenticate to an LLM resource.
     /// </summary>
     public TokenCredentialsOptions TokenCredentialsOptions { get; set; }
 }
