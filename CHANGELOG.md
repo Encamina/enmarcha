@@ -71,6 +71,8 @@ Previous classification is not required if changes are simple or all belong to t
 
 - Added `CosineStringSimilarityComparer` in `Encamina.Enmarcha.SemanticKernel` to compare two strings using cosine similarity algorithm.
 - Class `SlidePptxDocumentConnector` is now `public` instead of `internal`.
+- Added `UseAzureActiveDirectoryAuthentication` and `TokenCredentialsOptions` properties in `AzureOpenAIOptions`.
+- Added `RequiredIfAttribute` to validate properties based on the value of another property.
  
 ## [8.1.5]
 

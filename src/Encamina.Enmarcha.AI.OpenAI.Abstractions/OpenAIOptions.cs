@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-using Encamina.Enmarcha.Core.DataAnnotations;
+﻿using Encamina.Enmarcha.Core.DataAnnotations;
 
 namespace Encamina.Enmarcha.AI.OpenAI.Abstractions;
 
@@ -74,8 +72,20 @@ public class OpenAIOptions
 
     /// <summary>
     /// Gets the key credential used to authenticate to an LLM resource.
+    /// This property is required if property <see cref="UseTokenCredentialAuthentication"/> is <c>false</c>.
     /// </summary>
-    [Required]
+    [RequiredIf(nameof(UseTokenCredentialAuthentication), false)]
     [NotEmptyOrWhitespace]
     public string Key { get; init; }
+
+    /// <summary>
+    /// Gets or sets a value indicating whether Token Credential authentication should be used.
+    /// If set to true, the value of the <see cref="Key"/> property is ignored.
+    /// </summary>
+    public bool UseTokenCredentialAuthentication { get; init; }
+
+    /// <summary>
+    /// Gets the token credentials options to authenticate to an LLM resource.
+    /// </summary>
+    public TokenCredentialsOptions TokenCredentialsOptions { get; set; }
 }
