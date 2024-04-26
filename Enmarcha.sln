@@ -148,7 +148,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Encamina.Enmarcha.Data.Azur
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Encamina.Enmarcha.AspNet.OpenApi", "src\Encamina.Enmarcha.AspNet.OpenApi\Encamina.Enmarcha.AspNet.OpenApi.csproj", "{0EFAA5CF-7106-40E0-A427-1CFBFFAEA3EC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Encamina.Enmarcha.Core.Tests", "tst\Encamina.Enmarcha.Core.Tests\Encamina.Enmarcha.Core.Tests.csproj", "{0516ADAE-C543-4B48-94EE-AC535DEFED0E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Encamina.Enmarcha.Core.Tests", "tst\Encamina.Enmarcha.Core.Tests\Encamina.Enmarcha.Core.Tests.csproj", "{0516ADAE-C543-4B48-94EE-AC535DEFED0E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Encamina.Enmarcha.SemanticKernel.Connectors.Document.Tests", "tst\Encamina.Enmarcha.SemanticKernel.Connectors.Document.Tests\Encamina.Enmarcha.SemanticKernel.Connectors.Document.Tests.csproj", "{1E9782AE-28E8-4C09-A66B-22A903A76C7F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -376,6 +378,10 @@ Global
 		{0516ADAE-C543-4B48-94EE-AC535DEFED0E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0516ADAE-C543-4B48-94EE-AC535DEFED0E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0516ADAE-C543-4B48-94EE-AC535DEFED0E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1E9782AE-28E8-4C09-A66B-22A903A76C7F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1E9782AE-28E8-4C09-A66B-22A903A76C7F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1E9782AE-28E8-4C09-A66B-22A903A76C7F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1E9782AE-28E8-4C09-A66B-22A903A76C7F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -394,6 +400,7 @@ Global
 		{7F3ECD81-28E6-4000-9005-1B2ABA8EC1C5} = {CBD50B5F-AFB8-4DA1-9FD7-17D98EB3ED78}
 		{7B6F4DC4-74E2-4013-8DBA-12B7AAAD5278} = {CBD50B5F-AFB8-4DA1-9FD7-17D98EB3ED78}
 		{0516ADAE-C543-4B48-94EE-AC535DEFED0E} = {CBD50B5F-AFB8-4DA1-9FD7-17D98EB3ED78}
+		{1E9782AE-28E8-4C09-A66B-22A903A76C7F} = {CBD50B5F-AFB8-4DA1-9FD7-17D98EB3ED78}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {F30DF47A-541C-4383-BCEB-E4108D06A70E}
