@@ -24,6 +24,10 @@ Previous classification is not required if changes are simple or all belong to t
 - The method `GetDocumentConnector` from interface type `IDocumentConnectorProvider` now throws `InvalidOperationException` if a connector for the specified file extension is not found.
 - Renamed `UserId` to `IndexerId` in `ChatMessageHistoryRecord`. This change requires consumers to update their database to match the new property name. 
    - In case of using Cosmos DB, `IndexerId` should be the new partition key of the collection. You can learn how to change the partition key and do the data migration [here](https://learn.microsoft.com/en-us/azure/cosmos-db/nosql/change-partition-key).
+- Split the `OpenAIOptions` class into two separate classes:
+  - Created a new abstract class `OpenAIOptionsBase` containing common properties related to OpenAI model configuration.
+  - Moved the `Key` property to a new concrete class `OpenAIOptions`.
+  - `AzureOpenAIOptions` no longer inherits from `OpenAIOptions`, but now inherits from `OpenAIOptionsBase`.
 
 ### Major Changes
 
@@ -71,6 +75,8 @@ Previous classification is not required if changes are simple or all belong to t
 
 - Added `CosineStringSimilarityComparer` in `Encamina.Enmarcha.SemanticKernel` to compare two strings using cosine similarity algorithm.
 - Class `SlidePptxDocumentConnector` is now `public` instead of `internal`.
+- Added `UseAzureActiveDirectoryAuthentication` and `TokenCredentialsOptions` properties in `AzureOpenAIOptions`.
+- Added `RequiredIfAttribute` to validate properties based on the value of another property.
  
 ## [8.1.5]
 

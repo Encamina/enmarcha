@@ -25,7 +25,7 @@ public static class KernelExtensions
     /// </param>
     /// <returns>A list of all the functions found in this plugin, indexed by function name.</returns>
     /// <seealso href="https://en.wikipedia.org/wiki/Mixin"/>
-    public static IEnumerable<KernelPlugin> ImportQuestionAnsweringPlugin(this Kernel kernel, OpenAIOptions openAIOptions, Func<string, int> tokensLengthFunction)
+    public static IEnumerable<KernelPlugin> ImportQuestionAnsweringPlugin(this Kernel kernel, OpenAIOptionsBase openAIOptions, Func<string, int> tokensLengthFunction)
     {
         Guard.IsNotNull(openAIOptions);
         Guard.IsNotNull(tokensLengthFunction);
@@ -46,7 +46,7 @@ public static class KernelExtensions
     /// </param>
     /// <returns>A list of all the functions found in this plugin, indexed by function name.</returns>
     /// <seealso href="https://en.wikipedia.org/wiki/Mixin"/>
-    public static IEnumerable<KernelPlugin> ImportQuestionAnsweringPluginWithMemory(this Kernel kernel, OpenAIOptions openAIOptions, ISemanticTextMemory semanticTextMemory, Func<string, int> tokensLengthFunction)
+    public static IEnumerable<KernelPlugin> ImportQuestionAnsweringPluginWithMemory(this Kernel kernel, OpenAIOptionsBase openAIOptions, ISemanticTextMemory semanticTextMemory, Func<string, int> tokensLengthFunction)
     {
         kernel.ImportQuestionAnsweringPlugin(openAIOptions, tokensLengthFunction);
         kernel.ImportMemoryPlugin(semanticTextMemory, tokensLengthFunction);

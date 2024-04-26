@@ -79,6 +79,15 @@ namespace Encamina.Enmarcha.Core.DataAnnotations.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The value of &apos;{0}&apos; is required when the value of &apos;{1}&apos; is {2}!.
+        /// </summary>
+        internal static string ValueIsRequiredIf {
+            get {
+                return ResourceManager.GetString("ValueIsRequiredIf", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The value of &apos;{0}&apos; must be a valid and well formed URI!.
         /// </summary>
         internal static string ValuieIsInvalidUri {
