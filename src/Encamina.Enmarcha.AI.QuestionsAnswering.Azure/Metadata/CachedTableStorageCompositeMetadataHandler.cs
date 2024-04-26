@@ -25,14 +25,14 @@ internal class CachedTableStorageCompositeMetadataHandler : IMetadataHandler
     private const string RegexFormat = @"(?:^|\W){0}(?:$|\W)|";
 
     private readonly CachedTableStorageCompositeMetadataHandlerOptions options;
-    private readonly IMemoryCache memoryCache;
+    private readonly IMemoryCache? memoryCache;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="CachedTableStorageCompositeMetadataHandler"/> class.
     /// </summary>
     /// <param name="options">Configuration options for this specific metadata handler.</param>
     /// <param name="memoryCache">An optional valid instance of a memory cache to improve performance by storing parameters and values retrieved from the Table Storage.</param>
-    public CachedTableStorageCompositeMetadataHandler(IOptions<CachedTableStorageCompositeMetadataHandlerOptions> options, IMemoryCache memoryCache = null)
+    public CachedTableStorageCompositeMetadataHandler(IOptions<CachedTableStorageCompositeMetadataHandlerOptions> options, IMemoryCache? memoryCache = null)
     {
         this.memoryCache = memoryCache;
         this.options = options?.Value;

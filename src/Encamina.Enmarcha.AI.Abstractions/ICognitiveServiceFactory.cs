@@ -18,8 +18,8 @@ public interface ICognitiveServiceFactory<out TCognitiveService>
     /// Gets the specific cognitive service by its given name.
     /// </summary>
     /// <param name="cognitiveServiceName">The cognitive service name.</param>
-    /// <param name="throwIfNotFound">A flag indicating wheter an expection is thrown if the cognitive service is not found.</param>
+    /// <param name="throwIfNotFound">A flag indicating whether an exception is thrown if the cognitive service is not found.</param>
     /// <returns>A valid instances of <typeparamref name="TCognitiveService"/> found by its name.</returns>
-    TCognitiveService GetByName(string cognitiveServiceName, bool throwIfNotFound);
+    TCognitiveService? GetByName(string cognitiveServiceName, bool throwIfNotFound);
 }
 

@@ -65,11 +65,11 @@ internal class QuestionAnsweringService : CognitiveServiceBase<QuestionAnswering
         };
     }
 
-    private static QueryFilters BuildQueryFilters(IQuestionRequestOptions requestOptions)
+    private static QueryFilters? BuildQueryFilters(IQuestionRequestOptions requestOptions)
     {
         if (requestOptions == null)
         {
-            return null;
+            return null!;
         }
 
         var queryFilter = new QueryFilters()
@@ -92,7 +92,7 @@ internal class QuestionAnsweringService : CognitiveServiceBase<QuestionAnswering
     {
         if (metadataOptions == null || (!metadataOptions.Metadata?.Any() ?? true))
         {
-            return null;
+            return null!;
         }
 
         var metadataFilter = new MetadataFilter()

@@ -45,7 +45,7 @@ public interface ITextSplitter
     /// <param name="chunks">The collection of chunks to join.</param>
     /// <param name="separator">The separator to use between chunks.</param>
     /// <returns>A single string with all the chunks joined together by the specified separator.</returns>
-    string JoinChunks(IEnumerable<string> chunks, string separator);
+    string? JoinChunks(IEnumerable<string> chunks, string separator);
 
     /// <summary>
     /// Splits the specified text, using the specified length function.

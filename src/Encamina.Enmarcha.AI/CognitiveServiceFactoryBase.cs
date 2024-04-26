@@ -1,4 +1,6 @@
-﻿using CommunityToolkit.Diagnostics;
+﻿using System.Diagnostics.CodeAnalysis;
+
+using CommunityToolkit.Diagnostics;
 
 using Encamina.Enmarcha.AI.Abstractions;
 
@@ -21,7 +23,7 @@ public class CognitiveServiceFactoryBase<TCognitiveServiceBase, TCognitiveServic
     /// Initializes a new instance of the <see cref="CognitiveServiceFactoryBase{TCognitiveServiceBase, TCognitiveServiceOptions}"/> class.
     /// </summary>
     /// <param name="configurations">The configurations for the cognitive services.</param>
-    /// <param name="factory">A factory to create instances of the cognitive serivces.</param>
+    /// <param name="factory">A factory to create instances of the cognitive services.</param>
     protected CognitiveServiceFactoryBase(IOptions<ICognitiveServiceConfigurationsBase<TCognitiveServiceOptions>> configurations, Func<TCognitiveServiceOptions, TCognitiveServiceBase> factory)
     {
         Guard.IsNotNull(configurations);
@@ -35,7 +37,7 @@ public class CognitiveServiceFactoryBase<TCognitiveServiceBase, TCognitiveServic
     }
 
     /// <inheritdoc/>
-    public virtual TCognitiveServiceBase GetByName(string cognitiveServiceName, bool throwIfNotFound)
+    public virtual TCognitiveServiceBase? GetByName(string cognitiveServiceName, bool throwIfNotFound)
     {
         var key = cognitiveServiceName.ToUpperInvariant();
 
@@ -53,5 +55,5 @@ public class CognitiveServiceFactoryBase<TCognitiveServiceBase, TCognitiveServic
     }
 
     /// <inheritdoc/>
-    public TCognitiveServiceBase GetByName(string cognitiveServiceName) => GetByName(cognitiveServiceName, true);
+    public TCognitiveServiceBase GetByName(string cognitiveServiceName) => GetByName(cognitiveServiceName, true)!;
 }

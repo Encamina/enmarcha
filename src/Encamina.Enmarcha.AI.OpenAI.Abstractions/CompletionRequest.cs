@@ -226,5 +226,5 @@ public class CompletionRequest
     /// <summary>
     /// Gets a unique identifier representing the end-user requesting the completion, which can help monitoring and detecting abuse.
     /// </summary>
-    public string UserId { get; init; } = null;
+    public string? UserId { get; init; } = null;
 }

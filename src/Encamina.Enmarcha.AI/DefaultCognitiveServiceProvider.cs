@@ -19,11 +19,11 @@ internal sealed class DefaultCognitiveServiceProvider : CognitiveServiceProvider
     /// <param name="questionsAnsweringServiceFactory">>A cognitive service factory for questions answering cognitive services.</param>
     /// <param name="textTranslationServiceFactory">>A cognitive service factory for text translation cognitive services.</param>
     public DefaultCognitiveServiceProvider(
-        ICognitiveServiceFactory<IConversationAnalysisService> conversationAnalysisServiceFactory = null,
-        ICognitiveServiceFactory<IIntentPredictionService> intentPredictionServiceFactory = null,
-        ICognitiveServiceFactory<ILanguageDetectionService> languageDetectionServiceFactory = null,
-        ICognitiveServiceFactory<IQuestionAnsweringService> questionsAnsweringServiceFactory = null,
-        ICognitiveServiceFactory<ITextTranslationService> textTranslationServiceFactory = null)
+        ICognitiveServiceFactory<IConversationAnalysisService>? conversationAnalysisServiceFactory = null,
+        ICognitiveServiceFactory<IIntentPredictionService>? intentPredictionServiceFactory = null,
+        ICognitiveServiceFactory<ILanguageDetectionService>? languageDetectionServiceFactory = null,
+        ICognitiveServiceFactory<IQuestionAnsweringService>? questionsAnsweringServiceFactory = null,
+        ICognitiveServiceFactory<ITextTranslationService>? textTranslationServiceFactory = null)
             : base(conversationAnalysisServiceFactory, intentPredictionServiceFactory, languageDetectionServiceFactory, questionsAnsweringServiceFactory, textTranslationServiceFactory)
     {
     }

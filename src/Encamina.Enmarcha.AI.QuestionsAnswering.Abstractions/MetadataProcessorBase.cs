@@ -37,7 +37,7 @@ public abstract class MetadataProcessorBase : OrderableHandlerManagerBase<IMetad
     /// <inheritdoc/>
     public virtual Task<MetadataOptions> ProcessMessageAsync(string message, CancellationToken cancellationToken)
     {
-        return ProcessMessageAsync(message, null, cancellationToken);
+        return ProcessMessageAsync(message, null!, cancellationToken);
     }
 
     /// <inheritdoc/>

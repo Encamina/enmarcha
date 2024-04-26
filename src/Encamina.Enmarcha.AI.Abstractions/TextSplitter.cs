@@ -63,7 +63,7 @@ public abstract class TextSplitter : ITextSplitter
     /// <exception cref="ArgumentNullException">
     /// Thrown when any of the parameters <paramref name="chunks"/> or <paramref name="separator"/> is <see langword="null"/>.
     /// </exception>"
-    public virtual string JoinChunks(IEnumerable<string> chunks, string separator)
+    public virtual string? JoinChunks(IEnumerable<string> chunks, string separator)
     {
         Guard.IsNotNull(chunks);
         Guard.IsNotNull(separator);
