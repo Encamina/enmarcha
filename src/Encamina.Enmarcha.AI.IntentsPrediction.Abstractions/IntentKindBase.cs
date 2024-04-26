@@ -61,8 +61,8 @@ public class IntentKindBase : IEqualityComparer<IntentKindBase>, IEquatable<Inte
     public override string ToString() => value;
 
     /// <inheritdoc />
-    public bool Equals(IntentKindBase x, IntentKindBase y) => (x == null! && y == null!) || (x != null! && y != null! && x.Equals(y));
+    public bool Equals(IntentKindBase x, IntentKindBase y) => (x is null && y is null) || (x is not null && y is not null && x.Equals(y));
 
     /// <inheritdoc />
-    public int GetHashCode(IntentKindBase obj) => obj != null! ? obj.GetHashCode() : 0;
+    public int GetHashCode(IntentKindBase obj) => obj is not null ? obj.GetHashCode() : 0;
 }
