@@ -43,7 +43,7 @@ public static class IServiceCollectionExtensions
         return services.AddVersionSwaggerGenConfigureOptions(setupOptions: null);
     }
 
-    private static IServiceCollection AddVersionSwaggerGenConfigureOptions(this IServiceCollection services, Action<OptionsBuilder<VersionSwaggerGenOptions>> setupOptions)
+    private static IServiceCollection AddVersionSwaggerGenConfigureOptions(this IServiceCollection services, Action<OptionsBuilder<VersionSwaggerGenOptions>>? setupOptions)
     {
         var options = services.AddOptions<VersionSwaggerGenOptions>();
 

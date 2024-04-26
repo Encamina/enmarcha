@@ -18,7 +18,7 @@ internal static class Helpers
         return string.IsNullOrWhiteSpace(attrName) ? property.Name : attrName;
     }
 
-    internal static string GetAttributeDisplayName(PropertyInfo property)
+    internal static string? GetAttributeDisplayName(PropertyInfo property)
     {
         var atts = property.GetCustomAttributes(typeof(DisplayNameAttribute), true);
 

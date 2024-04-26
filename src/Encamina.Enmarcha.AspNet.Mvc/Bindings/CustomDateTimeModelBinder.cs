@@ -80,7 +80,7 @@ internal sealed class CustomDateTimeModelBinder : IModelBinder
         return Task.CompletedTask;
     }
 
-    private static DateTime? ParseDateTime(string dateToParse, string[] formats = null)
+    private static DateTime? ParseDateTime(string dateToParse, string[]? formats = null)
     {
         if (formats == null)
         {

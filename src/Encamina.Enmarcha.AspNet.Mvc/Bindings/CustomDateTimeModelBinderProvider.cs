@@ -13,7 +13,7 @@ public class CustomDateTimeModelBinderProvider : IModelBinderProvider
     /// <summary>
     /// Initializes a new instance of the <see cref="CustomDateTimeModelBinderProvider"/> class.
     /// </summary>
-    public CustomDateTimeModelBinderProvider() : this(null)
+    public CustomDateTimeModelBinderProvider() : this(null!)
     {
     }
 
@@ -27,10 +27,10 @@ public class CustomDateTimeModelBinderProvider : IModelBinderProvider
     }
 
     /// <inheritdoc/>
-    public virtual IModelBinder GetBinder(ModelBinderProviderContext context)
+    public virtual IModelBinder? GetBinder(ModelBinderProviderContext context)
     {
         return CustomDateTimeModelBinder.SupportedDateTimeTypes.Contains(context.Metadata.ModelType)
             ? new CustomDateTimeModelBinder(customDateTimeFormat)
-            : (IModelBinder)null;
+            : (IModelBinder?)null;
     }
 }
