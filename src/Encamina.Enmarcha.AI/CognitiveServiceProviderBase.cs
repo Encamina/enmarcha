@@ -44,65 +44,65 @@ public class CognitiveServiceProviderBase : ICognitiveServiceProvider
     }
 
     /// <inheritdoc/>
-    public virtual IConversationAnalysisService GetConversationAnalysisService(string serviceName) => GetByName(conversationAnalysisServiceFactory!, serviceName);
+    public virtual IConversationAnalysisService GetConversationAnalysisService(string serviceName) => GetByName(conversationAnalysisServiceFactory, serviceName)!;
 
     /// <inheritdoc/>
-    public virtual ILanguageDetectionService GetLanguageDetectionService(string serviceName) => GetByName(languageDetectionServiceFactory!, serviceName);
+    public virtual ILanguageDetectionService GetLanguageDetectionService(string serviceName) => GetByName(languageDetectionServiceFactory, serviceName)!;
 
     /// <inheritdoc/>
-    public virtual IQuestionAnsweringService GetQuestionsAnsweringService(string serviceName) => GetByName(questionsAnsweringServiceFactory!, serviceName);
+    public virtual IQuestionAnsweringService GetQuestionsAnsweringService(string serviceName) => GetByName(questionsAnsweringServiceFactory, serviceName)!;
 
     /// <inheritdoc/>
-    public virtual ITextTranslationService GetTextTranslationService(string serviceName) => GetByName(textTranslationServiceFactory!, serviceName);
+    public virtual ITextTranslationService GetTextTranslationService(string serviceName) => GetByName(textTranslationServiceFactory, serviceName)!;
 
     /// <inheritdoc/>
-    public virtual IIntentPredictionService GetIntentPredictionService(string serviceName) => GetByName(intentPredictionServiceFactory!, serviceName);
+    public virtual IIntentPredictionService GetIntentPredictionService(string serviceName) => GetByName(intentPredictionServiceFactory, serviceName)!;
 
     /// <inheritdoc/>
-    public bool TryGetConversationAnalysisService(string serviceName, out IConversationAnalysisService service)
+    public bool TryGetConversationAnalysisService(string serviceName, out IConversationAnalysisService? service)
     {
-        service = GetByName(conversationAnalysisServiceFactory!, serviceName, false);
+        service = GetByName(conversationAnalysisServiceFactory, serviceName, false);
 
         return service != null;
     }
 
     /// <inheritdoc/>
-    public bool TryGetLanguageDetectionService(string serviceName, out ILanguageDetectionService service)
+    public bool TryGetLanguageDetectionService(string serviceName, out ILanguageDetectionService? service)
     {
-        service = GetByName(languageDetectionServiceFactory!, serviceName, false);
+        service = GetByName(languageDetectionServiceFactory, serviceName, false);
 
         return service != null;
     }
 
     /// <inheritdoc/>
-    public bool TryGetQuestionsAnsweringService(string serviceName, out IQuestionAnsweringService service)
+    public bool TryGetQuestionsAnsweringService(string serviceName, out IQuestionAnsweringService? service)
     {
-        service = GetByName(questionsAnsweringServiceFactory!, serviceName, false);
+        service = GetByName(questionsAnsweringServiceFactory, serviceName, false);
 
         return service != null;
     }
 
     /// <inheritdoc/>
-    public bool TryGetTextTranslationService(string serviceName, out ITextTranslationService service)
+    public bool TryGetTextTranslationService(string serviceName, out ITextTranslationService? service)
     {
-        service = GetByName(textTranslationServiceFactory!, serviceName, false);
+        service = GetByName(textTranslationServiceFactory, serviceName, false);
 
         return service != null;
     }
 
     /// <inheritdoc/>
-    public bool TryGetIntentPredictionService(string serviceName, out IIntentPredictionService service)
+    public bool TryGetIntentPredictionService(string serviceName, out IIntentPredictionService? service)
     {
-        service = GetByName(intentPredictionServiceFactory!, serviceName, false);
+        service = GetByName(intentPredictionServiceFactory, serviceName, false);
 
         return service != null;
     }
 
-    private static TCognitiveService GetByName<TCognitiveService>(ICognitiveServiceFactory<TCognitiveService> cognitiveServiceFactory, string serviceName, bool throwIfNotFound = true)
+    private static TCognitiveService? GetByName<TCognitiveService>(ICognitiveServiceFactory<TCognitiveService>? cognitiveServiceFactory, string serviceName, bool throwIfNotFound = true)
             where TCognitiveService : class, ICognitiveService
     {
         return cognitiveServiceFactory != null
-            ? cognitiveServiceFactory.GetByName(serviceName, throwIfNotFound)!
+            ? cognitiveServiceFactory.GetByName(serviceName, throwIfNotFound)
             : throw new InvalidOperationException(string.Format(Resources.ExceptionMessages.NotConfiguredCognitiveServiceFactory, typeof(TCognitiveService).Name));
     }
 }

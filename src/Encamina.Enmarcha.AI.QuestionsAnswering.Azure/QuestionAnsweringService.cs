@@ -5,8 +5,6 @@ using CommunityToolkit.Diagnostics;
 
 using Encamina.Enmarcha.AI.QuestionsAnswering.Abstractions;
 
-using Microsoft.Extensions.Options;
-
 namespace Encamina.Enmarcha.AI.QuestionsAnswering.Azure;
 
 /// <summary>
@@ -69,7 +67,7 @@ internal class QuestionAnsweringService : CognitiveServiceBase<QuestionAnswering
     {
         if (requestOptions == null)
         {
-            return null!;
+            return null;
         }
 
         var queryFilter = new QueryFilters()
@@ -88,11 +86,11 @@ internal class QuestionAnsweringService : CognitiveServiceBase<QuestionAnswering
         return queryFilter.MetadataFilter != null || queryFilter.SourceFilter.Any() ? queryFilter : null;
     }
 
-    private static MetadataFilter BuildMetadataFilter(MetadataOptions metadataOptions)
+    private static MetadataFilter? BuildMetadataFilter(MetadataOptions metadataOptions)
     {
         if (metadataOptions == null || (!metadataOptions.Metadata?.Any() ?? true))
         {
-            return null!;
+            return null;
         }
 
         var metadataFilter = new MetadataFilter()
