@@ -40,7 +40,7 @@ public sealed class AzureOpenAIOptions : OpenAIOptionsBase
     public bool UseTokenCredentialAuthentication { get; init; }
 
     /// <summary>
-    /// Gets or sets the token credentials options to authenticate to an LLM resource.
+    /// Gets the token credentials options to authenticate to an LLM resource.
     /// </summary>
     public TokenCredentialsOptions TokenCredentialsOptions { get; init; }
 }

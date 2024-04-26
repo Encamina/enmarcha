@@ -5,7 +5,7 @@ namespace Encamina.Enmarcha.AI.OpenAI.Abstractions;
 /// <summary>
 /// Base class with options to connect and use an OpenAI service.
 /// </summary>
-public abstract class OpenAIOptionsBase
+public class OpenAIOptionsBase
 {
     /// <summary>
     /// Gets the model deployment name on the LLM (for example OpenAI) to use for chat.
