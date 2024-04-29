@@ -41,7 +41,7 @@ public abstract class MetadataProcessorBase : OrderableHandlerManagerBase<IMetad
     }
 
     /// <inheritdoc/>
-    public async Task<MetadataOptions> ProcessMessageAsync(string message, MetadataOptions metadataOptions, CancellationToken cancellationToken)
+    public async Task<MetadataOptions> ProcessMessageAsync(string message, MetadataOptions? metadataOptions, CancellationToken cancellationToken)
     {
         metadataOptions ??= new MetadataOptions();
 

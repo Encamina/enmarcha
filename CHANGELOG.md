@@ -77,6 +77,8 @@ Previous classification is not required if changes are simple or all belong to t
 - Class `SlidePptxDocumentConnector` is now `public` instead of `internal`.
 - Added `UseAzureActiveDirectoryAuthentication` and `TokenCredentialsOptions` properties in `AzureOpenAIOptions`.
 - Added `RequiredIfAttribute` to validate properties based on the value of another property.
+- Fixed warnings CS8603 and CS8025 in:
+  - `Encamina.Enmarcha.AI`.
  
 ## [8.1.5]
 

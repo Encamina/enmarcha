@@ -70,9 +70,7 @@ public abstract class TextSplitter : ITextSplitter
 
         var text = string.Join(separator, chunks).Trim();
 
-        return string.IsNullOrWhiteSpace(text)
-            ? null
-            : text;
+        return text;
     }
 
     /// <inheritdoc/>

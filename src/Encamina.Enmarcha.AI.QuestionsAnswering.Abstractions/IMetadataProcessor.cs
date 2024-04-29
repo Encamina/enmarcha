@@ -26,7 +26,7 @@ public interface IMetadataProcessor
     /// </summary>
     /// <param name="message">The message to process for metadata.</param>
     /// <param name="cancellationToken">A cancellation token that can be used to receive notice of cancellation.</param>
-    /// <returns>A valid instace of <see cref="MetadataOptions"/> of metadata is successfully retrieved from the given message, otherwise <see langword="null"/>.</returns>
+    /// <returns>A valid instance of <see cref="MetadataOptions"/> of metadata is successfully retrieved from the given message, otherwise <see langword="null"/>.</returns>
     Task<MetadataOptions> ProcessMessageAsync(string message, CancellationToken cancellationToken);
 
     /// <summary>
@@ -35,6 +35,6 @@ public interface IMetadataProcessor
     /// <param name="message">The message to process for metadata.</param>
     /// <param name="metadataOptions">The metadata options to use when processing the message.</param>
     /// <param name="cancellationToken">A cancellation token that can be used to receive notice of cancellation.</param>
-    /// <returns>A valid instace of <see cref="MetadataOptions"/> of metadata is successfully retrieved from the given message, otherwise <see langword="null"/>.</returns>
-    Task<MetadataOptions> ProcessMessageAsync(string message, MetadataOptions metadataOptions, CancellationToken cancellationToken);
+    /// <returns>A valid instance of <see cref="MetadataOptions"/> of metadata is successfully retrieved from the given message, otherwise <see langword="null"/>.</returns>
+    Task<MetadataOptions> ProcessMessageAsync(string message, MetadataOptions? metadataOptions, CancellationToken cancellationToken);
 }

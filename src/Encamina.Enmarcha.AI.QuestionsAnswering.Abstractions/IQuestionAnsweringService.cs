@@ -3,7 +3,7 @@
 namespace Encamina.Enmarcha.AI.QuestionsAnswering.Abstractions;
 
 /// <summary>
-/// Represents a congnitive service that provides question answering capabilities.
+/// Represents a cognitive service that provides question answering capabilities.
 /// </summary>
 public interface IQuestionAnsweringService : ICognitiveService
 {

@@ -66,7 +66,7 @@ public interface ICognitiveServiceProvider
     /// <returns>
     /// Returns <see langword="true"/> if a service is found; otherwise, returns <see langword="false"/>.
     /// </returns>
-    bool TryGetConversationAnalysisService(string serviceName, out IConversationAnalysisService service);
+    bool TryGetConversationAnalysisService(string serviceName, out IConversationAnalysisService? service);
 
     /// <summary>
     /// Tries to retrieve  a language detection cognitive service given its name.
@@ -78,7 +78,7 @@ public interface ICognitiveServiceProvider
     /// <returns>
     /// Returns <see langword="true"/> if a service is found; otherwise, returns <see langword="false"/>.
     /// </returns>
-    bool TryGetLanguageDetectionService(string serviceName, out ILanguageDetectionService service);
+    bool TryGetLanguageDetectionService(string serviceName, out ILanguageDetectionService? service);
 
     /// <summary>
     /// Tries to retrieve  a question answering cognitive service given its name.
@@ -90,7 +90,7 @@ public interface ICognitiveServiceProvider
     /// <returns>
     /// Returns <see langword="true"/> if a service is found; otherwise, returns <see langword="false"/>.
     /// </returns>
-    bool TryGetQuestionsAnsweringService(string serviceName, out IQuestionAnsweringService service);
+    bool TryGetQuestionsAnsweringService(string serviceName, out IQuestionAnsweringService? service);
 
     /// <summary>
     /// Tries to retrieve  a text translation cognitive service given its name.
@@ -102,7 +102,7 @@ public interface ICognitiveServiceProvider
     /// <returns>
     /// Returns <see langword="true"/> if a service is found; otherwise, returns <see langword="false"/>.
     /// </returns>
-    bool TryGetTextTranslationService(string serviceName, out ITextTranslationService service);
+    bool TryGetTextTranslationService(string serviceName, out ITextTranslationService? service);
 
     /// <summary>
     /// Tries to retrieve  an intent prediction cognitive service given its name.
@@ -114,5 +114,5 @@ public interface ICognitiveServiceProvider
     /// <returns>
     /// Returns <see langword="true"/> if a service is found; otherwise, returns <see langword="false"/>.
     /// </returns>
-    bool TryGetIntentPredictionService(string serviceName, out IIntentPredictionService service);
+    bool TryGetIntentPredictionService(string serviceName, out IIntentPredictionService? service);
 }
