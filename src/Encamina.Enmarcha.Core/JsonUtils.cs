@@ -20,7 +20,7 @@ public static class JsonUtils
     /// <param name="anonymousType">The anonymous type that identifies the type to deserialize from a JSON string.</param>
     /// <param name="options">A valid instance of <see cref="JsonSerializerOptions"/> with options for the deserialization.</param>
     /// <returns>A valid instance of <typeparamref name="T"/> obtained from the JSON deserialization.</returns>
-    public static T DeserializeAnonymousType<T>(string json, T anonymousType, JsonSerializerOptions options = default) => JsonSerializer.Deserialize<T>(json, options);
+    public static T DeserializeAnonymousType<T>(string json, T anonymousType, JsonSerializerOptions? options = default) => JsonSerializer.Deserialize<T>(json, options);
 
 #pragma warning restore IDE0060
 }

@@ -26,7 +26,7 @@ public static class ObjectExtensions
     /// <returns>
     /// A dictionary with values from <paramref name="object"/>'s properties.
     /// </returns>
-    public static IDictionary<string, object> ToPropertyDictionary(this object @object, string keyPrefix)
+    public static IDictionary<string, object> ToPropertyDictionary(this object @object, string? keyPrefix)
     {
         var dictionary = new Dictionary<string, object>();
 

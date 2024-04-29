@@ -81,6 +81,7 @@ Previous classification is not required if changes are simple or all belong to t
   - `Encamina.Enmarcha.AI`.
   - `Encamina.Enmarcha.AspNet`
   - `Encamina.Enmarcha.Bot`
+  - `Encamina.Enmarcha.Core`
  
 ## [8.1.5]
 

@@ -89,7 +89,7 @@ public static class StringExtensions
     /// <returns>
     /// Returns the trimmed string, or <see langword="null"/> if the trimming result is an empty string, or if <paramref name="value"/> is <see langword="null"/> or empty as well.
     /// </returns>
-    public static string TrimAndAsNullIfEmpty(this string value)
+    public static string? TrimAndAsNullIfEmpty(this string value)
     {
         var result = string.IsNullOrWhiteSpace(value) ? null : value.Trim();
 

@@ -14,7 +14,7 @@ public static class EnumExtensions
     /// <returns>
     /// The description for the enumeration value as set with the <see cref="DescriptionAttribute"/>. If not, returns <see langword="null"/>.
     /// </returns>
-    public static string GetEnumDescription(this Enum enumValue)
+    public static string? GetEnumDescription(this Enum enumValue)
     {
         return enumValue.GetEnumDescription(false);
     }
@@ -28,12 +28,12 @@ public static class EnumExtensions
     /// </param>
     /// <returns>
     /// The description for the enumeration value as set with the <see cref="DescriptionAttribute"/>. If not, returns <see langword="null"/> unless
-    /// the <paramref name="throwIfNoDescriptionFound"/> is <see langword="true"/>, in which case this methods trows a <see cref="ArgumentException"/>.
+    /// the <paramref name="throwIfNoDescriptionFound"/> is <see langword="true"/>, in which case this methods throws a <see cref="ArgumentException"/>.
     /// </returns>
     /// <exception cref="ArgumentException">
     /// If <paramref name="throwIfNoDescriptionFound"/> is <see langword="true"/> and the enumeration value does not have a description set using the <see cref="DescriptionAttribute"/>.
     /// </exception>
-    public static string GetEnumDescription(this Enum enumValue, bool throwIfNoDescriptionFound)
+    public static string? GetEnumDescription(this Enum enumValue, bool throwIfNoDescriptionFound)
     {
         var field = enumValue.GetType().GetField(enumValue.ToString());
 
