@@ -8,12 +8,12 @@ namespace Encamina.Enmarcha.AspNet.Mvc.Bindings;
 /// </summary>
 public class CustomDateTimeModelBinderProvider : IModelBinderProvider
 {
-    private readonly string customDateTimeFormat;
+    private readonly string? customDateTimeFormat;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="CustomDateTimeModelBinderProvider"/> class.
     /// </summary>
-    public CustomDateTimeModelBinderProvider() : this(null!)
+    public CustomDateTimeModelBinderProvider() : this(null)
     {
     }
 
@@ -21,7 +21,7 @@ public class CustomDateTimeModelBinderProvider : IModelBinderProvider
     /// Initializes a new instance of the <see cref="CustomDateTimeModelBinderProvider"/> class with specific custom date time format.
     /// </summary>
     /// <param name="customDateTimeFormat">The custom <see cref="DateTime"/> format to use when binding models.</param>
-    public CustomDateTimeModelBinderProvider(string customDateTimeFormat)
+    public CustomDateTimeModelBinderProvider(string? customDateTimeFormat)
     {
         this.customDateTimeFormat = customDateTimeFormat;
     }
