@@ -11,6 +11,7 @@ using Encamina.Enmarcha.Bot.QuestionAnswering;
 using Encamina.Enmarcha.Bot.Responses;
 
 using Encamina.Enmarcha.Core.Extensions;
+#pragma warning disable S2360 // Optional parameters should not be used
 
 using Microsoft.ApplicationInsights;
 using Microsoft.ApplicationInsights.Extensibility;
@@ -28,8 +29,6 @@ using Microsoft.Extensions.Configuration;
 
 using ExceptionMessages = Encamina.Enmarcha.Bot.Resources.ExceptionMessages;
 using IMiddleware = Microsoft.Bot.Builder.IMiddleware;
-
-#pragma warning disable S2360 // Optional parameters should not be used
 
 namespace Microsoft.Extensions.DependencyInjection;
 
@@ -250,7 +249,7 @@ public static class IServiceCollectionExtensions
         where TBotMiddleware : class, IMiddleware
     {
         return services.TryAddType(serviceLifetime, implementationFactory)
-                       .AddType<IMiddleware, TBotMiddleware>(serviceLifetime, serviceProvider => serviceProvider.GetService<TBotMiddleware>());
+                       .AddType<IMiddleware, TBotMiddleware>(serviceLifetime, serviceProvider => serviceProvider.GetService<TBotMiddleware>()!);
     }
 
     /// <summary>

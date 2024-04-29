@@ -43,7 +43,7 @@ internal class TableStorageResponseProvider : IIntentResponsesProvider
         string defaultLocale,
         string intentCounterSeparator = @"-",
         double cacheAbsoluteExpirationSeconds = 86400,
-        IMemoryCache memoryCache = null)
+        IMemoryCache? memoryCache = null)
     {
         Guard.IsNotNullOrWhiteSpace(tableConnectionString);
         Guard.IsNotNullOrWhiteSpace(tableName);

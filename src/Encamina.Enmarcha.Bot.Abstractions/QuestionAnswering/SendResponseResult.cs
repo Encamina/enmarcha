@@ -36,5 +36,5 @@ public class SendResponseResult
     /// <summary>
     /// Gets the resource response.
     /// </summary>
-    public ResourceResponse ResourceResponse { get; init; }
+    public ResourceResponse? ResourceResponse { get; init; }
 }

@@ -13,7 +13,7 @@ public class NamedComponentDialogBase : ComponentDialog, INameableDialog
     /// <summary>
     /// Initializes a new instance of the <see cref="NamedComponentDialogBase"/> class.
     /// </summary>
-    protected NamedComponentDialogBase() : this(null)
+    protected NamedComponentDialogBase() : this(null!)
     {
     }
 

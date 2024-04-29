@@ -36,13 +36,13 @@ internal static class TranslatorUtils
     /// <param name="toLanguage">The language to translate to.</param>
     /// <param name="cancellationToken">A cancellation token that can be used to receive notice of cancellation.</param>
     /// <returns>A task that represents the asynchronous error handling operation.</returns>
-    internal static async Task TranslateMessagesAsync(ITextTranslationService translationService, IList<Activity> activities, CultureInfo fromLanguage, CultureInfo toLanguage, CancellationToken cancellationToken)
+    internal static async Task TranslateMessagesAsync(ITextTranslationService translationService, IList<Activity> activities, CultureInfo? fromLanguage, CultureInfo toLanguage, CancellationToken cancellationToken)
     {
         var messageActivities = activities?.Where(a => a.Type == ActivityTypes.Message);
 
         if (messageActivities?.Any() ?? false)
         {
-            // Use an index as translation identifier to keep track of translatable items, which could be more than just the message, since it might also include attachemnts and other elements.
+            // Use an index as translation identifier to keep track of translatable items, which could be more than just the message, since it might also include attachments and other elements.
             var index = 0;
             var translatableItems = new Dictionary<string, string>();
 

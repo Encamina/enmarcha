@@ -59,9 +59,9 @@ internal sealed class QuestionAnsweringDialog : NamedDialogBase, IIntendable
     public override string Name => string.IsNullOrWhiteSpace(configurationOptions.DialogName) ? base.Name : configurationOptions.DialogName;
 
     /// <inheritdoc/>
-    public override async Task<DialogTurnResult> BeginDialogAsync(DialogContext dc, object options = null, CancellationToken cancellationToken = default)
+    public override async Task<DialogTurnResult> BeginDialogAsync(DialogContext dc, object? options = null, CancellationToken cancellationToken = default)
     {
-        ResourceResponse response = null;
+        ResourceResponse? response = null;
 
         if (dc.Context.Activity.Type == ActivityTypes.Message && !string.IsNullOrWhiteSpace(dc.Context.Activity.Text))
         {
@@ -141,7 +141,7 @@ internal sealed class QuestionAnsweringDialog : NamedDialogBase, IIntendable
         return answers;
     }
 
-    private async Task<ResourceResponse> SendAnswerAsync(IEnumerable<IAnswer> answers, ITurnContext turnContext, CancellationToken cancellationToken)
+    private async Task<ResourceResponse?> SendAnswerAsync(IEnumerable<IAnswer> answers, ITurnContext turnContext, CancellationToken cancellationToken)
     {
         var verbose = configurationOptions.Verbose || VerboseFromTurnContextValue(turnContext);
 

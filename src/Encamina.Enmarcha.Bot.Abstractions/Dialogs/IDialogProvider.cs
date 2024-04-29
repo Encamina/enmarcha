@@ -14,7 +14,7 @@ public interface IDialogProvider
     /// <returns>
     /// A valid <see cref="Dialog"/>.
     /// </returns>
-    Dialog GetById(string dialogId);
+    Dialog? GetById(string dialogId);
 
     /// <summary>
     /// Tries to get a <see cref="Dialog"/> from its unique identifier.
@@ -28,5 +28,5 @@ public interface IDialogProvider
     /// <returns>
     /// Returns <see langword="true"/> if a valid <see cref="Dialog"/> is found by its unique identifier; otherwise, returns <see langword="false"/>.
     /// </returns>
-    bool TryGetById(string dialogId, out Dialog dialog);
+    bool TryGetById(string dialogId, out Dialog? dialog);
 }

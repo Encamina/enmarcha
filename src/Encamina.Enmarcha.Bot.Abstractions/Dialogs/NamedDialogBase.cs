@@ -13,7 +13,7 @@ public abstract class NamedDialogBase : Dialog, INameableDialog
     /// <summary>
     /// Initializes a new instance of the <see cref="NamedDialogBase"/> class.
     /// </summary>
-    protected NamedDialogBase() : this(null)
+    protected NamedDialogBase() : this(null!)
     {
     }
 
