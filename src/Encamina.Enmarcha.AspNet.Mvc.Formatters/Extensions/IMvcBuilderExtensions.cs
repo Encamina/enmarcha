@@ -138,7 +138,7 @@ public static class IMvcBuilderExtensions
         return builder;
     }
 
-    private static IMvcBuilder AddCsvFormatters(IMvcBuilder builder, CsvFormatterOptions csvFormatterOptions, bool addInputFormater, bool addOutputFormater)
+    private static IMvcBuilder AddCsvFormatters(IMvcBuilder builder, CsvFormatterOptions? csvFormatterOptions, bool addInputFormater, bool addOutputFormater)
     {
         Guard.IsNotNull(builder);
 

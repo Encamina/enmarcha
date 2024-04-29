@@ -81,5 +81,5 @@ public sealed class ModelInfo
     /// </summary>
     /// <param name="id">The model's unique identifier. For example <c>text-embedding-ada-002</c> or <c>gpt-4</c>.</param>
     /// <returns>A models information from the given unique identifier, or <see langword="null"/> if it is not found.</returns>
-    public static ModelInfo GetById(string id) => ModelInfoById.TryGetValue(id, out var modelInfo) ? modelInfo : null;
+    public static ModelInfo? GetById(string id) => ModelInfoById.TryGetValue(id, out var modelInfo) ? modelInfo : null;
 }
