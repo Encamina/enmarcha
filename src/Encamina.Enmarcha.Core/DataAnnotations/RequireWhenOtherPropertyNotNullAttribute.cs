@@ -23,7 +23,7 @@ public sealed class RequireWhenOtherPropertyNotNullAttribute : ValidationAttribu
     public string OtherPropertyName { get; }
 
     /// <inheritdoc/>
-    protected override ValidationResult IsValid(object value, ValidationContext validationContext)
+    protected override ValidationResult? IsValid(object value, ValidationContext validationContext)
     {
         var otherPropertyValue = validationContext.ObjectInstance
                                                   .GetType()
