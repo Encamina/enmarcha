@@ -83,6 +83,7 @@ Previous classification is not required if changes are simple or all belong to t
   - `Encamina.Enmarcha.Bot`
   - `Encamina.Enmarcha.Core`
   - `Encamina.Enmarcha.Data`
+  - `Encamina.Enmarcha.Email`
  
 ## [8.1.5]
 

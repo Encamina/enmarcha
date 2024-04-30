@@ -38,7 +38,7 @@ public interface IEmailBuilder
     /// </summary>
     /// <param name="senderName">Optional (custom) sender name.</param>
     /// <returns>The <see cref="IEmailBuilder"/> so that additional calls can be chained.</returns>
-    IEmailBuilder SetDefaultSender(string senderName = null);
+    IEmailBuilder SetDefaultSender(string? senderName = null);
 
     /// <summary>
     /// Adds an attachment.
@@ -73,7 +73,7 @@ public interface IEmailBuilder
     /// <param name="recipientName">The recipient's name. Defaults to <see langword="null"/>.</param>
     /// <param name="recipientType">The type of recipient (like 'to', 'cc', or 'bcc'). Defaults to <see cref="EmailRecipientType.TO"/>.</param>
     /// <returns>The <see cref="IEmailBuilder"/> so that additional calls can be chained.</returns>
-    IEmailBuilder AddRecipient(string emailAddress, string recipientName = null, EmailRecipientType recipientType = EmailRecipientType.TO);
+    IEmailBuilder AddRecipient(string emailAddress, string? recipientName = null, EmailRecipientType recipientType = EmailRecipientType.TO);
 
     /// <summary>
     /// Sets the e-mail's subject.

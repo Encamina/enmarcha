@@ -10,7 +10,7 @@ namespace Encamina.Enmarcha.Email.Abstractions;
 /// </summary>
 public class SmtpClientOptions : INameable
 {
-    private string name = null;
+    private string? name = null;
 
     /// <summary>
     /// Gets or sets the host name of the SMTP service.
