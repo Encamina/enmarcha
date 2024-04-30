@@ -47,7 +47,7 @@ public static class ObjectExtensions
     /// Creates a dictionary from values in an <paramref name="object"/>'s properties.
     /// Each dictionary's key will be prefixed with the name of <typeparamref name="T"/>.
     /// </summary>
-    /// <remarks>This extension method is quite usefull to create in-memory configurations.</remarks>
+    /// <remarks>This extension method is quite useful to create in-memory configurations.</remarks>
     /// <typeparam name="T">The type the object from which the dictionary will be created.</typeparam>
     /// <param name="object">The object.</param>
     /// <returns>

@@ -1,10 +1,10 @@
-﻿using System.Linq.Expressions;
+﻿#pragma warning disable S2360 // Optional parameters should not be used
+
+using System.Linq.Expressions;
 
 using Encamina.Enmarcha.Data.Abstractions;
 
 namespace Encamina.Enmarcha.Data.Cosmos;
-
-#pragma warning disable S2360 // Optional parameters should not be used
 
 /// <summary>
 /// Represents a repository pattern adapted for Azure Cosmos DB.
@@ -144,7 +144,7 @@ public interface ICosmosRepository<T> : IAsyncRepository<T>
     /// <param name="partitionKey">The partition key of the entity to retrieve.</param>
     /// <param name="cancellationToken">A cancellation token that can be used to receive notice of cancellation.</param>
     /// <returns>The retrieved entity contained within a <see cref="Task"/> object representing the service response for the asynchronous operation.</returns>
-    Task<T> GetByIdAsync(string entityId, string partitionKey, CancellationToken cancellationToken);
+    Task<T?> GetByIdAsync(string entityId, string partitionKey, CancellationToken cancellationToken);
 
     /// <summary>
     /// Read all items (entities) from a given partition key.

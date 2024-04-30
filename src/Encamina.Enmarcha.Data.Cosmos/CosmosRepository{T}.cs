@@ -195,7 +195,7 @@ internal sealed class CosmosRepository<T> : ICosmosRepository<T>
     }
 
     /// <inheritdoc/>
-    public async Task<T> GetByIdAsync(string entityId, string partitionKey, CancellationToken cancellationToken)
+    public async Task<T?> GetByIdAsync(string entityId, string partitionKey, CancellationToken cancellationToken)
     {
         try
         {
@@ -309,7 +309,7 @@ internal sealed class CosmosRepository<T> : ICosmosRepository<T>
     }
 
     /// <inheritdoc/>
-    public async Task<T> GetByIdAsync<TEntityId>(TEntityId id, CancellationToken cancellationToken) => await GetByIdAsync(id.ToString(), null, cancellationToken);
+    public async Task<T?> GetByIdAsync<TEntityId>(TEntityId id, CancellationToken cancellationToken) => await GetByIdAsync(id.ToString(), null, cancellationToken);
 
     /// <inheritdoc/>
     public async Task AddAsync(T entity, CancellationToken cancellationToken) => await AddOrUpdateAsync(entity, cancellationToken);

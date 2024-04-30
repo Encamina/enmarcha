@@ -46,5 +46,5 @@ public abstract class ReadRepositoryBase<TEntity> : IReadRepository<TEntity> whe
     }
 
     /// <inheritdoc/>
-    public TEntity GetById<TEntityId>(TEntityId id) => dbContext.GetSet<TEntity>().Find(id);
+    public TEntity? GetById<TEntityId>(TEntityId id) => dbContext.GetSet<TEntity>().Find(id);
 }

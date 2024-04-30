@@ -32,5 +32,5 @@ public interface IAsyncReadRepository<TEntity>
     /// <param name="id">The entity's unique identifier.</param>
     /// <param name="cancellationToken">A cancellation token that can be used to receive notice of cancellation.</param>
     /// <returns>An entity from the repository.</returns>
-    Task<TEntity> GetByIdAsync<TEntityId>(TEntityId id, CancellationToken cancellationToken);
+    Task<TEntity?> GetByIdAsync<TEntityId>(TEntityId id, CancellationToken cancellationToken);
 }

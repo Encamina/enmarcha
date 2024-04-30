@@ -5,8 +5,6 @@ using CommunityToolkit.Diagnostics;
 using Encamina.Enmarcha.Data.Abstractions;
 using Encamina.Enmarcha.Data.EntityFramework.Internals;
 
-using Encamina.Enmarcha.Entities.Abstractions;
-
 using Microsoft.EntityFrameworkCore;
 
 namespace Encamina.Enmarcha.Data.EntityFramework;
@@ -14,7 +12,7 @@ namespace Encamina.Enmarcha.Data.EntityFramework;
 /// <summary>
 /// Base class for asynchronous repositories powered by Entity Framework.
 /// </summary>
-/// <typeparam name="TEntity">The type of (data) entity handled by this asychronous repository.</typeparam>
+/// <typeparam name="TEntity">The type of (data) entity handled by this asynchronous repository.</typeparam>
 [SuppressMessage("Minor Code Smell", "S1694:An abstract class should have both abstract and concrete methods", Justification = "It's the Architecture's intent that this class must be inherited!")]
 public abstract class AsyncRepositoryBase<TEntity> : IAsyncRepository<TEntity> where TEntity : class
 {
@@ -50,5 +48,5 @@ public abstract class AsyncRepositoryBase<TEntity> : IAsyncRepository<TEntity> w
         => await readRepository.GetAllAsync(queryFunction, cancellationToken);
 
     /// <inheritdoc/>
-    public virtual async Task<TEntity> GetByIdAsync<TEntityId>(TEntityId id, CancellationToken cancellationToken) => await readRepository.GetByIdAsync(id, cancellationToken);
+    public virtual async Task<TEntity?> GetByIdAsync<TEntityId>(TEntityId id, CancellationToken cancellationToken) => await readRepository.GetByIdAsync(id, cancellationToken);
 }
