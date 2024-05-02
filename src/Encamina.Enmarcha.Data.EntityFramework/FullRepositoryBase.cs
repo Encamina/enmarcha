@@ -71,10 +71,10 @@ public abstract class FullRepositoryBase<TEntity> : IFullRepository<TEntity> whe
         => await repositoryAsync.GetAllAsync(queryFunction, cancellationToken);
 
     /// <inheritdoc/>
-    public virtual TEntity GetById<TEntityId>(TEntityId id) => repository.GetById(id);
+    public virtual TEntity? GetById<TEntityId>(TEntityId id) => repository.GetById(id);
 
     /// <inheritdoc/>
-    public virtual async Task<TEntity> GetByIdAsync<TEntityId>(TEntityId id, CancellationToken cancellationToken) => await repositoryAsync.GetByIdAsync(id, cancellationToken);
+    public virtual async Task<TEntity?> GetByIdAsync<TEntityId>(TEntityId id, CancellationToken cancellationToken) => await repositoryAsync.GetByIdAsync(id, cancellationToken);
 
     /// <inheritdoc/>
     public virtual void Update(TEntity entity) => repository.Update(entity);

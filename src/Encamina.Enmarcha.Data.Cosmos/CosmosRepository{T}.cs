@@ -195,7 +195,7 @@ internal sealed class CosmosRepository<T> : ICosmosRepository<T>
     }
 
     /// <inheritdoc/>
-    public async Task<T?> GetByIdAsync(string entityId, string partitionKey, CancellationToken cancellationToken)
+    public async Task<T?> GetByIdAsync(string entityId, string? partitionKey, CancellationToken cancellationToken)
     {
         try
         {
@@ -360,7 +360,7 @@ internal sealed class CosmosRepository<T> : ICosmosRepository<T>
         return (result.AsQueryable(), continuation);
     }
 
-    private static PartitionKey GeneratePartition(string partitionKey)
+    private static PartitionKey GeneratePartition(string? partitionKey)
     {
         return string.IsNullOrWhiteSpace(partitionKey)
             ? throw new ArgumentNullException(nameof(partitionKey))
