@@ -44,7 +44,7 @@ public interface IMemoryStoreExtender
         string collectionName,
         IEnumerable<string> chunks,
         Kernel kernel,
-        IDictionary<string, string> metadata = null,
+        IDictionary<string, string>? metadata = null,
         CancellationToken cancellationToken = default);
 
     /// <summary>
@@ -63,7 +63,7 @@ public interface IMemoryStoreExtender
     /// <param name="collectionName">Name of the collection where the content will be retrieved.</param>
     /// <param name="cancellationToken">Cancellation token to cancel the operation.</param>
     /// <returns>A <see cref="Task"/> containing the <see cref="MemoryContent"/>, or <see langword="null"/> if the content could not be found.</returns>
-    Task<MemoryContent> GetMemoryAsync(string memoryId, string collectionName, CancellationToken cancellationToken);
+    Task<MemoryContent?> GetMemoryAsync(string memoryId, string collectionName, CancellationToken cancellationToken);
 
     /// <summary>
     /// Checks if the memory exists in a collection.

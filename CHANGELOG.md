@@ -85,6 +85,7 @@ Previous classification is not required if changes are simple or all belong to t
   - `Encamina.Enmarcha.Data`
   - `Encamina.Enmarcha.Email`
   - `Encamina.Enmarcha.Entities`
+  - `Encamina.Enmarcha.SemanticKernel`
  
 ## [8.1.5]
 

@@ -44,7 +44,7 @@ public class MemoryStoreExtender : IMemoryStoreExtender
     public void RaiseMemoryStoreEvent(MemoryStoreEventArgs e) => MemoryStoreEvent?.Invoke(this, e);
 
     /// <inheritdoc/>
-    public virtual async Task UpsertMemoryAsync(string memoryId, string collectionName, IEnumerable<string> chunks, Kernel kernel, IDictionary<string, string> metadata = null, CancellationToken cancellationToken = default)
+    public virtual async Task UpsertMemoryAsync(string memoryId, string collectionName, IEnumerable<string> chunks, Kernel kernel, IDictionary<string, string>? metadata = null, CancellationToken cancellationToken = default)
     {
         await DeleteMemoryAsync(memoryId, collectionName, cancellationToken);
         await SaveChunks(memoryId, collectionName, chunks, metadata, kernel, cancellationToken);
@@ -63,7 +63,7 @@ public class MemoryStoreExtender : IMemoryStoreExtender
     }
 
     /// <inheritdoc/>
-    public virtual async Task<MemoryContent> GetMemoryAsync(string memoryId, string collectionName, CancellationToken cancellationToken)
+    public virtual async Task<MemoryContent?> GetMemoryAsync(string memoryId, string collectionName, CancellationToken cancellationToken)
     {
         var chunkSize = await GetChunkSize(memoryId, collectionName, cancellationToken);
 
@@ -153,7 +153,7 @@ public class MemoryStoreExtender : IMemoryStoreExtender
         return int.Parse(metadata[ChunkSize]);
     }
 
-    private async Task SaveChunks(string memoryId, string collectionName, IEnumerable<string> chunks, IDictionary<string, string> metadata, Kernel kernel, CancellationToken cancellationToken)
+    private async Task SaveChunks(string memoryId, string collectionName, IEnumerable<string> chunks, IDictionary<string, string>? metadata, Kernel kernel, CancellationToken cancellationToken)
     {
         metadata ??= new Dictionary<string, string>();
 

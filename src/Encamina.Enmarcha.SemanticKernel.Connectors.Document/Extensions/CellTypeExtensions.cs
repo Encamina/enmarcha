@@ -77,7 +77,7 @@ internal static class CellTypeExtensions
     /// <param name="cell">The cell to get the value from.</param>
     /// <param name="workbookPart">The workbook part that contains the cell.</param>
     /// <returns>The raw text value of the cell.</returns>
-    public static string GetCellTextValue(this CellType cell, WorkbookPart workbookPart)
+    public static string? GetCellTextValue(this CellType cell, WorkbookPart workbookPart)
     {
         if (cell == null)
         {
@@ -103,7 +103,7 @@ internal static class CellTypeExtensions
     /// <param name="cell">The cell to get the value from.</param>
     /// <param name="workbookPart">The workbook part that contains the cell.</param>
     /// <returns>The formatted text value of the cell.</returns>
-    public static string GetCellFormattedTextValue(this CellType cell, WorkbookPart workbookPart)
+    public static string? GetCellFormattedTextValue(this CellType cell, WorkbookPart workbookPart)
     {
         if (cell == null)
         {
@@ -118,7 +118,7 @@ internal static class CellTypeExtensions
 
             if (cellFormat?.NumberFormatId != null)
             {
-                string format = workbookPart.WorkbookStylesPart.Stylesheet.NumberingFormats.Elements<NumberingFormat>()
+                string? format = workbookPart.WorkbookStylesPart.Stylesheet.NumberingFormats.Elements<NumberingFormat>()
                     .FirstOrDefault(i => i.NumberFormatId == cellFormat.NumberFormatId)?
                     .FormatCode;
 
