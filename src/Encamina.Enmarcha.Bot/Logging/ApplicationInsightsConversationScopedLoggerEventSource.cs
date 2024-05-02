@@ -27,7 +27,7 @@ internal sealed class ApplicationInsightsConversationScopedLoggerEventSource : E
     /// <param name="error">The error message to log.</param>
     /// <param name="applicationName">The name of the application.</param>
     [Event(1, Message = "Sending log to ApplicationInsigthsConversationScopedLoggerProvider has failed. Error: {0}", Level = EventLevel.Error)]
-    public void FailedToLog(string error, string applicationName = null)
+    public void FailedToLog(string error, string? applicationName = null)
     {
         WriteEvent(1, error, applicationName ?? this.applicationName);
     }
