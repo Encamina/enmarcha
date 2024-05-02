@@ -17,10 +17,10 @@ namespace Encamina.Enmarcha.Core.DataAnnotations;
 public sealed class NotEmptyOrWhitespaceAttribute : ValidationAttribute
 {
     /// <inheritdoc/>
-    public override bool IsValid(object? value) => value == null || (value is string s && !string.IsNullOrWhiteSpace(s));
+    public override bool IsValid(object value) => value == null || (value is string s && !string.IsNullOrWhiteSpace(s));
 
     /// <inheritdoc/>
-    protected override ValidationResult? IsValid(object? value, ValidationContext validationContext)
+    protected override ValidationResult? IsValid(object value, ValidationContext validationContext)
     {
         return IsValid(value)
             ? ValidationResult.Success

@@ -33,7 +33,7 @@ public sealed class RequiredIfAttribute : ValidationAttribute
     public object ConditionalValue { get; }
 
     /// <inheritdoc/>
-    protected override ValidationResult? IsValid(object? value, ValidationContext validationContext)
+    protected override ValidationResult? IsValid(object value, ValidationContext validationContext)
     {
         var conditionalValue = validationContext.ObjectInstance
             .GetType()
