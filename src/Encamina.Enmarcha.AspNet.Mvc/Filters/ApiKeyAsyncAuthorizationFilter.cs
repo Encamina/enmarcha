@@ -75,14 +75,14 @@ internal sealed class ApiKeyAsyncAuthorizationFilter : IAsyncAuthorizationFilter
         context.Result = new UnauthorizedResult();
     }
 
-    private static string GetApiKeyName(ActionDescriptor descriptor)
+    private static string? GetApiKeyName(ActionDescriptor descriptor)
     {
         return descriptor is ControllerActionDescriptor controllerActionDescriptor
             ? GetApiKeyName(controllerActionDescriptor.MethodInfo) ?? GetApiKeyName(controllerActionDescriptor.ControllerTypeInfo)
             : null;
     }
 
-    private static string GetApiKeyName(MemberInfo memberInfo)
+    private static string? GetApiKeyName(MemberInfo memberInfo)
     {
         return memberInfo?.GetCustomAttribute<ApiKeyAttribute>(true)?.ApiKeyName;
     }

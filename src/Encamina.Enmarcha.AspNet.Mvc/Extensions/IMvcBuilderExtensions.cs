@@ -46,7 +46,7 @@ public static class IMvcBuilderExtensions
         return builder.AddApiKeyAuthorizationFilter(setupOptions: null);
     }
 
-    private static IMvcBuilder AddApiKeyAuthorizationFilter(this IMvcBuilder builder, Action<Options.OptionsBuilder<ApiKeyAuthorizationFilterOptions>> setupOptions)
+    private static IMvcBuilder AddApiKeyAuthorizationFilter(this IMvcBuilder builder, Action<Options.OptionsBuilder<ApiKeyAuthorizationFilterOptions>>? setupOptions)
     {
         var options = builder.Services.AddOptions<ApiKeyAuthorizationFilterOptions>();
 

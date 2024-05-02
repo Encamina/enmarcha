@@ -79,6 +79,7 @@ Previous classification is not required if changes are simple or all belong to t
 - Added `RequiredIfAttribute` to validate properties based on the value of another property.
 - Fixed warnings CS8603 and CS8025 in:
   - `Encamina.Enmarcha.AI`.
+  - `Encamina.Enmarcha.AspNet`
  
 ## [8.1.5]
 

@@ -113,6 +113,6 @@ internal class CsvInputFormatter : InputFormatter
             return array;
         }
 
-        return list;
+        return list!;
     }
 }

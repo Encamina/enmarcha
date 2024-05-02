@@ -33,13 +33,13 @@ internal sealed class CustomDateTimeModelBinder : IModelBinder
         @"dd-MM-yyyy",
     };
 
-    private readonly string customDateTimeFormat;
+    private readonly string? customDateTimeFormat;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="CustomDateTimeModelBinder"/> class with specific custom date time format.
     /// </summary>
     /// <param name="customDateTimeFormat">The custom <see cref="DateTime"/> format to use when binding models.</param>
-    public CustomDateTimeModelBinder(string customDateTimeFormat)
+    public CustomDateTimeModelBinder(string? customDateTimeFormat)
     {
         this.customDateTimeFormat = customDateTimeFormat;
     }
@@ -80,7 +80,7 @@ internal sealed class CustomDateTimeModelBinder : IModelBinder
         return Task.CompletedTask;
     }
 
-    private static DateTime? ParseDateTime(string dateToParse, string[] formats = null)
+    private static DateTime? ParseDateTime(string dateToParse, string[]? formats = null)
     {
         if (formats == null)
         {
