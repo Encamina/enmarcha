@@ -22,7 +22,7 @@ public class ExecutionContext<T> : ExecutionContext, IExecutionContext<T>
     /// </summary>
     /// <param name="template">An execution context template with values to configure this execution context.</param>
     /// <param name="logger">A logger for the specific type of this excecution context.</param>
-    public ExecutionContext(IExecutionContextTemplate template, ILogger<T> logger) : base(template)
+    public ExecutionContext(IExecutionContextTemplate? template, ILogger<T> logger) : base(template)
     {
         Logger = logger;
     }
