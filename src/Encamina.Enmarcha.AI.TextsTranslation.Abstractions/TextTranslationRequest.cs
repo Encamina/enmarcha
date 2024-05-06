@@ -8,7 +8,7 @@ namespace Encamina.Enmarcha.AI.TextsTranslation.Abstractions;
 public class TextTranslationRequest : ITextTranslationRequest
 {
     /// <inheritdoc/>
-    public virtual CultureInfo FromLanguage { get; init; }
+    public virtual CultureInfo? FromLanguage { get; init; }
 
     /// <inheritdoc/>
     public virtual ICollection<CultureInfo> ToLanguages { get; init; } = new List<CultureInfo>();

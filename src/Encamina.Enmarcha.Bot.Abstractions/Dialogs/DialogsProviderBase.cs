@@ -116,14 +116,14 @@ public abstract class DialogsProviderBase : IDialogProvider, IIntendedDialogProv
     public virtual T? GetByType<T>(Func<Dialog, bool>? filterExpression = null) where T : Dialog => GetDialogByType<T>(filterExpression);
 
     /// <inheritdoc/>
-    public virtual bool TryGetByType(Type dialogType, out Dialog dialog, Func<Dialog, bool>? filterExpression = null)
+    public virtual bool TryGetByType(Type dialogType, out Dialog? dialog, Func<Dialog, bool>? filterExpression = null)
     {
         dialog = GetDialogByType(dialogType, filterExpression);
         return dialog != null;
     }
 
     /// <inheritdoc/>
-    public virtual bool TryGetByType<T>(out T dialog, Func<Dialog, bool>? filterExpression = null) where T : Dialog
+    public virtual bool TryGetByType<T>(out T? dialog, Func<Dialog, bool>? filterExpression = null) where T : Dialog
     {
         dialog = GetDialogByType<T>(filterExpression);
         return dialog != null;
@@ -169,7 +169,7 @@ public abstract class DialogsProviderBase : IDialogProvider, IIntendedDialogProv
         return result;
     }
 
-    private Dialog? GetDialogByType(Type dialogType, Func<Dialog, bool> filterPredicate)
+    private Dialog? GetDialogByType(Type? dialogType, Func<Dialog, bool>? filterPredicate)
     {
         if (dialogType == null)
         {
@@ -180,7 +180,7 @@ public abstract class DialogsProviderBase : IDialogProvider, IIntendedDialogProv
         return (serviceScope.ServiceProvider.GetServices(dialogType) as IEnumerable<Dialog>)?.FirstOrDefault(d => filterPredicate == null || filterPredicate(d));
     }
 
-    private T? GetDialogByType<T>(Func<Dialog, bool> filterPredicate) where T : Dialog
+    private T? GetDialogByType<T>(Func<Dialog, bool>? filterPredicate) where T : Dialog
     {
         using var serviceScope = serviceProvider.CreateScope();
         return serviceScope.ServiceProvider.GetServices<T>()?.FirstOrDefault(d => filterPredicate == null || filterPredicate(d));
