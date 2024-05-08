@@ -59,7 +59,7 @@ internal sealed class QuestionAnsweringDialog : NamedDialogBase, IIntendable
     public override string Name => string.IsNullOrWhiteSpace(configurationOptions.DialogName) ? base.Name : configurationOptions.DialogName;
 
     /// <inheritdoc/>
-    public override async Task<DialogTurnResult> BeginDialogAsync(DialogContext dc, object? options = null, CancellationToken cancellationToken = default)
+    public override async Task<DialogTurnResult> BeginDialogAsync(DialogContext dc, object options = null, CancellationToken cancellationToken = default)
     {
         ResourceResponse? response = null;
 
