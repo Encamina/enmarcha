@@ -13,5 +13,5 @@ public interface IQuestionRequestOptions
     /// <summary>
     /// Gets the metadata options.
     /// </summary>
-    MetadataOptions MetadataOptions { get; }
+    MetadataOptions? MetadataOptions { get; }
 }
