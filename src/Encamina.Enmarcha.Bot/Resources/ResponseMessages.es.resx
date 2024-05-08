@@ -118,6 +118,6 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="GeneralBotErrorResponse" xml:space="preserve">
-    <value>El bot ha encontrar un error. Por favor proporcione el siguiente identificador para rastrear el error: {0}</value>
+    <value>El bot ha encontrado un error. Por favor proporcione el siguiente identificador para rastrear el error: {0}</value>
   </data>
 </root>
