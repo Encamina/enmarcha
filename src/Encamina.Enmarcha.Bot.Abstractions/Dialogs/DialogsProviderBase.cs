@@ -51,18 +51,18 @@ public abstract class DialogsProviderBase : IDialogProvider, IIntendedDialogProv
     }
 
     /// <inheritdoc/>
-    public virtual Dialog GetById(string dialogId) => GetDialogByType(dialogsById?[dialogId], d => FilterById(d, dialogId));
+    public virtual Dialog? GetById(string dialogId) => GetDialogByType(dialogsById?[dialogId], d => FilterById(d, dialogId));
 
     /// <inheritdoc/>
-    public virtual Dialog GetByIntent(string dialogIntent) =>
+    public virtual Dialog? GetByIntent(string dialogIntent) =>
         GetDialogByType(dialogsByIntent?[dialogIntent.ToUpperInvariant()], d => FilterByIntent(d, dialogIntent));
 
     /// <inheritdoc/>
-    public virtual Dialog GetByName(string dialogName) =>
+    public virtual Dialog? GetByName(string dialogName) =>
         GetDialogByType(dialogsByName?[dialogName.ToUpperInvariant()], d => FilterByName(d, dialogName));
 
     /// <inheritdoc/>
-    public virtual bool TryGetById(string dialogId, out Dialog dialog)
+    public virtual bool TryGetById(string dialogId, out Dialog? dialog)
     {
         if (dialogsById == null)
         {
@@ -78,7 +78,7 @@ public abstract class DialogsProviderBase : IDialogProvider, IIntendedDialogProv
     }
 
     /// <inheritdoc/>
-    public virtual bool TryGetByIntent(string dialogIntent, out Dialog dialog)
+    public virtual bool TryGetByIntent(string dialogIntent, out Dialog? dialog)
     {
         if (dialogsByIntent == null)
         {
@@ -94,7 +94,7 @@ public abstract class DialogsProviderBase : IDialogProvider, IIntendedDialogProv
     }
 
     /// <inheritdoc/>
-    public virtual bool TryGetByName(string dialogName, out Dialog dialog)
+    public virtual bool TryGetByName(string dialogName, out Dialog? dialog)
     {
         if (dialogsByName == null)
         {
@@ -110,20 +110,20 @@ public abstract class DialogsProviderBase : IDialogProvider, IIntendedDialogProv
     }
 
     /// <inheritdoc/>
-    public virtual Dialog GetByType(Type dialogType, Func<Dialog, bool> filterExpression = null) => GetDialogByType(dialogType, filterExpression);
+    public virtual Dialog? GetByType(Type dialogType, Func<Dialog, bool>? filterExpression = null) => GetDialogByType(dialogType, filterExpression);
 
     /// <inheritdoc/>
-    public virtual T GetByType<T>(Func<Dialog, bool> filterExpression = null) where T : Dialog => GetDialogByType<T>(filterExpression);
+    public virtual T? GetByType<T>(Func<Dialog, bool>? filterExpression = null) where T : Dialog => GetDialogByType<T>(filterExpression);
 
     /// <inheritdoc/>
-    public virtual bool TryGetByType(Type dialogType, out Dialog dialog, Func<Dialog, bool> filterExpression = null)
+    public virtual bool TryGetByType(Type dialogType, out Dialog? dialog, Func<Dialog, bool>? filterExpression = null)
     {
         dialog = GetDialogByType(dialogType, filterExpression);
         return dialog != null;
     }
 
     /// <inheritdoc/>
-    public virtual bool TryGetByType<T>(out T dialog, Func<Dialog, bool> filterExpression = null) where T : Dialog
+    public virtual bool TryGetByType<T>(out T? dialog, Func<Dialog, bool>? filterExpression = null) where T : Dialog
     {
         dialog = GetDialogByType<T>(filterExpression);
         return dialog != null;
@@ -169,7 +169,7 @@ public abstract class DialogsProviderBase : IDialogProvider, IIntendedDialogProv
         return result;
     }
 
-    private Dialog GetDialogByType(Type dialogType, Func<Dialog, bool> filterPredicate)
+    private Dialog? GetDialogByType(Type? dialogType, Func<Dialog, bool>? filterPredicate)
     {
         if (dialogType == null)
         {
@@ -180,7 +180,7 @@ public abstract class DialogsProviderBase : IDialogProvider, IIntendedDialogProv
         return (serviceScope.ServiceProvider.GetServices(dialogType) as IEnumerable<Dialog>)?.FirstOrDefault(d => filterPredicate == null || filterPredicate(d));
     }
 
-    private T GetDialogByType<T>(Func<Dialog, bool> filterPredicate) where T : Dialog
+    private T? GetDialogByType<T>(Func<Dialog, bool>? filterPredicate) where T : Dialog
     {
         using var serviceScope = serviceProvider.CreateScope();
         return serviceScope.ServiceProvider.GetServices<T>()?.FirstOrDefault(d => filterPredicate == null || filterPredicate(d));

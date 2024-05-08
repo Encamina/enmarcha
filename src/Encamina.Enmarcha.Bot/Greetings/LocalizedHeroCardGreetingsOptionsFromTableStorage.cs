@@ -36,7 +36,7 @@ internal class LocalizedHeroCardGreetingsOptionsFromTableStorage : ILocalizedHer
     /// The absolute expiration time, relative to now in seconds for a cache to store values retrieved from the Table Storage, to improve performance. Default <c>86400</c> (i.e., 24 hours - 1 day).
     /// </param>
     /// <param name="memoryCache">An optional valid instance of a memory cache to improve performance by storing parameters and values retrieved from the Table Storage.</param>
-    public LocalizedHeroCardGreetingsOptionsFromTableStorage(string tableConnectionString, string tableName, string defaultLocale, double cacheAbsoluteExpirationSeconds = 86400, IMemoryCache memoryCache = null)
+    public LocalizedHeroCardGreetingsOptionsFromTableStorage(string tableConnectionString, string tableName, string defaultLocale, double cacheAbsoluteExpirationSeconds = 86400, IMemoryCache? memoryCache = null)
         : this(tableConnectionString, tableName, CultureInfo.GetCultureInfo(defaultLocale), cacheAbsoluteExpirationSeconds, memoryCache)
     {
     }
@@ -51,7 +51,7 @@ internal class LocalizedHeroCardGreetingsOptionsFromTableStorage : ILocalizedHer
     /// The absolute expiration time, relative to now in seconds for a cache to store values retrieved from the Table Storage, to improve performance. Default <c>86400</c> (i.e., 24 hours - 1 day).
     /// </param>
     /// <param name="memoryCache">An optional valid instance of a memory cache to improve performance by storing parameters and values retrieved from the Table Storage.</param>
-    public LocalizedHeroCardGreetingsOptionsFromTableStorage(string tableConnectionString, string tableName, CultureInfo defaultLocale, double cacheAbsoluteExpirationSeconds = 86400, IMemoryCache memoryCache = null)
+    public LocalizedHeroCardGreetingsOptionsFromTableStorage(string tableConnectionString, string tableName, CultureInfo defaultLocale, double cacheAbsoluteExpirationSeconds = 86400, IMemoryCache? memoryCache = null)
     {
         Guard.IsNotNullOrWhiteSpace(tableConnectionString);
         Guard.IsNotNullOrWhiteSpace(tableName);

@@ -61,7 +61,7 @@ internal sealed class QuestionAnsweringDialog : NamedDialogBase, IIntendable
     /// <inheritdoc/>
     public override async Task<DialogTurnResult> BeginDialogAsync(DialogContext dc, object options = null, CancellationToken cancellationToken = default)
     {
-        ResourceResponse response = null;
+        ResourceResponse? response = null;
 
         if (dc.Context.Activity.Type == ActivityTypes.Message && !string.IsNullOrWhiteSpace(dc.Context.Activity.Text))
         {
@@ -85,7 +85,7 @@ internal sealed class QuestionAnsweringDialog : NamedDialogBase, IIntendable
         return await dc.EndDialogAsync(response, cancellationToken);
     }
 
-    private static IActivity BuildMessageActivity(string message, bool withVerbose, IEnumerable<IAnswer> answers)
+    private static IActivity BuildMessageActivity(string message, bool withVerbose, IEnumerable<IAnswer>? answers)
     {
         var activity = MessageFactory.Text(message, message);
 
@@ -102,7 +102,7 @@ internal sealed class QuestionAnsweringDialog : NamedDialogBase, IIntendable
         return turnContext.Activity.Value is JObject activityValue && (activityValue[Constants.ActivityValueVerbose]?.Value<bool>() ?? false);
     }
 
-    private async Task<QuestionRequest> BuildQuestionRequestAsync(string question, string userId, MetadataOptions metadataOptions, IEnumerable<string> sources, CancellationToken cancellationToken)
+    private async Task<QuestionRequest> BuildQuestionRequestAsync(string question, string userId, MetadataOptions? metadataOptions, IEnumerable<string> sources, CancellationToken cancellationToken)
     {
         var questionRequestOptions = new QuestionRequestOptions(sources)
         {
@@ -119,7 +119,7 @@ internal sealed class QuestionAnsweringDialog : NamedDialogBase, IIntendable
             };
     }
 
-    private async Task<IEnumerable<IAnswer>> ProcessQuestionResultAsync(QuestionResult result, MetadataOptions metadataOptions, IEnumerable<string> sources, CancellationToken cancellationToken)
+    private async Task<IEnumerable<IAnswer>> ProcessQuestionResultAsync(QuestionResult result, MetadataOptions? metadataOptions, IEnumerable<string> sources, CancellationToken cancellationToken)
     {
         IEnumerable<IAnswer> answers = result.Answers;
 
@@ -141,7 +141,7 @@ internal sealed class QuestionAnsweringDialog : NamedDialogBase, IIntendable
         return answers;
     }
 
-    private async Task<ResourceResponse> SendAnswerAsync(IEnumerable<IAnswer> answers, ITurnContext turnContext, CancellationToken cancellationToken)
+    private async Task<ResourceResponse?> SendAnswerAsync(IEnumerable<IAnswer> answers, ITurnContext turnContext, CancellationToken cancellationToken)
     {
         var verbose = configurationOptions.Verbose || VerboseFromTurnContextValue(turnContext);
 

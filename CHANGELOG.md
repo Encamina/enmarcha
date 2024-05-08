@@ -80,6 +80,7 @@ Previous classification is not required if changes are simple or all belong to t
 - Fixed warnings CS8603 and CS8025 in:
   - `Encamina.Enmarcha.AI`.
   - `Encamina.Enmarcha.AspNet`
+  - `Encamina.Enmarcha.Bot`
 - Corrected a typo in the Spanish error message in `ResponseMessages.es.resx` from "ha encontrar" to "ha encontrado".
  
 ## [8.1.5]

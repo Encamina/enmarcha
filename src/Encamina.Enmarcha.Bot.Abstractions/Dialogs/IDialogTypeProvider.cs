@@ -17,7 +17,7 @@ public interface IDialogTypeProvider
     /// <returns>
     /// A valid <see cref="Dialog"/>.
     /// </returns>
-    Dialog GetByType(Type dialogType, Func<Dialog, bool> filterExpression = null);
+    Dialog? GetByType(Type dialogType, Func<Dialog, bool>? filterExpression = null);
 
     /// <summary>
     /// Gets a <see cref="Dialog"/> by its type from a generic type parameter.
@@ -27,7 +27,7 @@ public interface IDialogTypeProvider
     /// <returns>
     /// A valid <see cref="Dialog"/>.
     /// </returns>
-    T GetByType<T>(Func<Dialog, bool> filterExpression = null) where T : Dialog;
+    T? GetByType<T>(Func<Dialog, bool>? filterExpression = null) where T : Dialog;
 
     /// <summary>
     /// Tries to get a <see cref="Dialog"/> from its type.
@@ -42,7 +42,7 @@ public interface IDialogTypeProvider
     /// <returns>
     /// Returns <see langword="true"/> if a valid <see cref="Dialog"/> is found by its type; otherwise, returns <see langword="false"/>.
     /// </returns>
-    bool TryGetByType(Type dialogType, out Dialog dialog, Func<Dialog, bool> filterExpression = null);
+    bool TryGetByType(Type dialogType, out Dialog? dialog, Func<Dialog, bool>? filterExpression = null);
 
     /// <summary>
     /// Tries to get a <see cref="Dialog"/> by its type from a generic type parameter.
@@ -57,7 +57,7 @@ public interface IDialogTypeProvider
     /// <returns>
     /// Returns <see langword="true"/> if a valid <see cref="Dialog"/> is found by its type; otherwise, returns <see langword="false"/>.
     /// </returns>
-    bool TryGetByType<T>(out T dialog, Func<Dialog, bool> filterExpression = null) where T : Dialog;
+    bool TryGetByType<T>(out T? dialog, Func<Dialog, bool>? filterExpression = null) where T : Dialog;
 }
 
 #pragma warning restore S2360 // Optional parameters should not be used

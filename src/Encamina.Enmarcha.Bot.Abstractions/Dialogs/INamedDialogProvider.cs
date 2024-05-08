@@ -14,7 +14,7 @@ public interface INamedDialogProvider
     /// <returns>
     /// A valid <see cref="Dialog"/>.
     /// </returns>
-    Dialog GetByName(string dialogName);
+    Dialog? GetByName(string dialogName);
 
     /// <summary>
     /// Tries to get a <see cref="Dialog"/> from its name.
@@ -28,5 +28,5 @@ public interface INamedDialogProvider
     /// <returns>
     /// Returns <see langword="true"/> if a valid <see cref="Dialog"/> is found by its name; otherwise, returns <see langword="false"/>.
     /// </returns>
-    bool TryGetByName(string dialogName, out Dialog dialog);
+    bool TryGetByName(string dialogName, out Dialog? dialog);
 }

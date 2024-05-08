@@ -14,7 +14,7 @@ public interface IIntendedDialogProvider
     /// <returns>
     /// A valid <see cref="Dialog"/>.
     /// </returns>
-    Dialog GetByIntent(string dialogIntent);
+    Dialog? GetByIntent(string dialogIntent);
 
     /// <summary>
     /// Tries to get a <see cref="Dialog"/> from its intent.
@@ -28,5 +28,5 @@ public interface IIntendedDialogProvider
     /// <returns>
     /// Returns <see langword="true"/> if a valid <see cref="Dialog"/> is found by its intent; otherwise, returns <see langword="false"/>.
     /// </returns>
-    bool TryGetByIntent(string dialogIntent, out Dialog dialog);
+    bool TryGetByIntent(string dialogIntent, out Dialog? dialog);
 }

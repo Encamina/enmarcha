@@ -10,7 +10,7 @@ public interface ITextTranslationRequest
     /// <summary>
     /// Gets the language to translate from.
     /// </summary>
-    CultureInfo FromLanguage { get; init; }
+    CultureInfo? FromLanguage { get; init; }
 
     /// <summary>
     /// Gets the collection of languages to translate.

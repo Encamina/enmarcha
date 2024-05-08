@@ -21,7 +21,7 @@ public class NamedComponentDialogBase : ComponentDialog, INameableDialog
     /// Initializes a new instance of the <see cref="NamedComponentDialogBase"/> class.
     /// </summary>
     /// <param name="dialogId">The unique identifier for this dialog.</param>
-    protected NamedComponentDialogBase(string dialogId) : base(dialogId)
+    protected NamedComponentDialogBase(string? dialogId) : base(dialogId)
     {
     }
 

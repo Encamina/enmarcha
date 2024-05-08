@@ -19,7 +19,7 @@ public interface IMetadataProcessor
     /// <returns>
     /// A read only collection of answers processed with given metadata options.
     /// </returns>
-    Task<IReadOnlyCollection<IAnswer>> ProcessAnswersAsync(IEnumerable<IAnswer> answers, MetadataOptions metadataOptions, CancellationToken cancellationToken);
+    Task<IReadOnlyCollection<IAnswer>> ProcessAnswersAsync(IEnumerable<IAnswer> answers, MetadataOptions? metadataOptions, CancellationToken cancellationToken);
 
     /// <summary>
     /// Process a message to obtain metadata options from it.
