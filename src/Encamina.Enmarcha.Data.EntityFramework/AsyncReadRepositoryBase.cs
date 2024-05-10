@@ -43,5 +43,5 @@ public abstract class AsyncReadRepositoryBase<TEntity> : IAsyncReadRepository<TE
 
     /// <inheritdoc/>
     public virtual async Task<TEntity?> GetByIdAsync<TEntityId>(TEntityId id, CancellationToken cancellationToken)
-        => await dbContext.GetSet<TEntity>().FindAsync(new object[] { id }, cancellationToken);
+        => await dbContext.GetSet<TEntity>().FindAsync(new object?[] { id }, cancellationToken);
 }

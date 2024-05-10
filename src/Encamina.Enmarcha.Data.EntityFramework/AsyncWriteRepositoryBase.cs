@@ -54,7 +54,7 @@ public abstract class AsyncWriteRepositoryBase<TEntity> : IAsyncWriteRepository<
     {
         var set = dbContext.GetSet<TEntity>();
 
-        var entity = await set.FindAsync(new object[] { id }, cancellationToken);
+        var entity = await set.FindAsync(new object?[] { id }, cancellationToken);
 
         if (entity != null)
         {
