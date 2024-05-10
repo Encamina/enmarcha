@@ -13,7 +13,7 @@ public abstract class NamedDialogBase : Dialog, INameableDialog
     /// <summary>
     /// Initializes a new instance of the <see cref="NamedDialogBase"/> class.
     /// </summary>
-    protected NamedDialogBase() : this(null!)
+    protected NamedDialogBase() : this(null)
     {
     }
 
@@ -21,7 +21,7 @@ public abstract class NamedDialogBase : Dialog, INameableDialog
     /// Initializes a new instance of the <see cref="NamedDialogBase"/> class.
     /// </summary>
     /// <param name="dialogId">The unique identifier for this dialog.</param>
-    protected NamedDialogBase(string dialogId) : base(dialogId)
+    protected NamedDialogBase(string? dialogId) : base(dialogId)
     {
     }
 

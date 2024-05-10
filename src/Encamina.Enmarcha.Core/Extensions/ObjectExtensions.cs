@@ -53,23 +53,27 @@ public static class ObjectExtensions
     /// <returns>
     /// A dictionary with values from <paramref name="object"/>'s properties as strings.
     /// </returns>
-    public static IDictionary<string, string> ToPropertyDictionary<T>(this T @object)
+    public static IDictionary<string, string?> ToPropertyDictionary<T>(this T @object)
     {
-        var dictionary = new Dictionary<string, string>();
-        var propertiesDictionary = @object.ToPropertyDictionary($@"{typeof(T).Name}:");
+        var dictionary = new Dictionary<string, string?>();
 
-        foreach (var property in propertiesDictionary)
+        if (@object is not null)
         {
-            if (property.Value is IDictionary<string, string> innerProperties)
+            var propertiesDictionary = @object.ToPropertyDictionary($@"{typeof(T).Name}:");
+
+            foreach (var property in propertiesDictionary)
             {
-                foreach (var innerProperty in innerProperties)
+                if (property.Value is IDictionary<string, string> innerProperties)
                 {
-                    dictionary.Add($@"{property.Key}:{innerProperty.Key}", innerProperty.Value);
+                    foreach (var innerProperty in innerProperties)
+                    {
+                        dictionary.Add($@"{property.Key}:{innerProperty.Key}", innerProperty.Value);
+                    }
                 }
-            }
-            else
-            {
-                dictionary.Add(property.Key, property.Value?.ToString());
+                else
+                {
+                    dictionary.Add(property.Key, property.Value?.ToString());
+                }
             }
         }
 

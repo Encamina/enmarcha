@@ -10,7 +10,7 @@ namespace Encamina.Enmarcha.Core.Extensions;
 public static class StringExtensions
 {
     /// <summary>
-    /// Normalizes a given string, removing diacritics, plus some unwanted charaters, and replacing others.
+    /// Normalizes a given string, removing diacritics, plus some unwanted characters, and replacing others.
     /// </summary>
     /// <param name="value">The <see cref="string"/> value to normalize.</param>
     /// <param name="removeCharacters">A collection of characters to remove from <paramref name="value"/>.</param>
@@ -53,7 +53,7 @@ public static class StringExtensions
     /// Removes the <c>Async</c> suffix from a string, if present.
     /// </summary>
     /// <remarks>
-    /// This extension method is usefull when manipulating a an asynchronous method or function name.
+    /// This extension method is useful when manipulating a an asynchronous method or function name.
     /// </remarks>
     /// <param name="value">The string value to remove the <c>Async</c> suffix from.</param>
     /// <returns>The value with the <c>Async</c> suffix removed, if it was present.</returns>
@@ -104,7 +104,7 @@ public static class StringExtensions
     /// </remarks>
     /// <typeparam name="T">The specific type of <paramref name="object"/>.</typeparam>
     /// <param name="template">The string to use as template.</param>
-    /// <param name="object">The object whose properties'values will be used as values for the template.</param>
+    /// <param name="object">The object whose properties values will be used as values for the template.</param>
     /// <returns>
     /// <para>
     /// A string value from the <paramref name="template"/> with values or tokens replaced with values from <paramref name="object"/>'s properties.
@@ -126,7 +126,7 @@ public static class StringExtensions
     /// <param name="templateObjectPropertiesPrefix">
     /// A value that identifies any token or parameter in the template to be replaced with values from <paramref name="object"/>'s properties is prefixed with the '<c>$</c>' character.
     /// </param>
-    /// <param name="object">The object whose properties'values will be used as values for the template.</param>
+    /// <param name="object">The object whose properties values will be used as values for the template.</param>
     /// <returns>
     /// <para>
     /// A string value from the <paramref name="template"/> with values or tokens replaced with values from <paramref name="object"/>'s properties.
@@ -144,7 +144,7 @@ public static class StringExtensions
     /// Formats a string as template with tokens or parameters provided from the values in <paramref name="templateValues"/>.
     /// </summary>
     /// <param name="template">The string to use as template.</param>
-    /// <param name="templateValues">A dictionalry with values to use as replacements for tokens or parameters in <paramref name="template"/>.</param>
+    /// <param name="templateValues">A dictionary with values to use as replacements for tokens or parameters in <paramref name="template"/>.</param>
     /// <returns>
     /// <para>
     /// A string value from the <paramref name="template"/> with values or tokens replaced with values from <paramref name="templateValues"/>'s properties.
@@ -153,7 +153,7 @@ public static class StringExtensions
     /// If <paramref name="templateValues"/> is <see langword="null"/>, then this method returns the same value as <paramref name="template"/> without any token or parameter replacement.
     /// </para>
     /// </returns>
-    public static string TemplateStringFormatterWithValues(this string template, IDictionary<string, object> templateValues)
+    public static string TemplateStringFormatterWithValues(this string template, IDictionary<string, object>? templateValues)
     {
         return templateValues == null
             ? template
