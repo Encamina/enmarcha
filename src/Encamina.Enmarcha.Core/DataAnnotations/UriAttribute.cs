@@ -28,13 +28,13 @@ public sealed class UriAttribute : DataTypeAttribute
     public bool AllowsNull { get; set; } = true;
 
     /// <inheritdoc/>
-    public override bool IsValid(object value) => (AllowsNull && value == null) || (value is Uri uri && uri.IsWellFormedOriginalString());
+    public override bool IsValid(object? value) => (AllowsNull && value == null) || (value is Uri uri && uri.IsWellFormedOriginalString());
 
     /// <inheritdoc/>
     /// <remarks>
     /// A null value is accepted as valid since the idea of «Not Empty» doesn't necessarily means «Required».
     /// </remarks>
-    protected override ValidationResult IsValid(object value, ValidationContext validationContext)
+    protected override ValidationResult? IsValid(object? value, ValidationContext validationContext)
     {
         return IsValid(value)
             ? ValidationResult.Success

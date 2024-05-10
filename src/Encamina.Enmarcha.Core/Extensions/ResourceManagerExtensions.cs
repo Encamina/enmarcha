@@ -58,7 +58,7 @@ public static class ResourceManagerExtensions
     /// The value of the resource localized from <see cref="CultureInfo.CurrentCulture"/> and formatted with replaced
     /// items from the given array of objects, or <see langword="null"/> if it cannot be found in a resource set.
     /// </returns>
-    public static string GetFormattedStringByCurrentCulture(this ResourceManager resourceManager, string resourceName, params object[] args)
+    public static string GetFormattedStringByCurrentCulture(this ResourceManager resourceManager, string resourceName, params object?[] args)
     {
         return string.Format(CultureInfo.CurrentCulture, resourceManager.GetStringByCurrentCulture(resourceName), args);
     }

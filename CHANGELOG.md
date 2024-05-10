@@ -81,6 +81,7 @@ Previous classification is not required if changes are simple or all belong to t
   - `Encamina.Enmarcha.AI`.
   - `Encamina.Enmarcha.AspNet`
   - `Encamina.Enmarcha.Bot`
+  - `Encamina.Enmarcha.Core`
 - Corrected a typo in the Spanish error message in `ResponseMessages.es.resx` from "ha encontrar" to "ha encontrado".
  
 ## [8.1.5]

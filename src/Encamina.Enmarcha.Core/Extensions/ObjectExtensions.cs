@@ -26,7 +26,7 @@ public static class ObjectExtensions
     /// <returns>
     /// A dictionary with values from <paramref name="object"/>'s properties.
     /// </returns>
-    public static IDictionary<string, object> ToPropertyDictionary(this object @object, string keyPrefix)
+    public static IDictionary<string, object> ToPropertyDictionary(this object @object, string? keyPrefix)
     {
         var dictionary = new Dictionary<string, object>();
 
@@ -47,29 +47,33 @@ public static class ObjectExtensions
     /// Creates a dictionary from values in an <paramref name="object"/>'s properties.
     /// Each dictionary's key will be prefixed with the name of <typeparamref name="T"/>.
     /// </summary>
-    /// <remarks>This extension method is quite usefull to create in-memory configurations.</remarks>
+    /// <remarks>This extension method is quite useful to create in-memory configurations.</remarks>
     /// <typeparam name="T">The type the object from which the dictionary will be created.</typeparam>
     /// <param name="object">The object.</param>
     /// <returns>
     /// A dictionary with values from <paramref name="object"/>'s properties as strings.
     /// </returns>
-    public static IDictionary<string, string> ToPropertyDictionary<T>(this T @object)
+    public static IDictionary<string, string?> ToPropertyDictionary<T>(this T @object)
     {
-        var dictionary = new Dictionary<string, string>();
-        var propertiesDictionary = @object.ToPropertyDictionary($@"{typeof(T).Name}:");
+        var dictionary = new Dictionary<string, string?>();
 
-        foreach (var property in propertiesDictionary)
+        if (@object is not null)
         {
-            if (property.Value is IDictionary<string, string> innerProperties)
+            var propertiesDictionary = @object.ToPropertyDictionary($@"{typeof(T).Name}:");
+
+            foreach (var property in propertiesDictionary)
             {
-                foreach (var innerProperty in innerProperties)
+                if (property.Value is IDictionary<string, string> innerProperties)
                 {
-                    dictionary.Add($@"{property.Key}:{innerProperty.Key}", innerProperty.Value);
+                    foreach (var innerProperty in innerProperties)
+                    {
+                        dictionary.Add($@"{property.Key}:{innerProperty.Key}", innerProperty.Value);
+                    }
                 }
-            }
-            else
-            {
-                dictionary.Add(property.Key, property.Value?.ToString());
+                else
+                {
+                    dictionary.Add(property.Key, property.Value?.ToString());
+                }
             }
         }
 
