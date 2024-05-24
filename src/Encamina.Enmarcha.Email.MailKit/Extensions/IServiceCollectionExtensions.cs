@@ -27,7 +27,7 @@ public static class IServiceCollectionExtensions
     /// <seealso href="http://www.mimekit.net/"/>
     public static IServiceCollection AddMailKitEmailProvider(this IServiceCollection services, IConfiguration configuration, ServiceLifetime serviceLifetime = ServiceLifetime.Singleton)
     {
-        return services.InnerAddMailKitEmailProvider(optionBuilder => optionBuilder.Bind(configuration.GetSection(nameof(SmtpClientOptions))).ValidateDataAnnotations().ValidateOnStart(), serviceLifetime);
+        return services.InnerAddMailKitEmailProvider(optionBuilder => optionBuilder.Bind(configuration?.GetSection(nameof(SmtpClientOptions))).ValidateDataAnnotations().ValidateOnStart(), serviceLifetime);
     }
 
     /// <summary>
@@ -60,7 +60,7 @@ public static class IServiceCollectionExtensions
     /// <seealso href="http://www.mimekit.net/"/>
     public static IServiceCollection AddMailKitEmailProvider(this IServiceCollection services, IConfiguration configuration, Action<SmtpClientOptions> options, ServiceLifetime serviceLifetime = ServiceLifetime.Singleton)
     {
-        return services.InnerAddMailKitEmailProvider(optionBuilder => optionBuilder.Bind(configuration.GetSection(nameof(SmtpClientOptions))).PostConfigure(options).ValidateDataAnnotations().ValidateOnStart(), serviceLifetime);
+        return services.InnerAddMailKitEmailProvider(optionBuilder => optionBuilder.Bind(configuration?.GetSection(nameof(SmtpClientOptions))).PostConfigure(options).ValidateDataAnnotations().ValidateOnStart(), serviceLifetime);
     }
 
     private static IServiceCollection InnerAddMailKitEmailProvider(this IServiceCollection services, Action<OptionsBuilder<SmtpClientOptions>> setupOptions, ServiceLifetime serviceLifetime = ServiceLifetime.Singleton)
