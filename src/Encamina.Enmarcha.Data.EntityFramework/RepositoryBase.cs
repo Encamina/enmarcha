@@ -5,8 +5,6 @@ using CommunityToolkit.Diagnostics;
 using Encamina.Enmarcha.Data.Abstractions;
 using Encamina.Enmarcha.Data.EntityFramework.Internals;
 
-using Encamina.Enmarcha.Entities.Abstractions;
-
 using Microsoft.EntityFrameworkCore;
 
 namespace Encamina.Enmarcha.Data.EntityFramework;
@@ -14,7 +12,7 @@ namespace Encamina.Enmarcha.Data.EntityFramework;
 /// <summary>
 /// Base class for a repositories powered by Entity Framework.
 /// </summary>
-/// <typeparam name="TEntity">The type of (data) entity handled by this asychronous repository.</typeparam>
+/// <typeparam name="TEntity">The type of (data) entity handled by this asynchronous repository.</typeparam>
 [SuppressMessage("Minor Code Smell", "S1694:An abstract class should have both abstract and concrete methods", Justification = "It's the Architecture's intent that this class must be inherited!")]
 public abstract class RepositoryBase<TEntity> : IRepository<TEntity> where TEntity : class
 {
@@ -55,7 +53,7 @@ public abstract class RepositoryBase<TEntity> : IRepository<TEntity> where TEnti
     public virtual IQueryable<TEntity> GetAll([NotNull] Func<IQueryable<TEntity>, IQueryable<TEntity>> queryFunction) => readRepository.GetAll(queryFunction);
 
     /// <inheritdoc/>
-    public virtual TEntity GetById<TEntityId>(TEntityId id) => readRepository.GetById(id);
+    public virtual TEntity? GetById<TEntityId>(TEntityId id) => readRepository.GetById(id);
 
     /// <inheritdoc/>
     public virtual void Update(TEntity entity) => writeRepository.Update(entity);

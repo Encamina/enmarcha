@@ -68,7 +68,7 @@ internal sealed class CosmosRepository<T> : ICosmosRepository<T>
     /// <inheritdoc/>
     public async Task AddOrUpdateBulkAsync(IEnumerable<T> entities, CancellationToken cancellationToken)
     {
-        Task aggregationTask = null;
+        Task? aggregationTask = null;
 
         try
         {
@@ -195,7 +195,7 @@ internal sealed class CosmosRepository<T> : ICosmosRepository<T>
     }
 
     /// <inheritdoc/>
-    public async Task<T> GetByIdAsync(string entityId, string partitionKey, CancellationToken cancellationToken)
+    public async Task<T?> GetByIdAsync(string entityId, string? partitionKey, CancellationToken cancellationToken)
     {
         try
         {
@@ -309,7 +309,7 @@ internal sealed class CosmosRepository<T> : ICosmosRepository<T>
     }
 
     /// <inheritdoc/>
-    public async Task<T> GetByIdAsync<TEntityId>(TEntityId id, CancellationToken cancellationToken) => await GetByIdAsync(id.ToString(), null, cancellationToken);
+    public async Task<T?> GetByIdAsync<TEntityId>(TEntityId id, CancellationToken cancellationToken) => await GetByIdAsync(id!.ToString(), null, cancellationToken);
 
     /// <inheritdoc/>
     public async Task AddAsync(T entity, CancellationToken cancellationToken) => await AddOrUpdateAsync(entity, cancellationToken);
@@ -323,7 +323,7 @@ internal sealed class CosmosRepository<T> : ICosmosRepository<T>
     /// </remarks>
     public async Task DeleteAsync<TEntityId>(TEntityId id, CancellationToken cancellationToken)
     {
-        var partitionKey = GeneratePartition(id is string idString ? idString : id.ToString());
+        var partitionKey = GeneratePartition(id is string idString ? idString : id!.ToString());
 
         var resultSet = container.GetItemQueryIterator<CosmosDbItem>(new QueryDefinition(@"SELECT c.id FROM c"), requestOptions: new QueryRequestOptions()
         {
@@ -360,7 +360,7 @@ internal sealed class CosmosRepository<T> : ICosmosRepository<T>
         return (result.AsQueryable(), continuation);
     }
 
-    private static PartitionKey GeneratePartition(string partitionKey)
+    private static PartitionKey GeneratePartition(string? partitionKey)
     {
         return string.IsNullOrWhiteSpace(partitionKey)
             ? throw new ArgumentNullException(nameof(partitionKey))

@@ -29,5 +29,5 @@ public interface IReadRepository<TEntity>
     /// <typeparam name="TEntityId">The specific type of the entity's unique identifier.</typeparam>
     /// <param name="id">The entity's unique identifier.</param>
     /// <returns>An entity from the repository.</returns>
-    TEntity GetById<TEntityId>(TEntityId id);
+    TEntity? GetById<TEntityId>(TEntityId id);
 }
