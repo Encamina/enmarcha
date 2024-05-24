@@ -10,12 +10,12 @@ public class EmailAttachmentSpecification
     /// <summary>
     /// Gets the file name of the attachment in this specification.
     /// </summary>
-    public string FileName { get; init; }
+    public string? FileName { get; init; }
 
     /// <summary>
     /// Gets the <see cref="ContentType">content type</see> of the attachment in this specification.
     /// </summary>
-    public ContentType ContentType { get; init; }
+    public ContentType? ContentType { get; init; }
 
     /// <summary>
     /// Gets the binary data of the attachment in this specification.
