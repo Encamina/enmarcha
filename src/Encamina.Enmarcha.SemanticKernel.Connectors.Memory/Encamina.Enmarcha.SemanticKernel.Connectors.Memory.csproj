@@ -21,8 +21,8 @@
     <ItemGroup>
         <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.1" />
         <PackageReference Include="Microsoft.Extensions.Http" Version="8.0.0" />
-        <PackageReference Include="Microsoft.SemanticKernel.Connectors.AzureAISearch" Version="1.7.1-alpha" />
-        <PackageReference Include="Microsoft.SemanticKernel.Connectors.Qdrant" Version="1.7.1-alpha" />
+        <PackageReference Include="Microsoft.SemanticKernel.Connectors.AzureAISearch" Version="1.10.0-alpha" />
+        <PackageReference Include="Microsoft.SemanticKernel.Connectors.Qdrant" Version="1.10.0-alpha" />
     </ItemGroup>
 
     <ItemGroup>

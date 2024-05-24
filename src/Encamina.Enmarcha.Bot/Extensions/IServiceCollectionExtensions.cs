@@ -1,4 +1,6 @@
-﻿using System.Globalization;
+﻿#pragma warning disable S2360 // Optional parameters should not be used
+
+using System.Globalization;
 
 using Encamina.Enmarcha.AI;
 
@@ -11,7 +13,6 @@ using Encamina.Enmarcha.Bot.QuestionAnswering;
 using Encamina.Enmarcha.Bot.Responses;
 
 using Encamina.Enmarcha.Core.Extensions;
-#pragma warning disable S2360 // Optional parameters should not be used
 
 using Microsoft.ApplicationInsights;
 using Microsoft.ApplicationInsights.Extensibility;
@@ -71,7 +72,7 @@ public static class IServiceCollectionExtensions
     }
 
     /// <summary>
-    /// Adds a bot transcript logger middleware as singleton using a memory trasncript store.
+    /// Adds a bot transcript logger middleware as singleton using a memory transcript store.
     /// </summary>
     /// <remarks>This extension method uses the <see cref="MemoryTranscriptStore"/> transcript store.</remarks>
     /// <param name="services"> The <see cref="IServiceCollection"/> to add services to.</param>
@@ -84,7 +85,7 @@ public static class IServiceCollectionExtensions
     }
 
     /// <summary>
-    /// Adds a bot transcript logger middleware as singleton using a Blob container as trasncript logger (and store).
+    /// Adds a bot transcript logger middleware as singleton using a Blob container as transcript logger (and store).
     /// </summary>
     /// <remarks>This extension method uses the <see cref="BlobsTranscriptStore"/> transcript store.</remarks>
     /// <param name="services"> The <see cref="IServiceCollection"/> to add services to.</param>
@@ -114,13 +115,13 @@ public static class IServiceCollectionExtensions
     }
 
     /// <summary>
-    /// Adds a bot transcript logger middleware as singleton using a file storage as trasncript store.
+    /// Adds a bot transcript logger middleware as singleton using a file storage as transcript store.
     /// </summary>
     /// <remarks>This extension method uses the <see cref="MemoryTranscriptStore"/> transcript store.</remarks>
     /// <param name="services"> The <see cref="IServiceCollection"/> to add services to.</param>
     /// <param name="folder">A folder path to place the transcript files.</param>
     /// <param name="overwriteTranscriptFiles">
-    /// A flag to indicate if transcript files should be overriten or not. This is usually helpful for unit test scenariuos. Default value is <see langword="false"/>.
+    /// A flag to indicate if transcript files should be overwritten or not. This is usually helpful for unit test scenarios. Default value is <see langword="false"/>.
     /// </param>
     /// <param name="serviceLifetime">The lifetime for the <see cref="MemoryTranscriptStore"/>.</param>
     /// <returns>The <see cref="IServiceCollection"/> so that additional calls can be chained.</returns>
@@ -226,7 +227,7 @@ public static class IServiceCollectionExtensions
     /// <summary>
     /// Adds a bot middleware.
     /// </summary>
-    /// <typeparam name="TBotMiddleware">The type of a specific bot middlerware. It must implement interface <see cref="IMiddleware"/>.</typeparam>
+    /// <typeparam name="TBotMiddleware">The type of a specific bot middleware. It must implement interface <see cref="IMiddleware"/>.</typeparam>
     /// <param name="services"> The <see cref="IServiceCollection"/> to add services to.</param>
     /// <param name="serviceLifetime">The lifetime for the <typeparamref name="TBotMiddleware"/>.</param>
     /// <returns>The <see cref="IServiceCollection"/> so that additional calls can be chained.</returns>
@@ -238,9 +239,9 @@ public static class IServiceCollectionExtensions
     }
 
     /// <summary>
-    /// Adds a bot middlerware from an implementation factory.
+    /// Adds a bot middleware from an implementation factory.
     /// </summary>
-    /// <typeparam name="TBotMiddleware">The type of a specific bot middlerware. It must implement interface <see cref="IMiddleware"/>.</typeparam>
+    /// <typeparam name="TBotMiddleware">The type of a specific bot middleware. It must implement interface <see cref="IMiddleware"/>.</typeparam>
     /// <param name="services"> The <see cref="IServiceCollection"/> to add services to.</param>
     /// <param name="implementationFactory">The factory that creates the service.</param>
     /// <param name="serviceLifetime">The lifetime for the <typeparamref name="TBotMiddleware"/>.</param>

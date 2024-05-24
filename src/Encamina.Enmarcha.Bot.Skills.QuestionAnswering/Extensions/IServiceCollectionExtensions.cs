@@ -1,4 +1,6 @@
-﻿using Encamina.Enmarcha.AI.Abstractions;
+﻿#pragma warning disable S2360 // Optional parameters should not be used
+
+using Encamina.Enmarcha.AI.Abstractions;
 using Encamina.Enmarcha.AI.QuestionsAnswering.Abstractions;
 
 using Encamina.Enmarcha.Bot.Skills.QuestionAnswering;
@@ -10,8 +12,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 
 using ExceptionMessages = Encamina.Enmarcha.Bot.Skills.QuestionAnswering.Resources.ExceptionMessages;
-
-#pragma warning disable S2360 // Optional parameters should not be used
 
 namespace Microsoft.Extensions.DependencyInjection;
 
