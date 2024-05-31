@@ -4,6 +4,7 @@ using Encamina.Enmarcha.AI.OpenAI.Abstractions;
 using Encamina.Enmarcha.SemanticKernel.Abstractions;
 using Encamina.Enmarcha.SemanticKernel.Plugins.Chat.Options;
 
+using Microsoft.Azure.Cosmos;
 using Microsoft.Extensions.Options;
 
 using Microsoft.SemanticKernel;
@@ -100,8 +101,12 @@ public class ChatWithHistoryPlugin
         var chatMessage = await kernel.GetRequiredService<IChatCompletionService>().GetChatMessageContentAsync(chatHistory, options.ChatRequestSettings, kernel, cancellationToken);
         var response = chatMessage.Content;
 
-        await chatHistoryProvider.SaveChatMessagesHistoryAsync(chatIndexerId, AuthorRole.User.ToString(), ask, cancellationToken);               // Save in chat history the user message (a.k.a. ask).
-        await chatHistoryProvider.SaveChatMessagesHistoryAsync(chatIndexerId, AuthorRole.Assistant.ToString(), response, cancellationToken);     // Save in chat history the assistant message (a.k.a. response).
+        var chatHistoryToSave = new List<ChatMessageContent>()
+        {
+            new(AuthorRole.User, ask), // Save in chat history the user message (a.k.a. ask).
+            new(AuthorRole.Assistant, response), // Save in chat history the assistant message (a.k.a. response).
+        };
+        await chatHistoryProvider.SaveChatMessagesHistoryBatchAsync(chatIndexerId, chatHistoryToSave, cancellationToken);
 
         return response;
     }
