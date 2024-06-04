@@ -56,7 +56,7 @@ internal sealed class EmailService : IEmailBuilder, IEmailProvider, ISmtpClientO
         {
             ContentType = contentType,
             Data = data,
-            FileName = fileName.Trim(),
+            FileName = fileName?.Trim(),
         });
 
         return this;
