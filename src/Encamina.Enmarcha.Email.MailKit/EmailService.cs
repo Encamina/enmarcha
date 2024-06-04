@@ -27,7 +27,7 @@ internal sealed class EmailService : IEmailBuilder, IEmailProvider, ISmtpClientO
     /// <param name="smtpClientOptions">Options for SMTP client.</param>
     public EmailService(IOptions<SmtpClientOptions> smtpClientOptions)
     {
-        SmtpClientOptions = ValidateOptions(smtpClientOptions?.Value);
+        SmtpClientOptions = ValidateOptions(smtpClientOptions.Value);
     }
 
     /// <inheritdoc/>
@@ -56,7 +56,7 @@ internal sealed class EmailService : IEmailBuilder, IEmailProvider, ISmtpClientO
         {
             ContentType = contentType,
             Data = data,
-            FileName = fileName?.Trim(),
+            FileName = fileName.Trim(),
         });
 
         return this;
@@ -156,7 +156,7 @@ internal sealed class EmailService : IEmailBuilder, IEmailProvider, ISmtpClientO
         return this;
     }
 
-    private static SmtpClientOptions ValidateOptions(SmtpClientOptions? smtpClientOptions)
+    private static SmtpClientOptions ValidateOptions(SmtpClientOptions smtpClientOptions)
     {
 #pragma warning disable S3236 // Caller information arguments should not be provided explicitly
         Guard.IsNotNull(smtpClientOptions);
