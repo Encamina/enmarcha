@@ -156,7 +156,7 @@ internal sealed class EmailService : IEmailBuilder, IEmailProvider, ISmtpClientO
         return this;
     }
 
-    private static SmtpClientOptions ValidateOptions(SmtpClientOptions? smtpClientOptions)
+    private static SmtpClientOptions ValidateOptions(SmtpClientOptions smtpClientOptions)
     {
 #pragma warning disable S3236 // Caller information arguments should not be provided explicitly
         Guard.IsNotNull(smtpClientOptions);
