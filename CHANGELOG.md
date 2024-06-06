@@ -50,13 +50,13 @@ Previous classification is not required if changes are simple or all belong to t
   - Updated `Microsoft.Extensions.Logging.Abstractions` from `8.0.0` to `8.0.1`.
   - Updated `Microsoft.Extensions.Azure` from `1.7.2` to `1.7.3`.
   - Updated `Microsoft.Extensions.DependencyInjection.Abstractions` from `8.0.0` to `8.0.1`.
-  - Updated `Microsoft.SemanticKernel.Abstractions` from `1.6.2` to `1.7.1`.
-  - Updated `Microsoft.SemanticKernel.Connectors.AzureAISearch` from `1.6.2-alpha` to `1.7.1-alpha`. This does fix the [Issue 72](https://github.com/Encamina/enmarcha/issues/72).
-  - Updated `Microsoft.SemanticKernel.Connectors.OpenAI` from `1.6.2` to `1.7.1`.
-  - Updated `Microsoft.SemanticKernel.Connectors.Qdrant` from `1.6.2-alpha` to `1.7.1-alpha`.
-  - Updated `Microsoft.SemanticKernel.Core` from `1.6.2` to `1.7.1`.
-  - Updated `Microsoft.SemanticKernel.Plugins.Document` from `1.6.2-alpha` to `1.7.1-alpha`.
-  - Updated `Microsoft.SemanticKernel.Plugins.Memory` from `1.6.2-alpha` to `1.7.1-alpha`.
+  - Updated `Microsoft.SemanticKernel.Abstractions` from `1.6.2` to `1.10.0`.
+  - Updated `Microsoft.SemanticKernel.Connectors.AzureAISearch` from `1.6.2-alpha` to `1.10.0-alpha`. This does fix the [Issue 72](https://github.com/Encamina/enmarcha/issues/72).
+  - Updated `Microsoft.SemanticKernel.Connectors.OpenAI` from `1.6.2` to `1.10.0`.
+  - Updated `Microsoft.SemanticKernel.Connectors.Qdrant` from `1.6.2-alpha` to `1.10.0-alpha`.
+  - Updated `Microsoft.SemanticKernel.Core` from `1.6.2` to `1.10.0`.
+  - Updated `Microsoft.SemanticKernel.Plugins.Document` from `1.6.2-alpha` to `1.10.0-alpha`.
+  - Updated `Microsoft.SemanticKernel.Plugins.Memory` from `1.6.2-alpha` to `1.10.0-alpha`.
   - Updated `SharpToken` from `1.2.17` to `2.0.2`.
   - Updated `System.Text.Json` from `8.0.2` to `8.0.3`.
   - Updated `coverlet.collector` from `6.0.1` to `6.0.2`.
@@ -77,7 +77,7 @@ Previous classification is not required if changes are simple or all belong to t
 - Class `SlidePptxDocumentConnector` is now `public` instead of `internal`.
 - Added `UseAzureActiveDirectoryAuthentication` and `TokenCredentialsOptions` properties in `AzureOpenAIOptions`.
 - Added `RequiredIfAttribute` to validate properties based on the value of another property.
-- Fixed warnings CS8603 and CS8025 in:
+- Fixed some warnings in:
   - `Encamina.Enmarcha.AI`.
   - `Encamina.Enmarcha.AspNet`
   - `Encamina.Enmarcha.Bot`
@@ -86,6 +86,8 @@ Previous classification is not required if changes are simple or all belong to t
   - `Encamina.Enmarcha.Email`
   - `Encamina.Enmarcha.Entities`
   - `Encamina.Enmarcha.SemanticKernel`
+- Corrected a typo in the Spanish error message in `ResponseMessages.es.resx` from "ha encontrar" to "ha encontrado".
+- Added `SaveChatMessagesHistoryBatchAsync` in `ChatHistoryProvider`.
  
 ## [8.1.5]
 

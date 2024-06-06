@@ -144,7 +144,7 @@ public interface ICosmosRepository<T> : IAsyncRepository<T>
     /// <param name="partitionKey">The partition key of the entity to retrieve.</param>
     /// <param name="cancellationToken">A cancellation token that can be used to receive notice of cancellation.</param>
     /// <returns>The retrieved entity contained within a <see cref="Task"/> object representing the service response for the asynchronous operation.</returns>
-    Task<T?> GetByIdAsync(string entityId, string partitionKey, CancellationToken cancellationToken);
+    Task<T?> GetByIdAsync(string entityId, string? partitionKey, CancellationToken cancellationToken);
 
     /// <summary>
     /// Read all items (entities) from a given partition key.

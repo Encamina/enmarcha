@@ -37,7 +37,7 @@ public class DetectedLanguageTranslatorMiddleware : IMiddleware
     /// A cognitive service provider to locate a language detection and a text translation services from the given names.
     /// </param>
     public DetectedLanguageTranslatorMiddleware(CultureInfo translateToLanguage, IEnumerable<CultureInfo> languageExceptions, string languageDetectionServiceName, string textTranslationServiceName, ICognitiveServiceProvider cognitiveServiceProvider)
-        : this(translateToLanguage, languageExceptions, cognitiveServiceProvider?.GetLanguageDetectionService(languageDetectionServiceName), cognitiveServiceProvider?.GetTextTranslationService(textTranslationServiceName))
+        : this(translateToLanguage, languageExceptions, cognitiveServiceProvider.GetLanguageDetectionService(languageDetectionServiceName), cognitiveServiceProvider.GetTextTranslationService(textTranslationServiceName))
     {
     }
 
@@ -66,7 +66,7 @@ public class DetectedLanguageTranslatorMiddleware : IMiddleware
     /// any of the exception languages, then it will be translated into the translation language before passing it down the pipeline.
     /// </para>
     /// <para>
-    /// When returning, it also process outgoint activities to translate back.
+    /// When returning, it also process outgoing activities to translate back.
     /// </para>
     /// </summary>
     /// <param name="turnContext">The context object for this turn.</param>
