@@ -16,6 +16,12 @@ Also, any bug fix must start with the prefix �Bug fix:� followed by the desc
 
 Previous classification is not required if changes are simple or all belong to the same category.
 
+## [8.1.7]
+
+### Minor Changes
+
+- Added `MaxTokensOutput` property in `ModelInfo`.
+
 ## [8.1.6]
 
 ### Breaking Changes 
