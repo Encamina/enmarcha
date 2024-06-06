@@ -28,7 +28,7 @@ public class EmailSpecification
     /// <summary>
     /// Gets or sets the e-mail body.
     /// </summary>
-    public string Body { get; set; }
+    public string? Body { get; set; }
 
     /// <summary>
     /// Gets or sets a value indicating whether the <see cref="Body">body</see> of the e-mail is an HTML or not.

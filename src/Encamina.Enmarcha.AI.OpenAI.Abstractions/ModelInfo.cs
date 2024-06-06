@@ -20,6 +20,7 @@ public sealed class ModelInfo
         { @"gpt-4", new ModelInfo() { Id = @"gpt-4", MaxTokens = 8192, Encoding = @"cl100k_base", IsObsolete = false } },
         { @"gpt-4-32k", new ModelInfo() { Id = @"gpt-4", MaxTokens = 32768, Encoding = @"cl100k_base", IsObsolete = false } },
         { @"gpt-4-turbo", new ModelInfo() { Id = @"gpt-4", MaxTokens = 128000, Encoding = @"cl100k_base", IsObsolete = false } },
+        { @"gpt-4o", new ModelInfo() { Id = @"gpt-4o", MaxTokens = 128000, Encoding = @"o200k_base", IsObsolete = false } },
         { @"text-davinci-001", new ModelInfo() { Id = @"text-davinci-001", MaxTokens = 2049, Encoding = @"r50k_base", IsObsolete = true } },
         { @"text-davinci-002", new ModelInfo() { Id = @"text-davinci-002", MaxTokens = 4097, Encoding = @"p50k_base", IsObsolete = true } },
         { @"text-davinci-003", new ModelInfo() { Id = @"text-davinci-003", MaxTokens = 4097, Encoding = @"p50k_base", IsObsolete = true } },
