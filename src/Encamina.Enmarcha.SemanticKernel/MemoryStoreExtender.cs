@@ -76,9 +76,12 @@ public class MemoryStoreExtender : IMemoryStoreExtender
         var memoryRecords = await MemoryStore.GetBatchAsync(collectionName, keys, cancellationToken: cancellationToken).ToListAsync(cancellationToken);
         RaiseMemoryStoreEvent(new() { EventType = MemoryStoreEventTypes.GetMemory, MemoryIds = [memoryId], CollectionName = collectionName });
 
+        var metadata = JsonSerializer.Deserialize<Dictionary<string, string>>(memoryRecords[0].Metadata.AdditionalMetadata);
+        metadata ??= new Dictionary<string, string>();
+
         return new MemoryContent
         {
-            Metadata = JsonSerializer.Deserialize<Dictionary<string, string>>(memoryRecords[0].Metadata.AdditionalMetadata),
+            Metadata = metadata,
             Chunks = memoryRecords.Select(m => m.Metadata.Text),
         };
     }
@@ -107,7 +110,7 @@ public class MemoryStoreExtender : IMemoryStoreExtender
 
             if (totalChunks > 0)
             {
-                memoryContent.Metadata?.Add(Constants.MetadataTotalChunksCount, totalChunks.ToString());
+                memoryContent.Metadata.Add(Constants.MetadataTotalChunksCount, totalChunks.ToString());
 
                 var embeddingTasks = memoryContent.Chunks.Select(async (chunk, i) =>
                 {
@@ -126,8 +129,7 @@ public class MemoryStoreExtender : IMemoryStoreExtender
 
         await foreach (var key in asyncKeys)
         {
-            var message = @"Processed memory record {item}.";
-            logger.LogInformation(message, key);
+            logger.LogInformation(@"Processed memory record {Item}.", key);
 
             keys.Add(key);
 

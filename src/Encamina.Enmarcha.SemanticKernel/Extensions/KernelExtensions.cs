@@ -313,7 +313,7 @@ public static class KernelExtensions
 
     private static string ReadResource(Assembly assembly, string resourceName)
     {
-        using var stream = assembly.GetManifestResourceStream(resourceName);
+        using var stream = assembly.GetManifestResourceStream(resourceName) ?? throw new InvalidOperationException($"The resource stream for '{resourceName}' is null. Ensure the resource name is correct and the resource is embedded in the assembly.");
         using var streamReader = new StreamReader(stream!);
 
         return streamReader.ReadToEnd();

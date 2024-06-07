@@ -4,7 +4,6 @@ using Encamina.Enmarcha.AI.OpenAI.Abstractions;
 using Encamina.Enmarcha.SemanticKernel.Abstractions;
 using Encamina.Enmarcha.SemanticKernel.Plugins.Chat.Options;
 
-using Microsoft.Azure.Cosmos;
 using Microsoft.Extensions.Options;
 
 using Microsoft.SemanticKernel;
