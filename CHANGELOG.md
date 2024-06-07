@@ -21,6 +21,14 @@ Previous classification is not required if changes are simple or all belong to t
 ### Minor Changes
 
 - Added `MaxTokensOutput` property in `ModelInfo`.
+- Added `SaveChatMessagesHistoryBatchAsync` in `ChatHistoryProvider`.
+- Fixed some warnings in:
+    - `Encamina.Enmarcha.Bot`
+    - `Encamina.Enmarcha.Core`
+    - `Encamina.Enmarcha.Data`
+    - `Encamina.Enmarcha.Email`
+    - `Encamina.Enmarcha.Entities`
+    - `Encamina.Enmarcha.SemanticKernel` 
 
 ## [8.1.6]
 
@@ -86,14 +94,7 @@ Previous classification is not required if changes are simple or all belong to t
 - Fixed some warnings in:
   - `Encamina.Enmarcha.AI`.
   - `Encamina.Enmarcha.AspNet`
-  - `Encamina.Enmarcha.Bot`
-  - `Encamina.Enmarcha.Core`
-  - `Encamina.Enmarcha.Data`
-  - `Encamina.Enmarcha.Email`
-  - `Encamina.Enmarcha.Entities`
-  - `Encamina.Enmarcha.SemanticKernel`
 - Corrected a typo in the Spanish error message in `ResponseMessages.es.resx` from "ha encontrar" to "ha encontrado".
-- Added `SaveChatMessagesHistoryBatchAsync` in `ChatHistoryProvider`.
  
 ## [8.1.5]
 

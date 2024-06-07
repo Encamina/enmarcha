@@ -107,7 +107,7 @@ public class MemoryStoreExtender : IMemoryStoreExtender
 
             if (totalChunks > 0)
             {
-                memoryContent.Metadata.Add(Constants.MetadataTotalChunksCount, totalChunks.ToString());
+                memoryContent.Metadata?.Add(Constants.MetadataTotalChunksCount, totalChunks.ToString());
 
                 var embeddingTasks = memoryContent.Chunks.Select(async (chunk, i) =>
                 {
@@ -126,7 +126,8 @@ public class MemoryStoreExtender : IMemoryStoreExtender
 
         await foreach (var key in asyncKeys)
         {
-            logger.LogInformation(@"Processed memory record {item}.", key);
+            var message = @"Processed memory record {item}.";
+            logger.LogInformation(message, key);
 
             keys.Add(key);
 
@@ -150,7 +151,7 @@ public class MemoryStoreExtender : IMemoryStoreExtender
 
         var metadata = JsonSerializer.Deserialize<Dictionary<string, string>>(firstMemoryChunk.Metadata.AdditionalMetadata);
 
-        return int.Parse(metadata[ChunkSize]);
+        return int.Parse(metadata![ChunkSize]);
     }
 
     private async Task SaveChunks(string memoryId, string collectionName, IEnumerable<string> chunks, IDictionary<string, string>? metadata, Kernel kernel, CancellationToken cancellationToken)

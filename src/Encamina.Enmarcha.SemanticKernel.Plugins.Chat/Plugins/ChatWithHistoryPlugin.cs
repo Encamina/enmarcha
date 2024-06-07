@@ -138,7 +138,7 @@ public class ChatWithHistoryPlugin
     /// <param name="chatModelTokens">Total tokens supported by the chat model.</param>
     /// <param name="cancellationToken">A cancellation token that can be used to receive notice of cancellation.</param>
     /// <returns>The error message.</returns>
-    protected virtual async Task<string?> GetErrorMessageAsync(ChatHistory chatHistory, string locale, int systemPromptTokens, int askTokens, int chatModelTokens, CancellationToken cancellationToken)
+    protected virtual async Task<string?> GetErrorMessageAsync(ChatHistory chatHistory, string? locale, int systemPromptTokens, int askTokens, int chatModelTokens, CancellationToken cancellationToken)
     {
         var prompt = @$"Please translate from 'EN-us' to '{locale}' the following text: The length of the system prompt is {systemPromptTokens} and the length of the user ask is {askTokens}. The maximum length of the prompt and the user ask is {chatModelTokens}.";
 

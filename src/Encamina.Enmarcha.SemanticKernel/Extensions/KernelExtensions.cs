@@ -314,7 +314,7 @@ public static class KernelExtensions
     private static string ReadResource(Assembly assembly, string resourceName)
     {
         using var stream = assembly.GetManifestResourceStream(resourceName);
-        using var streamReader = new StreamReader(stream);
+        using var streamReader = new StreamReader(stream!);
 
         return streamReader.ReadToEnd();
     }

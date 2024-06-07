@@ -8,7 +8,7 @@ public sealed class MemoryContent
     /// <summary>
     /// Gets the metadata of the memory.
     /// </summary>
-    public IDictionary<string, string> Metadata { get; init; }
+    public IDictionary<string, string>? Metadata { get; init; }
 
     /// <summary>
     /// Gets the chunks of the memory.
