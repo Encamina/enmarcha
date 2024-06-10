@@ -50,7 +50,7 @@ internal sealed class EmailService : IEmailBuilder, IEmailProvider, ISmtpClientO
         => AddAttachment(fileName, data, string.IsNullOrWhiteSpace(contentTypeValue) ? null : new ContentType(contentTypeValue));
 
     /// <inheritdoc/>
-    public IEmailBuilder AddAttachment(string fileName, byte[] data, ContentType contentType)
+    public IEmailBuilder AddAttachment(string fileName, byte[] data, ContentType? contentType)
     {
         Specification.Attachments.Add(new EmailAttachmentSpecification()
         {
@@ -114,7 +114,7 @@ internal sealed class EmailService : IEmailBuilder, IEmailProvider, ISmtpClientO
     }
 
     /// <inheritdoc/>
-    public IEmailBuilder SetBody(string body, bool isHtml = false)
+    public IEmailBuilder SetBody(string? body, bool isHtml = false)
     {
         Specification.Body = body;
         Specification.IsHtmlBody = isHtml;

@@ -51,7 +51,7 @@ internal static class CellTypeExtensions
     /// <param name="cell">The cell to get the value from.</param>
     /// <param name="workbookPart">The workbook part that contains the cell.</param>
     /// <returns>A tuple containing the cell value and a boolean indicating whether the cell contains text.</returns>
-    public static (string Value, bool IsText) GetCellValue(this CellType cell, WorkbookPart workbookPart)
+    public static (string? Value, bool IsText) GetCellValue(this CellType cell, WorkbookPart workbookPart)
     {
         if (cell == null)
         {
@@ -114,11 +114,11 @@ internal static class CellTypeExtensions
             && double.TryParse(cell.CellValue?.InnerText, out var number)
             && cell.StyleIndex != null && workbookPart.WorkbookStylesPart?.Stylesheet is { CellFormats: not null, NumberingFormats: not null })
         {
-            var cellFormat = workbookPart.WorkbookStylesPart.Stylesheet.CellFormats.ElementAtOrDefault((int)cell.StyleIndex.Value) as CellFormat;
+            var cellFormat = workbookPart.WorkbookStylesPart.Stylesheet.CellFormats?.ElementAtOrDefault((int)cell.StyleIndex.Value) as CellFormat;
 
             if (cellFormat?.NumberFormatId != null)
             {
-                string? format = workbookPart.WorkbookStylesPart.Stylesheet.NumberingFormats.Elements<NumberingFormat>()
+                string? format = workbookPart.WorkbookStylesPart.Stylesheet.NumberingFormats?.Elements<NumberingFormat>()
                     .FirstOrDefault(i => i.NumberFormatId == cellFormat.NumberFormatId)?
                     .FormatCode;
 
@@ -127,7 +127,7 @@ internal static class CellTypeExtensions
                     format = defaultFormat;
                 }
 
-                return ConvertToExcelFormat(number, format);
+                return ConvertToExcelFormat(number, format!);
             }
         }
 

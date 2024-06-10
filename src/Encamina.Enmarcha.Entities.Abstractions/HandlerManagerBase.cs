@@ -34,5 +34,5 @@ public abstract class HandlerManagerBase<THandler>
     /// <summary>
     /// Gets the current collection of available handlers.
     /// </summary>
-    public virtual IEnumerable<THandler> Handlers { get; init; }
+    public virtual IEnumerable<THandler>? Handlers { get; init; }
 }

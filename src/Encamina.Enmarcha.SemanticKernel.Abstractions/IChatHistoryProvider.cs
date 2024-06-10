@@ -1,4 +1,5 @@
-﻿using Microsoft.SemanticKernel.ChatCompletion;
+﻿using Microsoft.SemanticKernel;
+using Microsoft.SemanticKernel.ChatCompletion;
 
 namespace Encamina.Enmarcha.SemanticKernel.Abstractions;
 
@@ -34,4 +35,13 @@ public interface IChatHistoryProvider
     /// <param name="cancellationToken">A cancellation token that can be used to receive notice of cancellation.</param>
     /// <returns>A <see cref="Task"/> that on completion indicates the asynchronous operation has executed.</returns>
     Task SaveChatMessagesHistoryAsync(string indexerId, string roleName, string message, CancellationToken cancellationToken);
+
+    /// <summary>
+    /// Save a set of messages in the chat history.
+    /// </summary>
+    /// <param name="indexerId">The unique identifier of the chat history indexer.</param>
+    /// <param name="messages">The list of messages to be saved.</param>
+    /// <param name="cancellationToken">A cancellation token that can be used to receive notice of cancellation.</param>
+    /// <returns>A <see cref="Task"/> that on completion indicates the asynchronous operation has executed.</returns>
+    Task SaveChatMessagesHistoryBatchAsync(string indexerId, IEnumerable<ChatMessageContent> messages, CancellationToken cancellationToken);
 }

@@ -22,7 +22,7 @@ public static class HttpContextExtensions
         Guard.IsNotNull(headerName);
 
         return httpContext.Request.Headers.TryGetValue(headerName, out var headerValue) && headerValue.Any()
-            ? headerValue[0].TrimAndAsNullIfEmpty() ?? defaultValue
+            ? headerValue[0]?.TrimAndAsNullIfEmpty() ?? defaultValue
             : defaultValue;
     }
 }

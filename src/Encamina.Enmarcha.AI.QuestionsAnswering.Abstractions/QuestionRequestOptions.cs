@@ -25,5 +25,5 @@ public class QuestionRequestOptions : IQuestionRequestOptions
     public virtual IReadOnlyCollection<string> Sources { get; } = Array.Empty<string>();
 
     /// <inheritdoc/>
-    public virtual MetadataOptions MetadataOptions { get; init; }
+    public virtual MetadataOptions? MetadataOptions { get; init; }
 }
