@@ -47,7 +47,7 @@ public class BotCloudAdapterWithErrorHandlerBase : CloudAdapter
     /// <summary>
     /// Gets this adapter's options.
     /// </summary>
-    protected virtual IBotAdapterOptions<BotCloudAdapterWithErrorHandlerBase> Options { get; init; }
+    protected virtual IBotAdapterOptions<BotCloudAdapterWithErrorHandlerBase>? Options { get; init; }
 
     /// <summary>
     /// An error handler that can catch exceptions in the middleware or application.

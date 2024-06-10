@@ -1,9 +1,9 @@
-﻿using System.Net.Mime;
+﻿#pragma warning disable S2360 // Optional parameters should not be used
+
+using System.Net.Mime;
 using System.Text;
 
 namespace Encamina.Enmarcha.Email.Abstractions;
-
-#pragma warning disable S2360 // Optional parameters should not be used
 
 /// <summary>
 /// Represents a builder that allows creating and sending a new e-mail.

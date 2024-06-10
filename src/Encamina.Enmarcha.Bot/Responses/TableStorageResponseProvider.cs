@@ -32,7 +32,7 @@ internal class TableStorageResponseProvider : IIntentResponsesProvider
     /// <param name="defaultLocale">Default locale.</param>
     /// <param name="intentCounterSeparator">
     /// An optional value that represents the intent counter separation (i.e., a value that helps separating the intent
-    /// label from a numeric value that represens its order or instance number). Defaults to '<c>-</c>'.
+    /// label from a numeric value that represents its order or instance number). Defaults to '<c>-</c>'.
     /// </param>
     /// <param name="cacheAbsoluteExpirationSeconds">
     /// An optional value for absolute expiration time in seconds for the cache. Defaults to '<c>86400</c>' seconds.
@@ -66,11 +66,13 @@ internal class TableStorageResponseProvider : IIntentResponsesProvider
     /// <inheritdoc/>
     public virtual async Task<IReadOnlyCollection<Response>> GetResponsesAsync(string intent, CultureInfo culture, CancellationToken cancellationToken)
     {
-        var intentsByLocale = await memoryCache?.GetOrCreate(CacheKey, async cacheEntry =>
+        var intentsByLocale = memoryCache != null
+        ? await memoryCache.GetOrCreateAsync(CacheKey, async cacheEntry =>
         {
-            cacheEntry.AbsoluteExpirationRelativeToNow = TimeSpan.FromSeconds(cacheAbsoluteExpirationSeconds);
-            return await InitAsync(cancellationToken);
-        }) ?? await InitAsync(cancellationToken);
+             cacheEntry.AbsoluteExpirationRelativeToNow = TimeSpan.FromSeconds(cacheAbsoluteExpirationSeconds);
+             return await InitAsync(cancellationToken);
+        })
+        : await InitAsync(cancellationToken);
 
         return (intentsByLocale.TryGetValue(culture.Name.ToUpperInvariant(), out var responsesByIntent) ||
                 intentsByLocale.TryGetValue(culture.Parent.Name.ToUpperInvariant(), out responsesByIntent) ||

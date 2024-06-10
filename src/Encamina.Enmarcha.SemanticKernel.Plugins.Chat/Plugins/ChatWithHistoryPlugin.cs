@@ -61,12 +61,12 @@ public class ChatWithHistoryPlugin
     [KernelFunction]
     [Description(@"Allows users to chat and ask questions to an Artificial Intelligence.")]
     [System.Diagnostics.CodeAnalysis.SuppressMessage(@"Design", @"CA1068:CancellationToken parameters must come last", Justification = @"We want to have optional parameters")]
-    public virtual async Task<string> ChatAsync(
+    public virtual async Task<string?> ChatAsync(
         CancellationToken cancellationToken,
         [Description(@"What the user says or asks when chatting")] string ask,
         [Description(@"The unique identifier of the chat history indexer")] string chatIndexerId,
-        [Description(@"The name of the user")] string userName = null,
-        [Description(@"The preferred language of the user while chatting")] string locale = null)
+        [Description(@"The name of the user")] string? userName = null,
+        [Description(@"The preferred language of the user while chatting")] string? locale = null)
     {
         var systemPrompt = SystemPrompt;
 
@@ -100,8 +100,12 @@ public class ChatWithHistoryPlugin
         var chatMessage = await kernel.GetRequiredService<IChatCompletionService>().GetChatMessageContentAsync(chatHistory, options.ChatRequestSettings, kernel, cancellationToken);
         var response = chatMessage.Content;
 
-        await chatHistoryProvider.SaveChatMessagesHistoryAsync(chatIndexerId, AuthorRole.User.ToString(), ask, cancellationToken);               // Save in chat history the user message (a.k.a. ask).
-        await chatHistoryProvider.SaveChatMessagesHistoryAsync(chatIndexerId, AuthorRole.Assistant.ToString(), response, cancellationToken);     // Save in chat history the assistant message (a.k.a. response).
+        var chatHistoryToSave = new List<ChatMessageContent>()
+        {
+            new(AuthorRole.User, ask), // Save in chat history the user message (a.k.a. ask).
+            new(AuthorRole.Assistant, response), // Save in chat history the assistant message (a.k.a. response).
+        };
+        await chatHistoryProvider.SaveChatMessagesHistoryBatchAsync(chatIndexerId, chatHistoryToSave, cancellationToken);
 
         return response;
     }
@@ -133,7 +137,7 @@ public class ChatWithHistoryPlugin
     /// <param name="chatModelTokens">Total tokens supported by the chat model.</param>
     /// <param name="cancellationToken">A cancellation token that can be used to receive notice of cancellation.</param>
     /// <returns>The error message.</returns>
-    protected virtual async Task<string> GetErrorMessageAsync(ChatHistory chatHistory, string locale, int systemPromptTokens, int askTokens, int chatModelTokens, CancellationToken cancellationToken)
+    protected virtual async Task<string?> GetErrorMessageAsync(ChatHistory chatHistory, string? locale, int systemPromptTokens, int askTokens, int chatModelTokens, CancellationToken cancellationToken)
     {
         var prompt = @$"Please translate from 'EN-us' to '{locale}' the following text: The length of the system prompt is {systemPromptTokens} and the length of the user ask is {askTokens}. The maximum length of the prompt and the user ask is {chatModelTokens}.";
 

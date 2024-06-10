@@ -34,11 +34,11 @@ public class DocumentConnectorProviderBase : IDocumentConnectorProvider
     /// <inheritdoc/>
     public virtual IDocumentConnector GetDocumentConnector(string fileExtension)
     {
-        return GetDocumentConnector(fileExtension, true);
+        return GetDocumentConnector(fileExtension, true)!;
     }
 
     /// <inheritdoc/>
-    public IDocumentConnector GetDocumentConnector(string fileExtension, bool throwException)
+    public IDocumentConnector? GetDocumentConnector(string fileExtension, bool throwException)
     {
         if (documentConnectors.TryGetValue(fileExtension.ToUpperInvariant(), out var value))
         {

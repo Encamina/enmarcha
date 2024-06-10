@@ -22,7 +22,7 @@ internal static class TranslatorUtils
     /// <returns>
     /// The trasnslated text in the given <paramref name="language"/> or the given default value from <paramref name="default"/>.
     /// </returns>
-    internal static string GetTranslation(IDictionary<string, string> translations, CultureInfo language, string @default = @"")
+    internal static string GetTranslation(IDictionary<string, string>? translations, CultureInfo language, string @default = @"")
     {
         return translations != null && (translations.TryGetValue(language.Name, out var value) || translations.TryGetValue(language.Parent.Name, out value)) ? value : @default;
     }

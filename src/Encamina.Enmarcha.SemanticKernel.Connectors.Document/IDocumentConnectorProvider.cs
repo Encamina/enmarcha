@@ -29,7 +29,7 @@ public interface IDocumentConnectorProvider
     /// <exception cref="InvalidOperationException">
     /// If the <paramref name="fileExtension"/> is not supported or no suitable <see cref="IDocumentConnector"/> instance for it can be found.
     /// </exception>
-    IDocumentConnector GetDocumentConnector(string fileExtension, bool throwException);
+    IDocumentConnector? GetDocumentConnector(string fileExtension, bool throwException);
 
     /// <summary>
     /// Determines whether a specified file extension is supported.

@@ -15,7 +15,7 @@ internal class Worksheet
     /// <summary>
     /// Gets the name of the worksheet.
     /// </summary>
-    public string Name { get; private init; }
+    public string? Name { get; private init; }
 
     /// <summary>
     /// Gets a value indicating whether the worksheet is hidden.
@@ -150,7 +150,7 @@ internal class Worksheet
     {
         return worksheet.Descendants<Row>()
             .Where((r) => r.Hidden != null && r.Hidden.Value && r.RowIndex?.Value is not null)
-            .Select(r => (int)r.RowIndex.Value)
+            .Select(r => (int)r.RowIndex!.Value)
             .ToList();
     }
 
@@ -163,7 +163,7 @@ internal class Worksheet
     {
         return worksheet.Descendants<Column>()
             .Where(c => c.Hidden != null && c.Hidden.Value && c.Min != null && c.Max != null)
-            .SelectMany(c => Enumerable.Range((int)c.Min.Value, (int)c.Max.Value - (int)c.Min.Value + 1))
+            .SelectMany(c => Enumerable.Range((int)c.Min!.Value, (int)c.Max!.Value - (int)c.Min.Value + 1))
             .ToList();
     }
 
@@ -304,8 +304,8 @@ internal class Worksheet
     /// <returns>A list of rows, each containing a list of cells, representing the range of cells with text.</returns>
     private static List<List<Cell>> GetOnlyCellsRangeWithText(IList<List<Cell>> rows)
     {
-        var firstNonEmptyRowIndex = rows.IndexOf(rows.FirstOrDefault(r => r.Exists(c => !c.IsNullOrWhiteSpace)));
-        var lastNonEmptyRowIndex = rows.IndexOf(rows.LastOrDefault(r => r.Exists(c => !c.IsNullOrWhiteSpace)));
+        var firstNonEmptyRowIndex = rows.IndexOf(rows.FirstOrDefault(r => r.Exists(c => !c.IsNullOrWhiteSpace))!);
+        var lastNonEmptyRowIndex = rows.IndexOf(rows.LastOrDefault(r => r.Exists(c => !c.IsNullOrWhiteSpace))!);
 
         var columnsRange = Enumerable.Range(0, rows[0].Count).ToList();
 

@@ -13,7 +13,7 @@ using Microsoft.Bot.Schema;
 namespace Encamina.Enmarcha.Bot.Middlewares;
 
 /// <summary>
-/// Middleware to automatically translate messages sent to consumers duting start activities into the language
+/// Middleware to automatically translate messages sent to consumers during start activities into the language
 /// received as <see cref="Activity.Locale"/>.
 /// </summary>
 /// <remarks>
@@ -31,7 +31,7 @@ public class StartActivityTranslatorMiddleware : IMiddleware
     /// A cognitive service provider to locate a language detection and a text translation services from the given names.
     /// </param>
     public StartActivityTranslatorMiddleware(string textTranslationServiceName, ICognitiveServiceProvider cognitiveServiceProvider)
-        : this(cognitiveServiceProvider?.GetTextTranslationService(textTranslationServiceName))
+        : this(cognitiveServiceProvider.GetTextTranslationService(textTranslationServiceName))
     {
     }
 

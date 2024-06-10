@@ -87,13 +87,13 @@ public class QuestionAnsweringPlugin
     /// <returns>A string representing the answer for the <paramref name="question"/> based on all the information found from searching the memory's collections.</returns>
     [KernelFunction]
     [Description(@"Answer questions using information obtained from a memory. The given question is used as query to search from a list (usually comma-separated) of collections. The result is used as context to answer the question.")]
-    public virtual async Task<string> QuestionAnsweringFromMemoryQueryAsync(
+    public virtual async Task<string?> QuestionAnsweringFromMemoryQueryAsync(
         [Description(@"The question to answer and search the memory for")] string question,
         [Description(@"A list of memory's collections, usually comma-separated")] string collectionsStr,
         [Description(@"Minimum relevance for the search results")] double minRelevance = 0.75,
         [Description(@"Maximum number of results per queried collection")] int resultsLimit = 20,
         [Description(@"The character (usually a comma) that separates each collection from the given list of collections")] char collectionSeparator = ',',
-        [Description(@"The locale in which the response is generated. This parameter is optional. If not provided, the question language is used.")] string locale = null,
+        [Description(@"The locale in which the response is generated. This parameter is optional. If not provided, the question language is used.")] string? locale = null,
         CancellationToken cancellationToken = default)
     {
         // This method was designed to maximize the use of tokens in an LLM model (like GPT).
@@ -145,10 +145,10 @@ public class QuestionAnsweringPlugin
     /// <returns>A string representing the answer for the <paramref name="input"/> based on all the information found from searching the memory's collections.</returns>
     [KernelFunction]
     [Description(@"Answer questions using information from a context.")]
-    public virtual async Task<string> QuestionAnsweringFromContextAsync(
+    public virtual async Task<string?> QuestionAnsweringFromContextAsync(
         [Description(@"The question to answer with information from a context.")] string input,
         [Description(@"Context with information that may contain the answer for question")] string context,
-        [Description(@"The locale in which the response is generated. This parameter is optional. If not provided, the input language is used.")] string locale = null,
+        [Description(@"The locale in which the response is generated. This parameter is optional. If not provided, the input language is used.")] string? locale = null,
         CancellationToken cancellationToken = default)
     {
         var functionArguments = new KernelArguments(questionAnsweringFromContextFunctionExecutionSettings)
@@ -163,14 +163,14 @@ public class QuestionAnsweringPlugin
         return functionResult.GetValue<string>();
     }
 
-    private static string GetAnswerLocale(string locale)
+    private static string GetAnswerLocale(string? locale)
     {
         return string.IsNullOrWhiteSpace(locale)
             ? "the SAME LANGUAGE as the QUESTION"
             : $"\"{locale}\" LANGUAGE";
     }
 
-    private Task<int> GetQuestionAnsweringFromContextFunctionUsedTokensAsync(KernelFunction questionAnsweringFromContextFunction, string input, string locale, CancellationToken cancellationToken)
+    private Task<int> GetQuestionAnsweringFromContextFunctionUsedTokensAsync(KernelFunction questionAnsweringFromContextFunction, string input, string? locale, CancellationToken cancellationToken)
     {
         var functionArguments = new KernelArguments(questionAnsweringFromContextFunctionExecutionSettings)
         {

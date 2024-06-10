@@ -6,7 +6,7 @@ using Encamina.Enmarcha.Entities.Abstractions;
 namespace Encamina.Enmarcha.Email.Abstractions;
 
 /// <summary>
-/// Represent's common SMTP configuration parameters or options.
+/// Represents common SMTP configuration parameters or options.
 /// </summary>
 public class SmtpClientOptions : INameable
 {
