@@ -14,15 +14,16 @@ public abstract class ValidableEntity : IValidableEntity
     {
         var validationContext = new ValidationContext(this);
         var validationResults = new List<ValidationResult>();
-
         return !Validator.TryValidateObject(this, validationContext, validationResults, true)
-            ? validationResults.Select(validationResult => validationResult.ErrorMessage)
+            ? validationResults
+                .Where(validationResult => validationResult.ErrorMessage != null)
+                .Select(validationResult => validationResult.ErrorMessage!)
             : Enumerable.Empty<string>();
     }
 
     /// <inheritdoc/>
     /// <exception cref="AggregateException">
-    /// Thrown if the entity is not valid. Inside this exeption type, various <see cref="ValidationException"/> are provided with specific validation error messages.
+    /// Thrown if the entity is not valid. Inside this exception type, various <see cref="ValidationException"/> are provided with specific validation error messages.
     /// </exception>
     public virtual void ValidateAndThrowException()
     {

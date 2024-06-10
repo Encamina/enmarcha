@@ -22,5 +22,5 @@ public abstract class NameableHandlerManagerBase<THandler> : HandlerManagerBase<
     /// <summary>
     /// Gets the current collection of available handlers indexed by the handle's name.
     /// </summary>
-    public new IDictionary<string, THandler> Handlers { get; init; }
+    public new IDictionary<string, THandler>? Handlers { get; init; }
 }
