@@ -13,5 +13,5 @@ public abstract class IdentifiableBase<T> : IIdentifiable<T>
     public virtual T Id { get; init; }
 
     /// <inheritdoc/>
-    object IIdentifiable.Id => Id;
+    object IIdentifiable.Id => Id!;
 }

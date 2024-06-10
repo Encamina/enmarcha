@@ -127,7 +127,7 @@ public class ExcelToMarkdownDocumentConnector : IDocumentConnector
         // Intentionally not implemented to comply with the Liskov Substitution Principle
     }
 
-    private static string ApplyStyles(string value, bool bold, bool italic)
+    private static string? ApplyStyles(string? value, bool bold, bool italic)
     {
         if (string.IsNullOrWhiteSpace(value))
         {
@@ -157,7 +157,7 @@ public class ExcelToMarkdownDocumentConnector : IDocumentConnector
         return value;
     }
 
-    private string GetCellTextValue(Cell cell)
+    private string? GetCellTextValue(Cell cell)
     {
         // Get the cell value with or without formatting
         var cellValue = WithFormattedValues ? cell.FormattedText : cell.Text;

@@ -107,7 +107,7 @@ public class PdfWithTocDocumentConnector : CleanPdfDocumentConnector
                 // It is the last title. Extract the text to the end.
 
                 var lastPage = pages.MaxBy(p => p.Number);
-                var lastIndex = lastPage.Content.Length;
+                var lastIndex = lastPage!.Content.Length;
 
                 tocContent = GetTocContent(pages, currentPage, currentIndex, lastPage, lastIndex);
             }

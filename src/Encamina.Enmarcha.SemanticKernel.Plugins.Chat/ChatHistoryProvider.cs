@@ -5,7 +5,7 @@ using Encamina.Enmarcha.SemanticKernel.Plugins.Chat.Options;
 using Encamina.Enmarcha.SemanticKernel.Plugins.Chat.Plugins;
 
 using Microsoft.Extensions.Options;
-
+using Microsoft.SemanticKernel;
 using Microsoft.SemanticKernel.ChatCompletion;
 
 namespace Encamina.Enmarcha.SemanticKernel.Plugins.Chat;
@@ -112,5 +112,18 @@ public class ChatHistoryProvider : IChatHistoryProvider
             Message = message,
             TimestampUtc = DateTime.UtcNow,
         }, cancellationToken);
+    }
+
+    /// <inheritdoc/>
+    public async Task SaveChatMessagesHistoryBatchAsync(string indexerId, IEnumerable<ChatMessageContent> messages, CancellationToken cancellationToken)
+    {
+        await chatMessagesHistoryRepository.AddBatchAsync(messages.Select(message => new ChatMessageHistoryRecord()
+        {
+            Id = Guid.NewGuid().ToString(),
+            IndexerId = indexerId,
+            RoleName = message.Role.ToString(),
+            Message = message.Content!,
+            TimestampUtc = DateTime.UtcNow,
+        }), cancellationToken);
     }
 }

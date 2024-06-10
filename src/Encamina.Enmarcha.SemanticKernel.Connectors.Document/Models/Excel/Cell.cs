@@ -12,12 +12,12 @@ internal class Cell
     /// <summary>
     /// Gets the text in the cell.
     /// </summary>
-    public string Text { get; private init; }
+    public string? Text { get; private init; }
 
     /// <summary>
     /// Gets the formatted text in the cell.
     /// </summary>
-    public string FormattedText { get; private init; }
+    public string? FormattedText { get; private init; }
 
     /// <summary>
     /// Gets a value indicating whether the text in the cell is null, empty or white space.
@@ -27,7 +27,7 @@ internal class Cell
     /// <summary>
     /// Gets the reference of the cell. Such us A1, B2, etc.
     /// </summary>
-    public string Reference { get; private init; }
+    public string? Reference { get; private init; }
 
     /// <summary>
     /// Gets a value indicating whether the text in the cell is bold.

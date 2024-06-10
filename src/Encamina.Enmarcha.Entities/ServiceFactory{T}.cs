@@ -27,28 +27,28 @@ public class ServiceFactory<T> : IServiceFactory<T> where T : class
     }
 
     /// <inheritdoc/>
-    public virtual T ById<TId>(TId serviceId) => ById(serviceId, true);
+    public virtual T ById<TId>(TId serviceId) => ById(serviceId, true)!;
 
     /// <inheritdoc/>
-    public virtual T ById<TId>(TId serviceId, bool throwIfNotFound)
+    public virtual T? ById<TId>(TId serviceId, bool throwIfNotFound)
     {
         return ProcessService(GetService<T>(s => s is IIdentifiable<TId> identifiable && identifiable.Id.Equals(serviceId)), throwIfNotFound, Resources.ExceptionMessages.InvalidServiceId, nameof(serviceId), typeof(T), serviceId);
     }
 
     /// <inheritdoc/>
-    public virtual T ByName(string serviceName) => ByName(serviceName, true);
+    public virtual T ByName(string serviceName) => ByName(serviceName, true)!;
 
     /// <inheritdoc/>
-    public virtual T ByName(string serviceName, bool throwIfNotFound)
+    public virtual T? ByName(string serviceName, bool throwIfNotFound)
     {
         return ProcessService(GetService<T>(s => s is INameable nameable && nameable.Name.Equals(serviceName)), throwIfNotFound, Resources.ExceptionMessages.InvalidServiceName, nameof(serviceName), typeof(T), serviceName);
     }
 
     /// <inheritdoc/>
-    public virtual T ByType(Type serviceType) => ByType(serviceType, true);
+    public virtual T ByType(Type serviceType) => ByType(serviceType, true)!;
 
     /// <inheritdoc/>
-    public virtual T ByType(Type serviceType, bool throwIfNotFound)
+    public virtual T? ByType(Type serviceType, bool throwIfNotFound)
     {
         return ProcessService(GetService<T>(s => s.GetType() == serviceType), throwIfNotFound, Resources.ExceptionMessages.InvaidServiceType, nameof(serviceType), serviceType);
     }
@@ -67,7 +67,7 @@ public class ServiceFactory<T> : IServiceFactory<T> where T : class
     /// This method disposes the <see cref="IServiceScope"/> used by this factory.
     /// </remarks>
     /// <param name="disposing">
-    /// A flag value indicating whether this instance is being disponsed or not, to prevent redundant calls.
+    /// A flag value indicating whether this instance is being disposed or not, to prevent redundant calls.
     /// </param>
     protected virtual void Dispose(bool disposing)
     {
@@ -82,7 +82,7 @@ public class ServiceFactory<T> : IServiceFactory<T> where T : class
         }
     }
 
-    private static T ProcessService(T service, bool throwIfNotFound, string exceptionMessage, string parameterName, params object[] exceptionMessageParameters)
+    private static T? ProcessService(T service, bool throwIfNotFound, string exceptionMessage, string parameterName, params object[] exceptionMessageParameters)
     {
         return service == null && throwIfNotFound
             ? throw new ArgumentException(string.Format(exceptionMessage, exceptionMessageParameters), parameterName)

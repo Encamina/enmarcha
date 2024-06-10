@@ -24,7 +24,7 @@ public interface IServiceFactory<out T> : IDisposable where T : class
     /// otherwise <see langword="false"/> and don't throw any exception.
     /// </param>
     /// <returns>A valid instance of the service if found.</returns>
-    T ById<TId>(TId serviceId, bool throwIfNotFound);
+    T? ById<TId>(TId serviceId, bool throwIfNotFound);
 
     /// <summary>
     /// Gets a service by its name.
@@ -42,7 +42,7 @@ public interface IServiceFactory<out T> : IDisposable where T : class
     /// otherwise <see langword="false"/> and don't throw any exception.
     /// </param>
     /// <returns>A valid instance of the service if found.</returns>
-    T ByName(string serviceName, bool throwIfNotFound);
+    T? ByName(string serviceName, bool throwIfNotFound);
 
     /// <summary>
     /// Gets a service by its type.
@@ -64,5 +64,5 @@ public interface IServiceFactory<out T> : IDisposable where T : class
     /// otherwise <see langword="false"/> and don't throw any exception.
     /// </param>
     /// <returns>A valid instance of the service if found.</returns>
-    T ByType(Type serviceType, bool throwIfNotFound);
+    T? ByType(Type serviceType, bool throwIfNotFound);
 }

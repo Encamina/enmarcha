@@ -21,6 +21,14 @@ Previous classification is not required if changes are simple or all belong to t
 ### Minor Changes
 
 - Added `MaxTokensOutput` property in `ModelInfo`.
+- Added `SaveChatMessagesHistoryBatchAsync` in `ChatHistoryProvider`.
+- Fixed some warnings in:
+    - `Encamina.Enmarcha.Bot`
+    - `Encamina.Enmarcha.Core`
+    - `Encamina.Enmarcha.Data`
+    - `Encamina.Enmarcha.Email`
+    - `Encamina.Enmarcha.Entities`
+    - `Encamina.Enmarcha.SemanticKernel` 
 
 ## [8.1.6]
 
@@ -83,13 +91,9 @@ Previous classification is not required if changes are simple or all belong to t
 - Class `SlidePptxDocumentConnector` is now `public` instead of `internal`.
 - Added `UseAzureActiveDirectoryAuthentication` and `TokenCredentialsOptions` properties in `AzureOpenAIOptions`.
 - Added `RequiredIfAttribute` to validate properties based on the value of another property.
-- Fixed warnings CS8603 and CS8025 in:
+- Fixed some warnings in:
   - `Encamina.Enmarcha.AI`.
   - `Encamina.Enmarcha.AspNet`
-  - `Encamina.Enmarcha.Bot`
-  - `Encamina.Enmarcha.Core`
-  - `Encamina.Enmarcha.Data`
-  - `Encamina.Enmarcha.Email`
 - Corrected a typo in the Spanish error message in `ResponseMessages.es.resx` from "ha encontrar" to "ha encontrado".
  
 ## [8.1.5]
