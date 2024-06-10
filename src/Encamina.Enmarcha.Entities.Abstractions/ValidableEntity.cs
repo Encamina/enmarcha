@@ -15,9 +15,9 @@ public abstract class ValidableEntity : IValidableEntity
         var validationContext = new ValidationContext(this);
         var validationResults = new List<ValidationResult>();
         return !Validator.TryValidateObject(this, validationContext, validationResults, true)
-            ? validationResults.Select(validationResult => validationResult.ErrorMessage)
-                .Where(errorMessage => errorMessage != null)
-                .Select(errorMessage => errorMessage!)
+            ? validationResults
+                .Where(validationResult => validationResult.ErrorMessage != null)
+                .Select(validationResult => validationResult.ErrorMessage!)
             : Enumerable.Empty<string>();
     }
 
