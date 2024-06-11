@@ -22,7 +22,7 @@ public class ExecutionContext : IdentifiableBase<Guid>, IExecutionContext
     /// Initializes a new instance of the <see cref="ExecutionContext"/> class from a given template.
     /// </summary>
     /// <param name="template">An execution context template with values to configure this execution context.</param>
-    public ExecutionContext(IExecutionContextTemplate template)
+    public ExecutionContext(IExecutionContextTemplate? template)
     {
         Id = Guid.NewGuid();
 

@@ -23,12 +23,13 @@ Previous classification is not required if changes are simple or all belong to t
 - Added `MaxTokensOutput` property in `ModelInfo`.
 - Added `SaveChatMessagesHistoryBatchAsync` in `ChatHistoryProvider`.
 - Fixed some warnings in:
-    - `Encamina.Enmarcha.Bot`
-    - `Encamina.Enmarcha.Core`
-    - `Encamina.Enmarcha.Data`
-    - `Encamina.Enmarcha.Email`
-    - `Encamina.Enmarcha.Entities`
-    - `Encamina.Enmarcha.SemanticKernel` 
+  - `Encamina.Enmarcha.Bot`
+  - `Encamina.Enmarcha.Core`
+  - `Encamina.Enmarcha.Data`
+  - `Encamina.Enmarcha.Email`
+  - `Encamina.Enmarcha.Entities`
+  - `Encamina.Enmarcha.SemanticKernel` 
+  - `Encamina.Enmarcha.Services`
 
 ## [8.1.6]
 
@@ -37,7 +38,7 @@ Previous classification is not required if changes are simple or all belong to t
 - Class `IDocumentConnectorUtils` has been removed. Please use an instance of `IDocumentConnectorProvider` and the method `SupportedFileExtension` to check if the file extension is supported and the method `GetDocumentConnector` to get the appropriate document connector.
 - The method `GetDocumentConnector` from interface type `IDocumentConnectorProvider` now throws `InvalidOperationException` if a connector for the specified file extension is not found.
 - Renamed `UserId` to `IndexerId` in `ChatMessageHistoryRecord`. This change requires consumers to update their database to match the new property name. 
-   - In case of using Cosmos DB, `IndexerId` should be the new partition key of the collection. You can learn how to change the partition key and do the data migration [here](https://learn.microsoft.com/en-us/azure/cosmos-db/nosql/change-partition-key).
+  - In case of using Cosmos DB, `IndexerId` should be the new partition key of the collection. You can learn how to change the partition key and do the data migration [here](https://learn.microsoft.com/en-us/azure/cosmos-db/nosql/change-partition-key).
 - Split the `OpenAIOptions` class into two separate classes:
   - Created a new abstract class `OpenAIOptionsBase` containing common properties related to OpenAI model configuration.
   - Moved the `Key` property to a new concrete class `OpenAIOptions`.
