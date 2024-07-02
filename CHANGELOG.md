@@ -18,6 +18,35 @@ Previous classification is not required if changes are simple or all belong to t
 
 ## [8.1.7]
 
+### Major Changes
+
+- Updated dependencies:
+    - Updated `Azure.AI.OpenAI` from `1.0.0-beta.16` to `1.0.0-beta.17`.
+    - Updated `Azure.Core` from `1.38.0` to `1.40.0`.
+    - Updated `Bogus` from `35.5.0` to `35.5.1`.
+    - Updated `MailKit` from `4.5.0` to `4.7.0`.
+    - Updated `Microsoft.AspNetCore.Authentication.JwtBearer` from `8.0.4` to `8.0.6`.
+    - Updated `Microsoft.AspNetCore.Authentication.OpenIdConnect` from `8.0.4` to `8.0.6`.
+    - Updated `Microsoft.Azure.Cosmos` from `3.39.0` to `3.41.0`.
+    - Updated `Microsoft.Bot.Builder.Azure` from `4.22.3` to `4.22.7`.
+    - Updated `Microsoft.Bot.Builder.Azure.Blobs` from `4.22.3` to `4.22.7`.
+    - Updated `Microsoft.Bot.Builder.Dialogs` from `4.22.3` to `4.22.7`.
+    - Updated `Microsoft.Bot.Builder.Integration.ApplicationInsights.Core` from `4.22.3` to `4.22.7`.
+    - Updated `Microsoft.Bot.Builder.Integration.AspNet.Core` from `4.22.3` to `4.22.7`.
+    - Updated `Microsoft.EntityFrameworkCore` from `8.0.4` to `8.0.6`.
+    - Updated `Microsoft.EntityFrameworkCore.SqlServer` from `8.0.4` to `8.0.6`.
+    - Updated `Microsoft.Extensions.Azure` from `1.7.3` to `1.7.4`.
+    - Updated `Microsoft.NET.Test.Sdk` from `17.9.0` to `17.10.0`.
+    - Updated `Microsoft.SemanticKernel.Abstractions` from `1.10.0` to `1.15.0`.
+    - Updated `Microsoft.SemanticKernel.Core` from `1.10.0` to `1.15.0`.
+    - Updated `MimeKit` from `4.5.0` to `4.7.0`.
+    - Updated `SharpToken` from `2.0.2` to `2.0.3`.
+    - Updated `Swashbuckle.AspNetCore.SwaggerGen` from `6.5.0` to `6.6.2`.
+    - Updated `xunit` from `2.7.1` to `2.8.1`.
+    - Updated `xunit.analyzers` from `1.12.0` to `1.14.0`.
+    - Updated `xunit.extensibility.core` from `2.7.1` to `2.8.1`.
+    - Updated `xunit.runner.visualstudio` from `2.5.8` to `2.8.1`.
+
 ### Minor Changes
 
 - Added `MaxTokensOutput` property in `ModelInfo`.
@@ -28,8 +57,8 @@ Previous classification is not required if changes are simple or all belong to t
     - `Encamina.Enmarcha.Data`
     - `Encamina.Enmarcha.Email`
     - `Encamina.Enmarcha.Entities`
-    - `Encamina.Enmarcha.SemanticKernel` 
-
+    - `Encamina.Enmarcha.SemanticKernel`
+  
 ## [8.1.6]
 
 ### Breaking Changes 
