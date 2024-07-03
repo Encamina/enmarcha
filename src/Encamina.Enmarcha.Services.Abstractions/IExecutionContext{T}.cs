@@ -5,7 +5,7 @@ namespace Encamina.Enmarcha.Services.Abstractions;
 /// <summary>
 /// Represents a basic execution context for a specific type.
 /// </summary>
-/// <typeparam name="T">The specific type of this excecution context.</typeparam>
+/// <typeparam name="T">The specific type of this execution context.</typeparam>
 public interface IExecutionContext<T> : IExecutionContext
     where T : class
 {
