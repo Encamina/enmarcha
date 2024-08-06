@@ -4,14 +4,12 @@ using System.Text;
 
 using CommunityToolkit.Diagnostics;
 
-using Microsoft.SemanticKernel.Plugins.Document;
-
 namespace Encamina.Enmarcha.SemanticKernel.Connectors.Document.Connectors;
 
 /// <summary>
 /// Extract text from a text (<c>.txt</c>) file.
 /// </summary>
-public sealed class TxtDocumentConnector : IDocumentConnector
+public sealed class TxtDocumentConnector : IEnmarchaDocumentConnector
 {
     private readonly Encoding encoding;
 
@@ -23,6 +21,9 @@ public sealed class TxtDocumentConnector : IDocumentConnector
     {
         this.encoding = encoding;
     }
+
+    /// <inheritdoc/>
+    public IReadOnlyList<string> CompatibleFileFormats => [".TXT"];
 
     /// <inheritdoc/>
     public string ReadText(Stream stream)

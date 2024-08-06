@@ -2,8 +2,6 @@
 
 using CommunityToolkit.Diagnostics;
 
-using Microsoft.SemanticKernel.Plugins.Document;
-
 using UglyToad.PdfPig;
 
 namespace Encamina.Enmarcha.SemanticKernel.Connectors.Document.Connectors;
@@ -17,8 +15,11 @@ namespace Encamina.Enmarcha.SemanticKernel.Connectors.Document.Connectors;
 /// each page generates text as if it were a single paragraph, and line breaks are added between different pages for separation.
 /// For strict format text extraction, consider using <see cref="StrictFormatCleanPdfDocumentConnector"/>.
 /// </remarks>
-public class PdfDocumentConnector : IDocumentConnector
+public class PdfDocumentConnector : IEnmarchaDocumentConnector
 {
+    /// <inheritdoc/>
+    public IReadOnlyList<string> CompatibleFileFormats => [".TXT"];
+
     /// <inheritdoc/>
     public virtual string ReadText(Stream stream)
     {

@@ -5,14 +5,12 @@ using System.Text.RegularExpressions;
 
 using CommunityToolkit.Diagnostics;
 
-using Microsoft.SemanticKernel.Plugins.Document;
-
 namespace Encamina.Enmarcha.SemanticKernel.Connectors.Document.Connectors;
 
 /// <summary>
 /// Document connector for Video Text Tracks (<c>.vtt</c>) files.
 /// </summary>
-public sealed class VttDocumentConnector : IDocumentConnector
+public sealed class VttDocumentConnector : IEnmarchaDocumentConnector
 {
     private static readonly Regex PatternRegex
         = new(@"\d+\n\d{2}:\d{2}:\d{2}\.\d{3} --> \d{2}:\d{2}:\d{2}\.\d{3}\n(.+?)(?=\n\d+\n\d{2}:\d{2}:\d{2}\.\d{3} -->|\n\n|$)", RegexOptions.Compiled, TimeSpan.FromMilliseconds(100));
@@ -27,6 +25,9 @@ public sealed class VttDocumentConnector : IDocumentConnector
     {
         this.encoding = encoding;
     }
+
+    /// <inheritdoc/>
+    public IReadOnlyList<string> CompatibleFileFormats => [".VTT"];
 
     /// <inheritdoc/>
     public string ReadText(Stream stream)
