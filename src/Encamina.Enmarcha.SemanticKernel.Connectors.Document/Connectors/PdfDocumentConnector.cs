@@ -18,7 +18,7 @@ namespace Encamina.Enmarcha.SemanticKernel.Connectors.Document.Connectors;
 public class PdfDocumentConnector : IEnmarchaDocumentConnector
 {
     /// <inheritdoc/>
-    public IReadOnlyList<string> CompatibleFileFormats => [".TXT"];
+    public IReadOnlyList<string> CompatibleFileFormats => [".PDF"];
 
     /// <inheritdoc/>
     public virtual string ReadText(Stream stream)

@@ -11,7 +11,7 @@ namespace Encamina.Enmarcha.SemanticKernel.Connectors.Document.Connectors;
 /// <summary>
 /// Extracts the text from a Microsoft PowerPoint (<c>.pptx</c>) file, one line per paragraph found in each slide.
 /// </summary>
-public sealed class ParagraphPptxDocumentConnector : BasePptxDocumentConnector
+public class ParagraphPptxDocumentConnector : BasePptxDocumentConnector
 {
     /// <inheritdoc/>
     protected override IEnumerable<string> GetAllTextInSlide(SlidePart slidePart)
