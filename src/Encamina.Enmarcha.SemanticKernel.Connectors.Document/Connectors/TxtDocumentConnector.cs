@@ -23,7 +23,7 @@ public sealed class TxtDocumentConnector : IEnmarchaDocumentConnector
     }
 
     /// <inheritdoc/>
-    public IReadOnlyList<string> CompatibleFileFormats => [".TXT"];
+    public IReadOnlyList<string> CompatibleFileFormats => [".TXT", ".MD"];
 
     /// <inheritdoc/>
     public string ReadText(Stream stream)

@@ -1,7 +1,5 @@
 ﻿using Encamina.Enmarcha.AI.Abstractions;
 
-using Microsoft.SemanticKernel.Plugins.Document;
-
 namespace Encamina.Enmarcha.SemanticKernel.Connectors.Document;
 
 /// <summary>
@@ -14,7 +12,9 @@ public abstract class DocumentContentSemanticExtractorBase : DocumentConnectorPr
     /// </summary>
     /// <param name="semanticTextSplitter">A valid instance of <see cref="ISemanticTextSplitter"/> to use when extracting semantic content from documents.</param>
     /// <param name="embeddingsGeneratorFunction">An embeddings function to use when extracting semantic content from documents.</param>
-    protected DocumentContentSemanticExtractorBase(ISemanticTextSplitter semanticTextSplitter, Func<IList<string>, CancellationToken, Task<IList<ReadOnlyMemory<float>>>> embeddingsGeneratorFunction)
+    /// <param name="connectors">List of document connectors to register.</param>
+    protected DocumentContentSemanticExtractorBase(ISemanticTextSplitter semanticTextSplitter, Func<IList<string>, CancellationToken, Task<IList<ReadOnlyMemory<float>>>> embeddingsGeneratorFunction, IEnumerable<IEnmarchaDocumentConnector> connectors)
+        : base(connectors)
     {
         SemanticTextSplitter = semanticTextSplitter;
         EmbeddingsGeneratorFunction = embeddingsGeneratorFunction;
