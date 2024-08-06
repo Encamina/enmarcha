@@ -186,6 +186,16 @@ public static class IServiceCollectionExtensions
     }
 
     /// <summary>
+    /// Adds the <see cref="CsvTsvDocumentConnector"/> implementation of <see cref="IEnmarchaDocumentConnector"/> to the specified <see cref="IServiceCollection"/> as a singleton service.
+    /// </summary>
+    /// <param name="services">The <see cref="IServiceCollection"/> to add services to.</param>
+    /// <returns>The <see cref="IServiceCollection"/> so that additional calls can be chained.</returns>
+    public static IServiceCollection AddCsvTsvDocumentConnector(this IServiceCollection services)
+    {
+        return services.AddSingleton<IEnmarchaDocumentConnector, CsvTsvDocumentConnector>();
+    }
+
+    /// <summary>
     /// Adds the default document connectors to the specified <see cref="IServiceCollection"/>.
     /// </summary>
     /// <param name="services">The <see cref="IServiceCollection"/> to add services to.</param>
