@@ -1,7 +1,5 @@
 ﻿using Encamina.Enmarcha.AI.Abstractions;
 
-using Microsoft.SemanticKernel.Plugins.Document;
-
 namespace Encamina.Enmarcha.SemanticKernel.Connectors.Document;
 
 /// <summary>
