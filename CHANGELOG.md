@@ -16,6 +16,27 @@ Also, any bug fix must start with the prefix �Bug fix:� followed by the desc
 
 Previous classification is not required if changes are simple or all belong to the same category.
 
+## [8.1.8]
+
+### Breaking Changes 
+- `DocumentConnectorProviderBase` no longer automatically registers document connectors. Instead, it will register available connectors in the dependency container. 
+  This means that document connectors must be registered manually in the dependency container. For this purpose, new extension methods have been added to `IServiceCollection` that allow to register document connectors in the dependency container.
+  Also the `AddDefaultDocumentConnectors` method has been added in `IServiceCollectionExtensions` to register document connectors that were registered by default before.
+
+### Major Changes
+- Added the `IEnmarchaDocumentConnector` interface that extends the existing `IDocumentConnector`. This interface, by now, adds a `CompatibleFileFormats` property that returns the file formats supported by the connector. Existing document connectors have been updated to implement this interface.
+- Added `CsvTsvDocumentConnector` document connector that allows to read CSV and TSV files keeping the headers in different chunks.
+- Added `SkVisionImageDocumentConnector` which allows to read images and extract text from them. Using Semantic Kernel vision capabilities.
+- The `IDocumentConnectorProvider` interface now works with the `IEnframeDocumentConnector` interface instead of `IDocumentConnector`.
+    - The `AddDocumentConnector` function has been modified by removing the `fileExtension` parameter, which will now come in the `CompatibleFileFormats` property of the document connector.
+- The `ParagraphPptxDocumentConnector` class is no longer sealed, allowing the creation of derived classes.
+- The `SlidePptxDocumentConnector` class is no longer sealed, allowing the creation of derived classes.
+- The `TxtDocumentConnector` class is no longer sealed, allowing the creation of derived classes.
+- The `VttDocumentConnector` class is no longer sealed, allowing the creation of derived classes.
+- Updated dependencies:
+    - Updated `MimeKit` from `4.5.0` to `4.7.1` in `Encamina.Enmarcha.Testing.Smtp`.`
+    - Updated `System.Text.Json` from `8.0.3` to `8.0.4`.
+
 ## [8.1.7]
 
 ### Major Changes
