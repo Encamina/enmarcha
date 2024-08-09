@@ -4,32 +4,27 @@ using System.Text;
 
 using CommunityToolkit.Diagnostics;
 
-using Microsoft.SemanticKernel.Plugins.Document;
-
 namespace Encamina.Enmarcha.SemanticKernel.Connectors.Document.Connectors;
 
 /// <summary>
 /// Extract text from a text (<c>.txt</c>) file.
 /// </summary>
-public sealed class TxtDocumentConnector : IDocumentConnector
+public class TxtDocumentConnector : IEnmarchaDocumentConnector
 {
-    private readonly Encoding encoding;
+    /// <inheritdoc/>
+    public IReadOnlyList<string> CompatibleFileFormats => [".TXT", ".MD"];
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="TxtDocumentConnector"/> class.
+    /// Gets the encoding used for reading the text from the stream.
     /// </summary>
-    /// <param name="encoding">The encoding to use when reading the text file.</param>
-    public TxtDocumentConnector(Encoding encoding)
-    {
-        this.encoding = encoding;
-    }
+    protected virtual Encoding Encoding => Encoding.UTF8;
 
     /// <inheritdoc/>
     public string ReadText(Stream stream)
     {
         Guard.IsNotNull(stream);
 
-        using var reader = new StreamReader(stream, encoding);
+        using var reader = new StreamReader(stream, Encoding);
         return reader.ReadToEnd();
     }
 

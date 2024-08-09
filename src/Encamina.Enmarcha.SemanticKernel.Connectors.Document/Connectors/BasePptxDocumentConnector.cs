@@ -6,15 +6,16 @@ using CommunityToolkit.Diagnostics;
 
 using DocumentFormat.OpenXml.Packaging;
 
-using Microsoft.SemanticKernel.Plugins.Document;
-
 namespace Encamina.Enmarcha.SemanticKernel.Connectors.Document.Connectors;
 
 /// <summary>
 /// Base abstract class that defines a Microsoft PowerPoint (<c>.pptx</c>) document connector.
 /// </summary>
-public abstract class BasePptxDocumentConnector : IDocumentConnector
+public abstract class BasePptxDocumentConnector : IEnmarchaDocumentConnector
 {
+    /// <inheritdoc/>
+    public IReadOnlyList<string> CompatibleFileFormats => [".PPTX"];
+
     /// <inheritdoc/>
     public string ReadText(Stream stream)
     {

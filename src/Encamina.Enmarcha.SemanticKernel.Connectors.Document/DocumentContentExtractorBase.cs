@@ -12,7 +12,8 @@ public class DocumentContentExtractorBase : DocumentConnectorProviderBase, IDocu
     /// </summary>
     /// <param name="textSplitter">A valid instance of <see cref="ITextSplitter"/> to use when extracting content from documents.</param>
     /// <param name="lengthFunction">A length function to use when extracting content from documents.</param>
-    protected DocumentContentExtractorBase(ITextSplitter textSplitter, Func<string, int> lengthFunction)
+    /// <param name="connectors">List of document connectors to register.</param>
+    protected DocumentContentExtractorBase(ITextSplitter textSplitter, Func<string, int> lengthFunction, IEnumerable<IEnmarchaDocumentConnector> connectors) : base(connectors)
     {
         LengthFunction = lengthFunction;
         TextSplitter = textSplitter;

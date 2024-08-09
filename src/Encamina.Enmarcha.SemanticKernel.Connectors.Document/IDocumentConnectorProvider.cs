@@ -1,9 +1,7 @@
-﻿using Microsoft.SemanticKernel.Plugins.Document;
-
-namespace Encamina.Enmarcha.SemanticKernel.Connectors.Document;
+﻿namespace Encamina.Enmarcha.SemanticKernel.Connectors.Document;
 
 /// <summary>
-/// Provider interface to obtain instances of <see cref="IDocumentConnector"/>s.
+/// Provider interface to obtain instances of <see cref="IEnmarchaDocumentConnector"/>s.
 /// </summary>
 public interface IDocumentConnectorProvider
 {
@@ -11,11 +9,11 @@ public interface IDocumentConnectorProvider
     /// Determines the most appropriate document connector from a specified file extension.
     /// </summary>
     /// <param name="fileExtension">The file extension.</param>
-    /// <returns>A valid instance of <see cref="IDocumentConnector"/> that could handle documents from the given file extension.</returns>
+    /// <returns>A valid instance of <see cref="IEnmarchaDocumentConnector"/> that could handle documents from the given file extension.</returns>
     /// <exception cref="InvalidOperationException">
-    /// If the <paramref name="fileExtension"/> is not supported or no suitable <see cref="IDocumentConnector"/> instance for it can be found.
+    /// If the <paramref name="fileExtension"/> is not supported or no suitable <see cref="IEnmarchaDocumentConnector"/> instance for it can be found.
     /// </exception>
-    IDocumentConnector GetDocumentConnector(string fileExtension);
+    IEnmarchaDocumentConnector GetDocumentConnector(string fileExtension);
 
     /// <summary>
     /// Determines the most appropriate document connector from a specified file extension.
@@ -23,13 +21,13 @@ public interface IDocumentConnectorProvider
     /// <param name="fileExtension">The file extension.</param>
     /// <param name="throwException">
     /// If <see langword="true"/> an <see cref="InvalidOperationException"/> is thrown if the <paramref name="fileExtension"/> is not supported
-    /// or no suitable <see cref="IDocumentConnector"/> instance for it can be found.
+    /// or no suitable <see cref="IEnmarchaDocumentConnector"/> instance for it can be found.
     /// </param>
-    /// <returns>A valid instance of <see cref="IDocumentConnector"/> that could handle documents from the given file extension.</returns>
+    /// <returns>A valid instance of <see cref="IEnmarchaDocumentConnector"/> that could handle documents from the given file extension.</returns>
     /// <exception cref="InvalidOperationException">
-    /// If the <paramref name="fileExtension"/> is not supported or no suitable <see cref="IDocumentConnector"/> instance for it can be found.
+    /// If the <paramref name="fileExtension"/> is not supported or no suitable <see cref="IEnmarchaDocumentConnector"/> instance for it can be found.
     /// </exception>
-    IDocumentConnector? GetDocumentConnector(string fileExtension, bool throwException);
+    IEnmarchaDocumentConnector? GetDocumentConnector(string fileExtension, bool throwException);
 
     /// <summary>
     /// Determines whether a specified file extension is supported.
@@ -46,9 +44,8 @@ public interface IDocumentConnectorProvider
     /// <remarks>
     /// If the file extension already has a document connector associated with it, the existing connector is replaced.
     /// </remarks>
-    /// <param name="fileExtension">The file extension.</param>
     /// <param name="documentConnector">
-    /// A valid instance of <see cref="IDocumentConnector"/> to handle documents with the specified file extension.
+    /// A valid instance of <see cref="IEnmarchaDocumentConnector"/> to handle documents with the specified file extension.
     /// </param>
-    void AddDocumentConnector(string fileExtension, IDocumentConnector documentConnector);
+    void AddDocumentConnector(IEnmarchaDocumentConnector documentConnector);
 }
