@@ -20,15 +20,8 @@ public static class ImageHelper
     {
         Guard.IsNotNull(stream);
 
-        try
-        {
-            var image = Image.Load(stream);
+        var image = Image.Load(stream);
 
-            return image.Metadata.DecodedImageFormat?.DefaultMimeType ?? System.Net.Mime.MediaTypeNames.Application.Octet;
-        }
-        catch (Exception ex)
-        {
-            throw new ArgumentException("The stream does not contain a valid image.", ex);
-        }
+        return image.Metadata.DecodedImageFormat?.DefaultMimeType ?? System.Net.Mime.MediaTypeNames.Application.Octet;
     }
 }
