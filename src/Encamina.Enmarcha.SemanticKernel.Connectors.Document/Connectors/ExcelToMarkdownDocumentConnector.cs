@@ -2,15 +2,16 @@
 
 using Encamina.Enmarcha.SemanticKernel.Connectors.Document.Models.Excel;
 
-using Microsoft.SemanticKernel.Plugins.Document;
-
 namespace Encamina.Enmarcha.SemanticKernel.Connectors.Document.Connectors;
 
 /// <summary>
 /// Extracts text from an Excel file (<c>.xlsx</c>) and exports to Markdown table format.
 /// </summary>
-public class ExcelToMarkdownDocumentConnector : IDocumentConnector
+public class ExcelToMarkdownDocumentConnector : IEnmarchaDocumentConnector
 {
+    /// <inheritdoc/>
+    public IReadOnlyList<string> CompatibleFileFormats => [".XLSX"];
+
     /// <summary>
     /// Gets the options for loading the Excel document.
     /// </summary>

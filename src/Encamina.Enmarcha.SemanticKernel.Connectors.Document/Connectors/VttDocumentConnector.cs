@@ -5,35 +5,30 @@ using System.Text.RegularExpressions;
 
 using CommunityToolkit.Diagnostics;
 
-using Microsoft.SemanticKernel.Plugins.Document;
-
 namespace Encamina.Enmarcha.SemanticKernel.Connectors.Document.Connectors;
 
 /// <summary>
 /// Document connector for Video Text Tracks (<c>.vtt</c>) files.
 /// </summary>
-public sealed class VttDocumentConnector : IDocumentConnector
+public class VttDocumentConnector : IEnmarchaDocumentConnector
 {
     private static readonly Regex PatternRegex
         = new(@"\d+\n\d{2}:\d{2}:\d{2}\.\d{3} --> \d{2}:\d{2}:\d{2}\.\d{3}\n(.+?)(?=\n\d+\n\d{2}:\d{2}:\d{2}\.\d{3} -->|\n\n|$)", RegexOptions.Compiled, TimeSpan.FromMilliseconds(100));
 
-    private readonly Encoding encoding;
-
     /// <summary>
-    /// Initializes a new instance of the <see cref="VttDocumentConnector"/> class.
+    /// Gets the encoding used for reading the text from the stream.
     /// </summary>
-    /// <param name="encoding">The encoding to use when reading the file.</param>
-    public VttDocumentConnector(Encoding encoding)
-    {
-        this.encoding = encoding;
-    }
+    protected virtual Encoding Encoding => Encoding.UTF8;
+
+    /// <inheritdoc/>
+    public IReadOnlyList<string> CompatibleFileFormats => [".VTT"];
 
     /// <inheritdoc/>
     public string ReadText(Stream stream)
     {
         Guard.IsNotNull(stream);
 
-        using var reader = new StreamReader(stream, encoding);
+        using var reader = new StreamReader(stream, Encoding);
         var input = reader.ReadToEnd();
 
         var result = new StringBuilder();
