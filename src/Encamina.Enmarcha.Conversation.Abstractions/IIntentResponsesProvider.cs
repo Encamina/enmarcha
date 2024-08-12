@@ -1,6 +1,6 @@
 ﻿using System.Globalization;
 
-namespace Encamina.Enmarcha.Bot.Abstractions.Responses;
+namespace Encamina.Enmarcha.Conversation.Abstractions;
 
 /// <summary>
 /// Represents a bot's response provider from intents.

@@ -4,11 +4,11 @@ using Azure.Data.Tables;
 
 using CommunityToolkit.Diagnostics;
 
-using Encamina.Enmarcha.Bot.Abstractions.Responses;
+using Encamina.Enmarcha.Conversation.Abstractions;
 
 using Microsoft.Extensions.Caching.Memory;
 
-namespace Encamina.Enmarcha.Bot.Responses;
+namespace Encamina.Enmarcha.Conversation;
 
 /// <summary>
 /// Custom intent responder provider based on values configured and stored in an Azure Table Storage.
@@ -66,17 +66,15 @@ internal class TableStorageResponseProvider : IIntentResponsesProvider
     /// <inheritdoc/>
     public virtual async Task<IReadOnlyCollection<Response>> GetResponsesAsync(string intent, CultureInfo culture, CancellationToken cancellationToken)
     {
-        var intentsByLocale = memoryCache != null
-        ? await memoryCache.GetOrCreateAsync(CacheKey, async cacheEntry =>
+        var intentsByLocale = await memoryCache.GetOrCreateAsync(CacheKey, async cacheEntry =>
         {
-             cacheEntry.AbsoluteExpirationRelativeToNow = TimeSpan.FromSeconds(cacheAbsoluteExpirationSeconds);
-             return await InitAsync(cancellationToken);
-        })
-        : await InitAsync(cancellationToken);
+            cacheEntry.AbsoluteExpirationRelativeToNow = TimeSpan.FromSeconds(cacheAbsoluteExpirationSeconds);
+            return await InitAsync(cancellationToken);
+        });
 
-        return (intentsByLocale.TryGetValue(culture.Name.ToUpperInvariant(), out var responsesByIntent) ||
-                intentsByLocale.TryGetValue(culture.Parent.Name.ToUpperInvariant(), out responsesByIntent) ||
-                intentsByLocale.TryGetValue(defaultLocale.ToUpperInvariant(), out responsesByIntent)) && responsesByIntent.TryGetValue(intent.ToUpperInvariant(), out var responses)
+        return intentsByLocale != null && (intentsByLocale.TryGetValue(culture.Name.ToUpperInvariant(), out var responsesByIntent) ||
+                                           intentsByLocale.TryGetValue(culture.Parent.Name.ToUpperInvariant(), out responsesByIntent) ||
+                                           intentsByLocale.TryGetValue(defaultLocale.ToUpperInvariant(), out responsesByIntent)) && responsesByIntent.TryGetValue(intent.ToUpperInvariant(), out var responses)
             ? responses.OrderBy(r => r.Order).ToList().AsReadOnly()
             : Array.Empty<Response>();
     }
@@ -84,7 +82,7 @@ internal class TableStorageResponseProvider : IIntentResponsesProvider
     private async Task<IDictionary<string, IDictionary<string, IList<Response>>>> InitAsync(CancellationToken cancellationToken)
     {
         var tableClient = new TableClient(tableConnectionString, tableName);
-        tableClient.CreateIfNotExists(cancellationToken);
+        await tableClient.CreateIfNotExistsAsync(cancellationToken);
 
         var entities = await tableClient.QueryAsync<ResponsesTableEntity>(cancellationToken: cancellationToken)
                                         .ToLookupAsync(e => e.Locale.ToUpperInvariant(), cancellationToken);
@@ -113,17 +111,15 @@ internal class TableStorageResponseProvider : IIntentResponsesProvider
                 Text = value.Response,
             };
 
-            if (intentsByLocale.ContainsKey(entity.Key))
+            if (intentsByLocale.TryGetValue(entity.Key, out var responsesByIntent))
             {
-                var responsesByIntent = intentsByLocale[entity.Key];
-
                 if (responsesByIntent.ContainsKey(responseIntent))
                 {
                     responsesByIntent[responseIntent].Add(response);
                 }
                 else
                 {
-                    responsesByIntent[responseIntent] = new List<Response>() { response };
+                    responsesByIntent[responseIntent] = [response];
                 }
             }
             else

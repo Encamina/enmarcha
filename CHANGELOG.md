@@ -36,6 +36,11 @@ Previous classification is not required if changes are simple or all belong to t
 - Updated dependencies:
     - Updated `MimeKit` from `4.5.0` to `4.7.1` in `Encamina.Enmarcha.Testing.Smtp`.`
     - Updated `System.Text.Json` from `8.0.3` to `8.0.4`.
+- Refactored and reorganized the `IIntentResponsesProvider` functionality:
+  - Introduced new projects: `Encamina.Enmarcha.Conversation.Abstractions`, and `Encamina.Enmarcha.Conversation`.
+  - Moved `IIntentResponsesProvider` and `Response` classes to `Encamina.Enmarcha.Conversation.Abstractions`.
+  - Moved `TableStorageResponseProvider` class to `Encamina.Enmarcha.Conversation`.
+  - Updated `LocalizedResponseGreetingsProvider.cs` to use new abstractions.
 
 ## [8.1.7]
 

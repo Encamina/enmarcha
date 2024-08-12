@@ -2,7 +2,7 @@
 using Encamina.Enmarcha.AI.QuestionsAnswering.Abstractions;
 
 using Encamina.Enmarcha.Bot.Abstractions.QuestionAnswering;
-using Encamina.Enmarcha.Bot.Abstractions.Responses;
+using Encamina.Enmarcha.Conversation.Abstractions;
 
 using Microsoft.Bot.Builder;
 

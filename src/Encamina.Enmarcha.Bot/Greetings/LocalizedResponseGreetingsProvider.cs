@@ -1,7 +1,7 @@
 ﻿using System.Globalization;
 
 using Encamina.Enmarcha.Bot.Abstractions.Greetings;
-using Encamina.Enmarcha.Bot.Abstractions.Responses;
+using Encamina.Enmarcha.Conversation.Abstractions;
 using Encamina.Enmarcha.Core.Extensions;
 
 using Microsoft.Bot.Builder;

@@ -150,7 +150,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Encamina.Enmarcha.AspNet.Op
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Encamina.Enmarcha.Core.Tests", "tst\Encamina.Enmarcha.Core.Tests\Encamina.Enmarcha.Core.Tests.csproj", "{0516ADAE-C543-4B48-94EE-AC535DEFED0E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Encamina.Enmarcha.SemanticKernel.Connectors.Document.Tests", "tst\Encamina.Enmarcha.SemanticKernel.Connectors.Document.Tests\Encamina.Enmarcha.SemanticKernel.Connectors.Document.Tests.csproj", "{1E9782AE-28E8-4C09-A66B-22A903A76C7F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Encamina.Enmarcha.SemanticKernel.Connectors.Document.Tests", "tst\Encamina.Enmarcha.SemanticKernel.Connectors.Document.Tests\Encamina.Enmarcha.SemanticKernel.Connectors.Document.Tests.csproj", "{1E9782AE-28E8-4C09-A66B-22A903A76C7F}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Encamina.Enmarcha.Conversation.Abstractions", "src\Encamina.Enmarcha.Conversation.Abstractions\Encamina.Enmarcha.Conversation.Abstractions.csproj", "{F15072A5-238C-4584-87D2-916EDE9A6BAB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Encamina.Enmarcha.Conversation", "src\Encamina.Enmarcha.Conversation\Encamina.Enmarcha.Conversation.csproj", "{854C7D01-FF78-4D69-9EC7-8ECBA0E0FA74}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -382,6 +386,14 @@ Global
 		{1E9782AE-28E8-4C09-A66B-22A903A76C7F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1E9782AE-28E8-4C09-A66B-22A903A76C7F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1E9782AE-28E8-4C09-A66B-22A903A76C7F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F15072A5-238C-4584-87D2-916EDE9A6BAB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F15072A5-238C-4584-87D2-916EDE9A6BAB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F15072A5-238C-4584-87D2-916EDE9A6BAB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F15072A5-238C-4584-87D2-916EDE9A6BAB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{854C7D01-FF78-4D69-9EC7-8ECBA0E0FA74}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{854C7D01-FF78-4D69-9EC7-8ECBA0E0FA74}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{854C7D01-FF78-4D69-9EC7-8ECBA0E0FA74}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{854C7D01-FF78-4D69-9EC7-8ECBA0E0FA74}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
