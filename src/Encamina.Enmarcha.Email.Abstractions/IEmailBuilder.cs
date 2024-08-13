@@ -99,6 +99,18 @@ public interface IEmailBuilder
     IEmailBuilder SetBody(StringBuilder body, bool isHtml = false);
 
     /// <summary>
+    /// Sets the e-mail addresses for the recipients of an e-mail, typically for the 'TO', 'CC', or 'BCC' fields, replacing any previously set recipients.
+    /// </summary>
+    /// <param name="recipients">
+    /// A collection of tuples where each tuple contains:
+    /// - <c>EmailAddress</c>: The recipient's e-mail address.
+    /// - <c>RecipientName</c>: The recipient's name./>.
+    /// - <c>RecipientType</c>: The type of recipient (like 'to', 'cc', or 'bcc')./>.
+    /// </param>
+    /// <returns>The <see cref="IEmailBuilder"/> so that additional calls can be chained.</returns>
+    IEmailBuilder SetRecipients(IEnumerable<(string EmailAddress, string? RecipientName, EmailRecipientType RecipientType)> recipients);
+
+    /// <summary>
     /// Sends the e-mail, thus effectively ending its building.
     /// </summary>
     /// <param name="cancellationToken">A cancellation token that can be used to receive notice of cancellation.</param>

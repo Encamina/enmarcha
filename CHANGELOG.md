@@ -19,11 +19,13 @@ Previous classification is not required if changes are simple or all belong to t
 ## [8.1.8]
 
 ### Breaking Changes 
+
 - `DocumentConnectorProviderBase` no longer automatically registers document connectors. Instead, it will register available connectors in the dependency container. 
   This means that document connectors must be registered manually in the dependency container. For this purpose, new extension methods have been added to `IServiceCollection` that allow to register document connectors in the dependency container.
   Also the `AddDefaultDocumentConnectors` method has been added in `IServiceCollectionExtensions` to register document connectors that were registered by default before.
 
 ### Major Changes
+
 - Added the `IEnmarchaDocumentConnector` interface that extends the existing `IDocumentConnector`. This interface, by now, adds a `CompatibleFileFormats` property that returns the file formats supported by the connector. Existing document connectors have been updated to implement this interface.
 - Added `CsvTsvDocumentConnector` document connector that allows to read CSV and TSV files keeping the headers in different chunks.
 - Added `SkVisionImageDocumentConnector` which allows to read images and extract text from them. Using Semantic Kernel vision capabilities.
@@ -41,6 +43,10 @@ Previous classification is not required if changes are simple or all belong to t
   - Moved `IIntentResponsesProvider` and `Response` classes to `Encamina.Enmarcha.Conversation.Abstractions`.
   - Moved `TableStorageResponseProvider` class to `Encamina.Enmarcha.Conversation`.
   - Updated `LocalizedResponseGreetingsProvider.cs` to use new abstractions.
+
+### Minor Changes
+
+- Added `SetRecipients` method to `IEmailBuilder` interface.
 
 ## [8.1.7]
 

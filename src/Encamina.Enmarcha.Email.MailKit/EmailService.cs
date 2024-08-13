@@ -146,6 +146,19 @@ internal sealed class EmailService : IEmailBuilder, IEmailProvider, ISmtpClientO
     public IEmailBuilder SetDefaultSender(string? senderName = null) => SetSender(SmtpClientOptions.User, senderName);
 
     /// <inheritdoc/>
+    public IEmailBuilder SetRecipients(IEnumerable<(string EmailAddress, string? RecipientName, EmailRecipientType RecipientType)> recipients)
+    {
+        Specification.To.Clear();
+
+        foreach (var (emailAddress, recipientName, recipientType) in recipients)
+        {
+            AddRecipient(emailAddress, recipientName, recipientType);
+        }
+
+        return this;
+    }
+
+    /// <inheritdoc/>
     /// <remarks>This implementation does not allows the subject to be <see langword="null"/>.</remarks>
     public IEmailBuilder SetSubject(string subject)
     {
