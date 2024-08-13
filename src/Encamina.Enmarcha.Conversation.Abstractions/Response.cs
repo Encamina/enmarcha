@@ -1,6 +1,6 @@
 ﻿using Encamina.Enmarcha.Entities.Abstractions;
 
-namespace Encamina.Enmarcha.Bot.Abstractions.Responses;
+namespace Encamina.Enmarcha.Conversation.Abstractions;
 
 /// <summary>
 /// Represents a bot's response, usually obtained from a (static) repository like a database or table storage.

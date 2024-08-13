@@ -35,6 +35,7 @@
         <ProjectReference Include="..\Encamina.Enmarcha.AI.TextsTranslation.Abstractions\Encamina.Enmarcha.AI.TextsTranslation.Abstractions.csproj" />
         <ProjectReference Include="..\Encamina.Enmarcha.AI\Encamina.Enmarcha.AI.csproj" />
         <ProjectReference Include="..\Encamina.Enmarcha.Bot.Abstractions\Encamina.Enmarcha.Bot.Abstractions.csproj" />
+        <ProjectReference Include="..\Encamina.Enmarcha.Conversation\Encamina.Enmarcha.Conversation.csproj" />
         <ProjectReference Include="..\Encamina.Enmarcha.DependencyInjection\Encamina.Enmarcha.DependencyInjection.csproj" />
         <ProjectReference Include="..\Encamina.Enmarcha.Entities.Abstractions\Encamina.Enmarcha.Entities.Abstractions.csproj" />
     </ItemGroup>

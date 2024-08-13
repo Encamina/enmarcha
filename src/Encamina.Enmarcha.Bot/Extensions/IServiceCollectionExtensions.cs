@@ -5,13 +5,11 @@ using System.Globalization;
 using Encamina.Enmarcha.AI;
 
 using Encamina.Enmarcha.Bot.Abstractions.Greetings;
-using Encamina.Enmarcha.Bot.Abstractions.Responses;
 
 using Encamina.Enmarcha.Bot.Greetings;
 using Encamina.Enmarcha.Bot.Middlewares;
 using Encamina.Enmarcha.Bot.QuestionAnswering;
-using Encamina.Enmarcha.Bot.Responses;
-
+using Encamina.Enmarcha.Conversation.Abstractions;
 using Encamina.Enmarcha.Core.Extensions;
 
 using Microsoft.ApplicationInsights;
@@ -425,7 +423,7 @@ public static class IServiceCollectionExtensions
     public static IServiceCollection AddBotTableStorageResponsesProvider(this IServiceCollection services, string defaultLocale, string tableConnectionString, string tableName = @"Responses", string intentCounterSeparator = @"-", double cacheAbsoluteExpirationSeconds = 86400, ServiceLifetime serviceLifetime = ServiceLifetime.Singleton)
     {
         return services.AddMemoryCache()
-                       .TryAddType<IIntentResponsesProvider>(serviceLifetime, sp => new TableStorageResponseProvider(tableConnectionString, tableName, defaultLocale, intentCounterSeparator, cacheAbsoluteExpirationSeconds, sp.GetService<IMemoryCache>()));
+            .AddTableStorageResponsesProvider(defaultLocale, tableConnectionString, tableName, intentCounterSeparator, cacheAbsoluteExpirationSeconds, serviceLifetime);
     }
 
     private static IServiceCollection AddBotTranscriptLoggerMiddleware(this IServiceCollection services, ServiceLifetime serviceLifetime = ServiceLifetime.Singleton)
