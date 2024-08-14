@@ -47,6 +47,7 @@ Previous classification is not required if changes are simple or all belong to t
 ### Minor Changes
 
 - Added `SetRecipients` method to `IEmailBuilder` interface.
+- Added `DocumentTooLargeException` class to handle exceptions when the document is too large to be processed.
 
 ## [8.1.7]
 
