@@ -17,7 +17,7 @@ public static class IServiceCollectionExtensions
     /// <returns>The <see cref="IServiceCollection"/> so that additional calls can be chained.</returns>
     public static IServiceCollection AddDefaultDocumentContentExtractor(this IServiceCollection services)
     {
-        return services.AddSingleton<IDocumentContentExtractor, DefaultDocumentContentExtractor>();
+        return services.AddScoped<IDocumentContentExtractor, DefaultDocumentContentExtractor>();
     }
 
     /// <summary>
@@ -33,13 +33,13 @@ public static class IServiceCollectionExtensions
     }
 
     /// <summary>
-    /// Adds a default implementation of Semantic <see cref="IDocumentContentExtractor"/> to the specified <see cref="IServiceCollection"/> as a singleton service.
+    /// Adds a default implementation of Semantic <see cref="IDocumentContentExtractor"/> to the specified <see cref="IServiceCollection"/> as a scoped service.
     /// </summary>
     /// <param name="services">The <see cref="IServiceCollection"/> to add services to.</param>
     /// <returns>The <see cref="IServiceCollection"/> so that additional calls can be chained.</returns>
     public static IServiceCollection AddDefaultDocumentContentSemanticExtractor(this IServiceCollection services)
     {
-        return services.AddDefaultDocumentContentSemanticExtractor(ServiceLifetime.Singleton);
+        return services.AddDefaultDocumentContentSemanticExtractor(ServiceLifetime.Scoped);
     }
 
     /// <summary>
@@ -60,7 +60,7 @@ public static class IServiceCollectionExtensions
     /// <returns>The <see cref="IServiceCollection"/> so that additional calls can be chained.</returns>
     public static IServiceCollection AddDefaultDocumentConnectorProvider(this IServiceCollection services)
     {
-        return services.AddSingleton<IDocumentConnectorProvider, DefaultDocumentContentExtractor>();
+        return services.AddScoped<IDocumentConnectorProvider, DefaultDocumentContentExtractor>();
     }
 
     /// <summary>
@@ -202,7 +202,7 @@ public static class IServiceCollectionExtensions
     /// <returns>The <see cref="IServiceCollection"/> so that additional calls can be chained.</returns>
     public static IServiceCollection AddSkVisionImageDocumentConnector(this IServiceCollection services)
     {
-        return services.AddSingleton<IEnmarchaDocumentConnector, SkVisionImageDocumentConnector>();
+        return services.AddScoped<IEnmarchaDocumentConnector, SkVisionImageDocumentConnector>();
     }
 
     /// <summary>

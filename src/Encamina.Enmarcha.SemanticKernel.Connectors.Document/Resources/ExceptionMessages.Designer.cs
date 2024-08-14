@@ -61,6 +61,15 @@ namespace Encamina.Enmarcha.SemanticKernel.Connectors.Document.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The document is too large or contains too much content..
+        /// </summary>
+        internal static string DocumentTooLargeExceptionMessage {
+            get {
+                return ResourceManager.GetString("DocumentTooLargeExceptionMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to File extension &apos;{0}&apos; is not supported!.
         /// </summary>
         internal static string FileExtensionNotSupported {
