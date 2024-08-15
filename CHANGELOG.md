@@ -44,6 +44,9 @@ Previous classification is not required if changes are simple or all belong to t
   - Moved `TableStorageResponseProvider` class to `Encamina.Enmarcha.Conversation`.
   - Updated `LocalizedResponseGreetingsProvider.cs` to use new abstractions.
 
+- Updated dependencies:
+    - Updated `Microsoft.SemanticKernel.Plugins.Document` from `1.10.0-alpha` to `1.15.0-alpha`.
+
 ### Minor Changes
 
 - Added `SetRecipients` method to `IEmailBuilder` interface.
