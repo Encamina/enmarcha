@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Diagnostics;
 
+using Encamina.Enmarcha.SemanticKernel.Connectors.Document.Exceptions;
 using Encamina.Enmarcha.SemanticKernel.Connectors.Document.Utils;
 
 using Microsoft.SemanticKernel;
@@ -80,6 +81,14 @@ public class SkVisionImageDocumentConnector : IEnmarchaDocumentConnector
 
         // TODO: We can improve that making an async version of IEnmarchaDocumentConnector.
         var response = chatCompletionService.GetChatMessageContentAsync(history).GetAwaiter().GetResult();
+
+        // Check if the the model has exceeded the output capacity.
+        if (response.Metadata?.TryGetValue(@"FinishReason", out var finishReason) == true &&
+            finishReason is string finishReasonString &&
+            finishReasonString.Equals(@"length", StringComparison.Ordinal))
+        {
+            throw new DocumentTooLargeException();
+        }
 
         return response?.Content ?? string.Empty;
     }
