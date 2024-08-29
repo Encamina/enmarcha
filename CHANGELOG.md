@@ -51,6 +51,8 @@ Previous classification is not required if changes are simple or all belong to t
 
 - Added `SetRecipients` method to `IEmailBuilder` interface.
 - Added `DocumentTooLargeException` class to handle exceptions when the document is too large to be processed.
+- Added `gpt-4o-mini` to `ModelInfo`.
+- Increased tokens in `TextSplitterOptions` default values.
 
 ## [8.1.7]
 
