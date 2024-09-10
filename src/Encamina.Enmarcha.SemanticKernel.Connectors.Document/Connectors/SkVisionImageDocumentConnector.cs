@@ -13,6 +13,8 @@ namespace Encamina.Enmarcha.SemanticKernel.Connectors.Document.Connectors;
 /// </summary>
 public class SkVisionImageDocumentConnector : IEnmarchaDocumentConnector
 {
+    private const int ResolutionLimit = 8192;
+
     private const string SystemPrompt = """
         You are an expert OCR (Optical Character Recognition) Specialist
 
@@ -67,8 +69,14 @@ public class SkVisionImageDocumentConnector : IEnmarchaDocumentConnector
     {
         Guard.IsNotNull(stream);
 
-        var mimeType = ImageHelper.GetMimeType(stream);
+        var (mimeType, width, height) = ImageHelper.GetImageInfo(stream);
         stream.Position = 0;
+
+        // Check image resolution
+        if (width > ResolutionLimit || height > ResolutionLimit)
+        {
+            throw new DocumentTooLargeException();
+        }
 
         var history = new ChatHistory(SystemPrompt);
 
