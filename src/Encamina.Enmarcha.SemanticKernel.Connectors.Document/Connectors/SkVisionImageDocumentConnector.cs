@@ -1,8 +1,10 @@
 ﻿using CommunityToolkit.Diagnostics;
 
 using Encamina.Enmarcha.SemanticKernel.Connectors.Document.Exceptions;
+using Encamina.Enmarcha.SemanticKernel.Connectors.Document.Options;
 using Encamina.Enmarcha.SemanticKernel.Connectors.Document.Utils;
 
+using Microsoft.Extensions.Options;
 using Microsoft.SemanticKernel;
 using Microsoft.SemanticKernel.ChatCompletion;
 
@@ -13,8 +15,6 @@ namespace Encamina.Enmarcha.SemanticKernel.Connectors.Document.Connectors;
 /// </summary>
 public class SkVisionImageDocumentConnector : IEnmarchaDocumentConnector
 {
-    private const int ResolutionLimit = 8192;
-
     private const string SystemPrompt = """
         You are an expert OCR (Optical Character Recognition) Specialist
 
@@ -51,14 +51,17 @@ public class SkVisionImageDocumentConnector : IEnmarchaDocumentConnector
         """;
 
     private readonly IChatCompletionService chatCompletionService;
+    private readonly SkVisionImageDocumentConnectorOptions options;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="SkVisionImageDocumentConnector"/> class.
     /// </summary>
     /// <param name="kernel">A valid <see cref="Kernel"/> instance.</param>
-    public SkVisionImageDocumentConnector(Kernel kernel)
+    /// <param name="options">Configuration options for this connector.</param>
+    public SkVisionImageDocumentConnector(Kernel kernel, IOptions<SkVisionImageDocumentConnectorOptions> options)
     {
         chatCompletionService = kernel.GetRequiredService<IChatCompletionService>();
+        this.options = options.Value;
     }
 
     /// <inheritdoc/>
@@ -73,7 +76,7 @@ public class SkVisionImageDocumentConnector : IEnmarchaDocumentConnector
         stream.Position = 0;
 
         // Check image resolution
-        if (width > ResolutionLimit || height > ResolutionLimit)
+        if (width > options.ResolutionLimit || height > options.ResolutionLimit)
         {
             throw new DocumentTooLargeException();
         }

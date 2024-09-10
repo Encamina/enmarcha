@@ -2,6 +2,9 @@
 
 using Encamina.Enmarcha.SemanticKernel.Connectors.Document;
 using Encamina.Enmarcha.SemanticKernel.Connectors.Document.Connectors;
+using Encamina.Enmarcha.SemanticKernel.Connectors.Document.Options;
+
+using Microsoft.Extensions.Configuration;
 
 namespace Microsoft.Extensions.DependencyInjection;
 
@@ -196,12 +199,18 @@ public static class IServiceCollectionExtensions
     }
 
     /// <summary>
-    /// Adds the <see cref="SkVisionImageDocumentConnector"/> implementation of <see cref="IEnmarchaDocumentConnector"/> to the specified <see cref="IServiceCollection"/> as a singleton service.
+    /// Adds and configures the <see cref="SkVisionImageDocumentConnector"/> implementation of <see cref="IEnmarchaDocumentConnector"/> to the specified <see cref="IServiceCollection"/> as a scoped service.
     /// </summary>
     /// <param name="services">The <see cref="IServiceCollection"/> to add services to.</param>
+    /// <param name="configuration">The current set of key-value application configuration parameters.</param>
     /// <returns>The <see cref="IServiceCollection"/> so that additional calls can be chained.</returns>
-    public static IServiceCollection AddSkVisionImageDocumentConnector(this IServiceCollection services)
+    public static IServiceCollection AddSkVisionImageDocumentConnector(this IServiceCollection services, IConfiguration configuration)
     {
+        services.AddOptions<SkVisionImageDocumentConnectorOptions>()
+                .Bind(configuration.GetSection(nameof(SkVisionImageDocumentConnectorOptions)))
+                .ValidateDataAnnotations()
+                .ValidateOnStart();
+
         return services.AddScoped<IEnmarchaDocumentConnector, SkVisionImageDocumentConnector>();
     }
 
