@@ -12,14 +12,14 @@ public class TextSplitterOptions
     /// </summary>
     [Required]
     [Range(0, int.MaxValue)]
-    public int ChunkOverlap { get; init; } = 10;
+    public int ChunkOverlap { get; init; } = 50;
 
     /// <summary>
     /// Gets the number of elements (characters, tokens, etc.) in each chunk.
     /// </summary>
     [Required]
     [Range(0, int.MaxValue)]
-    public int ChunkSize { get; init; } = 100;
+    public int ChunkSize { get; init; } = 1000;
 
     /// <summary>
     /// Gets the collection of separator characters to use when splitting the text and creating chunks.
