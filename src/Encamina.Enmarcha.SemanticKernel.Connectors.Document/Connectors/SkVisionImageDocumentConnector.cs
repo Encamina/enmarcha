@@ -5,6 +5,7 @@ using Encamina.Enmarcha.SemanticKernel.Connectors.Document.Options;
 using Encamina.Enmarcha.SemanticKernel.Connectors.Document.Utils;
 
 using Microsoft.Extensions.Options;
+
 using Microsoft.SemanticKernel;
 using Microsoft.SemanticKernel.ChatCompletion;
 
