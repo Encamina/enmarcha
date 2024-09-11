@@ -28,7 +28,7 @@ Previous classification is not required if changes are simple or all belong to t
 
 - Added the `IEnmarchaDocumentConnector` interface that extends the existing `IDocumentConnector`. This interface, by now, adds a `CompatibleFileFormats` property that returns the file formats supported by the connector. Existing document connectors have been updated to implement this interface.
 - Added `CsvTsvDocumentConnector` document connector that allows to read CSV and TSV files keeping the headers in different chunks.
-- Added `SkVisionImageDocumentConnector` which allows to read images and extract text from them. Using Semantic Kernel vision capabilities.
+- Added `SkVisionImageDocumentConnector` which allows to read images and extract text from them. Using Semantic Kernel vision capabilities. You can configure the connector with the `SkVisionImageDocumentConnectorOptions` class.
 - The `IDocumentConnectorProvider` interface now works with the `IEnframeDocumentConnector` interface instead of `IDocumentConnector`.
     - The `AddDocumentConnector` function has been modified by removing the `fileExtension` parameter, which will now come in the `CompatibleFileFormats` property of the document connector.
 - The `ParagraphPptxDocumentConnector` class is no longer sealed, allowing the creation of derived classes.

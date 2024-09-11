@@ -1,7 +1,10 @@
 ﻿using CommunityToolkit.Diagnostics;
 
 using Encamina.Enmarcha.SemanticKernel.Connectors.Document.Exceptions;
+using Encamina.Enmarcha.SemanticKernel.Connectors.Document.Options;
 using Encamina.Enmarcha.SemanticKernel.Connectors.Document.Utils;
+
+using Microsoft.Extensions.Options;
 
 using Microsoft.SemanticKernel;
 using Microsoft.SemanticKernel.ChatCompletion;
@@ -49,14 +52,17 @@ public class SkVisionImageDocumentConnector : IEnmarchaDocumentConnector
         """;
 
     private readonly IChatCompletionService chatCompletionService;
+    private readonly SkVisionImageDocumentConnectorOptions options;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="SkVisionImageDocumentConnector"/> class.
     /// </summary>
     /// <param name="kernel">A valid <see cref="Kernel"/> instance.</param>
-    public SkVisionImageDocumentConnector(Kernel kernel)
+    /// <param name="options">Configuration options for this connector.</param>
+    public SkVisionImageDocumentConnector(Kernel kernel, IOptions<SkVisionImageDocumentConnectorOptions> options)
     {
         chatCompletionService = kernel.GetRequiredService<IChatCompletionService>();
+        this.options = options.Value;
     }
 
     /// <inheritdoc/>
@@ -67,8 +73,14 @@ public class SkVisionImageDocumentConnector : IEnmarchaDocumentConnector
     {
         Guard.IsNotNull(stream);
 
-        var mimeType = ImageHelper.GetMimeType(stream);
+        var (mimeType, width, height) = ImageHelper.GetImageInfo(stream);
         stream.Position = 0;
+
+        // Check image resolution
+        if (width > options.ResolutionLimit || height > options.ResolutionLimit)
+        {
+            throw new DocumentTooLargeException();
+        }
 
         var history = new ChatHistory(SystemPrompt);
 
