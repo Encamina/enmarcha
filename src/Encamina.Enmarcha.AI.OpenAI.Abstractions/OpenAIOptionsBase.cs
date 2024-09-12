@@ -15,7 +15,7 @@ public class OpenAIOptionsBase
     /// this means that the value of this property does not necessarily indicate the model implemented behind it. Use property <see cref="ChatModelName"/> to set the model name.
     /// </remarks>
     [NotEmptyOrWhitespace]
-    public string ChatModelDeploymentName { get; init; }
+    public string? ChatModelDeploymentName { get; init; }
 
     /// <summary>
     /// Gets the name (sort of a unique identifier) of the model to use for chat.
@@ -26,7 +26,7 @@ public class OpenAIOptionsBase
     /// </remarks>
     [RequireWhenOtherPropertyNotNull(nameof(ChatModelDeploymentName))]
     [NotEmptyOrWhitespace]
-    public string ChatModelName { get; init; }
+    public string? ChatModelName { get; init; }
 
     /// <summary>
     /// Gets the model deployment name on the LLM (for example OpenAI) to use for completions.
@@ -36,7 +36,7 @@ public class OpenAIOptionsBase
     /// this means that the value of this property does not necessarily indicate the model implemented behind it. Use property <see cref="CompletionsModelName"/> to set the model name.
     /// </remarks>
     [NotEmptyOrWhitespace]
-    public string CompletionsModelDeploymentName { get; init; }
+    public string? CompletionsModelDeploymentName { get; init; }
 
     /// <summary>
     /// Gets the name (sort of a unique identifier) of the model to use for completions.
@@ -47,7 +47,7 @@ public class OpenAIOptionsBase
     /// </remarks>
     [RequireWhenOtherPropertyNotNull(nameof(CompletionsModelDeploymentName))]
     [NotEmptyOrWhitespace]
-    public string CompletionsModelName { get; init; }
+    public string? CompletionsModelName { get; init; }
 
     /// <summary>
     /// Gets the model deployment name on the LLM (for example OpenAI) to use for embeddings.
@@ -57,7 +57,7 @@ public class OpenAIOptionsBase
     /// this means that the value of this property does not necessarily indicate the model implemented behind it. Use property <see cref="EmbeddingsModelName"/> to set the model name.
     /// </remarks>
     [NotEmptyOrWhitespace]
-    public string EmbeddingsModelDeploymentName { get; init; }
+    public string? EmbeddingsModelDeploymentName { get; init; }
 
     /// <summary>
     /// Gets the name (sort of a unique identifier) of the model to use for embeddings.
@@ -68,5 +68,5 @@ public class OpenAIOptionsBase
     /// </remarks>
     [RequireWhenOtherPropertyNotNull(nameof(EmbeddingsModelDeploymentName))]
     [NotEmptyOrWhitespace]
-    public string EmbeddingsModelName { get; init; }
+    public string? EmbeddingsModelName { get; init; }
 }

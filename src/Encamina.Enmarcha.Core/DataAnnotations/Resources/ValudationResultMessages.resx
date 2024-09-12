@@ -129,4 +129,10 @@
   <data name="ValuieIsInvalidUri" xml:space="preserve">
     <value>The value of '{0}' must be a valid and well formed URI!</value>
   </data>
+  <data name="MissingPropertyRequiredIf" xml:space="preserve">
+    <value>Property {0} not found!</value>
+  </data>
+  <data name="PropertiesConditionsMissmatchRequiredIf" xml:space="preserve">
+    <value>The number of conditional property names must match the number of expected conditional values.</value>
+  </data>
 </root>

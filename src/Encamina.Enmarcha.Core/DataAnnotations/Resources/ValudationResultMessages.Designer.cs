@@ -61,6 +61,24 @@ namespace Encamina.Enmarcha.Core.DataAnnotations.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Property {0} not found!.
+        /// </summary>
+        internal static string MissingPropertyRequiredIf {
+            get {
+                return ResourceManager.GetString("MissingPropertyRequiredIf", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The number of conditional property names must match the number of expected conditional values..
+        /// </summary>
+        internal static string PropertiesConditionsMissmatchRequiredIf {
+            get {
+                return ResourceManager.GetString("PropertiesConditionsMissmatchRequiredIf", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The value of &apos;{0}&apos; must be a valid and not empty or whitespace string!.
         /// </summary>
         internal static string ValueIsEmptyOrWhiteSpace {

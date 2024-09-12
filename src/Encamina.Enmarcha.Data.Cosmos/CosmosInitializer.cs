@@ -1,5 +1,7 @@
 ﻿using System.Net.Security;
 
+using Azure.Identity;
+
 using Encamina.Enmarcha.Core;
 using Encamina.Enmarcha.Core.Extensions;
 using Encamina.Enmarcha.Data.Cosmos.Resources;
@@ -33,7 +35,10 @@ internal sealed class CosmosInitializer : ICosmosInitializer
     public CosmosInitializer(IOptions<CosmosOptions> options)
     {
         this.options = options.Value;
-        client = new CosmosClient(this.options.Endpoint, this.options.AuthKey, BuildCosmosClientOptions(this.options));
+
+        client = this.options.UseDefaultAzureCredentialAuthentication
+            ? new CosmosClient(this.options.Endpoint, new DefaultAzureCredential())
+            : new CosmosClient(this.options.Endpoint, this.options.AuthKey, BuildCosmosClientOptions(this.options));
     }
 
     /// <inheritdoc/>
