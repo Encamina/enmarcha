@@ -21,6 +21,8 @@ public sealed class RequiredIfAttribute : ValidationAttribute
     /// </summary>
     /// <param name="conditionalPropertyName">The name of the property that represents the condition.</param>
     /// <param name="conditionalValue">The value that triggers the requirement when the condition is met.</param>
+    /// <param name="allowEmpty">Determines whether the decorated property, if it is a string, can be empty (i.e., <see cref="string.Empty"/> when the condition is met.</param>
+    /// <param name="failOnAnyCondition">Determines whether the validation should fail if any of the conditions are met.</param>
     public RequiredIfAttribute(string conditionalPropertyName, object conditionalValue, bool allowEmpty = false, bool failOnAnyCondition = true)
         : this([conditionalPropertyName], [conditionalValue], allowEmpty, failOnAnyCondition)
     {
@@ -31,6 +33,8 @@ public sealed class RequiredIfAttribute : ValidationAttribute
     /// </summary>
     /// <param name="conditionalPropertyNames">The names of the properties that represent the conditions.</param>
     /// <param name="conditionalValues">The values that trigger the requirement when the conditions are met.</param>
+    /// <param name="allowEmpty">Determines whether the decorated property, if it is a string, can be empty (i.e., <see cref="string.Empty"/> when the condition is met.</param>
+    /// <param name="failOnAnyCondition">Determines whether the validation should fail if any of the conditions are met.</param>
     /// <exception cref="ArgumentException">
     /// Thrown when the number of items in <paramref name="conditionalPropertyNames"/> and items in <paramref name="conditionalValues"/> do not match.
     /// </exception>
