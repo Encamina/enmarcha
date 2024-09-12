@@ -1,5 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
+using Encamina.Enmarcha.Core.DataAnnotations;
+
 using Microsoft.Azure.Cosmos;
 
 namespace Encamina.Enmarcha.Data.Cosmos;
@@ -17,8 +19,8 @@ public class CosmosOptions
     /// <summary>
     /// Gets or sets the authentication key required to connect with Azure Cosmos DB.
     /// </summary>
-    [Required(AllowEmptyStrings = false)]
-    public string AuthKey { get; set; }
+    [RequiredIf(nameof(UseDefaultAzureCredentialAuthentication), false)]
+    public string? AuthKey { get; set; }
 
     /// <summary>
     /// Gets or sets the connection mode. Defaults to <see cref="ConnectionMode.Direct"/>.
@@ -87,4 +89,12 @@ public class CosmosOptions
     /// Defaults to '<see langword="false"/>'.
     /// </summary>
     public bool UseWithCosmosDbEmulator { get; set; } = false;
+
+    /// <summary>
+    /// Gets or sets a value indicating whether the default Azure credential should be used for authentication. This is usually required when connecting with Managed Identities.
+    /// </summary>
+    /// <remarks>
+    /// Default value is <see langword="false" />.
+    /// </remarks>
+    public bool UseDefaultAzureCredentialAuthentication { get; set; } = false;
 }

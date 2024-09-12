@@ -53,6 +53,14 @@ Previous classification is not required if changes are simple or all belong to t
 - Added `DocumentTooLargeException` class to handle exceptions when the document is too large to be processed.
 - Added `gpt-4o-mini` to `ModelInfo`.
 - Increased tokens in `TextSplitterOptions` default values.
+- Added new property In `Encamina.Enmarcha.AI.OpenAI.Azure.AzureOpenAIOptions` called `UseDefaultAzureCredentialAuthentication` to support connections with Managed Identities.
+- In `Encamina.Enmarcha.AI.OpenAI.Azure.AzureOpenAIOptions` the `Key` property is now only required if properties `UseDefaultAzureCredentialAuthentication` and `UseTokenCredentialAuthentication` are both false.
+- In `Encamina.Enmarcha.AI.QuestionsAnswering.Abstractions`, enum type `LogicalOperations` is now marked as obsolete. It is being replace by enum type `LogicOperations` (same name) in `Encamina.Enmarcha.Core` (different project and namespace). It will be removed in future versions.
+- Improved data annotation `RequiredIfAttribute` from `Encamina.Enmarcha.Core.DataAnnotations` to support multiple conditions and properties.
+- In class `CosmosOptions` from `Encamina.Enmarcha.Data.Cosmos` added new property `UseDefaultAzureCredentialAuthentication` to support connections with Managed Identities.
+- In class `CosmosOptions` from `Encamina.Enmarcha.Data.Cosmos` the `Key` property is now only required if property `UseDefaultAzureCredentialAuthentication` is `false`.
+- Added some compilation support classes to `Encamina.Enmarcha.AO.OpenAI.Azure` to support language features like the `required` keyword.
+- Fixed various warnings from SonarCloud, including nullability properties.
 
 ## [8.1.7]
 

@@ -1,8 +1,8 @@
-﻿#if NETSTANDARD2_1 || NETCOREAPP3_1 || NET45 || NET451 || NET452 || NET46 || NET461 || NET462 || NET47 || NET471 || NET472 || NET48
-
-using System.ComponentModel;
+﻿using System.ComponentModel;
 
 namespace System.Runtime.CompilerServices;
+
+#if !NET5_0_OR_GREATER
 
 /// <summary>
 /// Reserved to be used by the compiler for tracking metadata.
@@ -13,4 +13,4 @@ internal static class IsExternalInit
 {
 }
 
-#endif
+#endif // !NET5_0_OR_GREATER
