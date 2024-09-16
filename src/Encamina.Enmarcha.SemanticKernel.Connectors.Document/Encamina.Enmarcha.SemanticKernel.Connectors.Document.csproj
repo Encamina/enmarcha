@@ -22,7 +22,7 @@
     <PackageReference Include="ExcelNumberFormat" Version="1.1.0" />
     <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="8.0.0" />
     <PackageReference Include="Microsoft.Extensions.Options.DataAnnotations" Version="8.0.0" />
-    <PackageReference Include="Microsoft.SemanticKernel.Plugins.Document" Version="1.15.0-alpha" />
+    <PackageReference Include="Microsoft.SemanticKernel.Plugins.Document" Version="1.19.0-alpha" />
     <PackageReference Include="PdfPig" Version="0.1.8" />
     <PackageReference Include="SixLabors.ImageSharp" Version="3.1.5" />
     <PackageReference Include="System.Memory.Data" Version="8.0.0" />
@@ -55,6 +55,10 @@
     
   <ItemGroup>
     <None Include="README.md" Pack="true" PackagePath="\" />
+  </ItemGroup>
+    
+  <ItemGroup>
+    <PackageReference Update="CommunityToolkit.Diagnostics" Version="8.3.1" />
   </ItemGroup>
 
 </Project>

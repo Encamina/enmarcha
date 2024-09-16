@@ -14,11 +14,15 @@
 
     <ItemGroup>      
       <PackageReference Include="Asp.Versioning.Mvc.ApiExplorer" Version="8.1.0" />
-      <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="6.6.2" />
+      <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="6.7.3" />
     </ItemGroup>
     
     <ItemGroup>
         <None Include="README.md" Pack="true" PackagePath="\" />
+    </ItemGroup>
+    
+    <ItemGroup>
+      <PackageReference Update="CommunityToolkit.Diagnostics" Version="8.3.1" />
     </ItemGroup>
 
 </Project>

@@ -9,4 +9,8 @@
     <ProjectReference Include="..\Encamina.Enmarcha.Core\Encamina.Enmarcha.Core.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Update="CommunityToolkit.Diagnostics" Version="8.3.1" />
+  </ItemGroup>
+
 </Project>

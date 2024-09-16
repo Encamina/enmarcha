@@ -16,4 +16,8 @@
       <ProjectReference Include="..\Encamina.Enmarcha.Entities.Abstractions\Encamina.Enmarcha.Entities.Abstractions.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <PackageReference Update="CommunityToolkit.Diagnostics" Version="8.3.1" />
+    </ItemGroup>
+
 </Project>
