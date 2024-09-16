@@ -21,8 +21,8 @@
     <ItemGroup>
         <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.1" />
         <PackageReference Include="Microsoft.Extensions.Http" Version="8.0.0" />
-        <PackageReference Include="Microsoft.SemanticKernel.Connectors.AzureAISearch" Version="1.19.0-alpha" />
-        <PackageReference Include="Microsoft.SemanticKernel.Connectors.Qdrant" Version="1.19.0-alpha" />
+        <PackageReference Include="Microsoft.SemanticKernel.Connectors.AzureAISearch" Version="1.10.0-alpha" />
+        <PackageReference Include="Microsoft.SemanticKernel.Connectors.Qdrant" Version="1.10.0-alpha" />
     </ItemGroup>
 
     <ItemGroup>
@@ -36,10 +36,6 @@
 
     <ItemGroup>
         <None Include="README.md" Pack="true" PackagePath="\" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <PackageReference Update="CommunityToolkit.Diagnostics" Version="8.3.1" />
     </ItemGroup>
 
 </Project>

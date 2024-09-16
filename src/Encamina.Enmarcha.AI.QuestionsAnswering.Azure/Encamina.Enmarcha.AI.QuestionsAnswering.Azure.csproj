@@ -10,7 +10,7 @@
 
   <ItemGroup>
     <PackageReference Include="Azure.AI.Language.QuestionAnswering" Version="1.1.0" />
-    <PackageReference Include="Azure.Data.Tables" Version="12.9.0" />
+    <PackageReference Include="Azure.Data.Tables" Version="12.8.3" />
     <PackageReference Include="Microsoft.Extensions.Caching.Abstractions" Version="8.0.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="8.0.0" />
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="8.0.0" />
@@ -26,10 +26,6 @@
     
   <ItemGroup>
     <None Include="README.md" Pack="true" PackagePath="\" />
-  </ItemGroup>
-    
-  <ItemGroup>
-    <PackageReference Update="CommunityToolkit.Diagnostics" Version="8.3.1" />
   </ItemGroup>
 
 </Project>

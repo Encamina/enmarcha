@@ -10,7 +10,7 @@
 
     <ItemGroup>
         <PackageReference Include="Azure.AI.OpenAI" Version="1.0.0-beta.17" />
-        <PackageReference Include="Microsoft.Extensions.Azure" Version="1.7.5" />
+        <PackageReference Include="Microsoft.Extensions.Azure" Version="1.7.4" />
         <PackageReference Include="Microsoft.Extensions.Hosting" Version="8.0.0" />
         <PackageReference Include="Microsoft.Extensions.Options" Version="8.0.2" />
         <PackageReference Include="Microsoft.Extensions.Options.DataAnnotations" Version="8.0.0" />
@@ -25,10 +25,6 @@
     
     <ItemGroup>
         <None Include="README.md" Pack="true" PackagePath="\" />
-    </ItemGroup>
-    
-    <ItemGroup>
-      <PackageReference Update="CommunityToolkit.Diagnostics" Version="8.3.1" />
     </ItemGroup>
 
 </Project>

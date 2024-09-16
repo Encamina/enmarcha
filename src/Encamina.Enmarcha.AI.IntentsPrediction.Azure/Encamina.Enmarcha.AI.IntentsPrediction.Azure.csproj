@@ -10,7 +10,7 @@
 
     <ItemGroup>
         <PackageReference Include="Azure.AI.Language.Conversations" Version="1.1.0" />
-        <PackageReference Include="Azure.Core" Version="1.43.0" />
+        <PackageReference Include="Azure.Core" Version="1.40.0" />
         <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="8.0.0" />
         <PackageReference Include="Microsoft.Extensions.Hosting" Version="8.0.0" />
         <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="8.0.0" />
@@ -24,9 +24,5 @@
     
     <ItemGroup>
         <None Include="README.md" Pack="true" PackagePath="\" />
-    </ItemGroup>
-    
-    <ItemGroup>
-      <PackageReference Update="CommunityToolkit.Diagnostics" Version="8.3.1" />
     </ItemGroup>
 </Project>
