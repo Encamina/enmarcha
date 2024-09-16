@@ -42,23 +42,23 @@ Previous classification is not required if changes are simple or all belong to t
   - Updated `LocalizedResponseGreetingsProvider.cs` to use new abstractions.
 - Updated dependencies:
     - Updated all `Microsoft.SemanticKernel.XXX` packages to `1.17.2`
-    - Updated `MimeKit` from `4.5.0` to `4.7.1` in `Encamina.Enmarcha.Testing.Smtp`.`
-    - Updated `System.Text.Json` from `8.0.3` to `8.0.4`.
-    - Updated `MailKit` from `4.7.0` to `4.7.1.1`.
-    - Updated `Bogus` from `35.5.1` to `35.6.1`.
-    - Updated `Microsoft.EntityFrameworkCore` from `8.0.6` to `8.0.8`
-    - Updated `Microsoft.EntityFrameworkCore.SqlServer` from `8.0.6` to `8.0.8`
-    - Updated `Azure.Core` from `1.40.0` to `1.43.0`
-    - Updated `Microsoft.Azure.Cosmos` from `3.41.0` to `3.43.0`
-    - Updated `Azure.Data.Tables` from `12.8.3` to `12.9.0`
-    - Updated `Microsoft.Extensions.Azure` from `1.7.4` to `1.7.5`
-    - Updated `Microsoft.AspNetCore.Authentication.JwtBearer` from `8.0.6` to `8.0.8`
-    - Updated `Swashbuckle.AspNetCore.SwaggerGen` from `6.6.2` to `6.7.3`
-    - Updated `Microsoft.Bot.Builder.Azure` from `4.22.7` to `4.22.8`
-    - Updated `Microsoft.Bot.Builder.Azure.Blobs` from `4.22.7` to `4.22.8`
-    - Updated `Microsoft.Bot.Builder.Dialogs` from `4.22.7` to `4.22.8`
-    - Updated `Microsoft.Bot.Builder.Integration.ApplicationInsights.Core` from `4.22.7` to `4.22.8`
-    - Updated `Microsoft.Bot.Builder.Integration.AspNet.Core` from `4.22.7` to `4.22.8`
+    - Updated Azure.Core from 1.40.0 to 1.43.0
+    - Updated Azure.Data.Tables from 12.8.3 to 12.9.0
+    - Updated Bogus from 35.5.1 to 35.6.1
+    - Updated Encamina.Enmarcha.Testing.Smtp from MimeKit 4.5.0 to 4.7.1
+    - Updated MailKit from 4.7.0 to 4.7.1.1
+    - Updated Microsoft.AspNetCore.Authentication.JwtBearer from 8.0.6 to 8.0.8
+    - Updated Microsoft.Azure.Cosmos from 3.41.0 to 3.43.0
+    - Updated Microsoft.Bot.Builder.Azure from 4.22.7 to 4.22.8
+    - Updated Microsoft.Bot.Builder.Azure.Blobs from 4.22.7 to 4.22.8
+    - Updated Microsoft.Bot.Builder.Dialogs from 4.22.7 to 4.22.8
+    - Updated Microsoft.Bot.Builder.Integration.ApplicationInsights.Core from 4.22.7 to 4.22.8
+    - Updated Microsoft.Bot.Builder.Integration.AspNet.Core from 4.22.7 to 4.22.8
+    - Updated Microsoft.EntityFrameworkCore from 8.0.6 to 8.0.8
+    - Updated Microsoft.EntityFrameworkCore.SqlServer from 8.0.6 to 8.0.8
+    - Updated Microsoft.Extensions.Azure from 1.7.4 to 1.7.5
+    - Updated Swashbuckle.AspNetCore.SwaggerGen from 6.6.2 to 6.7.3
+    - Updated System.Text.Json from 8.0.3 to 8.0.4
 
 ### Minor Changes
 
