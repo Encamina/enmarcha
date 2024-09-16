@@ -7,5 +7,35 @@
     <ItemGroup>
       <ProjectReference Include="..\..\src\Encamina.Enmarcha.AI\Encamina.Enmarcha.AI.csproj" />
     </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Update="Microsoft.NET.Test.Sdk" Version="17.11.1" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Update="Moq" Version="4.20.72" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Update="xunit" Version="2.9.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Update="xunit.analyzers" Version="1.16.0">
+        <PrivateAssets>all</PrivateAssets>
+        <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      </PackageReference>
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Update="xunit.extensibility.core" Version="2.9.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Update="xunit.runner.visualstudio" Version="2.8.2">
+        <PrivateAssets>all</PrivateAssets>
+        <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      </PackageReference>
+    </ItemGroup>
     
 </Project>

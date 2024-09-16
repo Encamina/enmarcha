@@ -10,8 +10,8 @@
 
     <ItemGroup>
         <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
-        <PackageReference Include="Microsoft.Bot.Builder.Dialogs" Version="4.22.7" />
-        <PackageReference Include="Microsoft.Bot.Builder.Integration.AspNet.Core" Version="4.22.7" />
+        <PackageReference Include="Microsoft.Bot.Builder.Dialogs" Version="4.22.8" />
+        <PackageReference Include="Microsoft.Bot.Builder.Integration.AspNet.Core" Version="4.22.8" />
     </ItemGroup>
 
     <ItemGroup>
@@ -21,6 +21,10 @@
 
     <ItemGroup>
         <None Include="README.md" Pack="true" PackagePath="\" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Update="CommunityToolkit.Diagnostics" Version="8.3.1" />
     </ItemGroup>
 
 </Project>
