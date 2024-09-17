@@ -97,7 +97,7 @@ public class SkVisionImageDocumentConnector : IEnmarchaDocumentConnector
         // Check if the the model has exceeded the output capacity.
         if (response.Metadata?.TryGetValue(@"FinishReason", out var finishReason) == true &&
             finishReason is string finishReasonString &&
-            finishReasonString.Equals(@"length", StringComparison.Ordinal))
+            finishReasonString.Equals(@"length", StringComparison.OrdinalIgnoreCase))
         {
             throw new DocumentTooLargeException();
         }

@@ -1,4 +1,6 @@
-﻿using Encamina.Enmarcha.AI.OpenAI.Azure;
+﻿using CommunityToolkit.Diagnostics;
+
+using Encamina.Enmarcha.AI.OpenAI.Azure;
 using Encamina.Enmarcha.Core;
 using Encamina.Enmarcha.Data.AzureAISearch;
 using Encamina.Enmarcha.Data.Qdrant.Abstractions;
@@ -8,7 +10,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
 using Microsoft.SemanticKernel.Connectors.AzureAISearch;
-using Microsoft.SemanticKernel.Connectors.OpenAI;
+using Microsoft.SemanticKernel.Connectors.AzureOpenAI;
 using Microsoft.SemanticKernel.Connectors.Qdrant;
 using Microsoft.SemanticKernel.Memory;
 
@@ -100,8 +102,11 @@ public static class IServiceCollectionExtensions
         {
             var options = sp.GetRequiredService<IOptions<AzureOpenAIOptions>>().Value;
 
+            Guard.IsNotNull(options.EmbeddingsModelDeploymentName);
+            Guard.IsNotNull(options.Key);
+
             return new MemoryBuilder()
-                .WithAzureOpenAITextEmbeddingGeneration(options.EmbeddingsModelDeploymentName, options.Endpoint.ToString(), options.Key)
+                .WithTextEmbeddingGeneration(new AzureOpenAITextEmbeddingGenerationService(options.EmbeddingsModelDeploymentName, options.Endpoint.ToString(), options.Key))
                 .WithMemoryStore(sp.GetRequiredService<IMemoryStore>())
                 .Build();
         });

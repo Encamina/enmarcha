@@ -4,7 +4,6 @@ using Azure.AI.OpenAI;
 
 using Encamina.Enmarcha.AI.OpenAI.Abstractions;
 
-using Encamina.Enmarcha.Core;
 using Encamina.Enmarcha.Core.DataAnnotations;
 
 namespace Encamina.Enmarcha.AI.OpenAI.Azure;
