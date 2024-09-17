@@ -21,6 +21,8 @@ Previous classification is not required if changes are simple or all belong to t
 ### Breaking Changes
 
 - Semantic Kernel has been updated to `1.19.0`, migrating OpenAI and AzureOpenAI services to use the new OpenAI SDK v2.0 and Azure OpenAI SDK v2.0 SDKs. You can follow the [Migration Guide](https://learn.microsoft.com/en-us/semantic-kernel/support/v2-openai-migration-guide).
+- Removed the `ICompletionService` interface from `Encamina.Enmarcha.AI.OpenAI.Abstractions` and its implementation, `CompletionService`, from `Encamina.Enmarcha.AI.OpenAI.Azure`, as the OpenAI SDK 2.0 no longer includes the completion endpoint.
+    - Removed `CompletionServiceOptions`, `ICompletionServiceFactoryProvider`, `ICompletionServiceFactory`, `CompletionResult`, `CompletionRequest`, `Completion`, `CompletionServiceFactory`, `CompletionServiceFactoryProvider` they are not longer necessary.  
 
 ### Major Changes
 - Updated dependencies:
