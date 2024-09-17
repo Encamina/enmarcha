@@ -123,8 +123,8 @@ public sealed class RecursiveCharacterTextSplitterTests
         var splits = recursiveCharacterTextSplitter.Split(text, lengthFunction).ToList();
 
         // Assert
-        Assert.Single(splits);
-        Assert.Equal("Word", splits[0]);
+        var split = Assert.Single(splits);
+        Assert.Equal("Word", split);
     }
 
     private static string GivenAText()

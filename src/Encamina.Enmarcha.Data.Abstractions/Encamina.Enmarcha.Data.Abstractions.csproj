@@ -15,9 +15,5 @@
   <ItemGroup>
     <None Include="README.md" Pack="true" PackagePath="\" />
   </ItemGroup>
-    
-  <ItemGroup>
-    <PackageReference Update="CommunityToolkit.Diagnostics" Version="8.3.1" />
-  </ItemGroup>
 
 </Project>

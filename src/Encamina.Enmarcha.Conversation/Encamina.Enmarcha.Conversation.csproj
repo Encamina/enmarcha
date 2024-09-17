@@ -23,8 +23,4 @@
       <ProjectReference Include="..\Encamina.Enmarcha.DependencyInjection\Encamina.Enmarcha.DependencyInjection.csproj" />
     </ItemGroup>
 
-    <ItemGroup>
-      <PackageReference Update="CommunityToolkit.Diagnostics" Version="8.3.1" />
-    </ItemGroup>
-
 </Project>
