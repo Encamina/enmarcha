@@ -24,7 +24,12 @@ public class RecursiveCharacterTextSplitter : TextSplitter
     {
         var chunks = new List<string>();
 
-        string separator = null;
+        if (string.IsNullOrWhiteSpace(text))
+        {
+            return chunks;
+        }
+
+        string? separator = null;
 
         foreach (var s in options.Separators)
         {
@@ -35,7 +40,7 @@ public class RecursiveCharacterTextSplitter : TextSplitter
             }
         }
 
-        var splits = (separator != null ? text.Split(separator, StringSplitOptions.RemoveEmptyEntries) : new[] { text }).Select(s => s.Trim());
+        var splits = (separator != null ? text.Split(separator, StringSplitOptions.RemoveEmptyEntries) : [text]).Select(s => s.Trim());
 
         var goodSplits = new List<string>();
 
@@ -63,6 +68,6 @@ public class RecursiveCharacterTextSplitter : TextSplitter
             chunks.AddRange(MergeSplits(goodSplits, separator, lengthFunction, options));
         }
 
-        return chunks;
+        return chunks.Where(chunk => !string.IsNullOrWhiteSpace(chunk));
     }
 }

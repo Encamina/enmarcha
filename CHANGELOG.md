@@ -35,17 +35,30 @@ Previous classification is not required if changes are simple or all belong to t
 - The `SlidePptxDocumentConnector` class is no longer sealed, allowing the creation of derived classes.
 - The `TxtDocumentConnector` class is no longer sealed, allowing the creation of derived classes.
 - The `VttDocumentConnector` class is no longer sealed, allowing the creation of derived classes.
-- Updated dependencies:
-    - Updated `MimeKit` from `4.5.0` to `4.7.1` in `Encamina.Enmarcha.Testing.Smtp`.`
-    - Updated `System.Text.Json` from `8.0.3` to `8.0.4`.
 - Refactored and reorganized the `IIntentResponsesProvider` functionality:
   - Introduced new projects: `Encamina.Enmarcha.Conversation.Abstractions`, and `Encamina.Enmarcha.Conversation`.
   - Moved `IIntentResponsesProvider` and `Response` classes to `Encamina.Enmarcha.Conversation.Abstractions`.
   - Moved `TableStorageResponseProvider` class to `Encamina.Enmarcha.Conversation`.
   - Updated `LocalizedResponseGreetingsProvider.cs` to use new abstractions.
-
 - Updated dependencies:
-    - Updated `Microsoft.SemanticKernel.Plugins.Document` from `1.10.0-alpha` to `1.15.0-alpha`.
+    - Updated all `Microsoft.SemanticKernel.XXX` packages to `1.17.2`
+    - Updated Azure.Core from 1.40.0 to 1.43.0
+    - Updated Azure.Data.Tables from 12.8.3 to 12.9.0
+    - Updated Bogus from 35.5.1 to 35.6.1
+    - Updated Encamina.Enmarcha.Testing.Smtp from MimeKit 4.5.0 to 4.7.1
+    - Updated MailKit from 4.7.0 to 4.7.1.1
+    - Updated Microsoft.AspNetCore.Authentication.JwtBearer from 8.0.6 to 8.0.8
+    - Updated Microsoft.Azure.Cosmos from 3.41.0 to 3.43.0
+    - Updated Microsoft.Bot.Builder.Azure from 4.22.7 to 4.22.8
+    - Updated Microsoft.Bot.Builder.Azure.Blobs from 4.22.7 to 4.22.8
+    - Updated Microsoft.Bot.Builder.Dialogs from 4.22.7 to 4.22.8
+    - Updated Microsoft.Bot.Builder.Integration.ApplicationInsights.Core from 4.22.7 to 4.22.8
+    - Updated Microsoft.Bot.Builder.Integration.AspNet.Core from 4.22.7 to 4.22.8
+    - Updated Microsoft.EntityFrameworkCore from 8.0.6 to 8.0.8
+    - Updated Microsoft.EntityFrameworkCore.SqlServer from 8.0.6 to 8.0.8
+    - Updated Microsoft.Extensions.Azure from 1.7.4 to 1.7.5
+    - Updated Swashbuckle.AspNetCore.SwaggerGen from 6.6.2 to 6.7.3
+    - Updated System.Text.Json from 8.0.3 to 8.0.4
 
 ### Minor Changes
 
@@ -61,6 +74,7 @@ Previous classification is not required if changes are simple or all belong to t
 - In class `CosmosOptions` from `Encamina.Enmarcha.Data.Cosmos` the `Key` property is now only required if property `UseDefaultAzureCredentialAuthentication` is `false`.
 - Added some compilation support classes to `Encamina.Enmarcha.AO.OpenAI.Azure` to support language features like the `required` keyword.
 - Fixed various warnings from SonarCloud, including nullability properties.
+- Now `RecursiveCharacterTextSplitter` does not return empty chunks.
 
 ## [8.1.7]
 

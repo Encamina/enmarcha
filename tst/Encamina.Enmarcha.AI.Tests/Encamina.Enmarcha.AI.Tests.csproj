@@ -7,5 +7,5 @@
     <ItemGroup>
       <ProjectReference Include="..\..\src\Encamina.Enmarcha.AI\Encamina.Enmarcha.AI.csproj" />
     </ItemGroup>
-    
+
 </Project>

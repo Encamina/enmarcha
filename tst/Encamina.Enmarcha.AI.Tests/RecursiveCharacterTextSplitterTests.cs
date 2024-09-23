@@ -82,6 +82,51 @@ public sealed class RecursiveCharacterTextSplitterTests
         Assert.Equal("tortor vitae purus faucibus ornare suspendisse.", splitsWithDefaultOptions[9]);
     }
 
+    [Fact]
+    public void SplitText_WithEmptyString_ReturnsNoSplits()
+    {
+        // Arrange
+        var defaultTextSplitterOptions = new TextSplitterOptions
+        {
+            Separators = new List<string> { "\n\n", "\n", " ", string.Empty },
+            ChunkOverlap = 0,
+            ChunkSize = 100,
+        };
+        var optionsMonitor = new TestOptionsMonitor<TextSplitterOptions>(defaultTextSplitterOptions);
+        var recursiveCharacterTextSplitter = new RecursiveCharacterTextSplitter(optionsMonitor);
+        var lengthFunction = ILengthFunctions.LengthByCharacterCount;
+        var text = string.Empty;
+
+        // Act
+        var splits = recursiveCharacterTextSplitter.Split(text, lengthFunction).ToList();
+
+        // Assert
+        Assert.Empty(splits);
+    }
+
+    [Fact]
+    public void SplitText_WithSingleWord_ReturnsSingleSplit()
+    {
+        // Arrange
+        var defaultTextSplitterOptions = new TextSplitterOptions
+        {
+            Separators = new List<string> { "\n\n", "\n", " ", string.Empty },
+            ChunkOverlap = 0,
+            ChunkSize = 100,
+        };
+        var optionsMonitor = new TestOptionsMonitor<TextSplitterOptions>(defaultTextSplitterOptions);
+        var recursiveCharacterTextSplitter = new RecursiveCharacterTextSplitter(optionsMonitor);
+        var lengthFunction = ILengthFunctions.LengthByCharacterCount;
+        var text = "Word";
+
+        // Act
+        var splits = recursiveCharacterTextSplitter.Split(text, lengthFunction).ToList();
+
+        // Assert
+        var split = Assert.Single(splits);
+        Assert.Equal("Word", split);
+    }
+
     private static string GivenAText()
     {
         return """

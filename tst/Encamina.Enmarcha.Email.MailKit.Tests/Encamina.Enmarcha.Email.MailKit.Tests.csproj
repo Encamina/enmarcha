@@ -12,5 +12,5 @@
     <ProjectReference Include="..\..\src\Encamina.Enmarcha.Email.MailKit\Encamina.Enmarcha.Email.MailKit.csproj" />
     <ProjectReference Include="..\..\src\Encamina.Enmarcha.Testing.Smtp\Encamina.Enmarcha.Testing.Smtp.csproj" />
   </ItemGroup>
-    
+
 </Project>

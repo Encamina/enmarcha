@@ -17,16 +17,16 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Azure.Data.Tables" Version="12.8.3" />
+        <PackageReference Include="Azure.Data.Tables" Version="12.9.0" />
         <PackageReference Include="Microsoft.Azure.KeyVault.Core" Version="3.0.5">
           <TreatAsUsed>true</TreatAsUsed>
           <!-- This project needs this package reference to fix warning NU1701 -->
         </PackageReference>
-        <PackageReference Include="Microsoft.Bot.Builder.Azure" Version="4.22.7" />
-        <PackageReference Include="Microsoft.Bot.Builder.Azure.Blobs" Version="4.22.7" />
-        <PackageReference Include="Microsoft.Bot.Builder.Dialogs" Version="4.22.7" />
-        <PackageReference Include="Microsoft.Bot.Builder.Integration.ApplicationInsights.Core" Version="4.22.7" />
-        <PackageReference Include="Microsoft.Bot.Builder.Integration.AspNet.Core" Version="4.22.7" />
+        <PackageReference Include="Microsoft.Bot.Builder.Azure" Version="4.22.8" />
+        <PackageReference Include="Microsoft.Bot.Builder.Azure.Blobs" Version="4.22.8" />
+        <PackageReference Include="Microsoft.Bot.Builder.Dialogs" Version="4.22.8" />
+        <PackageReference Include="Microsoft.Bot.Builder.Integration.ApplicationInsights.Core" Version="4.22.8" />
+        <PackageReference Include="Microsoft.Bot.Builder.Integration.AspNet.Core" Version="4.22.8" />
         <PackageReference Include="System.Linq.Async" Version="6.0.1" />
     </ItemGroup>
 
