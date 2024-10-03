@@ -108,7 +108,12 @@ internal sealed class EmailService : IEmailBuilder, IEmailProvider, ISmtpClientO
         }
 
         await smtpClient.ConnectAsync(SmtpClientOptions.Host, SmtpClientOptions.Port, SmtpClientOptions.UseSSL, cancellationToken);
-        await smtpClient.AuthenticateAsync(SmtpClientOptions.User, SmtpClientOptions.Password, cancellationToken);
+
+        if (!SmtpClientOptions.AuthenticationNotRequired)
+        {
+            await smtpClient.AuthenticateAsync(SmtpClientOptions.User, SmtpClientOptions.Password, cancellationToken);
+        }
+
         await smtpClient.SendAsync(mailMessage, cancellationToken);
         await smtpClient.DisconnectAsync(true, cancellationToken);
     }

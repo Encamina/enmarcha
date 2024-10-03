@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Net.Security;
 
+using Encamina.Enmarcha.Core.DataAnnotations;
 using Encamina.Enmarcha.Entities.Abstractions;
 
 namespace Encamina.Enmarcha.Email.Abstractions;
@@ -11,6 +12,11 @@ namespace Encamina.Enmarcha.Email.Abstractions;
 public class SmtpClientOptions : INameable
 {
     private string? name = null;
+
+    /// <summary>
+    /// Gets or sets a value indicating whether authentication is not required to connect to the SMTP service.
+    /// </summary>
+    public bool AuthenticationNotRequired { get; set; }
 
     /// <summary>
     /// Gets or sets the host name of the SMTP service.
@@ -28,9 +34,10 @@ public class SmtpClientOptions : INameable
 
     /// <summary>
     /// Gets or sets the password credential required to connect to the SMTP service.
+    /// <para>This property is only required if <see cref="AuthenticationNotRequired"/> is set to <see langword="false"/>.</para>
     /// </summary>
-    [Required(AllowEmptyStrings = false)]
-    public string Password { get; set; }
+    [RequiredIf(nameof(AuthenticationNotRequired), conditionalValue: false, allowEmpty: false)]
+    public string? Password { get; set; }
 
     /// <summary>
     /// Gets or sets the port for the SMTP service. Default value is <c>587</c>.
@@ -48,9 +55,10 @@ public class SmtpClientOptions : INameable
 
     /// <summary>
     /// Gets or sets the user credential required to connect to the SMTP service.
+    /// <para>This property is only required if <see cref="AuthenticationNotRequired"/> is set to <see langword="false"/>.</para>
     /// </summary>
-    [Required(AllowEmptyStrings = false)]
-    public string User { get; set; }
+    [RequiredIf(nameof(AuthenticationNotRequired), conditionalValue: false, allowEmpty: false)]
+    public string? User { get; set; }
 
     /// <summary>
     /// Gets or sets a value indicating whether SSL should be use. Default is <see langword="false"/>.
