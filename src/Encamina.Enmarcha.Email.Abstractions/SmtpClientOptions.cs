@@ -14,9 +14,12 @@ public class SmtpClientOptions : INameable
     private string? name = null;
 
     /// <summary>
-    /// Gets or sets a value indicating whether authentication is not required to connect to the SMTP service.
+    /// Gets a value indicating whether authentication is required to connect to the SMTP service.
     /// </summary>
-    public bool AuthenticationNotRequired { get; set; }
+    /// <remarks>
+    /// The default value is <see langword="true"/>. Set this to <see langword="false"/> if the SMTP service does not require authentication.
+    /// </remarks>
+    public bool AuthenticationRequired { get; init; } = true;
 
     /// <summary>
     /// Gets or sets the host name of the SMTP service.
@@ -34,9 +37,9 @@ public class SmtpClientOptions : INameable
 
     /// <summary>
     /// Gets or sets the password credential required to connect to the SMTP service.
-    /// <para>This property is only required if <see cref="AuthenticationNotRequired"/> is set to <see langword="false"/>.</para>
+    /// <para>This property is only required if <see cref="AuthenticationRequired"/> is set to <see langword="false"/>.</para>
     /// </summary>
-    [RequiredIf(nameof(AuthenticationNotRequired), conditionalValue: false, allowEmpty: false)]
+    [RequiredIf(nameof(AuthenticationRequired), conditionalValue: true, allowEmpty: false)]
     public string? Password { get; set; }
 
     /// <summary>
@@ -55,9 +58,9 @@ public class SmtpClientOptions : INameable
 
     /// <summary>
     /// Gets or sets the user credential required to connect to the SMTP service.
-    /// <para>This property is only required if <see cref="AuthenticationNotRequired"/> is set to <see langword="false"/>.</para>
+    /// <para>This property is only required if <see cref="AuthenticationRequired"/> is set to <see langword="false"/>.</para>
     /// </summary>
-    [RequiredIf(nameof(AuthenticationNotRequired), conditionalValue: false, allowEmpty: false)]
+    [RequiredIf(nameof(AuthenticationRequired), conditionalValue: true, allowEmpty: false)]
     public string? User { get; set; }
 
     /// <summary>

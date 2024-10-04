@@ -20,8 +20,8 @@ Previous classification is not required if changes are simple or all belong to t
 
 ### Minor Changes
 
-- Added `AuthenticationNotRequired` property to `SmtpClientOptions.cs`, which can be set to `true` when the SMTP server does not require authentication (i.e., no username/password is needed).
- 
+- Added the `AuthenticationRequired` property to `SmtpClientOptions.cs`, which is set to `true` by default. This indicates that authentication is required to connect to the SMTP server. If set to `false`, the server does not require authentication, meaning no username or password is needed for the connection.
+
 ## [8.1.8]
 
 ### Breaking Changes 

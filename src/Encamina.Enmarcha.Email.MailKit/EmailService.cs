@@ -109,7 +109,7 @@ internal sealed class EmailService : IEmailBuilder, IEmailProvider, ISmtpClientO
 
         await smtpClient.ConnectAsync(SmtpClientOptions.Host, SmtpClientOptions.Port, SmtpClientOptions.UseSSL, cancellationToken);
 
-        if (!SmtpClientOptions.AuthenticationNotRequired)
+        if (SmtpClientOptions.AuthenticationRequired)
         {
             await smtpClient.AuthenticateAsync(SmtpClientOptions.User, SmtpClientOptions.Password, cancellationToken);
         }
