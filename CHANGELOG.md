@@ -16,6 +16,12 @@ Also, any bug fix must start with the prefix �Bug fix:� followed by the desc
 
 Previous classification is not required if changes are simple or all belong to the same category.
 
+## [8.1.9]
+
+### Minor Changes
+
+- Added the `AuthenticationRequired` property to `SmtpClientOptions.cs`, which is set to `true` by default. This indicates that authentication is required to connect to the SMTP server. If set to `false`, the server does not require authentication, meaning no username or password is needed for the connection.
+
 ## [8.1.8]
 
 ### Breaking Changes 
