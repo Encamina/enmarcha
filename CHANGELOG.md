@@ -18,6 +18,12 @@ Previous classification is not required if changes are simple or all belong to t
 
 ## [8.1.9]
 
+### Major Changes
+
+- Created a new project `Encamina.Enmarcha.Aspire` to handle configurations and extensions for Aspire.
+- Added `ResourceBuilderExtensions` class in `Encamina.Enmarcha.Aspire.Extensions`, which provides extension methods for configuring resources.
+  - The method `WithEnvironment<T>` was added to allow adding an array of environment variables to resources in a type-safe manner.
+
 ### Minor Changes
 
 - Added the `AuthenticationRequired` property to `SmtpClientOptions.cs`, which is set to `true` by default. This indicates that authentication is required to connect to the SMTP server. If set to `false`, the server does not require authentication, meaning no username or password is needed for the connection.

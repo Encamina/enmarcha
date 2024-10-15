@@ -154,7 +154,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Encamina.Enmarcha.SemanticK
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Encamina.Enmarcha.Conversation.Abstractions", "src\Encamina.Enmarcha.Conversation.Abstractions\Encamina.Enmarcha.Conversation.Abstractions.csproj", "{F15072A5-238C-4584-87D2-916EDE9A6BAB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Encamina.Enmarcha.Conversation", "src\Encamina.Enmarcha.Conversation\Encamina.Enmarcha.Conversation.csproj", "{854C7D01-FF78-4D69-9EC7-8ECBA0E0FA74}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Encamina.Enmarcha.Conversation", "src\Encamina.Enmarcha.Conversation\Encamina.Enmarcha.Conversation.csproj", "{854C7D01-FF78-4D69-9EC7-8ECBA0E0FA74}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Encamina.Enmarcha.Aspire", "src\Encamina.Enmarcha.Aspire\Encamina.Enmarcha.Aspire.csproj", "{68632D97-CE5C-4817-9ECF-E8A47993A287}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -394,6 +396,10 @@ Global
 		{854C7D01-FF78-4D69-9EC7-8ECBA0E0FA74}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{854C7D01-FF78-4D69-9EC7-8ECBA0E0FA74}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{854C7D01-FF78-4D69-9EC7-8ECBA0E0FA74}.Release|Any CPU.Build.0 = Release|Any CPU
+		{68632D97-CE5C-4817-9ECF-E8A47993A287}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{68632D97-CE5C-4817-9ECF-E8A47993A287}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{68632D97-CE5C-4817-9ECF-E8A47993A287}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{68632D97-CE5C-4817-9ECF-E8A47993A287}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
