@@ -28,16 +28,7 @@ public sealed class AtLeastOneRequiredSchemaFilter : ISchemaFilter
         var attribute = context.Type.GetCustomAttribute<AtLeastOneRequiredAttribute>();
         if (attribute != null)
         {
-            // Ensure 'Required' is not null
-            schema.Required ??= new HashSet<string>();
-
-            // Remove individually required properties specified in the attribute
-            foreach (var propName in attribute.PropertyNames)
-            {
-                schema.Required.Remove(propName);
-            }
-
-            // Add 'anyOf' with the specified properties
+            // Add 'anyOf' to the schema with the specified properties
             schema.AnyOf = attribute.PropertyNames.Select(propertyName => new OpenApiSchema
             {
                 Required = new HashSet<string> { propertyName },
