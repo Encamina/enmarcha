@@ -61,11 +61,11 @@ namespace Encamina.Enmarcha.Core.DataAnnotations.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Property {0} not found!.
+        ///   Looks up a localized string similar to At least one of the following properties must be provided: {0}..
         /// </summary>
-        internal static string MissingPropertyRequiredIf {
+        internal static string MissingRequiredProperty {
             get {
-                return ResourceManager.GetString("MissingPropertyRequiredIf", resourceCulture);
+                return ResourceManager.GetString("MissingRequiredProperty", resourceCulture);
             }
         }
         
@@ -75,6 +75,15 @@ namespace Encamina.Enmarcha.Core.DataAnnotations.Resources {
         internal static string PropertiesConditionsMissmatchRequiredIf {
             get {
                 return ResourceManager.GetString("PropertiesConditionsMissmatchRequiredIf", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Property {0} not found!.
+        /// </summary>
+        internal static string PropertyNotFound {
+            get {
+                return ResourceManager.GetString("PropertyNotFound", resourceCulture);
             }
         }
         
