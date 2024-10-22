@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Net.Security;
 
+using Encamina.Enmarcha.Core.DataAnnotations;
 using Encamina.Enmarcha.Entities.Abstractions;
 
 namespace Encamina.Enmarcha.Email.Abstractions;
@@ -11,6 +12,14 @@ namespace Encamina.Enmarcha.Email.Abstractions;
 public class SmtpClientOptions : INameable
 {
     private string? name = null;
+
+    /// <summary>
+    /// Gets a value indicating whether authentication is required to connect to the SMTP service.
+    /// </summary>
+    /// <remarks>
+    /// The default value is <see langword="true"/>. Set this to <see langword="false"/> if the SMTP service does not require authentication.
+    /// </remarks>
+    public bool AuthenticationRequired { get; init; } = true;
 
     /// <summary>
     /// Gets or sets the host name of the SMTP service.
@@ -28,9 +37,10 @@ public class SmtpClientOptions : INameable
 
     /// <summary>
     /// Gets or sets the password credential required to connect to the SMTP service.
+    /// <para>This property is only required if <see cref="AuthenticationRequired"/> is set to <see langword="false"/>.</para>
     /// </summary>
-    [Required(AllowEmptyStrings = false)]
-    public string Password { get; set; }
+    [RequiredIf(nameof(AuthenticationRequired), conditionalValue: true, allowEmpty: false)]
+    public string? Password { get; set; }
 
     /// <summary>
     /// Gets or sets the port for the SMTP service. Default value is <c>587</c>.
@@ -48,9 +58,10 @@ public class SmtpClientOptions : INameable
 
     /// <summary>
     /// Gets or sets the user credential required to connect to the SMTP service.
+    /// <para>This property is only required if <see cref="AuthenticationRequired"/> is set to <see langword="false"/>.</para>
     /// </summary>
-    [Required(AllowEmptyStrings = false)]
-    public string User { get; set; }
+    [RequiredIf(nameof(AuthenticationRequired), conditionalValue: true, allowEmpty: false)]
+    public string? User { get; set; }
 
     /// <summary>
     /// Gets or sets a value indicating whether SSL should be use. Default is <see langword="false"/>.

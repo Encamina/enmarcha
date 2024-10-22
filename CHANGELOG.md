@@ -27,6 +27,21 @@ Previous classification is not required if changes are simple or all belong to t
 ### Major Changes
 - Updated dependencies:
     - Updated all `Microsoft.SemanticKernel.XXX` packages to `1.19.0`
+    
+## [8.1.9]
+
+### Major Changes
+
+- Created a new project `Encamina.Enmarcha.Aspire` to handle configurations and extensions for Aspire.
+- Added `ResourceBuilderExtensions` class in `Encamina.Enmarcha.Aspire.Extensions`, which provides extension methods for configuring resources.
+  - The method `WithEnvironment<T>` was added to allow adding an array of environment variables to resources in a type-safe manner.
+
+### Minor Changes
+
+- Added the `AuthenticationRequired` property to `SmtpClientOptions.cs`, which is set to `true` by default. This indicates that authentication is required to connect to the SMTP server. If set to `false`, the server does not require authentication, meaning no username or password is needed for the connection.
+- Added the `AtLeastOneRequiredAttribute` Data Annotation to validate that at least one of the specified properties has a value.
+- Enchanced `JsonUtils` with new methods: `FastCheckIsJson` and `IsAnAdaptiveCard`.
+- Added new `AtLeastOneRequiredSchemaFilter` to ensure OpenAPI schemas enforce that at least one of the specified properties is required, by modifying the schema to use the `anyOf` rule in Swagger documentation generation.
 
 ## [8.1.8]
 

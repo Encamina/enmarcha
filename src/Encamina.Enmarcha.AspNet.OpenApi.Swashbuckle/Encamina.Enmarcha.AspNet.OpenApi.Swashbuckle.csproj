@@ -20,5 +20,9 @@
     <ItemGroup>
         <None Include="README.md" Pack="true" PackagePath="\" />
     </ItemGroup>
+    
+    <ItemGroup>
+      <ProjectReference Include="..\Encamina.Enmarcha.Core\Encamina.Enmarcha.Core.csproj" />
+    </ItemGroup>
 
 </Project>

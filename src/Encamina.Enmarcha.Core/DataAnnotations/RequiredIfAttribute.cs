@@ -69,7 +69,7 @@ public sealed class RequiredIfAttribute : ValidationAttribute
 
             if (propertyInfo == null)
             {
-                return new ValidationResult(ValudationResultMessages.ResourceManager.GetFormattedStringByCurrentCulture(nameof(ValudationResultMessages.MissingPropertyRequiredIf), propertyName));
+                return new ValidationResult(ValudationResultMessages.ResourceManager.GetFormattedStringByCurrentCulture(nameof(ValudationResultMessages.PropertyNotFound), propertyName));
             }
 
             var propertyValue = propertyInfo.GetValue(objInstance);
