@@ -12,6 +12,15 @@ namespace Encamina.Enmarcha.SemanticKernel.Connectors.Document.Connectors;
 /// </summary>
 public class DocDocumentConnector : IEnmarchaDocumentConnector
 {
+    /// <summary>
+    /// Initializes a new instance of the <see cref="DocDocumentConnector"/> class.
+    /// </summary>
+    public DocDocumentConnector()
+    {
+        // Register the code pages encoding provider for the .doc files
+        Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+    }
+
     /// <inheritdoc/>
     public IReadOnlyList<string> CompatibleFileFormats => [".DOC"];
 
@@ -19,9 +28,6 @@ public class DocDocumentConnector : IEnmarchaDocumentConnector
     public virtual string ReadText(Stream stream)
     {
         Guard.IsNotNull(stream);
-
-        // Register the code pages encoding provider for the .doc files
-        Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
 
         var document = new HWPFDocument(stream);
 
