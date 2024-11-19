@@ -89,6 +89,26 @@ public static class IServiceCollectionExtensions
     }
 
     /// <summary>
+    /// Adds the <see cref="DocDocumentConnector"/> implementation of <see cref="IEnmarchaDocumentConnector"/> to the specified <see cref="IServiceCollection"/> as a singleton service.
+    /// </summary>
+    /// <param name="services">The <see cref="IServiceCollection"/> to add services to.</param>
+    /// <returns>The <see cref="IServiceCollection"/> so that additional calls can be chained.</returns>
+    public static IServiceCollection AddDocDocumentConnector(this IServiceCollection services)
+    {
+        return services.AddSingleton<IEnmarchaDocumentConnector, DocDocumentConnector>();
+    }
+
+    /// <summary>
+    /// Adds the <see cref="HtmlDocumentConnector"/> implementation of <see cref="IEnmarchaDocumentConnector"/> to the specified <see cref="IServiceCollection"/> as a singleton service.
+    /// </summary>
+    /// <param name="services">The <see cref="IServiceCollection"/> to add services to.</param>
+    /// <returns>The <see cref="IServiceCollection"/> so that additional calls can be chained.</returns>
+    public static IServiceCollection AddHtmlDocumentConnector(this IServiceCollection services)
+    {
+        return services.AddSingleton<IEnmarchaDocumentConnector, HtmlDocumentConnector>();
+    }
+
+    /// <summary>
     /// Adds the <see cref="CleanPdfDocumentConnector"/> implementation of <see cref="IEnmarchaDocumentConnector"/> to the specified <see cref="IServiceCollection"/> as a singleton service.
     /// </summary>
     /// <param name="services">The <see cref="IServiceCollection"/> to add services to.</param>

@@ -30,6 +30,9 @@ Previous classification is not required if changes are simple or all belong to t
 - Added the `AtLeastOneRequiredAttribute` Data Annotation to validate that at least one of the specified properties has a value.
 - Enchanced `JsonUtils` with new methods: `FastCheckIsJson` and `IsAnAdaptiveCard`.
 - Added new `AtLeastOneRequiredSchemaFilter` to ensure OpenAPI schemas enforce that at least one of the specified properties is required, by modifying the schema to use the `anyOf` rule in Swagger documentation generation.
+- Added two new connectors to `Encamina.Enmarcha.SemanticKernel.Connectors.Document`:
+    - Document connector for reading `.doc` files: `DocDocumentConnector`.
+    - Document connector for reading `.html` files: `HtmlDocumentConnector`.
 
 ## [8.1.8]
 
