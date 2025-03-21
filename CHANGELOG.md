@@ -16,6 +16,67 @@ Also, any bug fix must start with the prefix �Bug fix:� followed by the desc
 
 Previous classification is not required if changes are simple or all belong to the same category.
 
+## [8.2.1]
+
+### Major Changes
+- Updated dependencies:
+  - Aspire.Hosting 8.2.1 → 8.2.2
+  - Azure.AI.OpenAI 2.1.0-beta.1 → 2.2.0-beta.1
+  - Azure.Core 1.43.0 → 1.45.0
+  - Azure.Data.Tables 12.9.0 → 12.10.0
+  - Azure.Identity 1.12.0 → 1.13.2
+  - Microsoft.AspNetCore.Authentication.JwtBearer 8.0.8 → 8.0.14
+  - Microsoft.AspNetCore.Authentication.OpenIdConnect 8.0.8 → 8.0.14
+  - Microsoft.Azure.Cosmos 3.43.0 → 3.47.2
+  - Microsoft.Extensions.Azure 1.7.5 → 1.11.0
+  - Microsoft.Extensions.Hosting 8.0.0 → 8.0.1
+  - Microsoft.Extensions.Http 8.0.0 → 8.0.1
+  - Microsoft.EntityFrameworkCore 8.0.8 → 8.0.14
+  - Microsoft.EntityFrameworkCore.SqlServer 8.0.8 → 8.0.14
+  - Microsoft.Extensions.DependencyInjection.Abstractions 8.0.1 → 8.0.2
+  - Microsoft.AspNetCore.Http.Abstractions 2.2.0 → 2.3.0
+  - Microsoft.Extensions.Logging.Abstractions 8.0.1 → 8.0.3
+  - Microsoft.Bot.Builder.Azure 4.22.8 → 4.23.0
+  - Microsoft.Bot.Builder.Azure.Blobs 4.22.8 → 4.23.0
+  - Microsoft.Bot.Builder.Dialogs 4.22.8 → 4.23.0
+  - Microsoft.Bot.Builder.Integration.ApplicationInsights.Core 4.22.8 → 4.23.0
+  - Microsoft.Bot.Builder.Integration.AspNet.Core 4.22.8 → 4.23.0
+  - MailKit 4.7.1.1 → 4.11.0
+  - System.Net.Http.Json 8.0.0 → 8.0.1
+  - System.Configuration.ConfigurationManager 8.0.0 → 8.0.1
+  - System.Memory.Data 8.0.0 → 8.0.1
+  - Microsoft.SemanticKernel.Abstractions 1.24.1 → 1.42.0
+  - Microsoft.SemanticKernel.Plugins.Memory 1.24.1-alpha → 1.42.0-alpha
+  - Microsoft.SemanticKernel.Connectors.AzureOpenAI 1.24.1 → 1.42.0
+  - Microsoft.SemanticKernel.Core 1.24.1 → 1.42.0
+  - Microsoft.SemanticKernel.Plugins.Document 1.24.1-alpha → 1.42.0-alpha
+  - Microsoft.SemanticKernel.Connectors.AzureAISearch 1.24.1-preview → 1.42.0-preview
+  - Microsoft.SemanticKernel.Connectors.Qdrant 1.24.1-preview → 1.42.0-preview
+  - HtmlAgilityPack 1.11.71 → 1.12.0
+  - PdfPig 0.1.8 → 0.1.10
+  - SixLabors.ImageSharp 3.1.5 → 3.1.7
+  - Bogus 35.6.1 → 35.6.2
+  - CommunityToolkit.Diagnostics 8.2.2 → 8.4.0
+  - coverlet.collector 6.0.2 → 6.0.4
+  - Moq 4.20.70 → 4.20.72
+  - xunit 2.8.1 → 2.9.3
+  - xunit.analyzers 1.14.0 → 1.20.0
+  - xunit.extensibility.core 2.8.1 → 2.9.3
+  - xunit.runner.visualstudio 2.8.1 → 3.0.2
+
+## [8.2.0]
+
+### Breaking Changes
+
+- Semantic Kernel has been updated to `1.24.1`, migrating OpenAI and AzureOpenAI services to use the new OpenAI SDK v2.0 and Azure OpenAI SDK v2.0 SDKs. You can follow the [Migration Guide](https://learn.microsoft.com/en-us/semantic-kernel/support/v2-openai-migration-guide).
+- Removed the `ICompletionService` interface from `Encamina.Enmarcha.AI.OpenAI.Abstractions` and its implementation, `CompletionService`, from `Encamina.Enmarcha.AI.OpenAI.Azure`, as the OpenAI SDK 2.0 no longer includes the completion endpoint.
+    - Removed `CompletionServiceOptions`, `ICompletionServiceFactoryProvider`, `ICompletionServiceFactory`, `CompletionResult`, `CompletionRequest`, `Completion`, `CompletionServiceFactory`, `CompletionServiceFactoryProvider` they are not longer necessary.  
+
+### Major Changes
+- Updated dependencies:
+    - Updated all `Microsoft.SemanticKernel.XXX` packages to `1.24.1`
+    - Updated `System.Text.Json` from `8.0.4` to `8.0.5`
+    
 ## [8.1.9]
 
 ### Major Changes

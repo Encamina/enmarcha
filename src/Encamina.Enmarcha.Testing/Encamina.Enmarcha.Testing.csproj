@@ -10,7 +10,7 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.Options" Version="8.0.2" />
-    <PackageReference Include="Bogus" Version="35.6.1" />
+    <PackageReference Include="Bogus" Version="35.6.2" />
   </ItemGroup>
     
   <ItemGroup>

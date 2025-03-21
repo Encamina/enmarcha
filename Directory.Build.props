@@ -16,8 +16,8 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <VersionPrefix>8.1.9</VersionPrefix>
-    <VersionSuffix>preview-03</VersionSuffix>
+    <VersionPrefix>8.2.1</VersionPrefix>
+    <VersionSuffix>preview-01</VersionSuffix>
   </PropertyGroup>
 
   <!--

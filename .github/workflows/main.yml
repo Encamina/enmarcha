@@ -29,13 +29,7 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-      
-      - name: Set Java for SonarCloud
-        uses: actions/setup-java@v4
-        with:
-            distribution: 'microsoft'
-            java-version: '21'
-        
+              
       - name: Using .NET from 'global.json'
         uses: actions/setup-dotnet@v4
         with:
@@ -43,15 +37,6 @@ jobs:
         
       - name: Restore NuGet Packages
         run: dotnet restore --configfile NuGet.config --verbosity Minimal   
-
-      - name: Sonar - Install SonarCloud scanners
-        run: dotnet tool install --global dotnet-sonarscanner --version 6.0.0
-
-      - name: Sonar - Begin Analyze
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: dotnet-sonarscanner begin /k:"${{ secrets.SONAR_PROJECT_KEY }}" /o:"${{ secrets.SONAR_ORGANIZATION }}" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.exclusions="**/tst/**/*" /d:sonar.cs.opencover.reportsPaths="**/tst/**/coverage.opencover.xml"
 
       - name: Test
         run: dotnet test --nologo --no-restore --collect:"XPlat Code Coverage" --configuration  ${{env.BuildConfiguration}} --settings coverlet.runsettings
@@ -73,12 +58,6 @@ jobs:
           
       - name: Build & Pack Libraries
         run: dotnet pack --nologo --no-restore --configuration ${{env.BuildConfiguration}} -p:IncludeSymbols=true -p:SymbolPackageFormat=snupkg -p:SourceLinkCreate=true -p:DebugType=full --output nupkg  
-     
-      - name: Sonar - End Analyze
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: dotnet-sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
 
       - name: Zip Libraries
         run: |
