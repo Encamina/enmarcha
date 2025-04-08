@@ -79,7 +79,7 @@ public class SkVisionStrictFormatCleanPdfDocumentConnector : StrictFormatCleanPd
     {
         var fontDetails = new FontDetails(string.Empty, false, FontDetails.DefaultWeight, false);
 
-        var lines = text.Split(['\r', '\n'], StringSplitOptions.RemoveEmptyEntries);
+        var lines = text.Split('\r', '\n', StringSplitOptions.RemoveEmptyEntries);
         if (lines.Length == 0)
         {
             lines = [text];
