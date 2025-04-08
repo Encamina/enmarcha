@@ -8,7 +8,7 @@ using Microsoft.Extensions.Options;
 using Microsoft.SemanticKernel;
 using Microsoft.SemanticKernel.ChatCompletion;
 
-namespace Encamina.Enmarcha.SemanticKernel.Connectors.Document.Connectors;
+namespace Encamina.Enmarcha.SemanticKernel.Connectors.Document;
 
 /// <summary>
 /// Extracts text (OCR) and interprets information from images, diagrams and unstructured information. Uses Semantic Kernel.
