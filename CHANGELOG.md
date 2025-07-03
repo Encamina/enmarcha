@@ -19,6 +19,15 @@ Previous classification is not required if changes are simple or all belong to t
 ## [8.2.1]
 
 ### Major Changes
+- Added a new sample project: `Encamina.Enmarcha.Samples.SemanticKernel.DocumentContentExtractor`, demonstrating how to extract content from documents using Semantic Kernel connectors and vision capabilities.
+  - Interactive console example allowing content extraction from `.docx`, `.pptx`, `.txt`, `.md`, `.jpg`, `.jpeg`, `.png`, and `.pdf` files.
+- Introduced the `SkVisionImageExtractor` class, which centralizes image processing logic using vision models (via Semantic Kernel). This enhances code reuse and promotes separation of concerns.
+- Refactored `SkVisionImageDocumentConnector` to inherit from `SkVisionImageExtractor`, simplifying the implementation and removing redundant logic.
+- Added a new class: `SkVisionStrictFormatCleanPdfDocumentConnector`, which extends `StrictFormatCleanPdfDocumentConnector`:
+  - Combines strict-format PDF text extraction with image analysis and interpretation using the vision model.
+  - Detects embedded images in PDF files, processes them using vision, and appends their descriptions as additional text blocks.
+- Introduced a new virtual extension point `ProcessPageExtensions(Page page)` in `StrictFormatCleanPdfDocumentConnector`, allowing derived classes to append custom content blocks to the extracted page content.
+
 - Updated dependencies:
   - Aspire.Hosting 8.2.1 → 8.2.2
   - Azure.AI.OpenAI 2.1.0-beta.1 → 2.2.0-beta.1

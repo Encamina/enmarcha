@@ -24,19 +24,16 @@ public class StrictFormatCleanPdfDocumentConnector : CleanPdfDocumentConnector
     /// <inheritdoc/>
     public override string ReadText(Stream stream)
     {
-        if (stream == null)
-        {
-            throw new ArgumentNullException(nameof(stream));
-        }
+        ArgumentNullException.ThrowIfNull(stream);
 
         using var document = PdfDocument.Open(stream);
 
         var textBlocks = new List<TextBlock>();
         foreach (var page in document.GetPages())
         {
-            var pageTextBlocks = GetTextBlocks(page);
+            textBlocks.AddRange(GetTextBlocks(page));
 
-            textBlocks.AddRange(pageTextBlocks);
+            textBlocks.AddRange(ProcessPageExtensions(page));
         }
 
         var cleanedTextBlocks = CleanTextBlocks(document, textBlocks);
@@ -88,5 +85,16 @@ public class StrictFormatCleanPdfDocumentConnector : CleanPdfDocumentConnector
             .Select(textBlock => new TextBlockElement(textBlock));
 
         return RemoveCommonTextElements(document, horizontalTextBlocks);
+    }
+
+    /// <summary>
+    /// Extension point to process a page and append additional text blocks to the extracted content.
+    /// This method can be overridden in derived classes to provide custom processing for specific pages.
+    /// </summary>
+    /// <param name="page">The PDF page to process.</param>
+    /// <returns>Additional <see cref="TextBlock"/> to append to the page content.</returns>
+    protected virtual IEnumerable<TextBlock> ProcessPageExtensions(Page page)
+    {
+        return [];
     }
 }

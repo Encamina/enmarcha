@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace Encamina.Enmarcha.AI.Abstractions;
+﻿namespace Encamina.Enmarcha.AI.Abstractions;
 
 /// <summary>
 /// <para>
