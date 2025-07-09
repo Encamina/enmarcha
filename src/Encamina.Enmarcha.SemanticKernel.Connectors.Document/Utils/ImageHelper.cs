@@ -1,4 +1,6 @@
-﻿using CommunityToolkit.Diagnostics;
+﻿using System.IO.Compression;
+
+using CommunityToolkit.Diagnostics;
 
 using SixLabors.ImageSharp;
 
@@ -20,11 +22,78 @@ public static class ImageHelper
     {
         Guard.IsNotNull(stream);
 
-        using var image = Image.Load(stream);
+        // Check if the stream is zlib compressed (common in PDF images)
+        var processedStream = TryDecompressZlib(stream) ?? stream;
 
-        var mimeType = image.Metadata.DecodedImageFormat?.DefaultMimeType ?? System.Net.Mime.MediaTypeNames.Application.Octet;
+        try
+        {
+            using var image = Image.Load(processedStream);
 
-        return (mimeType, image.Width, image.Height);
+            var mimeType = image.Metadata.DecodedImageFormat?.DefaultMimeType ?? System.Net.Mime.MediaTypeNames.Application.Octet;
+
+            return (mimeType, image.Width, image.Height);
+        }
+        finally
+        {
+            // Dispose the decompressed stream if we created one
+            if (processedStream != stream)
+            {
+                processedStream?.Dispose();
+            }
+
+            // Reset original stream position if possible
+            if (stream.CanSeek)
+            {
+                stream.Position = 0;
+            }
+        }
+    }
+
+    /// <summary>
+    /// Creates BinaryData from an image stream, handling potential compression or stream positioning issues.
+    /// </summary>
+    /// <param name="stream">The image stream.</param>
+    /// <returns>BinaryData containing the processed image data.</returns>
+    /// <exception cref="ArgumentNullException">Thrown when the stream is null.</exception>
+    /// <exception cref="ArgumentException">Thrown when the stream cannot be processed.</exception>
+    public static BinaryData CreateImageBinaryData(Stream stream)
+    {
+        Guard.IsNotNull(stream);
+
+        try
+        {
+            // Check if the stream is zlib compressed (common in PDF images)
+            var processedStream = TryDecompressZlib(stream) ?? stream;
+
+            try
+            {
+                if (processedStream != stream)
+                {
+                    // We have a decompressed version, use it
+                    using (processedStream)
+                    {
+                        return BinaryData.FromStream(processedStream);
+                    }
+                }
+                else
+                {
+                    // Use original stream
+                    return BinaryData.FromStream(stream);
+                }
+            }
+            finally
+            {
+                // Reset original stream position if possible
+                if (stream.CanSeek)
+                {
+                    stream.Position = 0;
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            throw new ArgumentException("Failed to create image data from stream.", nameof(stream), ex);
+        }
     }
 
     /// <summary>
@@ -47,5 +116,73 @@ public static class ImageHelper
     {
         var (_, width, height) = GetImageInfo(stream);
         return (width, height);
+    }
+
+    /// <summary>
+    /// Attempts to decompress a zlib-compressed stream. Returns the decompressed stream if successful, null otherwise.
+    /// </summary>
+    /// <param name="stream">The potentially compressed stream.</param>
+    /// <returns>A decompressed Stream if the input was zlib-compressed, null otherwise.</returns>
+    private static Stream? TryDecompressZlib(Stream stream)
+    {
+        if (stream.CanSeek)
+        {
+            stream.Position = 0;
+        }
+
+        // Check if it starts with zlib header
+        var buffer = new byte[2];
+        var bytesRead = stream.Read(buffer, 0, 2);
+
+        if (bytesRead < 2)
+        {
+            if (stream.CanSeek)
+            {
+                stream.Position = 0;
+            }
+
+            return null;
+        }
+
+        // zlib magic numbers: 0x78 followed by 0x9C, 0xDA, or 0x01
+        if (buffer[0] != 0x78 || (buffer[1] != 0x9C && buffer[1] != 0xDA && buffer[1] != 0x01))
+        {
+            if (stream.CanSeek)
+            {
+                stream.Position = 0;
+            }
+
+            return null;
+        }
+
+        try
+        {
+            // Reset to beginning for decompression
+            if (stream.CanSeek)
+            {
+                stream.Position = 0;
+            }
+
+            // Skip the first 2 bytes (zlib header) and decompress with DeflateStream
+            stream.ReadByte(); // Skip 0x78
+            stream.ReadByte(); // Skip 0x9C (or other)
+
+            using var deflateStream = new DeflateStream(stream, CompressionMode.Decompress, leaveOpen: true);
+            var decompressedData = new MemoryStream();
+            deflateStream.CopyTo(decompressedData);
+            decompressedData.Position = 0;
+
+            return decompressedData;
+        }
+        catch
+        {
+            // If decompression fails, reset stream and return null
+            if (stream.CanSeek)
+            {
+                stream.Position = 0;
+            }
+
+            return null;
+        }
     }
 }
