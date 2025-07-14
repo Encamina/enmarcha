@@ -85,7 +85,6 @@ public class SkVisionImageExtractor
         Guard.IsNotNull(stream);
 
         var (mimeType, width, height) = ImageHelper.GetImageInfo(stream);
-        stream.Position = 0;
 
         // Check image resolution
         if (width > options.ResolutionLimit || height > options.ResolutionLimit)
@@ -97,7 +96,7 @@ public class SkVisionImageExtractor
 
         var message = new ChatMessageContentItemCollection()
         {
-            new ImageContent(BinaryData.FromStream(stream), mimeType),
+            new ImageContent(ImageHelper.CreateImageBinaryData(stream), mimeType),
         };
 
         history.AddUserMessage(message);

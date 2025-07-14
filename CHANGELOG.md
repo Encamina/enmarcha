@@ -73,6 +73,12 @@ Previous classification is not required if changes are simple or all belong to t
   - xunit.extensibility.core 2.8.1 → 2.9.3
   - xunit.runner.visualstudio 2.8.1 → 3.0.2
 
+### Minor Changes
+- Updated the `BinaryData.FromStream` method in `SKVisionImageExtractor.cs` to a more robust custom implementation called `CreateImageBinaryData` implemented in `ImageHelper.cs`.
+- Added two new methods to the `ImageHelper.cs` class:
+    - Added the `CreateImageBinaryData` method that allows you to transform a Stream into BinaryData, taking into account that the image bytes may be compressed.
+    - Added `TryDecompressZlib` method that attempts to decompress compressed bytes from images.
+
 ## [8.2.0]
 
 ### Breaking Changes
