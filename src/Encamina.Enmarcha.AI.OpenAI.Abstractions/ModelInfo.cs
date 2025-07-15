@@ -24,6 +24,7 @@ public sealed class ModelInfo
         { @"gpt-4-turbo", new ModelInfo() { Id = @"gpt-4", MaxTokens = 128000, MaxTokensOutput = 4096, Encoding = @"cl100k_base", IsObsolete = true } },
         { @"gpt-4o", new ModelInfo() { Id = @"gpt-4o", MaxTokens = 128000, MaxTokensOutput = 4096, Encoding = @"o200k_base", IsObsolete = false } },
         { @"gpt-4o-mini", new ModelInfo() { Id = @"gpt-4o-mini", MaxTokens = 128000, MaxTokensOutput = 16416, Encoding = @"o200k_base", IsObsolete = false } },
+        { @"gpt-4.1", new ModelInfo() { Id = @"gpt-4.1", MaxTokens = 128000, MaxTokensOutput = 4096, Encoding = @"o200k_base", IsObsolete = false } },
 
         // GPT 3...
         { @"text-davinci-001", new ModelInfo() { Id = @"text-davinci-001", MaxTokens = 2049, MaxTokensOutput = 2049, Encoding = @"r50k_base", IsObsolete = true } },
