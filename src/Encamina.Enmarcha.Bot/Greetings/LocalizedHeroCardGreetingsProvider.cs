@@ -36,7 +36,7 @@ internal class LocalizedHeroCardGreetingsProvider : GreetingsProviderBase
     protected ILocalizedHeroCardGreetingsOptions Options { get; }
 
     /// <inheritdoc/>
-    public async override Task SendAsync(ITurnContext turnContext, CancellationToken cancellationToken)
+    public override async Task SendAsync(ITurnContext turnContext, CancellationToken cancellationToken)
     {
         var activityLocal = turnContext.Activity.GetCultureInfoFromActivity();
 
@@ -59,7 +59,7 @@ internal class LocalizedHeroCardGreetingsProvider : GreetingsProviderBase
 
         if (Options.LocalizedOptions.TryGetValue(key, out var options))
         {
-            turnContext.Activity.Locale = key.Name;  // Set activity locale to the used for the greetings, specially if using the dafault locale.
+            turnContext.Activity.Locale = key.Name;  // Set activity locale to the used for the greetings, specially if using the default locale.
 
             foreach (var option in options)
             {

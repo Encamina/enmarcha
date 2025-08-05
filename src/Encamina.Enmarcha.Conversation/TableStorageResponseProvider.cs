@@ -1,5 +1,6 @@
 ﻿using System.Globalization;
 
+using Azure.Core;
 using Azure.Data.Tables;
 
 using CommunityToolkit.Diagnostics;
@@ -20,8 +21,10 @@ internal class TableStorageResponseProvider : IIntentResponsesProvider
     private readonly double cacheAbsoluteExpirationSeconds;
     private readonly string defaultLocale;
     private readonly string intentOrderSeparator;
-    private readonly string tableConnectionString;
+    private readonly string? tableConnectionString;
+    private readonly Uri? tableEndpoint;
     private readonly string tableName;
+    private readonly TokenCredential? tokenCredential;
     private readonly IMemoryCache memoryCache;
 
     /// <summary>
@@ -31,31 +34,88 @@ internal class TableStorageResponseProvider : IIntentResponsesProvider
     /// <param name="tableName">The name of the table in the azure Table Storage.</param>
     /// <param name="defaultLocale">Default locale.</param>
     /// <param name="intentCounterSeparator">
-    /// An optional value that represents the intent counter separation (i.e., a value that helps separating the intent
+    /// An optional value that represents the intent counter separation (i.e., a value that helps to separate the intent
     /// label from a numeric value that represents its order or instance number). Defaults to '<c>-</c>'.
     /// </param>
     /// <param name="cacheAbsoluteExpirationSeconds">
     /// An optional value for absolute expiration time in seconds for the cache. Defaults to '<c>86400</c>' seconds.
     /// </param>
     /// <param name="memoryCache">An optional valid instance of a <see cref="IMemoryCache"/>.</param>
-    public TableStorageResponseProvider(string tableConnectionString,
+    public TableStorageResponseProvider(
+        string tableConnectionString,
         string tableName,
         string defaultLocale,
         string intentCounterSeparator = @"-",
         double cacheAbsoluteExpirationSeconds = 86400,
         IMemoryCache? memoryCache = null)
+        : this(tableName, defaultLocale, intentCounterSeparator, cacheAbsoluteExpirationSeconds, memoryCache)
     {
         Guard.IsNotNullOrWhiteSpace(tableConnectionString);
+
+        this.tableConnectionString = tableConnectionString;
+    }
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="TableStorageResponseProvider"/> class.
+    /// </summary>
+    /// <param name="tableEndpoint">The URI of the Azure Table Storage endpoint.</param>
+    /// <param name="credential">The <see cref="TokenCredential"/> used to authenticate requests to the Table Storage.</param>
+    /// <param name="tableName">The name of the table in the azure Table Storage.</param>
+    /// <param name="defaultLocale">Default locale.</param>
+    /// <param name="intentCounterSeparator">
+    /// An optional value that represents the intent counter separation (i.e., a value that helps to separate the intent
+    /// label from a numeric value that represents its order or instance number). Defaults to '<c>-</c>'.
+    /// </param>
+    /// <param name="cacheAbsoluteExpirationSeconds">
+    /// An optional value for absolute expiration time in seconds for the cache. Defaults to '<c>86400</c>' seconds.
+    /// </param>
+    /// <param name="memoryCache">An optional valid instance of a <see cref="IMemoryCache"/>.</param>
+    public TableStorageResponseProvider(
+        Uri tableEndpoint,
+        TokenCredential credential,
+        string tableName,
+        string defaultLocale,
+        string intentCounterSeparator = "-",
+        double cacheAbsoluteExpirationSeconds = 86400,
+        IMemoryCache? memoryCache = null)
+        : this(tableName, defaultLocale, intentCounterSeparator, cacheAbsoluteExpirationSeconds, memoryCache)
+    {
+        Guard.IsNotNull(tableEndpoint);
+        Guard.IsNotNull(credential);
+
+        this.tokenCredential = credential;
+        this.tableEndpoint = tableEndpoint;
+    }
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="TableStorageResponseProvider"/> class.
+    /// </summary>
+    /// <param name="tableName">The name of the table in the azure Table Storage.</param>
+    /// <param name="defaultLocale">Default locale.</param>
+    /// <param name="intentCounterSeparator">
+    /// An optional value that represents the intent counter separation (i.e., a value that helps to separate the intent
+    /// label from a numeric value that represents its order or instance number). Defaults to '<c>-</c>'.
+    /// </param>
+    /// <param name="cacheAbsoluteExpirationSeconds">
+    /// An optional value for absolute expiration time in seconds for the cache. Defaults to '<c>86400</c>' seconds.
+    /// </param>
+    /// <param name="memoryCache">An optional valid instance of a <see cref="IMemoryCache"/>.</param>
+    private TableStorageResponseProvider(
+        string tableName,
+        string defaultLocale,
+        string intentCounterSeparator,
+        double cacheAbsoluteExpirationSeconds,
+        IMemoryCache? memoryCache)
+    {
         Guard.IsNotNullOrWhiteSpace(tableName);
-        Guard.IsNotNullOrWhiteSpace(tableName);
+        Guard.IsNotNullOrWhiteSpace(defaultLocale);
         Guard.IsNotNullOrWhiteSpace(intentCounterSeparator);
         Guard.IsNotNull(memoryCache);
 
         this.cacheAbsoluteExpirationSeconds = cacheAbsoluteExpirationSeconds;
         this.defaultLocale = defaultLocale;
-        intentOrderSeparator = intentCounterSeparator;
+        this.intentOrderSeparator = intentCounterSeparator;
         this.memoryCache = memoryCache;
-        this.tableConnectionString = tableConnectionString;
         this.tableName = tableName;
     }
 
@@ -81,7 +141,10 @@ internal class TableStorageResponseProvider : IIntentResponsesProvider
 
     private async Task<IDictionary<string, IDictionary<string, IList<Response>>>> InitAsync(CancellationToken cancellationToken)
     {
-        var tableClient = new TableClient(tableConnectionString, tableName);
+        var tableClient = !string.IsNullOrWhiteSpace(tableConnectionString)
+            ? new TableClient(tableConnectionString, tableName)
+            : new TableClient(tableEndpoint!, tableName, tokenCredential!);
+
         await tableClient.CreateIfNotExistsAsync(cancellationToken);
 
         var entities = await tableClient.QueryAsync<ResponsesTableEntity>(cancellationToken: cancellationToken)

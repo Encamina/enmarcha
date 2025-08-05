@@ -2,6 +2,8 @@
 
 using System.Globalization;
 
+using Azure.Core;
+
 using Encamina.Enmarcha.AI;
 
 using Encamina.Enmarcha.Bot.Abstractions.Greetings;
@@ -395,6 +397,46 @@ public static class IServiceCollectionExtensions
     }
 
     /// <summary>
+    /// Adds a localized greetings provider based on <see cref="HeroCard">hero cards</see> configured from localized parameters stored in a Table Storage.
+    /// </summary>
+    /// <param name="services"> The <see cref="IServiceCollection"/> to add services to.</param>
+    /// <param name="defaultLocale">The default locale.</param>
+    /// <param name="tableEndpoint">The Table Storage endpoint URI.</param>
+    /// <param name="tokenCredential">The <see cref="TokenCredential"/> to use for authenticating with the Table Storage.</param>
+    /// <param name="tableName">The name of the table in the Table storage that contains the localized parameters for the greetings message. Default name <c>Greetings</c>.</param>
+    /// <param name="cacheAbsoluteExpirationSeconds">
+    /// The absolute expiration time, relative to now in seconds for a cache to store values retrieved from the Table Storage, to improve performance. Default <c>86400</c> (i.e., 24 hours - 1 day).
+    /// </param>
+    /// <param name="serviceLifetime">The lifetime for the greetings provider.</param>
+    /// <returns>The <see cref="IServiceCollection"/> so that additional calls can be chained.</returns>
+    public static IServiceCollection AddBotLocalizedHeroCardGreetingsProvider(this IServiceCollection services, string defaultLocale, Uri tableEndpoint, TokenCredential tokenCredential, string tableName = @"Greetings", double cacheAbsoluteExpirationSeconds = 86400, ServiceLifetime serviceLifetime = ServiceLifetime.Singleton)
+    {
+        return services.AddMemoryCache()
+            .TryAddType<IGreetingsProvider, LocalizedHeroCardGreetingsProvider>(serviceLifetime)
+            .TryAddType<ILocalizedHeroCardGreetingsOptions>(serviceLifetime, sp => new LocalizedHeroCardGreetingsOptionsFromTableStorage(tableEndpoint, tokenCredential, tableName, defaultLocale, cacheAbsoluteExpirationSeconds, sp.GetService<IMemoryCache>()));
+    }
+
+    /// <summary>
+    /// Adds a localized greetings provider based on <see cref="HeroCard">hero cards</see> configured from localized parameters stored in a Table Storage.
+    /// </summary>
+    /// <param name="services"> The <see cref="IServiceCollection"/> to add services to.</param>
+    /// <param name="defaultLocale">The default locale.</param>
+    /// <param name="tableEndpoint">The Table Storage endpoint URI.</param>
+    /// <param name="tokenCredentialProvider">The function to provide a <see cref="TokenCredential"/> for authenticating with the Table Storage.</param>
+    /// <param name="tableName">The name of the table in the Table storage that contains the localized parameters for the greetings message. Default name <c>Greetings</c>.</param>
+    /// <param name="cacheAbsoluteExpirationSeconds">
+    /// The absolute expiration time, relative to now in seconds for a cache to store values retrieved from the Table Storage, to improve performance. Default <c>86400</c> (i.e., 24 hours - 1 day).
+    /// </param>
+    /// <param name="serviceLifetime">The lifetime for the greetings provider.</param>
+    /// <returns>The <see cref="IServiceCollection"/> so that additional calls can be chained.</returns>
+    public static IServiceCollection AddBotLocalizedHeroCardGreetingsProvider(this IServiceCollection services, string defaultLocale, Uri tableEndpoint, Func<IServiceProvider, TokenCredential> tokenCredentialProvider, string tableName = @"Greetings", double cacheAbsoluteExpirationSeconds = 86400, ServiceLifetime serviceLifetime = ServiceLifetime.Singleton)
+    {
+        return services.AddMemoryCache()
+            .TryAddType<IGreetingsProvider, LocalizedHeroCardGreetingsProvider>(serviceLifetime)
+            .TryAddType<ILocalizedHeroCardGreetingsOptions>(serviceLifetime, sp => new LocalizedHeroCardGreetingsOptionsFromTableStorage(tableEndpoint, tokenCredentialProvider(sp), tableName, defaultLocale, cacheAbsoluteExpirationSeconds, sp.GetService<IMemoryCache>()));
+    }
+
+    /// <summary>
     /// Adds a localized greetings provider based on texts responses.
     /// </summary>
     /// <param name="services"> The <see cref="IServiceCollection"/> to add services to.</param>
@@ -424,6 +466,46 @@ public static class IServiceCollectionExtensions
     {
         return services.AddMemoryCache()
             .AddTableStorageResponsesProvider(defaultLocale, tableConnectionString, tableName, intentCounterSeparator, cacheAbsoluteExpirationSeconds, serviceLifetime);
+    }
+
+    /// <summary>
+    /// Adds a Table Storage as repository for the bot's localized responses.
+    /// </summary>
+    /// <param name="services"> The <see cref="IServiceCollection"/> to add services to.</param>
+    /// <param name="defaultLocale">The default locale.</param>
+    /// <param name="tableEndpoint">The Table Storage endpoint URI.</param>
+    /// <param name="tokenCredential">The <see cref="TokenCredential"/> to use for authenticating with the Table Storage.</param>
+    /// <param name="tableName">The name of the table in the Table storage that contains the localized responses. Default name <c>Responses</c>.</param>
+    /// <param name="intentCounterSeparator">An intent counter separator for scenarios with multiple responses.</param>
+    /// <param name="cacheAbsoluteExpirationSeconds">
+    /// The absolute expiration time, relative to now in seconds for a cache to store values retrieved from the Table Storage, to improve performance. Default <c>86400</c> (i.e., 24 hours - 1 day).
+    /// </param>
+    /// <param name="serviceLifetime">The lifetime for the responses provider.</param>
+    /// <returns>The <see cref="IServiceCollection"/> so that additional calls can be chained.</returns>
+    public static IServiceCollection AddBotTableStorageResponsesProvider(this IServiceCollection services, string defaultLocale, Uri tableEndpoint, TokenCredential tokenCredential, string tableName = @"Responses", string intentCounterSeparator = @"-", double cacheAbsoluteExpirationSeconds = 86400, ServiceLifetime serviceLifetime = ServiceLifetime.Singleton)
+    {
+        return services.AddMemoryCache()
+            .AddTableStorageResponsesProvider(defaultLocale, tableEndpoint, tokenCredential, tableName, intentCounterSeparator, cacheAbsoluteExpirationSeconds, serviceLifetime);
+    }
+
+    /// <summary>
+    /// Adds a Table Storage as repository for the bot's localized responses.
+    /// </summary>
+    /// <param name="services"> The <see cref="IServiceCollection"/> to add services to.</param>
+    /// <param name="defaultLocale">The default locale.</param>
+    /// <param name="tableEndpoint">The Table Storage endpoint URI.</param>
+    /// <param name="tokenCredentialProvider">The function to provide a <see cref="TokenCredential"/> for authenticating with the Table Storage.</param>
+    /// <param name="tableName">The name of the table in the Table storage that contains the localized responses. Default name <c>Responses</c>.</param>
+    /// <param name="intentCounterSeparator">An intent counter separator for scenarios with multiple responses.</param>
+    /// <param name="cacheAbsoluteExpirationSeconds">
+    /// The absolute expiration time, relative to now in seconds for a cache to store values retrieved from the Table Storage, to improve performance. Default <c>86400</c> (i.e., 24 hours - 1 day).
+    /// </param>
+    /// <param name="serviceLifetime">The lifetime for the responses provider.</param>
+    /// <returns>The <see cref="IServiceCollection"/> so that additional calls can be chained.</returns>
+    public static IServiceCollection AddBotTableStorageResponsesProvider(this IServiceCollection services, string defaultLocale, Uri tableEndpoint, Func<IServiceProvider, TokenCredential> tokenCredentialProvider, string tableName = @"Responses", string intentCounterSeparator = @"-", double cacheAbsoluteExpirationSeconds = 86400, ServiceLifetime serviceLifetime = ServiceLifetime.Singleton)
+    {
+        return services.AddMemoryCache()
+            .AddTableStorageResponsesProvider(defaultLocale, tableEndpoint, tokenCredentialProvider, tableName, intentCounterSeparator, cacheAbsoluteExpirationSeconds, serviceLifetime);
     }
 
     private static IServiceCollection AddBotTranscriptLoggerMiddleware(this IServiceCollection services, ServiceLifetime serviceLifetime = ServiceLifetime.Singleton)

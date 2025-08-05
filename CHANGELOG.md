@@ -19,6 +19,7 @@ Previous classification is not required if changes are simple or all belong to t
 ## [8.2.1]
 
 ### Major Changes
+- Added Azure authentication support via TokenCredential in `LocalizedHeroCardGreetingsOptionsFromTableStorage` and `TableStorageResponseProvider`.
 - Added a new sample project: `Encamina.Enmarcha.Samples.SemanticKernel.DocumentContentExtractor`, demonstrating how to extract content from documents using Semantic Kernel connectors and vision capabilities.
   - Interactive console example allowing content extraction from `.docx`, `.pptx`, `.txt`, `.md`, `.jpg`, `.jpeg`, `.png`, and `.pdf` files.
 - Introduced the `SkVisionImageExtractor` class, which centralizes image processing logic using vision models (via Semantic Kernel). This enhances code reuse and promotes separation of concerns.

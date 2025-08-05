@@ -17,7 +17,7 @@ public interface ILocalizedHeroCardGreetingsOptions
     public CultureInfo DefaultLocale { get; }
 
     /// <summary>
-    /// Gets a dictionary of localizard options for <see cref="HeroCard">hero cards</see>.
+    /// Gets a dictionary of localized options for <see cref="HeroCard">hero cards</see>.
     /// The <see cref="IDictionary{TKey, TValue}.Keys"/> are locale or language codes.
     /// </summary>
     public IDictionary<CultureInfo, IEnumerable<IHeroCardOptions>> LocalizedOptions { get; }
