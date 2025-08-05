@@ -1,6 +1,7 @@
 ﻿using System.Globalization;
 
 using Azure;
+using Azure.Core;
 using Azure.Data.Tables;
 
 using CommunityToolkit.Diagnostics;
@@ -21,10 +22,12 @@ internal class LocalizedHeroCardGreetingsOptionsFromTableStorage : ILocalizedHer
     private const string CacheKey = @"CacheKey_Greetings";
 
     private readonly double cacheAbsoluteExpirationSeconds;
-    private readonly string tableConnectionString;
+    private readonly string? tableConnectionString;
+    private readonly Uri? tableEndpoint;
     private readonly string tableName;
+    private readonly TokenCredential? tokenCredential;
 
-    private readonly IMemoryCache memoryCache;
+    private readonly IMemoryCache? memoryCache;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="LocalizedHeroCardGreetingsOptionsFromTableStorage"/> class.
@@ -44,6 +47,22 @@ internal class LocalizedHeroCardGreetingsOptionsFromTableStorage : ILocalizedHer
     /// <summary>
     /// Initializes a new instance of the <see cref="LocalizedHeroCardGreetingsOptionsFromTableStorage"/> class.
     /// </summary>
+    /// <param name="tableEndpoint">The URI of the Azure Table Storage endpoint.</param>
+    /// <param name="credential">The <see cref="TokenCredential"/> used to authenticate requests to the Table Storage.</param>
+    /// <param name="tableName">The name of the table in the Table storage that contains the localized parameters for the greetings message.</param>
+    /// <param name="defaultLocale">The default locale.</param>
+    /// <param name="cacheAbsoluteExpirationSeconds">
+    /// The absolute expiration time, relative to now in seconds for a cache to store values retrieved from the Table Storage, to improve performance. Default <c>86400</c> (i.e., 24 hours - 1 day).
+    /// </param>
+    /// <param name="memoryCache">An optional valid instance of a memory cache to improve performance by storing parameters and values retrieved from the Table Storage.</param>
+    public LocalizedHeroCardGreetingsOptionsFromTableStorage(Uri tableEndpoint, TokenCredential credential, string tableName, string defaultLocale, double cacheAbsoluteExpirationSeconds = 86400, IMemoryCache? memoryCache = null)
+        : this(tableEndpoint, credential, tableName, CultureInfo.GetCultureInfo(defaultLocale), cacheAbsoluteExpirationSeconds, memoryCache)
+    {
+    }
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="LocalizedHeroCardGreetingsOptionsFromTableStorage"/> class.
+    /// </summary>
     /// <param name="tableConnectionString">The Table Storage connection string.</param>
     /// <param name="tableName">The name of the table in the Table storage that contains the localized parameters for the greetings message.</param>
     /// <param name="defaultLocale">The default locale.</param>
@@ -52,20 +71,59 @@ internal class LocalizedHeroCardGreetingsOptionsFromTableStorage : ILocalizedHer
     /// </param>
     /// <param name="memoryCache">An optional valid instance of a memory cache to improve performance by storing parameters and values retrieved from the Table Storage.</param>
     public LocalizedHeroCardGreetingsOptionsFromTableStorage(string tableConnectionString, string tableName, CultureInfo defaultLocale, double cacheAbsoluteExpirationSeconds = 86400, IMemoryCache? memoryCache = null)
+        : this(tableName, defaultLocale, cacheAbsoluteExpirationSeconds, memoryCache)
     {
         Guard.IsNotNullOrWhiteSpace(tableConnectionString);
+
+        this.tableConnectionString = tableConnectionString;
+        LocalizedOptions = BuildOptions();
+    }
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="LocalizedHeroCardGreetingsOptionsFromTableStorage"/> class.
+    /// </summary>
+    /// <param name="tableEndpoint">The URI of the Azure Table Storage endpoint.</param>
+    /// <param name="credential">The <see cref="TokenCredential"/> used to authenticate requests to the Table Storage.</param>
+    /// <param name="tableName">The name of the table in the Table storage that contains the localized parameters for the greetings message.</param>
+    /// <param name="defaultLocale">The default locale.</param>
+    /// <param name="cacheAbsoluteExpirationSeconds">
+    /// The absolute expiration time, relative to now in seconds for a cache to store values retrieved from the Table Storage, to improve performance. Default <c>86400</c> (i.e., 24 hours - 1 day).
+    /// </param>
+    /// <param name="memoryCache">An optional valid instance of a memory cache to improve performance by storing parameters and values retrieved from the Table Storage.</param>
+    public LocalizedHeroCardGreetingsOptionsFromTableStorage(Uri tableEndpoint, TokenCredential credential, string tableName, CultureInfo defaultLocale, double cacheAbsoluteExpirationSeconds = 86400, IMemoryCache? memoryCache = null)
+        : this(tableName, defaultLocale, cacheAbsoluteExpirationSeconds, memoryCache)
+    {
+        Guard.IsNotNull(tableEndpoint);
+        Guard.IsNotNull(credential);
+
+        this.tableEndpoint = tableEndpoint;
+        this.tokenCredential = credential;
+
+        LocalizedOptions = BuildOptions();
+    }
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="LocalizedHeroCardGreetingsOptionsFromTableStorage"/> class.
+    /// </summary>
+    /// <param name="tableName">The name of the table in the Table storage that contains the localized parameters for the greetings message.</param>
+    /// <param name="defaultLocale">The default locale.</param>
+    /// <param name="cacheAbsoluteExpirationSeconds">
+    /// The absolute expiration time, relative to now in seconds for a cache to store values retrieved from the Table Storage, to improve performance. Default <c>86400</c> (i.e., 24 hours - 1 day).
+    /// </param>
+    /// <param name="memoryCache">An optional valid instance of a memory cache to improve performance by storing parameters and values retrieved from the Table Storage.</param>
+    private LocalizedHeroCardGreetingsOptionsFromTableStorage(string tableName, CultureInfo defaultLocale, double cacheAbsoluteExpirationSeconds, IMemoryCache? memoryCache)
+    {
         Guard.IsNotNullOrWhiteSpace(tableName);
-        Guard.IsNotNullOrWhiteSpace(tableName);
+        Guard.IsNotNull(defaultLocale);
         Guard.IsNotNull(memoryCache);
 
         this.cacheAbsoluteExpirationSeconds = cacheAbsoluteExpirationSeconds;
-        this.tableConnectionString = tableConnectionString;
         this.tableName = tableName;
 
         this.memoryCache = memoryCache;
 
         DefaultLocale = defaultLocale;
-        LocalizedOptions = BuildOptions();
+        LocalizedOptions = new Dictionary<CultureInfo, IEnumerable<IHeroCardOptions>>();
     }
 
     /// <inheritdoc/>
@@ -85,7 +143,10 @@ internal class LocalizedHeroCardGreetingsOptionsFromTableStorage : ILocalizedHer
 
     private IDictionary<CultureInfo, IEnumerable<IHeroCardOptions>> Init()
     {
-        var tableClient = new TableClient(tableConnectionString, tableName);
+        var tableClient = !string.IsNullOrWhiteSpace(tableConnectionString)
+            ? new TableClient(tableConnectionString, tableName)
+            : new TableClient(tableEndpoint!, tableName, tokenCredential!);
+
         tableClient.CreateIfNotExists();
 
         var entities = tableClient.Query<HeroCardGreetingsOptionsTableEntity>().ToLookup(entity => (entity.PartitionKey, entity.Order));
