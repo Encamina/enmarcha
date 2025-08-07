@@ -52,7 +52,7 @@ public class SkVisionStrictFormatCleanPdfDocumentConnector : StrictFormatCleanPd
             try
             {
                 using var imageStream = new MemoryStream(image.RawBytes.ToArray());
-                var imageDescription = visionProcessor.ProcessImageWithVision(imageStream);
+                var imageDescription = visionProcessor.ProcessImageWithVision(imageStream, image.WidthInSamples, image.HeightInSamples);
 
                 if (!string.IsNullOrEmpty(imageDescription))
                 {

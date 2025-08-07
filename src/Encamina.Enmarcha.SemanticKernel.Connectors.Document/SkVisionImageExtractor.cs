@@ -80,11 +80,16 @@ public class SkVisionImageExtractor
     /// <param name="stream">The image stream to process.</param>
     /// <returns>The extracted text description from the image.</returns>
     /// <exception cref="DocumentTooLargeException">Thrown when the image exceeds resolution limits or output capacity.</exception>
-    public string ProcessImageWithVision(Stream stream)
+    public string ProcessImageWithVision(Stream stream, int? rawCcittWidth = null, int? rawCcittHeight = null)
     {
         Guard.IsNotNull(stream);
 
-        var (mimeType, width, height) = ImageHelper.GetImageInfo(stream);
+        if (stream.CanSeek)
+        {
+            stream.Position = 0;
+        }
+
+        var (mimeType, width, height, pngData) = ImageHelper.ProcessImageAndGetBinary(stream, rawCcittWidth, rawCcittHeight);
 
         // Check image resolution
         if (width > options.ResolutionLimit || height > options.ResolutionLimit)
@@ -92,22 +97,25 @@ public class SkVisionImageExtractor
             throw new DocumentTooLargeException();
         }
 
-        var history = new ChatHistory(SystemPrompt);
+        if (stream.CanSeek)
+        {
+            stream.Position = 0;
+        }
 
+        var history = new ChatHistory(SystemPrompt);
         var message = new ChatMessageContentItemCollection()
         {
-            new ImageContent(ImageHelper.CreateImageBinaryData(stream), mimeType),
+            new ImageContent(pngData, mimeType),
         };
 
         history.AddUserMessage(message);
 
-        // TODO: We can improve that making an async version of IEnmarchaDocumentConnector.
+        // TODO: We can improve that making an async version of IEnmarchaDocumentConnector
         var response = chatCompletionService.GetChatMessageContentAsync(history).GetAwaiter().GetResult();
 
-        // Check if the model has exceeded the output capacity.
-        if (response.Metadata?.TryGetValue(@"FinishReason", out var finishReason) == true &&
+        if (response.Metadata?.TryGetValue("FinishReason", out var finishReason) == true &&
             finishReason is string finishReasonString &&
-            finishReasonString.Equals(@"length", StringComparison.OrdinalIgnoreCase))
+            finishReasonString.Equals("length", StringComparison.OrdinalIgnoreCase))
         {
             throw new DocumentTooLargeException();
         }
