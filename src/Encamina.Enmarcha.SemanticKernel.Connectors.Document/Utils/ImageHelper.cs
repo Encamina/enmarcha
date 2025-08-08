@@ -16,20 +16,6 @@ namespace Encamina.Enmarcha.SemanticKernel.Connectors.Document.Utils;
 public static class ImageHelper
 {
     /// <summary>
-    /// Gets both the MIME type and resolution (width and height) of an image from a stream.
-    /// </summary>
-    /// <param name="stream">The stream containing the image.</param>
-    /// <param name="rawCcittWidth">Optional width for raw CCITT images.</param>
-    /// <param name="rawCcittHeight">Optional height for raw CCITT images.</param>
-    /// <returns>A tuple containing the MIME type, width, and height of the image.</returns>
-    public static (string MimeType, int Width, int Height) GetImageInfo(Stream stream, int? rawCcittWidth = null, int? rawCcittHeight = null)
-    {
-        Guard.IsNotNull(stream);
-
-        return ProcessImageStream(stream, (image, mimeType) => (mimeType, image.Width, image.Height), rawCcittWidth, rawCcittHeight);
-    }
-
-    /// <summary>
     /// Processes an image stream and returns its MIME type, width, height, and PNG data as a BinaryData object.
     /// </summary>
     /// <param name="stream">The stream containing the image.</param>
@@ -61,28 +47,6 @@ public static class ImageHelper
     }
 
     /// <summary>
-    /// Gets the MIME type of an image from a stream.
-    /// </summary>
-    /// <param name="stream">The stream containing the image.</param>
-    /// <returns>The MIME type of the image, or "application/octet-stream" if the type is unknown.</returns>
-    public static string GetMimeType(Stream stream)
-    {
-        var (mimeType, _, _) = GetImageInfo(stream);
-        return mimeType;
-    }
-
-    /// <summary>
-    /// Gets the resolution (width and height) of an image from a stream.
-    /// </summary>
-    /// <param name="stream">The stream containing the image.</param>
-    /// <returns>A tuple containing the width and height of the image.</returns>
-    public static (int Width, int Height) GetResolution(Stream stream)
-    {
-        var (_, width, height) = GetImageInfo(stream);
-        return (width, height);
-    }
-
-    /// <summary>
     /// Attempts to decompress a zlib-compressed stream. Returns the decompressed stream if successful, null otherwise.
     /// </summary>
     /// <param name="stream">The potentially compressed stream.</param>
@@ -108,7 +72,7 @@ public static class ImageHelper
         }
 
         // Standard zlib header check
-        if (buffer[0] != 0x78 || buffer[1] != 0x9C && buffer[1] != 0xDA && buffer[1] != 0x01)
+        if (buffer[0] != 0x78 || (buffer[1] != 0x9C && buffer[1] != 0xDA && buffer[1] != 0x01))
         {
             if (stream.CanSeek)
             {
@@ -156,18 +120,17 @@ public static class ImageHelper
         stream.Position = 0;
         var header = new byte[4];
         var bytesRead = stream.Read(header, 0, 4);
-        stream.Position = 0;
-
-        foreach (var info in ImageInfo.GetAll())
+        if (bytesRead != 4)
         {
-            if (info.Match(header))
-            {
-                return info;
-            }
+            throw new InvalidOperationException($"Could not read the expected 4 bytes from the stream (got {bytesRead}).");
         }
 
+        stream.Position = 0;
+
+        var info = ImageInfo.GetAll().FirstOrDefault(x => x.Match(header));
+
         // If not found, fallback to raw-ccitt
-        return ImageInfo.GetByType("raw-ccitt")!;
+        return info ?? ImageInfo.GetByType("raw-ccitt")!;
     }
 
     /// <summary>
@@ -202,6 +165,7 @@ public static class ImageHelper
 
             default:
                 stream.Position = 0;
+
                 return stream; // PNG, JPEG, etc.
         }
     }
@@ -222,10 +186,14 @@ public static class ImageHelper
             throw new ArgumentException("Not a binary PBM P4");
         }
 
-        string? line = null;
+        string? line;
         do
         {
             line = reader.ReadLine();
+            if (line == null)
+            {
+                throw new ArgumentException("Unexpected end of PBM header.");
+            }
         }
         while (line.StartsWith('#'));
 
@@ -236,7 +204,11 @@ public static class ImageHelper
         pbmStream.Position = dataOffset;
         var bytesPerRow = (width + 7) / 8;
         var bitmap = new byte[bytesPerRow * height];
-        pbmStream.Read(bitmap, 0, bitmap.Length);
+        var bytesRead = pbmStream.Read(bitmap, 0, bitmap.Length);
+        if (bytesRead != bitmap.Length)
+        {
+            throw new InvalidOperationException($"Could not read all PBM data (expected {bitmap.Length}, got {bytesRead}).");
+        }
 
         using var img = new Image<L8>(width, height);
         for (var y = 0; y < height; y++)
@@ -279,8 +251,8 @@ public static class ImageHelper
             for (var x = 0; x < width; x++)
             {
                 var byteIndex = x / 8;
-                var bitIndex = 7 - x % 8;
-                var isBlack = (buffer[byteIndex] >> bitIndex & 0x1) == 0;
+                var bitIndex = 7 - (x % 8);
+                var isBlack = ((buffer[byteIndex] >> bitIndex) & 0x1) == 0;
                 img[x, y] = isBlack ? new L8(0) : new L8(255);
             }
         }
@@ -304,7 +276,11 @@ public static class ImageHelper
     {
         rawCcittStream.Position = 0;
         var rawData = new byte[rawCcittStream.Length];
-        rawCcittStream.Read(rawData, 0, rawData.Length);
+        var bytesRead = rawCcittStream.Read(rawData, 0, rawData.Length);
+        if (bytesRead != rawData.Length)
+        {
+            throw new InvalidOperationException($"Could not read all of the raw CCITT data (expected {rawData.Length}, got {bytesRead}).");
+        }
 
         var tiffStream = new MemoryStream();
         var tiff = Tiff.ClientOpen("in-memory", "w", tiffStream, new TiffStream()) ?? throw new InvalidOperationException("Could not create in-memory TIFF");

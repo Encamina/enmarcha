@@ -78,6 +78,8 @@ public class SkVisionImageExtractor
     /// Processes an image stream through the vision model to extract text and interpret visual content.
     /// </summary>
     /// <param name="stream">The image stream to process.</param>
+    /// <param name="rawCcittWidth"> Optional width for raw CCITT images.</param>
+    /// <param name="rawCcittHeight"> Optional height for raw CCITT images.</param>
     /// <returns>The extracted text description from the image.</returns>
     /// <exception cref="DocumentTooLargeException">Thrown when the image exceeds resolution limits or output capacity.</exception>
     public string ProcessImageWithVision(Stream stream, int? rawCcittWidth = null, int? rawCcittHeight = null)
