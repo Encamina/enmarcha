@@ -75,10 +75,17 @@ Previous classification is not required if changes are simple or all belong to t
   - xunit.runner.visualstudio 2.8.1 → 3.0.2
 
 ### Minor Changes
-- Updated the `BinaryData.FromStream` method in `SKVisionImageExtractor.cs` to a more robust custom implementation called `CreateImageBinaryData` implemented in `ImageHelper.cs`.
-- Added two new methods to the `ImageHelper.cs` class:
-    - Added the `CreateImageBinaryData` method that allows you to transform a Stream into BinaryData, taking into account that the image bytes may be compressed.
+- Updated the `BinaryData.FromStream` method in `SKVisionImageExtractor.cs` to a more robust custom implementation `ProcessImageAndGetBinary` implemented in `ImageHelper.cs`.
+- Added new methods for the `ImageHelper.cs` class for extract images in PDF's:
     - Added `TryDecompressZlib` method that attempts to decompress compressed bytes from images.
+    - Added `ProcessImageAndGetBinary` for processing an image and returning its binary data.
+    - Added `EnsureImageSharpCompatible` for ensuring the image is compatible with ImageSharp.
+    - Added `DetectImageInfo` for detecting image information.
+    - Added `ConvertPbmP4ToPng` for converting PBM or P4 images to PNG format.
+    - Added `ConvertCcittTiffToPng` for converting CCITT TIFF images to PNG format.
+    - Added `WrapRawCcittAsTiff` for wrapping raw CCITT data as a TIFF image.
+    - Added `ProcessImageStream` for processing an image stream.
+- Added new class `ImageInfo` to encapsulate image types information.
 
 ## [8.2.0]
 

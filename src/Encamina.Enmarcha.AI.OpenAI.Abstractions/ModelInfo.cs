@@ -78,7 +78,7 @@ public sealed class ModelInfo
     public int MaxTokensOutput { get; init; }
 
     /// <summary>
-    /// Gets the supported encoding for the model. 
+    /// Gets the supported encoding for the model.
     /// </summary>
     public string Encoding { get; init; }
 
