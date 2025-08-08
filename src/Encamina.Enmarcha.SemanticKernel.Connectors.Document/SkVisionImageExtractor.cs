@@ -40,10 +40,10 @@ public class SkVisionImageExtractor
         - Specific Instructions for Formatting:
 
         1. Represent diagrams or schemes using a dedicated section with discrete data in a table in Markdown format, formatted as follows:
-        [IMAGE]
+        [IMAGE][/IMAGE]
 
         2. Represent images or photos using a dedicated Markdown section with a full description of what you see, formatted as follows:
-        [PHOTO]
+        [PHOTO][/PHOTO]
 
         3. Restrain from adding any additional information or commentary. If the page is empty do not transcribe anything and just return an empty string.
 
@@ -61,14 +61,14 @@ public class SkVisionImageExtractor
     /// <summary>
     /// Configuration options for vision image processing.
     /// </summary>
-    private readonly SkVisionImageDocumentConnectorOptions options;
+    private readonly SkVisionImageExtractorOptions options;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="SkVisionImageExtractor"/> class.
     /// </summary>
     /// <param name="kernel">A valid <see cref="Kernel"/> instance.</param>
     /// <param name="options">Configuration options for vision processing.</param>
-    public SkVisionImageExtractor(Kernel kernel, IOptions<SkVisionImageDocumentConnectorOptions> options)
+    public SkVisionImageExtractor(Kernel kernel, IOptions<SkVisionImageExtractorOptions> options)
     {
         chatCompletionService = kernel.GetRequiredService<IChatCompletionService>();
         this.options = options.Value;
