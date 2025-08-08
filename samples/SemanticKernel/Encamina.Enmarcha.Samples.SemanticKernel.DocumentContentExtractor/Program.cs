@@ -15,6 +15,8 @@ internal static class Program
 {
     private static void Main(string[] _)
     {
+        Console.Clear();
+
         // Create and configure builder
         var hostBuilder = new HostBuilder()
             .ConfigureAppConfiguration((configuration) =>
@@ -64,7 +66,7 @@ internal static class Program
 
     public static IServiceCollection AddDocumentConnectors(this IServiceCollection services, IConfiguration configuration)
     {
-        services.AddWordDocumentConnector(); // .docx
+        services.AddWordDocumentConnector(configuration); // .docx
         services.AddParagraphPptxDocumentConnector(); // .pptx
         services.AddTxtDocumentConnector(); // .txt; .md
         services.AddSkVisionImageDocumentConnector(configuration); // .jpg; .jpeg; .png;

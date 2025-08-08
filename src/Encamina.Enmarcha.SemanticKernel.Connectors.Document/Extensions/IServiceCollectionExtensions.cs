@@ -82,9 +82,21 @@ public static class IServiceCollectionExtensions
     /// Adds the <see cref="WordDocumentConnector"/> implementation of <see cref="IEnmarchaDocumentConnector"/> to the specified <see cref="IServiceCollection"/> as a singleton service.
     /// </summary>
     /// <param name="services">The <see cref="IServiceCollection"/> to add services to.</param>
+    /// <param name="configuration">The current set of key-value application configuration parameters.</param>
     /// <returns>The <see cref="IServiceCollection"/> so that additional calls can be chained.</returns>
-    public static IServiceCollection AddWordDocumentConnector(this IServiceCollection services)
+    public static IServiceCollection AddWordDocumentConnector(this IServiceCollection services, IConfiguration configuration)
     {
+        var useImageExtractor = configuration.GetValue(@"WordDocumentConnector:UseImageExtractor", false);
+        if (useImageExtractor)
+        {
+            services.AddOptions<SkVisionImageExtractorOptions>()
+                    .Bind(configuration.GetSection(nameof(SkVisionImageExtractorOptions)))
+                    .ValidateDataAnnotations()
+                    .ValidateOnStart();
+
+            return services.AddSingleton<IEnmarchaDocumentConnector, SkVisionWordDocumentConnector>();
+        }
+
         return services.AddSingleton<IEnmarchaDocumentConnector, WordDocumentConnector>();
     }
 
@@ -238,10 +250,11 @@ public static class IServiceCollectionExtensions
     /// Adds the default document connectors to the specified <see cref="IServiceCollection"/>.
     /// </summary>
     /// <param name="services">The <see cref="IServiceCollection"/> to add services to.</param>
+    /// <param name="configuration">The current set of key-value application configuration parameters.</param>
     /// <returns>The <see cref="IServiceCollection"/> so that additional calls can be chained.</returns>
-    public static IServiceCollection AddDefaultDocumentConnectors(this IServiceCollection services)
+    public static IServiceCollection AddDefaultDocumentConnectors(this IServiceCollection services, IConfiguration configuration)
     {
-        services.AddWordDocumentConnector();
+        services.AddWordDocumentConnector(configuration);
         services.AddCleanPdfDocumentConnector();
         services.AddParagraphPptxDocumentConnector();
         services.AddTxtDocumentConnector();
