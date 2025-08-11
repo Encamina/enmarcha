@@ -27,7 +27,7 @@
     <PackageReference Include="Microsoft.SemanticKernel.Plugins.Document" Version="1.42.0-alpha" />
     <PackageReference Include="PdfPig" Version="0.1.10" />
     <PackageReference Include="ScratchPad.NPOI.HWPF" Version="2.5.7" />
-    <PackageReference Include="SixLabors.ImageSharp" Version="3.1.7" />
+    <PackageReference Include="SixLabors.ImageSharp" Version="3.1.11" />
     <PackageReference Include="System.Memory.Data" Version="8.0.1" />
   </ItemGroup>
 
