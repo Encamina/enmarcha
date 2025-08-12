@@ -19,7 +19,7 @@ public class CosmosOptions
     /// <summary>
     /// Gets or sets the authentication key required to connect with Azure Cosmos DB.
     /// </summary>
-    [RequiredIf(nameof(UseDefaultAzureCredentialAuthentication), false)]
+    [RequiredIf([nameof(UseDefaultAzureCredentialAuthentication), nameof(UseTokenCredentialAuthentication)], [false, false], failOnAnyCondition: false)]
     public string? AuthKey { get; set; }
 
     /// <summary>
@@ -97,4 +97,13 @@ public class CosmosOptions
     /// Default value is <see langword="false" />.
     /// </remarks>
     public bool UseDefaultAzureCredentialAuthentication { get; set; } = false;
+
+    /// <summary>
+    /// Gets or sets a value indicating whether token credential authentication should be used.
+    /// When set to <see langword="true"/>, a TokenCredential must be provided to the CosmosClient constructor at run-time.
+    /// </summary>
+    /// <remarks>
+    /// Default value is <see langword="false" />.
+    /// </remarks>
+    public bool UseTokenCredentialAuthentication { get; set; } = false;
 }

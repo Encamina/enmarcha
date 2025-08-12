@@ -1,5 +1,6 @@
 ﻿using System.Net.Security;
 
+using Azure.Core;
 using Azure.Identity;
 
 using Encamina.Enmarcha.Core;
@@ -36,9 +37,19 @@ internal sealed class CosmosInitializer : ICosmosInitializer
     {
         this.options = options.Value;
 
-        client = this.options.UseDefaultAzureCredentialAuthentication
-            ? new CosmosClient(this.options.Endpoint, new DefaultAzureCredential())
-            : new CosmosClient(this.options.Endpoint, this.options.AuthKey, BuildCosmosClientOptions(this.options));
+        client = CreateCosmosClient(this.options, null);
+    }
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="CosmosInitializer"/> class.
+    /// </summary>
+    /// <param name="options">Configuration options for Cosmos DB connection.</param>
+    /// <param name="tokenCredential">Optional token credential for authentication. Is used if <see cref="CosmosOptions.UseTokenCredentialAuthentication"/> is set to <c>true</c>.</param>
+    public CosmosInitializer(IOptions<CosmosOptions> options, TokenCredential tokenCredential)
+    {
+        this.options = options.Value;
+
+        client = CreateCosmosClient(this.options, tokenCredential);
     }
 
     /// <inheritdoc/>
@@ -62,6 +73,21 @@ internal sealed class CosmosInitializer : ICosmosInitializer
     public Container GetContainer(string database, string containerName)
     {
         return client.GetContainer(database, containerName);
+    }
+
+    private static CosmosClient CreateCosmosClient(CosmosOptions options, TokenCredential? tokenCredential)
+    {
+        if (options.UseTokenCredentialAuthentication && tokenCredential is null)
+        {
+            throw new ArgumentNullException(nameof(tokenCredential), ExceptionMessages.ResourceManager.GetFormattedStringByCurrentUICulture(nameof(ExceptionMessages.TokenCredentialCannotBeNullException)));
+        }
+
+        return options switch
+        {
+            { UseTokenCredentialAuthentication: true } => new CosmosClient(options.Endpoint, tokenCredential, BuildCosmosClientOptions(options)),
+            { UseDefaultAzureCredentialAuthentication: true } => new CosmosClient(options.Endpoint, new DefaultAzureCredential()),
+            _ => new CosmosClient(options.Endpoint, options.AuthKey, BuildCosmosClientOptions(options)),
+        };
     }
 
     private static CosmosClientOptions BuildCosmosClientOptions(CosmosOptions options)

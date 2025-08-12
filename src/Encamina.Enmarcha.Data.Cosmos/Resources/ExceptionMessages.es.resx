@@ -135,4 +135,7 @@
   <data name="MissingDatabaseConfigurationParameterException" xml:space="preserve">
     <value>¡Falta el parámetro de configuración 'Base de datos'!</value>
   </data>
+  <data name="TokenCredentialCannotBeNullException" xml:space="preserve">
+    <value>'TokenCredential' no puede ser nulo cuando 'UseTokenCredentialAuthentication' es true.</value>
+  </data>
 </root>

@@ -113,5 +113,14 @@ namespace Encamina.Enmarcha.Data.Cosmos.Resources {
                 return ResourceManager.GetString("MissingDatabaseConfigurationParameterException", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to TokenCredential cannot be null when UseTokenCredentialAuthentication is true..
+        /// </summary>
+        internal static string TokenCredentialCannotBeNullException {
+            get {
+                return ResourceManager.GetString("TokenCredentialCannotBeNullException", resourceCulture);
+            }
+        }
     }
 }
