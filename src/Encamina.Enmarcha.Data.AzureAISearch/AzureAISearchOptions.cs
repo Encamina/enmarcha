@@ -19,6 +19,15 @@ public sealed class AzureAISearchOptions
     /// <summary>
     /// Gets the Azure AI Search key.
     /// </summary>
-    [Required]
-    public required string Key { get; init; }
+    [RequiredIf(nameof(UseTokenCredentialAuthentication), false)]
+    public string? Key { get; init; }
+
+    /// <summary>
+    /// Gets or sets a value indicating whether token credential authentication should be used.
+    /// When set to <see langword="true"/>, a TokenCredential must be provided to the Azure AI Search client constructor at run-time.
+    /// </summary>
+    /// <remarks>
+    /// Default value is <see langword="false" />.
+    /// </remarks>
+    public bool UseTokenCredentialAuthentication { get; set; } = false;
 }
