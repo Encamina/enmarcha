@@ -30,7 +30,8 @@ Previous classification is not required if changes are simple or all belong to t
 - Introduced a new virtual extension point `ProcessPageExtensions(Page page)` in `StrictFormatCleanPdfDocumentConnector`, allowing derived classes to append custom content blocks to the extracted page content.
 - Added a new connector `SkVisionWordDocumentConnector` to extract text, tables, hyperlinks and images from Word documents (.docx) using Semantic Kernel vision capabilities in image extractions. This capacity to extract the description for each image is realized using the existing `SkVisionImageExtractor`. This functionality is compatible with the previous `WordDocumentConector` implementation, so it can be used interchangeably using the `WordDocumentConnector:UseImageExtractor` setting.
 - Added Azure authentication support via TokenCredential in `CosmosInitializer`.
-
+- Added Azure authentication support via TokenCredential in Azure AI Search.
+ 
 - Updated dependencies:
   - Aspire.Hosting 8.2.1 → 8.2.2
   - Azure.AI.OpenAI 2.1.0-beta.1 → 2.2.0-beta.1

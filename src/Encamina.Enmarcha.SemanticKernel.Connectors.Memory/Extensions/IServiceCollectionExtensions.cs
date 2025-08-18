@@ -1,4 +1,6 @@
-﻿using CommunityToolkit.Diagnostics;
+﻿using Azure.Core;
+
+using CommunityToolkit.Diagnostics;
 
 using Encamina.Enmarcha.AI.OpenAI.Azure;
 using Encamina.Enmarcha.Core;
@@ -29,21 +31,31 @@ public static class IServiceCollectionExtensions
     /// This extension methods requires a <see cref="AzureAISearchOptions"/> to be already configured.
     /// </remarks>
     /// <param name="services"> The <see cref="IServiceCollection"/> to add services to.</param>
+    /// <param name="tokenCredential">The <see cref="TokenCredential"/> to use for authenticating with the Azure AI Search service.
+    /// Is used if <see cref="AzureAISearchOptions.UseTokenCredentialAuthentication"/> is set to <c>true</c>.
+    /// if <see cref="AzureAISearchOptions.UseTokenCredentialAuthentication"/> is set to <c>false</c>, this parameter is ignored and <see cref="AzureAISearchOptions.Key"/> is used instead.</param>
     /// <returns>The <see cref="IServiceCollection"/> so that additional calls can be chained.</returns>
-    public static IServiceCollection AddAzureAISearchMemoryStore(this IServiceCollection services)
+    public static IServiceCollection AddAzureAISearchMemoryStore(this IServiceCollection services, TokenCredential? tokenCredential = null)
     {
         return services.AddSingleton<IMemoryStore>(serviceProvider =>
         {
             var optionsMonitor = serviceProvider.GetRequiredService<IOptionsMonitor<AzureAISearchOptions>>();
 
-            static AzureAISearchMemoryStore Builder(AzureAISearchOptions options)
+            static AzureAISearchMemoryStore Builder(AzureAISearchOptions options, TokenCredential? tokenCredential)
             {
-                return new AzureAISearchMemoryStore(options.Endpoint.AbsoluteUri, options.Key);
+                if (options.UseTokenCredentialAuthentication && tokenCredential is null)
+                {
+                    throw new ArgumentNullException(nameof(tokenCredential), @"TokenCredential must be provided when UseTokenCredentialAuthentication is true.");
+                }
+
+                return options.UseTokenCredentialAuthentication
+                    ? new AzureAISearchMemoryStore(options.Endpoint.AbsoluteUri, tokenCredential!)
+                    : new AzureAISearchMemoryStore(options.Endpoint.AbsoluteUri, options.Key!);
             }
 
-            var debouncedBuilder = Debouncer.Debounce<AzureAISearchOptions>(options => Builder(options), 300);
+            var debouncedBuilder = Debouncer.Debounce<AzureAISearchOptions>(options => Builder(options, tokenCredential), 300);
 
-            var memory = Builder(optionsMonitor.CurrentValue);
+            var memory = Builder(optionsMonitor.CurrentValue, tokenCredential);
 
             optionsMonitor.OnChange(debouncedBuilder);
 
@@ -120,21 +132,31 @@ public static class IServiceCollectionExtensions
     /// </remarks>
     /// <param name="services"> The <see cref="IServiceCollection"/> to add services to.</param>
     /// <param name="memoryProviderName">The name or key for the memory provider.</param>
+    /// <param name="tokenCredential">The <see cref="TokenCredential"/> to use for authenticating with the Azure AI Search service.
+    /// Is used if <see cref="AzureAISearchOptions.UseTokenCredentialAuthentication"/> is set to <c>true</c>.
+    /// if <see cref="AzureAISearchOptions.UseTokenCredentialAuthentication"/> is set to <c>false</c>, this parameter is ignored and <see cref="AzureAISearchOptions.Key"/> is used instead.</param>
     /// <returns>The <see cref="IServiceCollection"/> so that additional calls can be chained.</returns>
-    public static IServiceCollection AddAzureAISearchNamedMemoryStore(this IServiceCollection services, string memoryProviderName)
+    public static IServiceCollection AddAzureAISearchNamedMemoryStore(this IServiceCollection services, string memoryProviderName, TokenCredential? tokenCredential = null)
     {
         return services.AddKeyedSingleton<IMemoryStore>(memoryProviderName, (serviceProvider, _) =>
         {
             var optionsMonitor = serviceProvider.GetRequiredService<IOptionsMonitor<AzureAISearchOptions>>();
 
-            static AzureAISearchMemoryStore Builder(AzureAISearchOptions options)
+            static AzureAISearchMemoryStore Builder(AzureAISearchOptions options, TokenCredential? tokenCredential)
             {
-                return new AzureAISearchMemoryStore(options.Endpoint.AbsoluteUri, options.Key);
+                if (options.UseTokenCredentialAuthentication && tokenCredential is null)
+                {
+                    throw new ArgumentNullException(nameof(tokenCredential), @"TokenCredential must be provided when UseTokenCredentialAuthentication is true.");
+                }
+
+                return options.UseTokenCredentialAuthentication
+                    ? new AzureAISearchMemoryStore(options.Endpoint.AbsoluteUri, tokenCredential!)
+                    : new AzureAISearchMemoryStore(options.Endpoint.AbsoluteUri, options.Key!);
             }
 
-            var debouncedBuilder = Debouncer.Debounce<AzureAISearchOptions>(options => Builder(options), 300);
+            var debouncedBuilder = Debouncer.Debounce<AzureAISearchOptions>(options => Builder(options, tokenCredential), 300);
 
-            var memory = Builder(optionsMonitor.CurrentValue);
+            var memory = Builder(optionsMonitor.CurrentValue, tokenCredential);
 
             optionsMonitor.OnChange(debouncedBuilder);
 
