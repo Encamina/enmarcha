@@ -76,6 +76,14 @@ Previous classification is not required if changes are simple or all belong to t
   - xunit.analyzers 1.14.0 → 1.20.0
   - xunit.extensibility.core 2.8.1 → 2.9.3
   - xunit.runner.visualstudio 2.8.1 → 3.0.2
+  - Microsoft.SemanticKernel.Abstractions 1.42.0 → 1.64.0
+  - Microsoft.SemanticKernel.Plugins.Memory 1.42.0-alpha → 1.64.0-alpha
+  - Microsoft.SemanticKernel.Connectors.AzureOpenAI 1.42.0 → 1.64.0
+  - Microsoft.SemanticKernel.Core 1.42.0 → 1.64.0
+  - Microsoft.SemanticKernel.Plugins.Document 1.42.0-alpha → 1.64.0-alpha
+  - Microsoft.SemanticKernel.Connectors.AzureAISearch 1.42.0-preview → 1.64.0-preview
+  - Microsoft.SemanticKernel.Connectors.Qdrant 1.42.0-preview → 1.64.0-preview
+  - Azure.AI.OpenAI 2.2.0-beta.1 → 2.3.0-beta.1
 
 ### Minor Changes
 - Updated the `BinaryData.FromStream` method in `SKVisionImageExtractor.cs` to a more robust custom implementation `ProcessImageAndGetBinary` implemented in `ImageHelper.cs`.
