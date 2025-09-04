@@ -19,6 +19,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.SemanticKernel.Connectors.AzureOpenAI" Version="1.64.0" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\..\src\Encamina.Enmarcha.SemanticKernel\Encamina.Enmarcha.SemanticKernel.csproj" />
   </ItemGroup>
 
