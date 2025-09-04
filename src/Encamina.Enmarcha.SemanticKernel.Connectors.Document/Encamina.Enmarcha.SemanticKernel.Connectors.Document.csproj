@@ -24,7 +24,7 @@
     <PackageReference Include="HtmlAgilityPack" Version="1.12.0" />
     <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="8.0.0" />
     <PackageReference Include="Microsoft.Extensions.Options.DataAnnotations" Version="8.0.0" />
-    <PackageReference Include="Microsoft.SemanticKernel.Plugins.Document" Version="1.42.0-alpha" />
+    <PackageReference Include="Microsoft.SemanticKernel.Plugins.Document" Version="1.64.0-alpha" />
     <PackageReference Include="PdfPig" Version="0.1.10" />
     <PackageReference Include="ScratchPad.NPOI.HWPF" Version="2.5.7" />
     <PackageReference Include="SixLabors.ImageSharp" Version="3.1.7" />
