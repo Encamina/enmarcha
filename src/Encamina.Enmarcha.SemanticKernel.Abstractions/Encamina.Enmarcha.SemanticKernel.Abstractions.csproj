@@ -17,6 +17,7 @@
     </PropertyGroup>
 
     <ItemGroup>        
+        <PackageReference Include="Azure.AI.OpenAI" Version="2.3.0-beta.1" />        
         <PackageReference Include="Microsoft.SemanticKernel.Connectors.AzureOpenAI" Version="1.64.0" PrivateAssets="none" />
         <PackageReference Include="Microsoft.SemanticKernel.Core" Version="1.64.0" />
         <PackageReference Include="SharpToken" Version="2.0.3" />
