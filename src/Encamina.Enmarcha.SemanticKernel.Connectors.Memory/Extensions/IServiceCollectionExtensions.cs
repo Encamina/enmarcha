@@ -88,36 +88,6 @@ public static class IServiceCollectionExtensions
         return services.AddKeyedSingleton<VectorStore>(memoryProviderName, (sp, _) => CreateQdrantVectorStore(sp));
     }
 
-    /// <summary>
-    /// Adds semantic text memory (<see cref="ISemanticTextMemory"/>) to the <see cref="IServiceCollection"/> with the specified <see cref="ServiceLifetime"/>.
-    /// </summary>
-    /// <remarks>
-    /// Default <see cref="ServiceLifetime"/> is <see cref="ServiceLifetime.Singleton"/>.
-    /// </remarks>
-    /// <param name="services">The <see cref="IServiceCollection"/> to add services to.</param>
-    /// <param name="serviceLifetime">The lifetime for the semantic text memory instance.</param>
-    /// <returns>The <see cref="IServiceCollection"/> so that additional calls can be chained.</returns>
-    public static IServiceCollection AddSemanticTextMemory(this IServiceCollection services, ServiceLifetime serviceLifetime = ServiceLifetime.Singleton)
-    {
-        return services.TryAddType(serviceLifetime, sp =>
-        {
-            var options = sp.GetRequiredService<IOptions<AzureOpenAIOptions>>().Value;
-            Guard.IsNotNull(options);
-            Guard.IsNotNull(options.Endpoint);
-            Guard.IsNotNullOrWhiteSpace(options.Key);
-            Guard.IsNotNullOrWhiteSpace(options.EmbeddingsModelDeploymentName);
-
-            return new MemoryBuilder()
-                .WithTextEmbeddingGeneration(
-                    new AzureOpenAITextEmbeddingGenerationService(
-                        options.EmbeddingsModelDeploymentName,
-                        options.Endpoint.ToString(),
-                        options.Key))
-                .WithMemoryStore(sp.GetRequiredService<IMemoryStore>())
-                .Build();
-        });
-    }
-
     private static AzureAISearchVectorStore CreateAzureAISearchVectorStore(IServiceProvider sp, TokenCredential? tokenCredential)
     {
         var opts = sp.GetRequiredService<IOptions<AzureAISearchOptions>>().Value
