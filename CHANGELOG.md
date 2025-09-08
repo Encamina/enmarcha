@@ -16,6 +16,23 @@ Also, any bug fix must start with the prefix �Bug fix:� followed by the desc
 
 Previous classification is not required if changes are simple or all belong to the same category.
 
+## [8.3.0]
+
+### Major Changes
+- Updated Semantic Kernel from `1.42.0` to `1.64.0`.
+
+- Updated dependencies:
+    - Microsoft.SemanticKernel.Core 1.42.0 -> 1.64.0
+    - Microsoft.SemanticKernel.Plugins.Memory 1.42.0 -> 1.64.0
+    - Microsoft.SemanticKernel.Connectors.AzureOpenAI 1.42.0 -> 1.64.0
+    - Microsoft.SemanticKernel.Plugins.Document 1.42.0 -> 1.64.0
+    - Microsoft.SemanticKernel.Connectors.AzureAISearch 1.42.0 -> 1.64.0
+    - Microsoft.SemanticKernel.Connectors.Qdrant 1.42.0 -> 1.64.0
+    - Microsoft.SemanticKernel.Abstractions 1.42.0 -> 1.64.0
+
+### Minor Changes
+- Removed `Encamina.Enmarcha.Samples.SemanticKernel.QuestionAnswering` project.
+
 ## [8.2.1]
 
 ### Major Changes
