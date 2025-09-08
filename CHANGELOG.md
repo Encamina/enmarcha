@@ -20,7 +20,6 @@ Previous classification is not required if changes are simple or all belong to t
 
 ### Major Changes
 - Updated Semantic Kernel from `1.42.0` to `1.64.0`.
-- Removed `AddSemanticTextMemory()` from `Encamina.Enmarcha.SemanticKernel.Connectors.Memory\Extensions\IServiceCollectionExtensions`.
 
 - Updated dependencies:
     - Microsoft.SemanticKernel.Core 1.42.0 -> 1.64.0
