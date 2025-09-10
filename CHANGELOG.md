@@ -18,6 +18,10 @@ Previous classification is not required if changes are simple or all belong to t
 
 ## [8.3.0]
 
+### Breaking Changes
+
+**This is the last version of ENMARCHA libraries to use the [Microsoft Bot Framework](https://learn.microsoft.com/en-us/azure/bot-service/), which is being deprecated and replaced by the new [Microsoft Agent SDK](https://github.com/Microsoft/Agents).**
+
 ### Major Changes
 - Updated Semantic Kernel from `1.42.0` to `1.64.0`.
 
