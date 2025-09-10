@@ -31,6 +31,9 @@ Previous classification is not required if changes are simple or all belong to t
     - Microsoft.SemanticKernel.Abstractions 1.42.0 -> 1.64.0
 
 ### Minor Changes
+- Added `AuthorizationScope` property to `AzureOpenAIOptions` to specify the authorization scope.
+
+### Minor Changes
 - Removed `Encamina.Enmarcha.Samples.SemanticKernel.QuestionAnswering` project.
 
 ## [8.2.1]

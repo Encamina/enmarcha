@@ -48,4 +48,10 @@ public sealed class AzureOpenAIOptions : OpenAIOptionsBase
     /// Gets the token credentials options to authenticate to an LLM resource.
     /// </summary>
     public TokenCredentialsOptions? TokenCredentialsOptions { get; init; }
+
+    /// <summary>
+    /// Gets the authorization scope for authentication when authenticating with Azure authentication tokens.
+    /// If not specified, defaults authorization scopes will be used.
+    /// </summary>
+    public string? AuthorizationScope { get; init; }
 }
