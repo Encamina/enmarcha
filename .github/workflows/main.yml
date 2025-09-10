@@ -6,7 +6,7 @@ on:
       - releases/**
       - main
     paths-ignore:
-      - '/**/*.md'   
+      - "/**/*.md"
   pull_request:
     types:
       - opened
@@ -24,27 +24,27 @@ env:
 jobs:
   CI:
     runs-on: ubuntu-latest
-    outputs: 
+    outputs:
       release_version: ${{ steps.PassOutputReleaseVersion.releaseVersion }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-              
+
       - name: Using .NET from 'global.json'
         uses: actions/setup-dotnet@v4
         with:
           global-json-file: global.json
-        
+
       - name: Restore NuGet Packages
-        run: dotnet restore --configfile NuGet.config --verbosity Minimal   
+        run: dotnet restore --configfile NuGet.config --verbosity Minimal
 
       - name: Test
         run: dotnet test --nologo --no-restore --collect:"XPlat Code Coverage" --configuration  ${{env.BuildConfiguration}} --settings coverlet.runsettings
 
-      - name: Install Report Generator Tool 
+      - name: Install Report Generator Tool
         run: dotnet tool install dotnet-reportgenerator-globaltool --tool-path tools --ignore-failed-sources
-    
-      - name: Generate Coverage Report  
+
+      - name: Generate Coverage Report
         run: ./tools/reportgenerator -reports:./**/coverage.cobertura.xml -targetdir:coverage/Cobertura -reporttypes:'MarkdownSummaryGithub;Cobertura'
 
       - name: Publish Coverage Report
@@ -55,16 +55,16 @@ jobs:
 
       - name: Write Coverage Report to Job Summary
         run: cat coverage/Cobertura/SummaryGithub.md >> $GITHUB_STEP_SUMMARY
-          
+
       - name: Build & Pack Libraries
-        run: dotnet pack --nologo --no-restore --configuration ${{env.BuildConfiguration}} -p:IncludeSymbols=true -p:SymbolPackageFormat=snupkg -p:SourceLinkCreate=true -p:DebugType=full --output nupkg  
+        run: dotnet pack --nologo --no-restore --configuration ${{env.BuildConfiguration}} -p:IncludeSymbols=true -p:SymbolPackageFormat=snupkg -p:SourceLinkCreate=true -p:DebugType=full --output nupkg
 
       - name: Zip Libraries
         run: |
           cd ${{ github.workspace }}/nupkg 
           zip -r nupkg.zip *
           mv ./nupkg.zip ${{ github.workspace }}
-                
+
       - name: Upload Libraries for Continuous Deployment
         uses: actions/upload-artifact@v4
         with:
@@ -75,6 +75,10 @@ jobs:
     runs-on: ubuntu-latest
     needs: CI
     if: github.event_name != 'pull_request' && (startsWith(github.ref, 'refs/heads/releases') || github.ref == 'refs/heads/main')
+    permissions:
+      contents: write # Required to create releases and push tags
+      packages: write # Required for package operations (good to have for NuGet operations)
+      pull-requests: read # Required to read PR information for generate-notes
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -104,13 +108,13 @@ jobs:
       # When retrying a failed workflow, already published packages will be skipped without error.
       - name: Push Libraries to NuGet.org
         run: dotnet nuget push **/*.nupkg --api-key ${{ secrets.NUGET_KEY }} --source https://api.nuget.org/v3/index.json --skip-duplicate
-      
+
       - name: Create Tag
         run: |
           git config --global user.name "${{ github.actor }}"
           git config --global user.email "${{ github.actor }}@users.noreply.github.com"
           git tag -a "Release-${{ steps.PassOutputReleaseVersion.outputs.RELEASE_VERSION }}" -m "Version from build ${{ github.run_number }}"
-        
+
       - name: Create Release
         id: create_release
         env:
@@ -125,9 +129,9 @@ jobs:
 
       - name: Upload Release Assets
         env:
-            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-            releaseAssetName: enmarcha-libraries-${{ steps.PassOutputReleaseVersion.outputs.RELEASE_VERSION }}.zip
-            tag: "v${{ steps.PassOutputReleaseVersion.outputs.RELEASE_VERSION }}"
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          releaseAssetName: enmarcha-libraries-${{ steps.PassOutputReleaseVersion.outputs.RELEASE_VERSION }}.zip
+          tag: "v${{ steps.PassOutputReleaseVersion.outputs.RELEASE_VERSION }}"
         run: |
-            mv nupkg.zip $releaseAssetName
-            gh release upload "$tag" "$releaseAssetName" --repo="$GITHUB_REPOSITORY"
+          mv nupkg.zip $releaseAssetName
+          gh release upload "$tag" "$releaseAssetName" --repo="$GITHUB_REPOSITORY"
