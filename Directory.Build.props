@@ -16,19 +16,20 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <VersionPrefix>8.3.0</VersionPrefix>
-    <VersionSuffix></VersionSuffix>
+    <VersionPrefix>10.0.0</VersionPrefix>
+    <VersionSuffix>preview-1</VersionSuffix>
   </PropertyGroup>
 
   <!--
     Deterministic builds ensure that the same binary is produced regardless of the machine building it, including paths to sources stored in the symbols. 
-    While deterministic builds are enabled by default in .NET SDK projects, there is an extra property (ContinuousIntegrationBuild) to set on the build server 
+    While deterministic builds are enabled by default in .NET SDK projects, there is an extra property (ContinuousIntegrationBuild) to set on the build
+  server 
     to normalize stored file paths. These should not be enabled during local development or the debugger won’t be able to find the local source files.
    -->
   <PropertyGroup Condition="'$(TF_BUILD)' == 'true'">
     <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
   </PropertyGroup>
-  
+
   <PropertyGroup>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
