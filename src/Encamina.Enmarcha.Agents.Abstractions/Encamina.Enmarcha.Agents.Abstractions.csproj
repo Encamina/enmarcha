@@ -1,0 +1,24 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <OutputType>Library</OutputType>
+        <NoDefaultLaunchSettingsFile>true</NoDefaultLaunchSettingsFile>
+        <IsPackable>true</IsPackable>
+        <UserSecretsId>efb25ac3-1f06-4334-8fd0-3b9c52859e0e</UserSecretsId>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Microsoft.Agents.Builder.Dialogs" Version="1.2.41" />
+      <PackageReference Include="Microsoft.Agents.Extensions.Teams" Version="1.2.41" />
+      <PackageReference Include="Microsoft.Agents.Hosting.AspNetCore" Version="1.2.41" />
+      <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.3.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Encamina.Enmarcha.AI.QuestionsAnswering.Abstractions\Encamina.Enmarcha.AI.QuestionsAnswering.Abstractions.csproj" />
+      <ProjectReference Include="..\Encamina.Enmarcha.Entities.Abstractions\Encamina.Enmarcha.Entities.Abstractions.csproj" />
+    </ItemGroup>
+
+</Project>

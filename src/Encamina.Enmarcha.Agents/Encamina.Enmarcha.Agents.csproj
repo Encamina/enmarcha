@@ -1,0 +1,65 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <OutputType>Library</OutputType>
+        <NoDefaultLaunchSettingsFile>true</NoDefaultLaunchSettingsFile>
+        <IsPackable>true</IsPackable>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Azure.Data.Tables" Version="12.10.0" />
+      <PackageReference Include="Microsoft.Agents.Builder.Dialogs" Version="1.2.41" />
+      <PackageReference Include="Microsoft.Agents.Hosting.AspNetCore" Version="1.2.41" />
+      <PackageReference Include="Microsoft.Agents.Storage.Blobs" Version="1.2.41" />
+      <PackageReference Include="Microsoft.Agents.Storage.CosmosDb" Version="1.2.41" />
+      <PackageReference Include="Microsoft.ApplicationInsights" Version="2.23.0" />
+      <PackageReference Include="Microsoft.Extensions.Logging.ApplicationInsights" Version="2.23.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Encamina.Enmarcha.Agents.Abstractions\Encamina.Enmarcha.Agents.Abstractions.csproj" />
+      <ProjectReference Include="..\Encamina.Enmarcha.AI.LanguagesDetection.Abstractions\Encamina.Enmarcha.AI.LanguagesDetection.Abstractions.csproj" />
+      <ProjectReference Include="..\Encamina.Enmarcha.AI.TextsTranslation.Abstractions\Encamina.Enmarcha.AI.TextsTranslation.Abstractions.csproj" />
+      <ProjectReference Include="..\Encamina.Enmarcha.AI\Encamina.Enmarcha.AI.csproj" />
+      <ProjectReference Include="..\Encamina.Enmarcha.Conversation.Abstractions\Encamina.Enmarcha.Conversation.Abstractions.csproj" />
+      <ProjectReference Include="..\Encamina.Enmarcha.Conversation\Encamina.Enmarcha.Conversation.csproj" />
+      <ProjectReference Include="..\Encamina.Enmarcha.Core\Encamina.Enmarcha.Core.csproj" />
+      <ProjectReference Include="..\Encamina.Enmarcha.DependencyInjection\Encamina.Enmarcha.DependencyInjection.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Compile Update="Middlewares\Resources\ExceptionMessages.Designer.cs">
+        <DependentUpon>ExceptionMessages.resx</DependentUpon>
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+      </Compile>
+      <Compile Update="Resources\ExceptionMessages.Designer.cs">
+        <DependentUpon>ExceptionMessages.resx</DependentUpon>
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+      </Compile>
+      <Compile Update="Resources\ResponseMessages.Designer.cs">
+        <DependentUpon>ResponseMessages.resx</DependentUpon>
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+      </Compile>
+    </ItemGroup>
+
+    <ItemGroup>
+      <EmbeddedResource Update="Middlewares\Resources\ExceptionMessages.resx">
+        <LastGenOutput>ExceptionMessages.Designer.cs</LastGenOutput>
+        <Generator>ResXFileCodeGenerator</Generator>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\ExceptionMessages.resx">
+        <LastGenOutput>ExceptionMessages.Designer.cs</LastGenOutput>
+        <Generator>ResXFileCodeGenerator</Generator>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\ResponseMessages.resx">
+        <LastGenOutput>ResponseMessages.Designer.cs</LastGenOutput>
+        <Generator>ResXFileCodeGenerator</Generator>
+      </EmbeddedResource>
+    </ItemGroup>
+
+</Project>
