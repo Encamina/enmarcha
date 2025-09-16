@@ -33,7 +33,8 @@ public class ConversationStateLoggerMiddleware : IMiddleware
     {
         if (turnContext.Activity.Text != null)
         {
-            var conversationData = conversationState.GetValue(turnContext.Activity.Conversation.Id, () => new ConversationData());
+            var conversationStateAccessors = conversationState.CreateProperty<ConversationData>(turnContext.Activity.Conversation.Id);
+            var conversationData = await conversationStateAccessors.GetAsync(turnContext, () => new ConversationData(), cancellationToken).ConfigureAwait(false);
 
             conversationData.ConversationLog.Add((Activity)turnContext.Activity);
             await conversationState.SaveChangesAsync(turnContext, cancellationToken: cancellationToken).ConfigureAwait(false);
