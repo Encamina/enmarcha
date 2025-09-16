@@ -1,4 +1,5 @@
 ﻿using System.Globalization;
+using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
 
@@ -9,6 +10,18 @@ namespace Encamina.Enmarcha.Core.Extensions;
 /// </summary>
 public static class StringExtensions
 {
+    /// <summary>
+    /// UniqueHash - create a unique hash from a string.
+    /// </summary>
+    /// <param name="text">text to hash.</param>
+    /// <returns>string which is unique SHA256 hash.</returns>
+    public static string Hash(this string text)
+    {
+        using var sha256Hash = SHA256.Create();
+        var bytes = sha256Hash.ComputeHash(Encoding.UTF8.GetBytes(text));
+        return Convert.ToBase64String(bytes);
+    }
+
     /// <summary>
     /// Normalizes a given string, removing diacritics, plus some unwanted characters, and replacing others.
     /// </summary>

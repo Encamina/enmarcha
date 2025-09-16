@@ -16,6 +16,14 @@ Also, any bug fix must start with the prefix �Bug fix:� followed by the desc
 
 Previous classification is not required if changes are simple or all belong to the same category.
 
+## [10.0.0]
+
+### Breaking Changes
+- Removed `Encamina.Enmarcha.Bot`, `Encamina.Enmarcha.Bot.Abstractions` and `Encamina.Enmarcha.Bot.Skills.QuestionAnswering` projects.
+
+### Major Changes
+- Added `Encamina.Enmarcha.AI.Agents`, `Encamina.Enmarcha.AI.Agents.Abstractions` and `Encamina.Enmarcha.Agents.Skills.QuestionAnswering` projects to provide support for the new Microsoft 365 Agents SDK.
+
 ## [8.3.0]
 
 ### Breaking Changes
