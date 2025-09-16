@@ -16,16 +16,19 @@ Also, any bug fix must start with the prefix �Bug fix:� followed by the desc
 
 Previous classification is not required if changes are simple or all belong to the same category.
 
+## [10.0.0]
+
+### Breaking Changes
+- Removed `Encamina.Enmarcha.Bot`, `Encamina.Enmarcha.Bot.Abstractions` and `Encamina.Enmarcha.Bot.Skills.QuestionAnswering` projects.
+
+### Major Changes
+- Added `Encamina.Enmarcha.AI.Agents`, `Encamina.Enmarcha.AI.Agents.Abstractions` and `Encamina.Enmarcha.Agents.Skills.QuestionAnswering` projects to provide support for the new Microsoft 365 Agents SDK.
+
 ## [8.3.0]
 
 ### Breaking Changes
 
 **This is the last version of ENMARCHA libraries to use the [Microsoft Bot Framework](https://learn.microsoft.com/en-us/azure/bot-service/), which is being deprecated and replaced by the new [Microsoft Agent SDK](https://github.com/Microsoft/Agents).**
-
-- Removed `Encamina.Enmarcha.Bot`, `Encamina.Enmarcha.Bot.Abstractions` and `Encamina.Enmarcha.Bot.Skills.QuestionAnswering` projects.
-
-### Major Changes
-- Added `Encamina.Enmarcha.AI.Agents`, `Encamina.Enmarcha.AI.Agents.Abstractions` and `Encamina.Enmarcha.Agents.Skills.QuestionAnswering` projects to provide support for the new Microsoft 365 Agents SDK.
 
 ### Major Changes
 - Updated Semantic Kernel from `1.42.0` to `1.64.0`.
