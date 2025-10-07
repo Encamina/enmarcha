@@ -12,23 +12,7 @@ namespace Encamina.Enmarcha.Agents.Telemetry;
 /// </summary>
 public class TelemetryAgentIdInitializer : ITelemetryInitializer
 {
-    private static readonly AsyncLocal<AgentTelemetryContext> CurrentContext = new();
-
-    /// <summary>
-    /// Sets the current telemetry context for the async flow.
-    /// </summary>
-    internal static void SetCurrentContext(AgentTelemetryContext context)
-    {
-        CurrentContext.Value = context;
-    }
-
-    /// <summary>
-    /// Clears the current telemetry context.
-    /// </summary>
-    internal static void ClearCurrentContext()
-    {
-        CurrentContext.Value = null;
-    }
+    private static readonly AsyncLocal<AgentTelemetryContext?> CurrentContext = new();
 
     /// <inheritdoc/>
     public void Initialize(ITelemetry telemetry)
@@ -62,5 +46,22 @@ public class TelemetryAgentIdInitializer : ITelemetryInitializer
                 properties.TryAdd("requestId", context.RequestId);
             }
         }
+    }
+
+    /// <summary>
+    /// Sets the current telemetry context for the async flow.
+    /// </summary>
+    /// <param name="context">The telemetry context to set.</param>
+    internal static void SetCurrentContext(AgentTelemetryContext context)
+    {
+        CurrentContext.Value = context;
+    }
+
+    /// <summary>
+    /// Clears the current telemetry context.
+    /// </summary>
+    internal static void ClearCurrentContext()
+    {
+        CurrentContext.Value = null;
     }
 }
