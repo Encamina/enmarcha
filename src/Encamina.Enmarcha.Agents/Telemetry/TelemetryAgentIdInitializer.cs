@@ -1,4 +1,5 @@
-﻿using Encamina.Enmarcha.Agents.Models;
+﻿using Encamina.Enmarcha.Agents.Abstractions.Telemetry;
+using Encamina.Enmarcha.Agents.Models;
 using Encamina.Enmarcha.Core.Extensions;
 
 using Microsoft.ApplicationInsights.Channel;
@@ -39,11 +40,11 @@ public class TelemetryAgentIdInitializer : ITelemetryInitializer
             {
                 var properties = propertiesTelemetry.Properties;
 
-                properties.TryAdd("conversationId", context.ConversationId);
-                properties.TryAdd("activityId", context.ActivityId);
-                properties.TryAdd("channelId", context.ChannelId);
-                properties.TryAdd("activityType", context.ActivityType);
-                properties.TryAdd("requestId", context.RequestId);
+                properties.TryAdd(TelemetryConstants.ConversationIdProperty, context.ConversationId);
+                properties.TryAdd(TelemetryConstants.ActivityIdProperty, context.ActivityId);
+                properties.TryAdd(TelemetryConstants.ChannelIdProperty, context.ChannelId);
+                properties.TryAdd(TelemetryConstants.ActivityTypeProperty, context.ActivityType);
+                properties.TryAdd(TelemetryConstants.RequestIdProperty, context.RequestId);
             }
         }
     }
