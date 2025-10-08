@@ -48,7 +48,7 @@ public sealed class CorrelationRehydrationMiddleware : IMiddleware
         {
             if (!string.IsNullOrEmpty(convId) && !string.IsNullOrEmpty(actId))
             {
-                var corr = await store.GetAsync(convId!, actId!, cancellationToken);
+                var corr = await store.GetAsync(convId, actId, cancellationToken);
                 if (corr is not null && !string.IsNullOrWhiteSpace(corr.TraceParent))
                 {
                     var parent = ActivityContext.Parse(corr.TraceParent, corr.TraceState);
