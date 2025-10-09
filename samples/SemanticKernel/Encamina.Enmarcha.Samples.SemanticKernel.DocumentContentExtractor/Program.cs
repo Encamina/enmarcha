@@ -65,7 +65,8 @@ internal static class Program
         var example = new Example(host.Services.GetRequiredService<Kernel>(), host.Services.GetRequiredService<IDocumentConnectorProvider>(), host.Services.GetRequiredService<IDocumentContentExtractor>(), host.Services.GetRequiredService<IDocumentContentEnrichedExtractor>());
 
         //example.ExtractDocumentContent();
-        example.ExtractDocumentContentWithMistralAI();
+
+        example.ExtractDocumentContentEnriched();
 
         Console.WriteLine("Press any key to exit...");
         Console.ReadKey();

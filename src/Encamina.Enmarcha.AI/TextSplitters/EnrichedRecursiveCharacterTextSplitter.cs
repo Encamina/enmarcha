@@ -26,151 +26,239 @@ public class EnrichedRecursiveCharacterTextSplitter : EnrichedTextSplitter
     /// <inheritdoc/>
     public override IEnumerable<(IDictionary<string, string> Metadata, string Text)> Split(string text, Func<string, int> lengthFunction, EnrichedTextSplitterOptions options)
     {
-        var chunks = new List<(IDictionary<string, string> Metadata, string Text)>();
+        var h1Sections = SplitByH1(text);
+        var context = new Dictionary<string, string>();
 
-        if (string.IsNullOrWhiteSpace(text))
+        foreach (var h1Section in h1Sections)
         {
-            return chunks;
-        }
+            var chunks = lengthFunction(h1Section) <= options.ChunkSize ? [h1Section] : RecursiveSplit(h1Section, options.ChunkSize, lengthFunction, [.. HeaderLevels]);
 
-        var context = new Dictionary<string, object>();
-        string? separator = null;
-
-        // Find appropriate separator (H1 first, then other headers, then default separators)
-        foreach (var s in HeaderLevels)
-        {
-            if (s == string.Empty || text.Contains(s, StringComparison.Ordinal))
+            foreach (var chunk in chunks)
             {
-                separator = s;
-                break;
+                // Skip chunks that are too small (less than 30 tokens)
+                if (lengthFunction(chunk) < 30)
+                {
+                    continue;
+                }
+
+                var currentMetadata = ExtractMetadata(chunk);
+                context = UpdateContext(currentMetadata, context);
+
+                yield return (new Dictionary<string, string>(context), chunk.Trim());
             }
         }
+    }
 
-        var splits = (separator != null ? text.Split(separator, StringSplitOptions.RemoveEmptyEntries) : [text]).Select(s => s.Trim());
+    /// <summary>
+    /// Splits text by H1 headers, keeping each H1 section together.
+    /// </summary>
+    private static List<string> SplitByH1(string text)
+    {
+        var matches = Regex.Matches(text, @"^# .+", RegexOptions.Multiline);
+        var sections = new List<string>();
 
-        var goodSplits = new List<string>();
-
-        foreach (var split in splits)
+        foreach (var (match, index) in matches.Select((m, i) => (m, i)))
         {
-            if (lengthFunction(split) < options.ChunkSize)
+            var start = match.Index;
+            var end = index + 1 < matches.Count ? matches[index + 1].Index : text.Length;
+            var section = text[start..end].Trim();
+
+            sections.Add(section);
+        }
+
+        // If no H1 found, return the entire text
+        if (sections.Count == 0)
+        {
+            sections.Add(text);
+        }
+
+        return sections;
+    }
+
+    /// <summary>
+    /// Recursively splits text by headers and delimiters.
+    /// </summary>
+    private static List<string> RecursiveSplit(string text, int maxTokens, Func<string, int> lengthFunction, List<string> headerLevels)
+    {
+        if (lengthFunction(text) <= maxTokens)
+        {
+            return [text];
+        }
+
+        if (headerLevels.Count == 0)
+        {
+            return SplitByDelimiters(text, maxTokens, lengthFunction);
+        }
+
+        var header = headerLevels[0];
+        var pattern = $@"(?=^{Regex.Escape(header)} )";
+        var sections = Regex.Split(text, pattern, RegexOptions.Multiline);
+
+        if (sections.Length == 1)
+        {
+            return RecursiveSplit(text, maxTokens, lengthFunction, headerLevels.Skip(1).ToList());
+        }
+
+        var chunks = new List<string>();
+        var current = string.Empty;
+
+        foreach (var section in sections)
+        {
+            var trimmedSection = section.Trim();
+            if (string.IsNullOrWhiteSpace(trimmedSection))
             {
-                goodSplits.Add(split);
+                continue;
+            }
+
+            var tentative = string.IsNullOrEmpty(current) ? trimmedSection : current + "\n" + trimmedSection;
+
+            if (lengthFunction(tentative) <= maxTokens)
+            {
+                current = tentative;
             }
             else
             {
-                if (goodSplits.Count > 0)
+                if (!string.IsNullOrEmpty(current))
                 {
-                    var mergedChunks = MergeSplits(goodSplits, separator, lengthFunction, options);
-                    foreach (var chunk in mergedChunks)
+                    chunks.Add(current.Trim());
+                }
+
+                if (lengthFunction(trimmedSection) > maxTokens)
+                {
+                    var subChunks = RecursiveSplit(trimmedSection, maxTokens, lengthFunction, [.. headerLevels.Skip(1)]);
+
+                    chunks.AddRange(subChunks);
+                    current = string.Empty;
+                }
+                else
+                {
+                    current = trimmedSection;
+                }
+            }
+        }
+
+        if (!string.IsNullOrEmpty(current))
+        {
+            chunks.Add(current.Trim());
+        }
+
+        return chunks;
+    }
+
+    /// <summary>
+    /// Splits text by delimiters when header splitting is not enough.
+    /// </summary>
+    private static List<string> SplitByDelimiters(string text, int maxTokens, Func<string, int> lengthFunction)
+    {
+        var delimiters = new[] { @"\n\s*\n", @"\n", @"\.", @";", @"," };
+
+        foreach (var delim in delimiters)
+        {
+            var parts = Regex.Split(text, delim);
+            var chunks = new List<string>();
+            var current = string.Empty;
+
+            foreach (var part in parts)
+            {
+                var tentative = current + part + "\n";
+
+                if (lengthFunction(tentative) <= maxTokens)
+                {
+                    current = tentative;
+                }
+                else
+                {
+                    if (!string.IsNullOrEmpty(current))
                     {
-                        var metadata = ExtractAndUpdateMetadata(chunk, ref context);
-                        chunks.Add((metadata, chunk.Trim()));
+                        chunks.Add(current.Trim());
                     }
 
-                    goodSplits.Clear();
+                    current = part + "\n";
                 }
-
-                var otherChunks = Split(split, lengthFunction, options);
-                chunks.AddRange(otherChunks);
             }
-        }
 
-        if (goodSplits.Count > 0)
-        {
-            var mergedChunks = MergeSplits(goodSplits, separator, lengthFunction, options);
-            foreach (var chunk in mergedChunks)
+            if (!string.IsNullOrEmpty(current))
             {
-                var metadata = ExtractAndUpdateMetadata(chunk, ref context);
-                chunks.Add((metadata, chunk.Trim()));
+                chunks.Add(current.Trim());
+            }
+
+            // Check if all chunks are within the limit
+            if (chunks.All(c => lengthFunction(c) <= maxTokens))
+            {
+                return chunks;
             }
         }
 
-        return chunks.Where(chunk => !string.IsNullOrWhiteSpace(chunk.Text));
+        return [text];
     }
 
     /// <summary>
-    /// Extracts metadata from the chunk and updates the context.
+    /// Extracts metadata (headers and bold text) from a chunk.
     /// </summary>
-    /// <param name="chunk">The text chunk to extract metadata from.</param>
-    /// <param name="context">The current context dictionary to update.</param>
-    /// <returns>A dictionary containing the metadata for this chunk.</returns>
-    private static Dictionary<string, string> ExtractAndUpdateMetadata(string chunk, ref Dictionary<string, object> context)
+    private static Dictionary<string, string> ExtractMetadata(string text)
     {
-        var currentMeta = ExtractMetadata(chunk);
-        context = UpdateContext(currentMeta, context);
-
         var metadata = new Dictionary<string, string>();
-        foreach (var (key, value) in context)
+
+        // Extract H1
+        var header1Match = Regex.Match(text, @"^# (.+)", RegexOptions.Multiline);
+        if (header1Match.Success)
         {
-            metadata[key] = value is List<string> list ? string.Join(", ", list) : value.ToString() ?? string.Empty;
+            metadata["Header_1"] = header1Match.Groups[1].Value;
         }
 
-        return metadata;
-    }
-
-    /// <summary>
-    /// Extracts metadata from markdown text including headers (H1-H6) and bold text.
-    /// </summary>
-    /// <param name="text">The markdown text to extract metadata from.</param>
-    /// <returns>A dictionary containing the extracted metadata.</returns>
-    private static Dictionary<string, object> ExtractMetadata(string text)
-    {
-        var metadata = new Dictionary<string, object>();
-
-        // Extract Header 1
-        var header1 = Regex.Matches(text, @"^# (.+)", RegexOptions.Multiline);
-        if (header1.Count > 0)
-        {
-            metadata["Header_1"] = header1[0].Groups[1].Value;
-        }
-
-        // Extract Headers 2-6
-        for (var level = 2; level <= 6; level++)
+        // Extract H2-H6
+        foreach (var level in Enumerable.Range(2, 5))
         {
             var pattern = $@"^{new string('#', level)} (.+)";
-            var headers = Regex.Matches(text, pattern, RegexOptions.Multiline);
-            if (headers.Count > 0)
+            var matches = Regex.Matches(text, pattern, RegexOptions.Multiline);
+
+            if (matches.Count > 0)
             {
-                metadata[$"Header_{level}"] = headers.Select(m => m.Groups[1].Value).ToList();
+                var headers = string.Join(", ", matches.Select(m => m.Groups[1].Value));
+                metadata[$"Header_{level}"] = headers;
             }
         }
 
-        // Extract Bold text
-        var bolds = Regex.Matches(text, @"\*\*(.+?)\*\*");
-        if (bolds.Count > 0)
+        // Extract bold text
+        var boldMatches = Regex.Matches(text, @"\*\*(.+?)\*\*");
+        if (boldMatches.Count > 0)
         {
-            metadata["Bold"] = bolds.Select(m => m.Groups[1].Value).ToList();
+            var bolds = string.Join(", ", boldMatches.Select(m => m.Groups[1].Value));
+            metadata["Bold"] = bolds;
         }
 
         return metadata;
     }
 
     /// <summary>
-    /// Updates the context by merging current metadata with previous context,
-    /// maintaining hierarchical structure.
+    /// Updates the context with new metadata, maintaining hierarchical structure.
     /// </summary>
-    private static Dictionary<string, object> UpdateContext(Dictionary<string, object> currentMeta, Dictionary<string, object> previousContext)
+    private static Dictionary<string, string> UpdateContext(Dictionary<string, string> currentMetadata, Dictionary<string, string> previousContext)
     {
-        var context = new Dictionary<string, object>(previousContext);
+        var context = new Dictionary<string, string>(previousContext);
         var levels = new[] { "Header_1", "Header_2", "Header_3", "Header_4", "Header_5", "Header_6", "Bold" };
 
-        for (var i = 0; i < levels.Length; i++)
+        foreach (var (key, index) in levels.Select((level, idx) => (level, idx)))
         {
-            var key = levels[i];
-
-            if (currentMeta.ContainsKey(key))
+            if (currentMetadata.ContainsKey(key))
             {
-                context[key] = currentMeta[key];
+                context[key] = currentMetadata[key];
 
-                // Remove all lower level keys
-                for (var j = i + 1; j < levels.Length; j++)
+                // Remove lower level headers
+                foreach (var lowerLevelKey in levels.Skip(index + 1))
                 {
-                    context.Remove(levels[j]);
+                    context.Remove(lowerLevelKey);
                 }
             }
-            else if (context.ContainsKey(key) && context[key] is List<string> list && list.Count > 0)
+            else if (context.ContainsKey(key))
             {
-                context[key] = new List<string> { list[^1] };
+                // Keep only the last header if it's a list
+                var value = context[key];
+                if (value.Contains(','))
+                {
+                    var parts = value.Split(',');
+                    context[key] = parts[^1].Trim();
+                }
             }
         }
 

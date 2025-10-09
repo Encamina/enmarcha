@@ -40,17 +40,5 @@ public abstract class EnrichedTextSplitter : TextSplitter, IEnrichedTextSplitter
     /// <param name="lengthFunction">Length function used to calculate the length of a string.</param>
     /// <param name="options">Custom options used for splitting.</param>
     /// <returns>An IEnumerable of smaller text chunks.</returns>
-    public override IEnumerable<string> Split(string text, Func<string, int> lengthFunction, TextSplitterOptions options)
-    {
-        // Adapt TextSplitterOptions to EnrichedTextSplitterOptions
-        var enrichedOptions = options as EnrichedTextSplitterOptions ?? new EnrichedTextSplitterOptions()
-        {
-            ChunkSize = options.ChunkSize,
-            ChunkOverlap = options.ChunkOverlap,
-            Separators = options.Separators,
-        };
-
-        // Call the enriched Split and extract only the text parts
-        return Split(text, lengthFunction, enrichedOptions).Select(chunk => chunk.Text);
-    }
+    public override IEnumerable<string> Split(string text, Func<string, int> lengthFunction, TextSplitterOptions options) => throw new NotImplementedException();
 }
