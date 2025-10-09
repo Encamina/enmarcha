@@ -10,12 +10,14 @@ internal class Example
     private readonly Kernel kernel;
     private readonly IDocumentConnectorProvider documentConnectorProvider;
     private readonly IDocumentContentExtractor documentContentExtractor;
+    private readonly IDocumentContentEnrichedExtractor enrichedDocumentContentExtractor;
 
-    public Example(Kernel kernel, IDocumentConnectorProvider documentConnectorProvider, IDocumentContentExtractor documentContentExtractor)
+    public Example(Kernel kernel, IDocumentConnectorProvider documentConnectorProvider, IDocumentContentExtractor documentContentExtractor, IDocumentContentEnrichedExtractor enrichedDocumentContentExtractor)
     {
         this.kernel = kernel;
         this.documentConnectorProvider = documentConnectorProvider;
         this.documentContentExtractor = documentContentExtractor;
+        this.enrichedDocumentContentExtractor = enrichedDocumentContentExtractor;
     }
 
     public void ExtractDocumentContent()
@@ -47,5 +49,36 @@ internal class Example
         }
 
         Console.WriteLine($"Total chunks extracted: {documentChunks.Count}");
+    }
+
+    public void ExtractDocumentContentWithMistralAI()
+    {
+        Console.WriteLine("Please enter the path to the document you want to extract content from:");
+        var filePath = Console.ReadLine();
+
+        if (string.IsNullOrWhiteSpace(filePath))
+        {
+            Console.WriteLine("Invalid file path. Please try again.");
+            return;
+        }
+
+        var extension = Path.GetExtension(filePath);
+        if (!documentConnectorProvider.SupportedFileExtension(extension))
+        {
+            Console.WriteLine($"The file extension is not supported.");
+            return;
+        }
+
+        var stream = File.OpenRead(filePath);
+        var markdownChunks = enrichedDocumentContentExtractor.GetDocumentContent(stream, extension).ToList();
+
+        // Print the extracted content
+        foreach (var chunk in markdownChunks)
+        {
+            Console.WriteLine(chunk);
+            Console.WriteLine("------------");
+        }
+
+        Console.WriteLine($"Total chunks extracted: {markdownChunks.Count}");
     }
 }

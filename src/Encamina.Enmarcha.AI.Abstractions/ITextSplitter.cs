@@ -13,6 +13,7 @@ public interface ITextSplitter
     /// <summary>
     /// Gets the number of elements (characters, tokens, etc.) in each chunk.
     /// </summary>
+    [Obsolete("Use IEnrichedTextSplitter.ChunkSize for enriched metadata support.")]
     int ChunkSize { get; }
 
     /// <summary>
@@ -53,6 +54,7 @@ public interface ITextSplitter
     /// <param name="text">The text to split.</param>
     /// <param name="lengthFunction">A function to use to calculate the length (or size) of each split, usually specified by <see cref="ChunkSize"/>.</param>
     /// <returns>A collection of text splits.</returns>
+    [Obsolete("Use IEnrichedTextSplitter.Split for enriched metadata support.")]
     IEnumerable<string> Split(string text, Func<string, int> lengthFunction);
 
     /// <summary>
@@ -62,5 +64,6 @@ public interface ITextSplitter
     /// <param name="lengthFunction">Length function used to calculate the length of a string.</param>
     /// <param name="options">Custom options used for splitting.</param>
     /// <returns>An IEnumerable of smaller text chunks.</returns>
+    [Obsolete("Use IEnrichedTextSplitter.Split for enriched metadata support.")]
     IEnumerable<string> Split(string text, Func<string, int> lengthFunction, TextSplitterOptions options);
 }
