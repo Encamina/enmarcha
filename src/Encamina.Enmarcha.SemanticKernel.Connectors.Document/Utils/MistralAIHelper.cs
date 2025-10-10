@@ -129,87 +129,38 @@ internal static class MistralAIHelper
     /// <param name="markdown">The Markdown text to split.</param>
     /// <param name="maxChunkSize">Maximum number of characters allowed per chunk.</param>
     /// <returns>An enumerable of Markdown chunks.</returns>
-    public static IEnumerable<string> SplitMarkdown(string markdown, int maxChunkSize = 5000)
+    public static List<string> SplitMarkdown(string markdown, int maxChunkSize = 5000)
     {
-        var chunks = new List<string>();
+        var parts = new List<string>();
+        var current = new List<string>();
+        var length = 0;
 
-        if (string.IsNullOrWhiteSpace(markdown))
+        using (var reader = new StringReader(markdown))
         {
-            return chunks;
-        }
-
-        // Markdown-specific separators in priority order (respecting structure)
-        var separators = new[] { "\n## ", "\n### ", "\n#### ", "\n##### ", "\n\n", "\n", ". ", " ", string.Empty };
-
-        string? activeSeparator = null;
-
-        // Find the first applicable separator
-        foreach (var sep in separators)
-        {
-            if (sep == string.Empty || markdown.Contains(sep, StringComparison.Ordinal))
+            string? line;
+            while ((line = reader.ReadLine()) != null)
             {
-                activeSeparator = sep;
-                break;
-            }
-        }
+                var lineWithEnding = line + Environment.NewLine;
 
-        // Split the text by the active separator
-        var splits = activeSeparator is not null
-            ? markdown.Split(activeSeparator, StringSplitOptions.RemoveEmptyEntries).Select(s => s.Trim())
-            : new[] { markdown };
-
-        var pendingSplits = new List<string>();
-        var currentLength = 0;
-
-        foreach (var split in splits)
-        {
-            var splitLength = split.Length;
-
-            if (splitLength < maxChunkSize)
-            {
-                // Check if we can add this split to pending ones
-                var separatorLength = pendingSplits.Count > 0 ? (activeSeparator?.Length ?? 0) : 0;
-
-                if (currentLength + separatorLength + splitLength <= maxChunkSize)
+                if (length + lineWithEnding.Length > maxChunkSize)
                 {
-                    pendingSplits.Add(split);
-                    currentLength += separatorLength + splitLength;
+                    parts.Add(string.Join(string.Empty, current));
+                    current = [lineWithEnding];
+                    length = lineWithEnding.Length;
                 }
                 else
                 {
-                    // Flush pending splits as a chunk
-                    if (pendingSplits.Count > 0)
-                    {
-                        chunks.Add(string.Join(activeSeparator ?? string.Empty, pendingSplits));
-                        pendingSplits.Clear();
-                    }
-
-                    pendingSplits.Add(split);
-                    currentLength = splitLength;
+                    current.Add(lineWithEnding);
+                    length += lineWithEnding.Length;
                 }
-            }
-            else
-            {
-                // Split is too large, flush pending and recursively split
-                if (pendingSplits.Count > 0)
-                {
-                    chunks.Add(string.Join(activeSeparator ?? string.Empty, pendingSplits));
-                    pendingSplits.Clear();
-                    currentLength = 0;
-                }
-
-                // Recursively split this oversized chunk
-                var nestedChunks = SplitMarkdown(split, maxChunkSize);
-                chunks.AddRange(nestedChunks);
             }
         }
 
-        // Add remaining pending splits
-        if (pendingSplits.Count > 0)
+        if (current.Count > 0)
         {
-            chunks.Add(string.Join(activeSeparator ?? string.Empty, pendingSplits));
+            parts.Add(string.Join(string.Empty, current));
         }
 
-        return chunks.Where(chunk => !string.IsNullOrWhiteSpace(chunk));
+        return parts;
     }
 }
