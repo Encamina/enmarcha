@@ -19,12 +19,12 @@ public class EnrichedRecursiveCharacterTextSplitter : EnrichedTextSplitter
     /// Initializes a new instance of the <see cref="EnrichedRecursiveCharacterTextSplitter"/> class.
     /// </summary>
     /// <param name="options">The options to use when configuring the enriched recursive character text splitter.</param>
-    public EnrichedRecursiveCharacterTextSplitter(IOptionsMonitor<EnrichedTextSplitterOptions> options) : base(options)
+    public EnrichedRecursiveCharacterTextSplitter(IOptionsMonitor<TextSplitterOptions> options) : base(options)
     {
     }
 
     /// <inheritdoc/>
-    public override IEnumerable<(IDictionary<string, string> Metadata, string Text)> Split(string text, Func<string, int> lengthFunction, EnrichedTextSplitterOptions options)
+    public override IEnumerable<(IDictionary<string, string> Metadata, string Text)> SplitWithMetadata(string text, Func<string, int> lengthFunction, TextSplitterOptions options)
     {
         var h1Sections = SplitByH1(text);
         var context = new Dictionary<string, string>();

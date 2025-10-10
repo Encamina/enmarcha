@@ -21,6 +21,7 @@ public class MistralAIDocumentConnector : IEnmarchaDocumentConnector
     /// System prompt used for refine the MistralAI output.
     /// </summary>
     protected const string SystemPrompt = """
+
         You are an expert assistant specialized in structuring, cleaning, and organizing Markdown documents.
 
         Your task is to refine and correct the markdown content while preserving its original meaning.
@@ -35,25 +36,25 @@ public class MistralAIDocumentConnector : IEnmarchaDocumentConnector
                 * Subtitle or additional info: ### (H3)
                 Example:
                     Input:
-                        # CASER HOGAR INTEGRAL
-                        Condiciones Generales y Especiales
-                        ## CAJA DE SEGUROS REUNIDOS
-                        ## Compañía de Seguros y Reaseguros, S.A. -CASER-
+                        # Title
+                        Conditions
+                        ## Organization
+                        ## Subtitle
                     Ouput:
-                        # CASER HOGAR INTEGRAL
-                        Condiciones Generales y Especiales
-                        ## CAJA DE SEGUROS REUNIDOS
-                        ### Compañía de Seguros y Reaseguros, S.A. -CASER-
+                        # Title
+                        Conditions
+                        ## Organization
+                        ### Subtitle
         3. **TABLE OF CONTENTS vs. REGULAR CONTENT**:
             - In TABLE OF CONTENTS sections: multiple consecutive headings without text between them are normal and expected. Keep them as-is.
             - Outside TABLE OF CONTENTS: if you find multiple consecutive headings at the same level with no content between them, determine if there's a parent-child relationship and adjust hierarchy accordingly.
               Example:
                 Input:
-                    ## ARTICLE 21. EXTRAORDINARY RISKS COVERED BY INSURANCE CONSORTIUM
-                    ## LEGAL DEFENSE
+                    ## Title of the article
+                    ## Subtitle of the article
                 Output:
-                    ## ARTICLE 21. EXTRAORDINARY RISKS COVERED BY INSURANCE CONSORTIUM
-                    ### LEGAL DEFENSE
+                    ## Title of the article
+                    ### Subtitle of the article
         4. Convert and fix broken tables, lists, and any malformed Markdown formatting.
         5. DO NOT generate hyperlinks, numbered lists where they don't exist, or HTML entities (&nbsp;, <br>, etc.).
         6. Remove headers, footers, page numbers, and any document metadata that appears repeatedly.
@@ -111,60 +112,78 @@ public class MistralAIDocumentConnector : IEnmarchaDocumentConnector
     }
 
     /// <inheritdoc/>
-    public string ReadText(Stream stream) => ReadTextAsync(stream);
+    public string ReadText(Stream stream) => ReadTextAsync(stream, CancellationToken.None).GetAwaiter().GetResult();
 
     /// <summary>
     /// Reads text from a PDF stream using the configured AI service.
     /// </summary>
     /// <param name="stream">The PDF stream to read.</param>
+    /// <param name="cancellationToken">Cancellation token to cancel the operation.</param>
     /// <returns>The extracted text content.</returns>
-    /// <exception cref="HttpRequestException">Thrown when the HTTP request fails.</exception>
-    public virtual string ReadTextAsync(Stream stream)
+    public virtual async Task<string> ReadTextAsync(Stream stream, CancellationToken cancellationToken = default)
     {
         Guard.IsNotNull(stream);
 
+        var markdown = string.Empty;
+
         // Extract raw markdown from PDF
-        var rawMarkdown = ExtractMarkdownFromPdf(stream);
+        var rawMarkdown = await ExtractMarkdownFromPdfAsync(stream, cancellationToken);
 
-        // Refine markdown using chat completion
-        var refinedMarkdown = RefineMarkdownWithAI(rawMarkdown);
+        if (options.LLMPostProcessing)
+        {
+            // Refine the raw markdown using AI
+            var refinedMarkdown = await RefineMarkdownWithAIAsync(rawMarkdown, cancellationToken);
+            markdown = refinedMarkdown;
+        }
+        else
+        {
+            markdown = rawMarkdown;
+        }
 
-        return refinedMarkdown;
+        return markdown;
     }
 
     /// <summary>
     /// Extracts markdown content from a PDF stream by processing it in chunks.
     /// </summary>
-    private string ExtractMarkdownFromPdf(Stream stream)
+    /// <param name="stream">The PDF stream to process.</param>
+    /// <param name="cancellationToken">Cancellation token to cancel the operation.</param>
+    /// <returns>The extracted markdown content.</returns>
+    private async Task<string> ExtractMarkdownFromPdfAsync(Stream stream, CancellationToken cancellationToken)
     {
-        var sb = new StringBuilder();
+        var markdown = new StringBuilder();
 
-        var pdfParts = MistralAIHelper.SplitPdfByPagesAsync(stream, options.SplitPageNumber, CancellationToken.None).GetAwaiter().GetResult();
+        var pdfParts = await MistralAIHelper.SplitPdfByPagesAsync(stream, options.SplitPageNumber, cancellationToken);
 
         using var httpClient = httpFactory.CreateClient();
         httpClient.Timeout = TimeSpan.FromMinutes(10);
 
         foreach (var pdfPart in pdfParts)
         {
-            var markdownPart = ProcessPdfPart(httpClient, pdfPart);
+            var markdownPart = await ProcessMarkdownPdfPartAsync(httpClient, pdfPart, cancellationToken);
 
-            if (sb.Length > 0 && !string.IsNullOrWhiteSpace(markdownPart))
+            if (markdown.Length > 0 && !string.IsNullOrWhiteSpace(markdownPart))
             {
-                sb.AppendLine().AppendLine();
+                markdown.AppendLine().AppendLine();
             }
 
-            sb.Append(markdownPart);
+            markdown.Append(markdownPart);
         }
 
-        return sb.ToString();
+        return markdown.ToString();
     }
 
     /// <summary>
     /// Processes a single PDF part and extracts markdown.
     /// </summary>
-    private string ProcessPdfPart(HttpClient httpClient, Stream pdfPart)
+    /// <param name="httpClient">The HTTP client to use for the request.</param>
+    /// <param name="pdfPart">The PDF part stream to process.</param>
+    /// <param name="cancellationToken">Cancellation token to cancel the operation.</param>
+    /// <returns>The extracted markdown content from the PDF part.</returns>
+    /// <exception cref="HttpRequestException">Thrown when the HTTP request fails.</exception>
+    private async Task<string> ProcessMarkdownPdfPartAsync(HttpClient httpClient, Stream pdfPart, CancellationToken cancellationToken)
     {
-        var documentUrl = MistralAIHelper.BuildPdfDataUrlAsync(pdfPart, CancellationToken.None).GetAwaiter().GetResult();
+        var documentUrl = await MistralAIHelper.BuildPdfDataUrlAsync(pdfPart, cancellationToken);
 
         using var httpRequest = new HttpRequestMessage(HttpMethod.Post, options.Endpoint)
         {
@@ -181,19 +200,24 @@ public class MistralAIDocumentConnector : IEnmarchaDocumentConnector
             }),
         };
 
-        using var httpResponse = httpClient.SendAsync(httpRequest, CancellationToken.None).GetAwaiter().GetResult();
+        using var httpResponse = await httpClient.SendAsync(httpRequest, cancellationToken);
 
         httpResponse.EnsureSuccessStatusCode();
 
-        var content = httpResponse.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+        var content = await httpResponse.Content.ReadAsStringAsync(cancellationToken);
 
-        return MistralAIHelper.ExtractAndCombineMarkdown(content);
+        var combinedMarkdown = MistralAIHelper.ExtractAndCombineMarkdown(content);
+
+        return combinedMarkdown;
     }
 
     /// <summary>
     /// Refines extracted markdown using AI chat completion.
     /// </summary>
-    private string RefineMarkdownWithAI(string markdown)
+    /// <param name="markdown">The raw markdown to refine.</param>
+    /// <param name="cancellationToken">Cancellation token to cancel the operation.</param>
+    /// <returns>The refined markdown content.</returns>
+    private async Task<string> RefineMarkdownWithAIAsync(string markdown, CancellationToken cancellationToken)
     {
         var splittedMarkdown = MistralAIHelper.SplitMarkdown(markdown);
 
@@ -204,7 +228,7 @@ public class MistralAIDocumentConnector : IEnmarchaDocumentConnector
             var history = new ChatHistory(SystemPrompt);
             history.AddUserMessage(message);
 
-            var response = chatCompletionService.GetChatMessageContentAsync(history).GetAwaiter().GetResult();
+            var response = await chatCompletionService.GetChatMessageContentAsync(history, cancellationToken: cancellationToken);
 
             var content = response?.Content ?? string.Empty;
 

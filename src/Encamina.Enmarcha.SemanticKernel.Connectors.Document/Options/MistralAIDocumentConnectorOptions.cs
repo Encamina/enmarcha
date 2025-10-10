@@ -34,4 +34,9 @@ public sealed class MistralAIDocumentConnectorOptions
     /// </summary>
     [Range(0, 30)]
     public int SplitPageNumber { get; set; } = 30;
+
+    /// <summary>
+    /// Gets or sets a value indicating whether to apply LLM-based post-processing to refine the extracted text.
+    /// </summary>
+    public bool LLMPostProcessing { get; set; } = true;
 }

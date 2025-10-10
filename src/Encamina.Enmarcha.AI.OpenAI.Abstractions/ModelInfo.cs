@@ -12,19 +12,23 @@ public sealed class ModelInfo
 {
     private static readonly IDictionary<string, ModelInfo> ModelInfoById = new ReadOnlyDictionary<string, ModelInfo>(new Dictionary<string, ModelInfo>()
     {
-        // GPT 3.5...
-        { @"gpt-35-turbo-16k", new ModelInfo() { Id = @"gpt-35-turbo-16k", MaxTokens = 16200, MaxTokensOutput = 4096, Encoding = @"cl100k_base", IsObsolete = false } },
-        { @"gpt-3.5-turbo-16k", new ModelInfo() { Id = @"gpt-3.5-turbo-16k", MaxTokens = 16200, MaxTokensOutput = 4096, Encoding = @"cl100k_base", IsObsolete = false } },
-        { @"gpt-35-turbo", new ModelInfo() { Id = @"gpt-35-turbo", MaxTokens = 4096, MaxTokensOutput = 4096, Encoding = @"cl100k_base", IsObsolete = false } },
-        { @"gpt-3.5-turbo", new ModelInfo() { Id = @"gpt-3.5-turbo", MaxTokens = 4096, MaxTokensOutput = 4096, Encoding = @"cl100k_base", IsObsolete = false } },
+        // GPT 5...
+        { @"gpt-5", new ModelInfo() { Id = @"gpt-5", MaxTokens = 128000, MaxTokensOutput = 128000, Encoding = @"o200k_base", IsObsolete = false } },
+        { @"gpt-5-mini", new ModelInfo() { Id = @"gpt-5-mini", MaxTokens = 128000, MaxTokensOutput = 128000, Encoding = @"o200k_base", IsObsolete = false } },
 
         // GPT 4...
         { @"gpt-4", new ModelInfo() { Id = @"gpt-4", MaxTokens = 8192, MaxTokensOutput = 4096, Encoding = @"cl100k_base", IsObsolete = true } },
         { @"gpt-4-32k", new ModelInfo() { Id = @"gpt-4", MaxTokens = 32768, MaxTokensOutput = 4096, Encoding = @"cl100k_base", IsObsolete = true } },
         { @"gpt-4-turbo", new ModelInfo() { Id = @"gpt-4", MaxTokens = 128000, MaxTokensOutput = 4096, Encoding = @"cl100k_base", IsObsolete = true } },
-        { @"gpt-4o", new ModelInfo() { Id = @"gpt-4o", MaxTokens = 128000, MaxTokensOutput = 4096, Encoding = @"o200k_base", IsObsolete = false } },
-        { @"gpt-4o-mini", new ModelInfo() { Id = @"gpt-4o-mini", MaxTokens = 128000, MaxTokensOutput = 16416, Encoding = @"o200k_base", IsObsolete = false } },
-        { @"gpt-4.1", new ModelInfo() { Id = @"gpt-4.1", MaxTokens = 128000, MaxTokensOutput = 4096, Encoding = @"o200k_base", IsObsolete = false } },
+        { @"gpt-4o", new ModelInfo() { Id = @"gpt-4o", MaxTokens = 128000, MaxTokensOutput = 16384, Encoding = @"o200k_base", IsObsolete = false } },
+        { @"gpt-4o-mini", new ModelInfo() { Id = @"gpt-4o-mini", MaxTokens = 128000, MaxTokensOutput = 16384, Encoding = @"o200k_base", IsObsolete = false } },
+        { @"gpt-4.1", new ModelInfo() { Id = @"gpt-4.1", MaxTokens = 128000, MaxTokensOutput = 32768, Encoding = @"o200k_base", IsObsolete = false } },
+
+        // GPT 3.5...
+        { @"gpt-35-turbo-16k", new ModelInfo() { Id = @"gpt-35-turbo-16k", MaxTokens = 16200, MaxTokensOutput = 4096, Encoding = @"cl100k_base", IsObsolete = true } },
+        { @"gpt-3.5-turbo-16k", new ModelInfo() { Id = @"gpt-3.5-turbo-16k", MaxTokens = 16200, MaxTokensOutput = 4096, Encoding = @"cl100k_base", IsObsolete = true } },
+        { @"gpt-35-turbo", new ModelInfo() { Id = @"gpt-35-turbo", MaxTokens = 4096, MaxTokensOutput = 4096, Encoding = @"cl100k_base", IsObsolete = true } },
+        { @"gpt-3.5-turbo", new ModelInfo() { Id = @"gpt-3.5-turbo", MaxTokens = 4096, MaxTokensOutput = 4096, Encoding = @"cl100k_base", IsObsolete = true } },
 
         // GPT 3...
         { @"text-davinci-001", new ModelInfo() { Id = @"text-davinci-001", MaxTokens = 2049, MaxTokensOutput = 2049, Encoding = @"r50k_base", IsObsolete = true } },

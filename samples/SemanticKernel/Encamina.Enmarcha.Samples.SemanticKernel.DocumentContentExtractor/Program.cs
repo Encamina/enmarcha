@@ -25,7 +25,7 @@ internal static class Program
             .ConfigureAppConfiguration((configuration) =>
             {
                 configuration.AddJsonFile(path: @"appsettings.json", optional: false, reloadOnChange: true)
-                             .AddJsonFile($@"appsettings.{Environment.UserName}.json", optional: true, reloadOnChange: true);
+                             .AddJsonFile(path: $@"appsettings.{Environment.UserName}.json", optional: true, reloadOnChange: true);
             });
 
         // Configure service
@@ -45,14 +45,14 @@ internal static class Program
                 return kernel;
             });
 
-            services.AddRecursiveCharacterTextSplitter()
+            services.AddRecursiveCharacterTextSplitter() // TODO: Should be commented...
                     .AddEnrichedRecursiveCharacterTextSplitter()
                     .AddSingleton(ILengthFunctions.LengthByTokenCount)
                     ;
 
             services.AddDocumentConnectors(hostContext.Configuration)
                     .AddDefaultDocumentConnectorProvider()
-                    .AddDefaultDocumentContentExtractor()
+                    .AddDefaultDocumentContentExtractor() // TODO: Should be commented...
                     .AddDefaultDocumentContentEnrichedExtractor()
                     ;
 

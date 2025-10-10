@@ -11,7 +11,7 @@ public interface IDocumentContentEnrichedExtractor : IDocumentContentExtractor
     /// <param name="stream">The document stream.</param>
     /// <param name="fileExtension">The extension of the document file.</param>
     /// <returns>The text content of the document with metadata.</returns>
-    new IEnumerable<(IDictionary<string, string> Metadata, string Text)> GetDocumentContent(Stream stream, string fileExtension);
+    IEnumerable<(IDictionary<string, string> Metadata, string Text)> GetDocumentContentWithMetadata(Stream stream, string fileExtension);
 
     /// <summary>
     /// Asynchronously extracts the content from a document stream.
@@ -20,5 +20,5 @@ public interface IDocumentContentEnrichedExtractor : IDocumentContentExtractor
     /// <param name="fileExtension">The extension of the document file.</param>
     /// <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
     /// <returns>The text content of the document with metadata.</returns>
-    new Task<IEnumerable<(IDictionary<string, string> Metadata, string Text)>> GetDocumentContentAsync(Stream stream, string fileExtension, CancellationToken cancellationToken);
+    Task<IEnumerable<(IDictionary<string, string> Metadata, string Text)>> GetDocumentContentWithMetadataAsync(Stream stream, string fileExtension, CancellationToken cancellationToken);
 }

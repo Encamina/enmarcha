@@ -74,7 +74,7 @@ internal class Example
         var stopwatch = Stopwatch.StartNew();
 
         using var stream = File.OpenRead(filePath);
-        var markdownChunks = enrichedDocumentContentExtractor.GetDocumentContent(stream, extension).ToList();
+        var markdownChunks = enrichedDocumentContentExtractor.GetDocumentContentWithMetadata(stream, extension).ToList();
 
         // Print all chunks except the last with separator
         foreach (var (metadata, text) in markdownChunks.SkipLast(1))

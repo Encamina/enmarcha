@@ -2,8 +2,8 @@
 
 using CommunityToolkit.Diagnostics;
 
-using PdfSharp.Pdf;
-using PdfSharp.Pdf.IO;
+using UglyToad.PdfPig;
+using UglyToad.PdfPig.Writer;
 
 namespace Encamina.Enmarcha.SemanticKernel.Connectors.Document.Utils;
 
@@ -16,56 +16,74 @@ internal static class MistralAIHelper
     /// Splits a PDF stream into multiple parts, each containing a specified number of pages.
     /// </summary>
     /// <param name="stream">The input PDF stream.</param>
-    /// <param name="pages">The number of pages per split part.</param>
-    /// <param name="ct">Cancellation token.</param>
+    /// <param name="pagesPerPart">The number of pages per split part.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
     /// <returns>A task that represents the asynchronous operation. The task result contains a list of memory streams, each representing a part of the split PDF.</returns>
-    public static Task<IReadOnlyList<MemoryStream>> SplitPdfByPagesAsync(Stream stream, int pages, CancellationToken ct)
+    public static async Task<IReadOnlyList<MemoryStream>> SplitPdfByPagesAsync(Stream stream, int pagesPerPart = 30, CancellationToken cancellationToken = default)
     {
         Guard.IsNotNull(stream);
-        Guard.IsGreaterThan(pages, 0);
+        Guard.IsGreaterThan(pagesPerPart, 0);
 
-        var resultStreams = new List<MemoryStream>();
+        List<MemoryStream> resultStreams = [];
 
         try
         {
+            // Reset stream position if seekable
             if (stream.CanSeek)
             {
                 stream.Position = 0;
             }
 
-            using var sourcePdf = PdfReader.Open(stream, PdfDocumentOpenMode.Import);
-            var totalPages = sourcePdf.PageCount;
-
-            var currentPage = 0;
-
-            while (currentPage < totalPages)
+            // Read PDF bytes efficiently
+            byte[] pdfBytes;
+            if (stream is MemoryStream ms)
             {
-                ct.ThrowIfCancellationRequested();
+                pdfBytes = ms.ToArray();
+            }
+            else
+            {
+                using var buffer = new MemoryStream();
+                await stream.CopyToAsync(buffer, cancellationToken);
+                pdfBytes = buffer.ToArray();
+            }
 
-                using var targetPdf = new PdfDocument();
-                var endPage = Math.Min(currentPage + pages, totalPages);
+            using var sourcePdf = PdfDocument.Open(pdfBytes);
+            var totalPages = sourcePdf.NumberOfPages;
+            var estimatedParts = (int)Math.Ceiling((double)totalPages / pagesPerPart);
 
-                for (var i = currentPage; i < endPage; i++)
+            resultStreams.Capacity = estimatedParts;
+
+            // Split PDF into parts
+            for (var startPage = 1; startPage <= totalPages; startPage += pagesPerPart)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+
+                var endPage = Math.Min(startPage + pagesPerPart - 1, totalPages);
+                var builder = new PdfDocumentBuilder();
+
+                for (var pageNumber = startPage; pageNumber <= endPage; pageNumber++)
                 {
-                    targetPdf.AddPage(sourcePdf.Pages[i]);
+                    cancellationToken.ThrowIfCancellationRequested();
+                    builder.AddPage(sourcePdf, pageNumber);
                 }
 
-                var partStream = new MemoryStream();
-                targetPdf.Save(partStream, closeStream: false);
+                var partBytes = builder.Build();
+                var partStream = new MemoryStream(partBytes.Length);
+
+                await partStream.WriteAsync(partBytes, cancellationToken);
                 partStream.Position = 0;
 
                 resultStreams.Add(partStream);
-
-                currentPage = endPage;
             }
 
-            return Task.FromResult<IReadOnlyList<MemoryStream>>(resultStreams.AsReadOnly());
+            return resultStreams.AsReadOnly();
         }
         catch
         {
-            foreach (var partStream in resultStreams)
+            // Clean up all created streams on error
+            foreach (var partStream in resultStreams.Where(partStream => partStream is not null))
             {
-                partStream.Dispose();
+                await partStream.DisposeAsync();
             }
 
             resultStreams.Clear();
