@@ -127,7 +127,7 @@ internal class Example
         Console.WriteLine("-----------------------------------\n");
         Console.WriteLine("[ADDITIONAL INFORMATION]\n");
         Console.WriteLine($"Total chunks extracted: {markdownChunks.Count}");
-        Console.WriteLine($"Time elapsed: {stopwatch.Elapsed.TotalSeconds:F2} seconds\n");
+        Console.WriteLine($"Time elapsed: {stopwatch.Elapsed:hh\\:mm\\:ss}\n");
         Console.WriteLine("[END ADDITIONAL INFORMATION]");
     }
 }

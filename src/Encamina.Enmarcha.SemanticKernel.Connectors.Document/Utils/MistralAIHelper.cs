@@ -19,15 +19,10 @@ internal static class MistralAIHelper
     /// <param name="pages">The number of pages per split part.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>A task that represents the asynchronous operation. The task result contains a list of memory streams, each representing a part of the split PDF.</returns>
-    /// <exception cref="ArgumentException">Thrown when pages is less than or equal to zero.</exception>
     public static Task<IReadOnlyList<MemoryStream>> SplitPdfByPagesAsync(Stream stream, int pages, CancellationToken ct)
     {
         Guard.IsNotNull(stream);
-
-        if (pages <= 0)
-        {
-            throw new ArgumentException("Pages per part must be greater than zero.", nameof(pages));
-        }
+        Guard.IsGreaterThan(pages, 0);
 
         var resultStreams = new List<MemoryStream>();
 
@@ -42,13 +37,12 @@ internal static class MistralAIHelper
             var totalPages = sourcePdf.PageCount;
 
             var currentPage = 0;
-            var partNumber = 1;
 
             while (currentPage < totalPages)
             {
                 ct.ThrowIfCancellationRequested();
 
-                var targetPdf = new PdfDocument();
+                using var targetPdf = new PdfDocument();
                 var endPage = Math.Min(currentPage + pages, totalPages);
 
                 for (var i = currentPage; i < endPage; i++)
@@ -63,19 +57,18 @@ internal static class MistralAIHelper
                 resultStreams.Add(partStream);
 
                 currentPage = endPage;
-                partNumber++;
-                targetPdf.Dispose();
             }
 
             return Task.FromResult<IReadOnlyList<MemoryStream>>(resultStreams.AsReadOnly());
         }
-        catch (Exception ex)
+        catch
         {
-            foreach (var streamMemory in resultStreams)
+            foreach (var partStream in resultStreams)
             {
-                stream.Dispose();
+                partStream.Dispose();
             }
 
+            resultStreams.Clear();
             throw;
         }
     }
@@ -113,12 +106,10 @@ internal static class MistralAIHelper
     /// <exception cref="InvalidOperationException">Thrown when JSON structure is invalid.</exception>
     public static string ExtractAndCombineMarkdown(string jsonContent)
     {
-        var pages = JsonNode.Parse(jsonContent)?["pages"]?.AsArray()
-            ?? throw new InvalidOperationException("Invalid JSON structure: 'pages' array not found.");
+        var pages = JsonNode.Parse(jsonContent)?["pages"]?.AsArray() ?? throw new InvalidOperationException("Invalid JSON structure: 'pages' array not found.");
 
-        var markdownPages = pages
-            .Select(page => page?["markdown"]?.GetValue<string>())
-            .Where(markdown => !string.IsNullOrWhiteSpace(markdown));
+        var markdownPages = pages.Select(page => page?["markdown"]?.GetValue<string>())
+                                 .Where(markdown => !string.IsNullOrWhiteSpace(markdown));
 
         return string.Join(string.Empty, markdownPages);
     }
