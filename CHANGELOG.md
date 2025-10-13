@@ -26,6 +26,10 @@ Previous classification is not required if changes are simple or all belong to t
 - Added `Encamina.Enmarcha.AI.Agents`, `Encamina.Enmarcha.AI.Agents.Abstractions` and `Encamina.Enmarcha.Agents.Skills.QuestionAnswering` projects to provide support for the new Microsoft 365 Agents SDK.
 - Added `ICorrelationStore` and `DistributedCacheCorrelationStore` to store correlations (`CorrelationEntry`) in a distributed cache.
 
+## Minor Changes
+- Updated dependencies:
+    - Microsoft.Azure.Cosmos from `3.47.2` to `3.49.0`.
+
 ## [8.3.0]
 
 ### Breaking Changes
