@@ -3,6 +3,7 @@ using System.Text;
 
 using CommunityToolkit.Diagnostics;
 
+using Encamina.Enmarcha.AI.Abstractions;
 using Encamina.Enmarcha.SemanticKernel.Connectors.Document.Options;
 using Encamina.Enmarcha.SemanticKernel.Connectors.Document.Utils;
 
@@ -10,236 +11,253 @@ using Microsoft.Extensions.Options;
 using Microsoft.SemanticKernel;
 using Microsoft.SemanticKernel.ChatCompletion;
 
-namespace Encamina.Enmarcha.SemanticKernel.Connectors.Document.Connectors;
-
-/// <summary>
-/// Extracts text from a Portable Document File (<c>.pdf</c>) with MistralAI.
-/// </summary>
-public class MistralAIDocumentConnector : IEnmarchaDocumentConnector
+namespace Encamina.Enmarcha.SemanticKernel.Connectors.Document.Connectors
 {
     /// <summary>
-    /// System prompt used for refine the MistralAI output.
+    /// Extracts text from a Portable Document File (<c>.pdf</c>) with MistralAI.
     /// </summary>
-    protected const string SystemPrompt = """
+    public class MistralAIDocumentConnector : IEnmarchaDocumentConnector
+    {
+        /// <summary>
+        /// System prompt used for refine the MistralAI output.
+        /// </summary>
+        protected const string SystemPrompt = """
 
-        You are an expert assistant specialized in structuring, cleaning, and organizing Markdown documents.
+            You are an expert assistant specialized in structuring, cleaning, and organizing Markdown documents.
 
-        Your task is to refine and correct the markdown content while preserving its original meaning.
+            Your task is to refine and correct the markdown content while preserving its original meaning.
 
-        [INSTRUCTIONS]
+            [INSTRUCTIONS]
 
-        1. Maintain and correct Markdown heading hierarchies (#, ##, ###, ####) based on their semantic level.
-        2. **COVER PAGE / DOCUMENT TITLE HANDLING**:
-            - When you detect a document cover or title page (usually at the beginning), apply the following hierarchy:
-                * Main document title: # (H1)
-                * Organization/Company name: ## (H2)
-                * Subtitle or additional info: ### (H3)
-                Example:
+            1. Maintain and correct Markdown heading hierarchies (#, ##, ###, ####) based on their semantic level.
+            2. **COVER PAGE / DOCUMENT TITLE HANDLING**:
+                - When you detect a document cover or title page (usually at the beginning), apply the following hierarchy:
+                    * Main document title: # (H1)
+                    * Organization/Company name: ## (H2)
+                    * Subtitle or additional info: ### (H3)
+                    Example:
+                        Input:
+                            # Title
+                            Conditions
+                            ## Organization
+                            ## Subtitle
+                        Ouput:
+                            # Title
+                            Conditions
+                            ## Organization
+                            ### Subtitle
+            3. **TABLE OF CONTENTS vs. REGULAR CONTENT**:
+                - In TABLE OF CONTENTS sections: multiple consecutive headings without text between them are normal and expected. Keep them as-is.
+                - Outside TABLE OF CONTENTS: if you find multiple consecutive headings at the same level with no content between them, determine if there's a parent-child relationship and adjust hierarchy accordingly.
+                  Example:
                     Input:
-                        # Title
-                        Conditions
-                        ## Organization
-                        ## Subtitle
-                    Ouput:
-                        # Title
-                        Conditions
-                        ## Organization
-                        ### Subtitle
-        3. **TABLE OF CONTENTS vs. REGULAR CONTENT**:
-            - In TABLE OF CONTENTS sections: multiple consecutive headings without text between them are normal and expected. Keep them as-is.
-            - Outside TABLE OF CONTENTS: if you find multiple consecutive headings at the same level with no content between them, determine if there's a parent-child relationship and adjust hierarchy accordingly.
-              Example:
-                Input:
-                    ## Title of the article
-                    ## Subtitle of the article
-                Output:
-                    ## Title of the article
-                    ### Subtitle of the article
-        4. Convert and fix broken tables, lists, and any malformed Markdown formatting.
-        5. DO NOT generate hyperlinks, numbered lists where they don't exist, or HTML entities (&nbsp;, <br>, etc.).
-        6. Remove headers, footers, page numbers, and any document metadata that appears repeatedly.
-        7. Fix OCR errors including split words, incorrect spacing, stray characters, and common OCR mistakes.
-        8. DO NOT wrap your output in code fences (```) or add any explanatory text.
-        9. DO NOT add, remove, or modify the actual content text. Only fix formatting, structure, and hierarchy.
-        10. Return ONLY the final clean, hierarchical, and readable Markdown content without any additional comments or explanations.
-        11. Higher-level headings CANNOT appear under lower-level headings in the hierarchy. For example, an H1 (#) cannot appear under an H2 (##).
+                        ## Title of the article
+                        ## Subtitle of the article
+                    Output:
+                        ## Title of the article
+                        ### Subtitle of the article
+            4. Convert and fix broken tables, lists, and any malformed Markdown formatting.
+            5. DO NOT generate hyperlinks, numbered lists where they don't exist, or HTML entities (&nbsp;, <br>, etc.).
+            6. Remove headers, footers, page numbers, and any document metadata that appears repeatedly.
+            7. Fix OCR errors including split words, incorrect spacing, stray characters, and common OCR mistakes.
+            8. DO NOT wrap your output in code fences (```) or add any explanatory text.
+            9. DO NOT add, remove, or modify the actual content text. Only fix formatting, structure, and hierarchy.
+            10. Return ONLY the final clean, hierarchical, and readable Markdown content without any additional comments or explanations.
+            11. Higher-level headings CANNOT appear under lower-level headings in the hierarchy. For example, an H1 (#) cannot appear under an H2 (##).
 
-        [END INSTRUCTIONS]
+            [END INSTRUCTIONS]
 
-        """;
+            """;
 
-    /// <summary>
-    /// The chat completion service instance.
-    /// </summary>
-    private readonly IChatCompletionService chatCompletionService;
+        /// <summary>
+        /// The chat completion service instance.
+        /// </summary>
+        private readonly IChatCompletionService chatCompletionService;
 
-    /// <summary>
-    /// Configuration options for MistralAI processing.
-    /// </summary>
-    private readonly MistralAIDocumentConnectorOptions options;
+        /// <summary>
+        /// Configuration options for MistralAI processing.
+        /// </summary>
+        private readonly MistralAIDocumentConnectorOptions options;
 
-    /// <summary>
-    /// The HTTP client factory for making requests to external services.
-    /// </summary>
-    private readonly IHttpClientFactory httpFactory;
+        /// <summary>
+        /// The HTTP client factory for making requests to external services.
+        /// </summary>
+        private readonly IHttpClientFactory httpFactory;
 
-    /// <summary>
-    /// Initializes a new instance of the <see cref="MistralAIDocumentConnector"/> class.
-    /// </summary>
-    /// <param name="kernel">A valid <see cref="Kernel"/> instance.</param>
-    /// <param name="options"> A valid instance of <see cref="MistralAIDocumentConnectorOptions"/>.</param>
-    /// <param name="httpFactory">The HTTP client factory.</param>
-    public MistralAIDocumentConnector(Kernel kernel, IOptions<MistralAIDocumentConnectorOptions> options, IHttpClientFactory httpFactory)
-    {
-        chatCompletionService = kernel.GetRequiredService<IChatCompletionService>();
-        this.options = options.Value;
-        this.httpFactory = httpFactory;
-    }
+        private readonly Func<string, int> lengthFunction;
 
-    /// <inheritdoc/>
-    public IReadOnlyList<string> CompatibleFileFormats => [".PDF"];
 
-    /// <inheritdoc/>
-    public void AppendText(Stream stream, string text)
-    {
-        // Intentionally not implemented to comply with the Liskov Substitution Principle...
-    }
-
-    /// <inheritdoc/>
-    public void Initialize(Stream stream)
-    {
-        // Intentionally not implemented to comply with the Liskov Substitution Principle...
-    }
-
-    /// <inheritdoc/>
-    public string ReadText(Stream stream) => ReadTextAsync(stream, CancellationToken.None).GetAwaiter().GetResult();
-
-    /// <summary>
-    /// Reads text from a PDF stream using the configured AI service.
-    /// </summary>
-    /// <param name="stream">The PDF stream to read.</param>
-    /// <param name="cancellationToken">Cancellation token to cancel the operation.</param>
-    /// <returns>The extracted text content.</returns>
-    public virtual async Task<string> ReadTextAsync(Stream stream, CancellationToken cancellationToken = default)
-    {
-        Guard.IsNotNull(stream);
-
-        var markdown = string.Empty;
-
-        // Extract raw markdown from PDF
-        var rawMarkdown = await ExtractMarkdownFromPdfAsync(stream, cancellationToken);
-
-        if (options.LLMPostProcessing)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MistralAIDocumentConnector"/> class.
+        /// </summary>
+        /// <param name="kernel">A valid <see cref="Kernel"/> instance.</param>
+        /// <param name="options"> A valid instance of <see cref="MistralAIDocumentConnectorOptions"/>.</param>
+        /// <param name="httpFactory">The HTTP client factory.</param>
+        public MistralAIDocumentConnector(Kernel kernel, IOptions<MistralAIDocumentConnectorOptions> options, IHttpClientFactory httpFactory, Func<string, int> lengthFunction)
         {
-            // Refine the raw markdown using AI
-            var refinedMarkdown = await RefineMarkdownWithAIAsync(rawMarkdown, cancellationToken);
-            markdown = refinedMarkdown;
-        }
-        else
-        {
-            markdown = rawMarkdown;
+            chatCompletionService = kernel.GetRequiredService<IChatCompletionService>();
+            this.options = options.Value;
+            this.httpFactory = httpFactory;
+            this.lengthFunction = lengthFunction;
         }
 
-        return markdown;
-    }
+        /// <inheritdoc/>
+        public IReadOnlyList<string> CompatibleFileFormats => new[] { ".PDF" };
 
-    /// <summary>
-    /// Extracts markdown content from a PDF stream by processing it in chunks.
-    /// </summary>
-    /// <param name="stream">The PDF stream to process.</param>
-    /// <param name="cancellationToken">Cancellation token to cancel the operation.</param>
-    /// <returns>The extracted markdown content.</returns>
-    private async Task<string> ExtractMarkdownFromPdfAsync(Stream stream, CancellationToken cancellationToken)
-    {
-        var markdown = new StringBuilder();
-
-        var pdfParts = await MistralAIHelper.SplitPdfByPagesAsync(stream, options.SplitPageNumber, cancellationToken);
-
-        using var httpClient = httpFactory.CreateClient();
-        httpClient.Timeout = TimeSpan.FromMinutes(10);
-
-        foreach (var pdfPart in pdfParts)
+        /// <inheritdoc/>
+        public void AppendText(Stream stream, string text)
         {
-            var markdownPart = await ProcessMarkdownPdfPartAsync(httpClient, pdfPart, cancellationToken);
+            // Intentionally not implemented to comply with the Liskov Substitution Principle...
+        }
 
-            if (markdown.Length > 0 && !string.IsNullOrWhiteSpace(markdownPart))
+        /// <inheritdoc/>
+        public void Initialize(Stream stream)
+        {
+            // Intentionally not implemented to comply with the Liskov Substitution Principle...
+        }
+
+        /// <inheritdoc/>
+        public string ReadText(Stream stream) => ReadTextAsync(stream, CancellationToken.None).GetAwaiter().GetResult();
+
+        /// <summary>
+        /// Reads text from a PDF stream using the configured AI service.
+        /// </summary>
+        /// <param name="stream">The PDF stream to read.</param>
+        /// <param name="cancellationToken">Cancellation token to cancel the operation.</param>
+        /// <returns>The extracted text content.</returns>
+        public virtual async Task<string> ReadTextAsync(Stream stream, CancellationToken cancellationToken = default)
+        {
+            Guard.IsNotNull(stream);
+
+            var markdown = string.Empty;
+
+            // Extract raw markdown from PDF
+            var rawMarkdown = await ExtractMarkdownFromPdfAsync(stream, cancellationToken);
+
+            if (options.LLMPostProcessing)
             {
-                markdown.AppendLine().AppendLine();
+                // Refine the raw markdown using AI
+                var refinedMarkdown = await RefineMarkdownWithAIAsync(rawMarkdown, cancellationToken);
+                markdown = refinedMarkdown;
+            }
+            else
+            {
+                markdown = rawMarkdown;
             }
 
-            markdown.Append(markdownPart);
+            return markdown;
         }
 
-        return markdown.ToString();
-    }
-
-    /// <summary>
-    /// Processes a single PDF part and extracts markdown.
-    /// </summary>
-    /// <param name="httpClient">The HTTP client to use for the request.</param>
-    /// <param name="pdfPart">The PDF part stream to process.</param>
-    /// <param name="cancellationToken">Cancellation token to cancel the operation.</param>
-    /// <returns>The extracted markdown content from the PDF part.</returns>
-    /// <exception cref="HttpRequestException">Thrown when the HTTP request fails.</exception>
-    private async Task<string> ProcessMarkdownPdfPartAsync(HttpClient httpClient, Stream pdfPart, CancellationToken cancellationToken)
-    {
-        var documentUrl = await MistralAIHelper.BuildPdfDataUrlAsync(pdfPart, cancellationToken);
-
-        using var httpRequest = new HttpRequestMessage(HttpMethod.Post, options.Endpoint)
+        /// <summary>
+        /// Extracts markdown content from a PDF stream by processing it in chunks.
+        /// </summary>
+        /// <param name="stream">The PDF stream to process.</param>
+        /// <param name="cancellationToken">Cancellation token to cancel the operation.</param>
+        /// <returns>The extracted markdown content.</returns>
+        private async Task<string> ExtractMarkdownFromPdfAsync(Stream stream, CancellationToken cancellationToken)
         {
-            Headers = { { "Authorization", $"Bearer {options.ApiKey}" } },
-            Content = JsonContent.Create(new
+            var markdown = new StringBuilder();
+
+            var pdfParts = await MistralAIHelper.SplitPdfByPagesAsync(stream, options.SplitPageNumber, cancellationToken);
+
+            using var httpClient = httpFactory.CreateClient();
+            httpClient.Timeout = TimeSpan.FromMinutes(10);
+
+            foreach (var pdfPart in pdfParts)
             {
-                model = options.ModelName,
-                document = new
+                var markdownPart = await ProcessMarkdownPdfPartAsync(httpClient, pdfPart, cancellationToken);
+
+                if (markdown.Length > 0 && !string.IsNullOrWhiteSpace(markdownPart))
                 {
-                    type = "document_url",
-                    document_url = documentUrl,
-                },
-                include_image_base64 = true,
-            }),
-        };
+                    markdown.AppendLine().AppendLine();
+                }
 
-        using var httpResponse = await httpClient.SendAsync(httpRequest, cancellationToken);
-
-        httpResponse.EnsureSuccessStatusCode();
-
-        var content = await httpResponse.Content.ReadAsStringAsync(cancellationToken);
-
-        var combinedMarkdown = MistralAIHelper.ExtractAndCombineMarkdown(content);
-
-        return combinedMarkdown;
-    }
-
-    /// <summary>
-    /// Refines extracted markdown using AI chat completion.
-    /// </summary>
-    /// <param name="markdown">The raw markdown to refine.</param>
-    /// <param name="cancellationToken">Cancellation token to cancel the operation.</param>
-    /// <returns>The refined markdown content.</returns>
-    private async Task<string> RefineMarkdownWithAIAsync(string markdown, CancellationToken cancellationToken)
-    {
-        var splittedMarkdown = MistralAIHelper.SplitMarkdown(markdown);
-
-        var refinedMarkdown = new StringBuilder();
-
-        foreach (var message in splittedMarkdown)
-        {
-            var history = new ChatHistory(SystemPrompt);
-            history.AddUserMessage(message);
-
-            var response = await chatCompletionService.GetChatMessageContentAsync(history, cancellationToken: cancellationToken);
-
-            var content = response?.Content ?? string.Empty;
-
-            if (refinedMarkdown.Length > 0 && !string.IsNullOrWhiteSpace(content))
-            {
-                refinedMarkdown.AppendLine().AppendLine();
+                markdown.Append(markdownPart);
             }
 
-            refinedMarkdown.Append(content);
+            return markdown.ToString();
         }
 
-        return refinedMarkdown.ToString();
+        /// <summary>
+        /// Processes a single PDF part and extracts markdown.
+        /// </summary>
+        /// <param name="httpClient">The HTTP client to use for the request.</param>
+        /// <param name="pdfPart">The PDF part stream to process.</param>
+        /// <param name="cancellationToken">Cancellation token to cancel the operation.</param>
+        /// <returns>The extracted markdown content from the PDF part.</returns>
+        /// <exception cref="HttpRequestException">Thrown when the HTTP request fails.</exception>
+        private async Task<string> ProcessMarkdownPdfPartAsync(HttpClient httpClient, Stream pdfPart, CancellationToken cancellationToken)
+        {
+            var documentUrl = await MistralAIHelper.BuildPdfDataUrlAsync(pdfPart, cancellationToken);
+
+            using var httpRequest = new HttpRequestMessage(HttpMethod.Post, options.Endpoint)
+            {
+                Headers = { { "Authorization", $"Bearer {options.ApiKey}" } },
+                Content = JsonContent.Create(new
+                {
+                    model = options.ModelName,
+                    document = new
+                    {
+                        type = "document_url",
+                        document_url = documentUrl,
+                    },
+                    include_image_base64 = true,
+                }),
+            };
+
+            using var httpResponse = await httpClient.SendAsync(httpRequest, cancellationToken);
+
+            httpResponse.EnsureSuccessStatusCode();
+
+            var content = await httpResponse.Content.ReadAsStringAsync(cancellationToken);
+
+            var combinedMarkdown = MistralAIHelper.ExtractAndCombineMarkdown(content);
+
+            return combinedMarkdown;
+        }
+
+        /// <summary>
+        /// Refines extracted markdown using AI chat completion.
+        /// </summary>
+        /// <param name="markdown">The raw markdown to refine.</param>
+        /// <param name="cancellationToken">Cancellation token to cancel the operation.</param>
+        /// <returns>The refined markdown content.</returns>
+        private async Task<string> RefineMarkdownWithAIAsync(string markdown, CancellationToken cancellationToken)
+        {
+            var splittedMarkdown = MistralAIHelper.SplitMarkdown(markdown, 1024, lengthFunction);
+
+            var refinedMarkdown = new StringBuilder();
+
+            foreach (var chunk in splittedMarkdown)
+            {
+                var history = new ChatHistory(SystemPrompt);
+                history.AddUserMessage(chunk.Content);
+
+                var response = await chatCompletionService.GetChatMessageContentAsync(history, cancellationToken: cancellationToken);
+
+                var content = response?.Content ?? string.Empty;
+
+                if (refinedMarkdown.Length > 0 && !string.IsNullOrWhiteSpace(content))
+                {
+                    refinedMarkdown.AppendLine().AppendLine();
+                }
+
+                refinedMarkdown.Append(content);
+            }
+
+            return refinedMarkdown.ToString();
+        }
+    }
+
+    public class LengthFunctions : ILengthFunctions
+    {
+        public int LengthByTokenCount(string text)
+        {
+            if (string.IsNullOrEmpty(text))
+                return 0;
+
+            // Ejemplo simple contando palabras como "tokens"
+            return text.Split(' ', StringSplitOptions.RemoveEmptyEntries).Length;
+        }
     }
 }

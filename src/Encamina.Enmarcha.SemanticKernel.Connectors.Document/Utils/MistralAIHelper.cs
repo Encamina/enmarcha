@@ -1,6 +1,10 @@
 ﻿using System.Text.Json.Nodes;
+using System.Text.RegularExpressions;
 
 using CommunityToolkit.Diagnostics;
+
+using Encamina.Enmarcha.AI.Abstractions;
+using Encamina.Enmarcha.AI.OpenAI.Abstractions;
 
 using UglyToad.PdfPig;
 using UglyToad.PdfPig.Writer;
@@ -138,38 +142,195 @@ internal static class MistralAIHelper
     /// <param name="markdown">The Markdown text to split.</param>
     /// <param name="maxChunkSize">Maximum number of characters allowed per chunk.</param>
     /// <returns>An enumerable of Markdown chunks.</returns>
-    public static List<string> SplitMarkdown(string markdown, int maxChunkSize = 5000)
+    /// 
+    public class MarkdownChunk
     {
-        var parts = new List<string>();
-        var current = new List<string>();
-        var length = 0;
+        public string Content { get; set; } = string.Empty;
+        public Dictionary<string, object> Metadata { get; set; } = new();
+    }
 
-        using (var reader = new StringReader(markdown))
+    public static List<MarkdownChunk> SplitMarkdown(string markdown, int maxTokens, Func<string, int> countTokens)
+    {
+        List<string> SplitByH1(string text)
         {
-            string? line;
-            while ((line = reader.ReadLine()) != null)
+            var matches = Regex.Matches(text, @"^# .+", RegexOptions.Multiline);
+            var sections = new List<string>();
+            for (int i = 0; i < matches.Count; i++)
             {
-                var lineWithEnding = line + Environment.NewLine;
+                var start = matches[i].Index;
+                var end = (i + 1 < matches.Count) ? matches[i + 1].Index : text.Length;
+                var section = text.Substring(start, end - start).Trim();
+                sections.Add(section);
+            }
+            return sections.Count > 0 ? sections : new List<string> { text };
+        }
 
-                if (length + lineWithEnding.Length > maxChunkSize)
+        List<string> SplitByDelimiters(string text, Func<string, int> tokenCounter, int maxToks)
+        {
+            var delimiters = new[] { @"\n\s*\n", @"\n", @"\.", @";", @"," };
+            foreach (var delim in delimiters)
+            {
+                var parts = Regex.Split(text, delim);
+                var chunks = new List<string>();
+                var current = "";
+
+                foreach (var part in parts)
                 {
-                    parts.Add(string.Join(string.Empty, current));
-                    current = [lineWithEnding];
-                    length = lineWithEnding.Length;
+                    var tentative = string.IsNullOrEmpty(current) ? part : current + part + "\n";
+                    if (tokenCounter(tentative) <= maxToks)
+                    {
+                        current = tentative;
+                    }
+                    else
+                    {
+                        if (!string.IsNullOrWhiteSpace(current))
+                            chunks.Add(current.Trim());
+                        current = part + "\n";
+                    }
+                }
+
+                if (!string.IsNullOrWhiteSpace(current))
+                    chunks.Add(current.Trim());
+
+                if (chunks.All(c => tokenCounter(c) <= maxToks))
+                    return chunks;
+            }
+
+            return new List<string> { text };
+        }
+
+        List<string> RecursiveSplit(string text, Func<string, int> tokenCounter, int maxToks, string[] headers)
+        {
+            if (tokenCounter(text) <= maxToks)
+                return new List<string> { text };
+
+            if (headers.Length == 0)
+                return SplitByDelimiters(text, tokenCounter, maxToks);
+
+            var header = headers[0];
+            var pattern = $@"(?=^{Regex.Escape(header)} )";
+            var sections = Regex.Split(text, pattern, RegexOptions.Multiline)
+                                .Where(s => !string.IsNullOrWhiteSpace(s))
+                                .ToList();
+
+            if (sections.Count == 1)
+                return RecursiveSplit(text, tokenCounter, maxToks, headers.Skip(1).ToArray());
+
+            var chunks = new List<string>();
+            var current = "";
+
+            foreach (var section in sections)
+            {
+                var tentative = string.IsNullOrEmpty(current) ? section : current + "\n" + section;
+                if (tokenCounter(tentative) <= maxToks)
+                {
+                    current = tentative;
                 }
                 else
                 {
-                    current.Add(lineWithEnding);
-                    length += lineWithEnding.Length;
+                    if (!string.IsNullOrWhiteSpace(current))
+                        chunks.Add(current.Trim());
+
+                    if (tokenCounter(section) > maxToks)
+                    {
+                        var subs = RecursiveSplit(section, tokenCounter, maxToks, headers.Skip(1).ToArray());
+                        chunks.AddRange(subs);
+                        current = "";
+                    }
+                    else
+                    {
+                        current = section;
+                    }
                 }
+            }
+
+            if (!string.IsNullOrWhiteSpace(current))
+                chunks.Add(current.Trim());
+
+            return chunks;
+        }
+
+        Dictionary<string, object> ExtractMetadata(string text)
+        {
+            var metadata = new Dictionary<string, object>();
+
+            var h1 = Regex.Match(text, @"^# (.+)", RegexOptions.Multiline);
+            if (h1.Success)
+                metadata["Header_1"] = h1.Groups[1].Value;
+
+            for (int level = 2; level <= 6; level++)
+            {
+                var headerMatches = Regex.Matches(text, $"^{"#".PadLeft(level, '#')} (.+)", RegexOptions.Multiline);
+                if (headerMatches.Count > 0)
+                {
+                    var headers = headerMatches.Select(m => m.Groups[1].Value).ToList();
+                    metadata[$"Header_{level}"] = headers;
+                }
+            }
+
+            var bolds = Regex.Matches(text, @"\*\*(.+?)\*\*");
+            if (bolds.Count > 0)
+            {
+                metadata["Bold"] = bolds.Select(m => m.Groups[1].Value).ToList();
+            }
+
+            return metadata;
+        }
+
+        Dictionary<string, object> UpdateContext(Dictionary<string, object> currentMeta, Dictionary<string, object> previous)
+        {
+            var context = new Dictionary<string, object>(previous);
+            var levels = Enumerable.Range(1, 6).Select(i => $"Header_{i}").Concat(new[] { "Bold" }).ToList();
+
+            for (int i = 0; i < levels.Count; i++)
+            {
+                var key = levels[i];
+                if (currentMeta.ContainsKey(key))
+                {
+                    context[key] = currentMeta[key];
+
+                    foreach (var lowerKey in levels.Skip(i + 1))
+                    {
+                        context.Remove(lowerKey);
+                    }
+                }
+                else if (context.TryGetValue(key, out var val) && val is List<string> list && list.Count > 0)
+                {
+                    context[key] = new List<string> { list.Last() };
+                }
+            }
+
+            return context;
+        }
+
+        // MAIN
+        var h1Sections = SplitByH1(markdown);
+        var headerLevels = new[] { "##", "###", "####", "#####", "######" };
+        var allChunks = new List<MarkdownChunk>();
+        var context = new Dictionary<string, object>();
+
+        foreach (var section in h1Sections)
+        {
+            var chunks = (countTokens(section) <= maxTokens)
+                ? new List<string> { section }
+                : RecursiveSplit(section, countTokens, maxTokens, headerLevels);
+
+            foreach (var chunk in chunks)
+            {
+                if (countTokens(chunk) < 30)
+                    continue;
+
+                var currentMeta = ExtractMetadata(chunk);
+                context = UpdateContext(currentMeta, context);
+
+                allChunks.Add(new MarkdownChunk
+                {
+                    Content = chunk.Trim(),
+                    Metadata = new Dictionary<string, object>(context)
+                });
             }
         }
 
-        if (current.Count > 0)
-        {
-            parts.Add(string.Join(string.Empty, current));
-        }
-
-        return parts;
+        return allChunks;
     }
 }
