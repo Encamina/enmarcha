@@ -1,4 +1,5 @@
-﻿using System.Text.Json.Nodes;
+﻿using System.Text;
+using System.Text.Json.Nodes;
 
 using CommunityToolkit.Diagnostics;
 
@@ -117,19 +118,144 @@ internal static class MistralAIHelper
     }
 
     /// <summary>
-    /// Extracts and combines markdown content from JSON pages with page separators.
+    /// Extracts and combines markdown content from JSON pages, replacing base64 image references with simple filenames.
     /// </summary>
-    /// <param name="jsonContent">JSON string containing the pages array.</param>
-    /// <returns>Combined markdown string with page separators.</returns>
+    /// <param name="jsonContent">JSON string containing the pages array with markdown and images.</param>
+    /// <returns>Combined markdown string with image references replaced by filenames.</returns>
     /// <exception cref="InvalidOperationException">Thrown when JSON structure is invalid.</exception>
     public static string ExtractAndCombineMarkdown(string jsonContent)
     {
-        var pages = JsonNode.Parse(jsonContent)?["pages"]?.AsArray() ?? throw new InvalidOperationException("Invalid JSON structure: 'pages' array not found.");
+        Guard.IsNotNull(jsonContent);
 
-        var markdownPages = pages.Select(page => page?["markdown"]?.GetValue<string>())
-                                 .Where(markdown => !string.IsNullOrWhiteSpace(markdown));
+        var pages = JsonNode.Parse(jsonContent)?["pages"]?.AsArray()
+            ?? throw new InvalidOperationException("Invalid JSON structure: 'pages' array not found.");
 
-        return string.Join(string.Empty, markdownPages);
+        var fullContent = new StringBuilder();
+
+        for (var pageIndex = 0; pageIndex < pages.Count; pageIndex++)
+        {
+            var page = pages[pageIndex];
+            if (page is null)
+            {
+                continue;
+            }
+
+            // Extract image data from the page
+            var imageData = ExtractImageDataFromPage(page);
+
+            // Extract markdown content
+            var pageMarkdown = page["markdown"]?.GetValue<string>()
+                ?? page["content"]?.GetValue<string>()
+                ?? string.Empty;
+
+            if (string.IsNullOrWhiteSpace(pageMarkdown))
+            {
+                continue;
+            }
+
+            // Replace image references with filenames
+            var processedMarkdown = ReplaceImagesInMarkdown(pageMarkdown, imageData);
+            fullContent.Append(processedMarkdown);
+            fullContent.Append("\n\n");
+        }
+
+        return fullContent.ToString();
+    }
+
+    /// <summary>
+    /// Replaces image references in the markdown with simple filenames instead of embedding base64 content.
+    /// </summary>
+    /// <param name="markdownStr">The markdown string containing image references.</param>
+    /// <param name="imagesDict">Dictionary mapping image IDs to their base64 content.</param>
+    /// <returns>The markdown string with replaced image references.</returns>
+    private static string ReplaceImagesInMarkdown(string markdownStr, IDictionary<string, string> imagesDict)
+    {
+        if (imagesDict.Count == 0)
+        {
+            return markdownStr;
+        }
+
+        var result = markdownStr;
+
+        foreach (var (imgName, _) in imagesDict)
+        {
+            var filename = $"{imgName}.png";
+            result = result.Replace($"![{imgName}]({imgName})", $"![{filename}]({filename})");
+        }
+
+        return result;
+    }
+
+    /// <summary>
+    /// Extracts image data from a JSON page node, handling multiple possible JSON structures.
+    /// </summary>
+    /// <param name="page">The JSON page node.</param>
+    /// <returns>Dictionary mapping image IDs to their base64 content.</returns>
+    private static Dictionary<string, string> ExtractImageDataFromPage(JsonNode page)
+    {
+        var imageData = new Dictionary<string, string>();
+        var rawImages = page["images"] ?? page["image"];
+
+        if (rawImages is null)
+        {
+            return imageData;
+        }
+
+        if (rawImages is JsonObject imagesObject)
+        {
+            var normalizedImages = new List<Dictionary<string, string>>();
+
+            foreach (var (key, value) in imagesObject)
+            {
+                if (value is JsonObject imgObj)
+                {
+                    var imgId = imgObj["id"]?.GetValue<string>() ?? key;
+                    var imgB64 = imgObj["image_base64"]?.GetValue<string>()
+                        ?? imgObj["base64"]?.GetValue<string>()
+                        ?? imgObj["data"]?.GetValue<string>();
+
+                    if (!string.IsNullOrWhiteSpace(imgB64))
+                    {
+                        imageData[imgId] = imgB64;
+                    }
+                }
+                else if (value is JsonValue)
+                {
+                    // Assume value is the base64 string directly
+                    var imgB64 = value.GetValue<string>();
+                    if (!string.IsNullOrWhiteSpace(imgB64))
+                    {
+                        imageData[key] = imgB64;
+                    }
+                }
+            }
+        }
+        else if (rawImages is JsonArray imagesArray)
+        {
+            for (var i = 0; i < imagesArray.Count; i++)
+            {
+                var img = imagesArray[i];
+                if (img is not JsonObject imgObj)
+                {
+                    continue;
+                }
+
+                var imgId = imgObj["id"]?.GetValue<string>()
+                    ?? imgObj["image_id"]?.GetValue<string>()
+                    ?? $"image_{imageData.Count + 1}";
+
+                var imgB64 = imgObj["image_base64"]?.GetValue<string>()
+                    ?? imgObj["base64"]?.GetValue<string>()
+                    ?? imgObj["data"]?.GetValue<string>();
+
+                if (!string.IsNullOrWhiteSpace(imgB64))
+                {
+                    imageData[imgId] = imgB64;
+                }
+            }
+        }
+
+        return imageData;
     }
 
     /// <summary>
