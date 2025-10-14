@@ -1,9 +1,13 @@
 ﻿using System.Net.Http.Json;
 using System.Text;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 using CommunityToolkit.Diagnostics;
 
 using Encamina.Enmarcha.AI.Abstractions;
+using Encamina.Enmarcha.AI.OpenAI.Abstractions;
+using Encamina.Enmarcha.AI.OpenAI.Azure;
 using Encamina.Enmarcha.SemanticKernel.Connectors.Document.Options;
 using Encamina.Enmarcha.SemanticKernel.Connectors.Document.Utils;
 
@@ -22,40 +26,36 @@ namespace Encamina.Enmarcha.SemanticKernel.Connectors.Document.Connectors
         /// System prompt used for refine the MistralAI output.
         /// </summary>
         protected const string SystemPrompt = """
-
             You are an expert assistant specialized in structuring, cleaning, and organizing Markdown documents.
-
-            Your task is to refine and correct the markdown content while preserving its original meaning.
-
+            Your task is to refine and correct content while preserving its original meaning
             [INSTRUCTIONS]
-
             1. Maintain and correct Markdown heading hierarchies (#, ##, ###, ####) based on their semantic level.
             2. **COVER PAGE / DOCUMENT TITLE HANDLING**:
-                - When you detect a document cover or title page (usually at the beginning), apply the following hierarchy:
-                    * Main document title: # (H1)
-                    * Organization/Company name: ## (H2)
-                    * Subtitle or additional info: ### (H3)
-                    Example:
-                        Input:
-                            # Title
-                            Conditions
-                            ## Organization
-                            ## Subtitle
-                        Ouput:
-                            # Title
-                            Conditions
-                            ## Organization
-                            ### Subtitle
+               - When you detect a document cover or title page (usually at the beginning), apply the following hierarchy:
+                 * Main document title: # (H1)
+                 * Organization/Company name: ## (H2)
+                 * Subtitle or additional info: ### (H3)
+               - Example:
+                 Input:
+                   # CASER HOGAR INTEGRAL
+                   Condiciones Generales y Especiales
+                   ## CAJA DE SEGUROS REUNIDOS
+                   ## Compañía de Seguros y Reaseguros, S.A. -CASER-
+                 Output:
+                   # CASER HOGAR INTEGRAL
+                   Condiciones Generales y Especiales
+                   ## CAJA DE SEGUROS REUNIDOS
+                   ### Compañía de Seguros y Reaseguros, S.A. -CASER-
             3. **TABLE OF CONTENTS vs. REGULAR CONTENT**:
-                - In TABLE OF CONTENTS sections: multiple consecutive headings without text between them are normal and expected. Keep them as-is.
-                - Outside TABLE OF CONTENTS: if you find multiple consecutive headings at the same level with no content between them, determine if there's a parent-child relationship and adjust hierarchy accordingly.
-                  Example:
-                    Input:
-                        ## Title of the article
-                        ## Subtitle of the article
-                    Output:
-                        ## Title of the article
-                        ### Subtitle of the article
+               - In TABLE OF CONTENTS sections: multiple consecutive headings without text between them are normal and expected. Keep them as-is.
+               - Outside TABLE OF CONTENTS: if you find multiple consecutive headings at the same level with no content between them,
+                 determine if there's a parent-child relationship and adjust hierarchy accordingly.
+                 Example:
+                   ## ARTICLE 21. EXTRAORDINARY RISKS COVERED BY INSURANCE CONSORTIUM
+                   ## LEGAL DEFENSE
+                 Should become:
+                   ## ARTICLE 21. EXTRAORDINARY RISKS COVERED BY INSURANCE CONSORTIUM
+                   ### LEGAL DEFENSE
             4. Convert and fix broken tables, lists, and any malformed Markdown formatting.
             5. DO NOT generate hyperlinks, numbered lists where they don't exist, or HTML entities (&nbsp;, <br>, etc.).
             6. Remove headers, footers, page numbers, and any document metadata that appears repeatedly.
@@ -63,10 +63,7 @@ namespace Encamina.Enmarcha.SemanticKernel.Connectors.Document.Connectors
             8. DO NOT wrap your output in code fences (```) or add any explanatory text.
             9. DO NOT add, remove, or modify the actual content text. Only fix formatting, structure, and hierarchy.
             10. Return ONLY the final clean, hierarchical, and readable Markdown content without any additional comments or explanations.
-            11. Higher-level headings CANNOT appear under lower-level headings in the hierarchy. For example, an H1 (#) cannot appear under an H2 (##).
-
             [END INSTRUCTIONS]
-
             """;
 
         /// <summary>
@@ -84,21 +81,36 @@ namespace Encamina.Enmarcha.SemanticKernel.Connectors.Document.Connectors
         /// </summary>
         private readonly IHttpClientFactory httpFactory;
 
+        /// <summary>
+        /// Function to count tokens in a text string.
+        /// </summary>
         private readonly Func<string, int> lengthFunction;
 
+        /// <summary>
+        /// The chat model name used for refinement (from AzureOpenAIOptions).
+        /// </summary>
+        private readonly string chatModelName;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="MistralAIDocumentConnector"/> class.
         /// </summary>
         /// <param name="kernel">A valid <see cref="Kernel"/> instance.</param>
         /// <param name="options"> A valid instance of <see cref="MistralAIDocumentConnectorOptions"/>.</param>
+        /// <param name="azureOpenAIOptions">A valid instance of Azure OpenAI options containing the chat model name.</param>
         /// <param name="httpFactory">The HTTP client factory.</param>
-        public MistralAIDocumentConnector(Kernel kernel, IOptions<MistralAIDocumentConnectorOptions> options, IHttpClientFactory httpFactory, Func<string, int> lengthFunction)
+        /// <param name="lengthFunction">Function to count tokens in text.</param>
+        public MistralAIDocumentConnector(
+            Kernel kernel,
+            IOptions<MistralAIDocumentConnectorOptions> options,
+            IOptions<AzureOpenAIOptions> azureOpenAIOptions,
+            IHttpClientFactory httpFactory,
+            Func<string, int> lengthFunction)
         {
             chatCompletionService = kernel.GetRequiredService<IChatCompletionService>();
             this.options = options.Value;
             this.httpFactory = httpFactory;
             this.lengthFunction = lengthFunction;
+            this.chatModelName = azureOpenAIOptions.Value.ChatModelName ?? throw new ArgumentNullException(nameof(azureOpenAIOptions.Value.ChatModelName), "ChatModelName no puede ser nulo.");
         }
 
         /// <inheritdoc/>
@@ -129,23 +141,18 @@ namespace Encamina.Enmarcha.SemanticKernel.Connectors.Document.Connectors
         {
             Guard.IsNotNull(stream);
 
-            var markdown = string.Empty;
-
-            // Extract raw markdown from PDF
             var rawMarkdown = await ExtractMarkdownFromPdfAsync(stream, cancellationToken);
 
             if (options.LLMPostProcessing)
             {
-                // Refine the raw markdown using AI
                 var refinedMarkdown = await RefineMarkdownWithAIAsync(rawMarkdown, cancellationToken);
-                markdown = refinedMarkdown;
-            }
-            else
-            {
-                markdown = rawMarkdown;
+
+                var chunks = ChunkRefinedMarkdown(refinedMarkdown);
+
+                return refinedMarkdown;
             }
 
-            return markdown;
+            return rawMarkdown;
         }
 
         /// <summary>
@@ -217,47 +224,53 @@ namespace Encamina.Enmarcha.SemanticKernel.Connectors.Document.Connectors
         }
 
         /// <summary>
-        /// Refines extracted markdown using AI chat completion.
+        /// Refines extracted markdown using AI chat completion by splitting it into manageable parts.
         /// </summary>
-        /// <param name="markdown">The raw markdown to refine.</param>
+        /// <param name="rawMarkdown">The raw markdown to refine.</param>
         /// <param name="cancellationToken">Cancellation token to cancel the operation.</param>
         /// <returns>The refined markdown content.</returns>
-        private async Task<string> RefineMarkdownWithAIAsync(string markdown, CancellationToken cancellationToken)
+        private async Task<string> RefineMarkdownWithAIAsync(string rawMarkdown, CancellationToken cancellationToken)
         {
-            var splittedMarkdown = MistralAIHelper.SplitMarkdown(markdown, 1024, lengthFunction);
+            var modelInfo = ModelInfo.GetById(chatModelName);
 
-            var refinedMarkdown = new StringBuilder();
+            if (modelInfo == null)
+            {
+                throw new InvalidOperationException($"Model '{chatModelName}' not found in ModelInfo registry.");
+            }
 
-            foreach (var chunk in splittedMarkdown)
+            var maxCharsPerChunk = (int)modelInfo.MaxTokensOutput;
+
+            var markdownParts = MistralAIHelper.SplitMarkdownForRefinement(rawMarkdown, maxCharsPerChunk);
+
+            var refinedParts = new List<string>();
+
+            for (int i = 0; i < markdownParts.Count; i++)
             {
                 var history = new ChatHistory(SystemPrompt);
-                history.AddUserMessage(chunk.Content);
+                history.AddUserMessage($"[INPUT]\n\nParte {i + 1}/{markdownParts.Count}:\n\n{markdownParts[i]}\n\n[FIN INPUT]\n\n[RESPONSE]");
 
                 var response = await chatCompletionService.GetChatMessageContentAsync(history, cancellationToken: cancellationToken);
 
                 var content = response?.Content ?? string.Empty;
 
-                if (refinedMarkdown.Length > 0 && !string.IsNullOrWhiteSpace(content))
-                {
-                    refinedMarkdown.AppendLine().AppendLine();
-                }
+                var cleanedContent = MistralAIHelper.CleanLLMOutput(content);
 
-                refinedMarkdown.Append(content);
+                refinedParts.Add(cleanedContent);
             }
 
-            return refinedMarkdown.ToString();
+            var refinedMarkdown = string.Join("\n\n", refinedParts);
+
+            return refinedMarkdown;
         }
-    }
 
-    public class LengthFunctions : ILengthFunctions
-    {
-        public int LengthByTokenCount(string text)
+        /// <summary>
+        /// Chunks the refined markdown into smaller pieces with metadata for storage/search.
+        /// </summary>
+        /// <param name="refinedMarkdown">The refined markdown to chunk.</param>
+        /// <returns>List of markdown chunks with metadata.</returns>
+        private List<MarkdownChunk> ChunkRefinedMarkdown(string refinedMarkdown)
         {
-            if (string.IsNullOrEmpty(text))
-                return 0;
-
-            // Ejemplo simple contando palabras como "tokens"
-            return text.Split(' ', StringSplitOptions.RemoveEmptyEntries).Length;
+            return MistralAIHelper.ChunkingMarkdown(refinedMarkdown, 1024, lengthFunction);
         }
     }
 }

@@ -32,6 +32,10 @@ internal static class Program
         // Configure services
         hostBuilder.ConfigureServices((hostContext, services) =>
         {
+            services.AddOptions<AzureOpenAIOptions>()
+                    .Bind(hostContext.Configuration.GetSection(nameof(AzureOpenAIOptions)))
+                    .ValidateDataAnnotations();
+
             services.AddScoped(_ =>
             {
                 // Get semantic kernel options
@@ -49,8 +53,7 @@ internal static class Program
             services.AddRecursiveCharacterTextSplitter() // TODO: Should be commented...
                     .AddEnrichedRecursiveCharacterTextSplitter();
 
-            //Correct registration of ILengthFunctions
-            services.AddSingleton<Func<string, int>>(ILengthFunctions.LengthByCharacterCount);
+            services.AddSingleton<Func<string, int>>(ILengthFunctions.LengthByTokenCount);
 
             services.AddDocumentConnectors(hostContext.Configuration)
                     .AddDefaultDocumentConnectorProvider()
