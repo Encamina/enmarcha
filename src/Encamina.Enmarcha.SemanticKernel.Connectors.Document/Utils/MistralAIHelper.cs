@@ -1,8 +1,5 @@
 ﻿using System.Text;
-using System.Text.Json;
 using System.Text.Json.Nodes;
-using System.Text.Json.Serialization;
-using System.Text.RegularExpressions;
 
 using CommunityToolkit.Diagnostics;
 
@@ -130,10 +127,9 @@ internal static class MistralAIHelper
     {
         Guard.IsNotNull(jsonContent);
 
-        var pages = JsonNode.Parse(jsonContent)?["pages"]?.AsArray()
-            ?? throw new InvalidOperationException("Invalid JSON structure: 'pages' array not found.");
+        var pages = JsonNode.Parse(jsonContent)?["pages"]?.AsArray() ?? throw new InvalidOperationException("Invalid JSON structure: 'pages' array not found.");
 
-        var fullContent = new StringBuilder();
+        var extractedMarkdown = new StringBuilder();
 
         for (var pageIndex = 0; pageIndex < pages.Count; pageIndex++)
         {
@@ -158,11 +154,54 @@ internal static class MistralAIHelper
 
             // Replace image references with filenames
             var processedMarkdown = ReplaceImagesInMarkdown(pageMarkdown, imageData);
-            fullContent.Append(processedMarkdown);
-            fullContent.Append("\n\n");
+            extractedMarkdown.Append(processedMarkdown);
+            extractedMarkdown.Append("\n\n");
         }
 
-        return fullContent.ToString();
+        return extractedMarkdown.ToString();
+    }
+
+    /// <summary>
+    /// Split the markdown into chunks according to the maximum number of characters for LLM processing.
+    /// </summary>
+    /// <param name="markdown">The markdown text to be split.</param>
+    /// <param name="maxTokens">Maximum number of tokens per chunk.</param>
+    /// <param name="lengthFunction">Function to count tokens in a string.</param>
+    /// <returns>List of markdown chunks.</returns>
+    public static List<string> SplitMarkdownForRefinement(string markdown, int maxTokens, Func<string, int> lengthFunction)
+    {
+        var parts = new List<string>();
+        var current = new StringBuilder();
+
+        maxTokens /= 2;
+
+        var lines = markdown.Split('\n');
+
+        foreach (var line in lines)
+        {
+            var lineWithNewline = line + "\n";
+            var tentative = current.ToString() + lineWithNewline;
+
+            var tentativeTokenCount = lengthFunction(tentative);
+
+            if (tentativeTokenCount > maxTokens && current.Length > 0)
+            {
+                parts.Add(current.ToString());
+                current.Clear();
+                current.Append(lineWithNewline);
+            }
+            else
+            {
+                current.Append(lineWithNewline);
+            }
+        }
+
+        if (current.Length > 0)
+        {
+            parts.Add(current.ToString());
+        }
+
+        return parts;
     }
 
     /// <summary>
@@ -206,8 +245,6 @@ internal static class MistralAIHelper
 
         if (rawImages is JsonObject imagesObject)
         {
-            var normalizedImages = new List<Dictionary<string, string>>();
-
             foreach (var (key, value) in imagesObject)
             {
                 if (value is JsonObject imgObj)
@@ -259,341 +296,5 @@ internal static class MistralAIHelper
         }
 
         return imageData;
-    }
-
-    /// <summary>
-    /// Divide el markdown en trozos según el número máximo de caracteres para procesamiento LLM.
-    /// </summary>
-    /// <param name="markdown">El texto markdown a dividir.</param>
-    /// <param name="maxChars">Número máximo de caracteres por trozo.</param>
-    /// <returns>Lista de trozos de markdown.</returns>
-    public static List<string> SplitMarkdownForRefinement(string markdown, int maxChars)
-    {
-        var parts = new List<string>();
-        var current = new StringBuilder();
-        var currentLength = 0;
-
-        var lines = markdown.Split('\n');
-
-        foreach (var line in lines)
-        {
-            var lineWithNewline = line + "\n";
-            var lineLength = lineWithNewline.Length;
-
-            if (currentLength + lineLength > maxChars && current.Length > 0)
-            {
-                parts.Add(current.ToString());
-                current.Clear();
-                current.Append(lineWithNewline);
-                currentLength = lineLength;
-            }
-            else
-            {
-                current.Append(lineWithNewline);
-                currentLength += lineLength;
-            }
-        }
-
-        if (current.Length > 0)
-        {
-            parts.Add(current.ToString());
-        }
-
-        return parts;
-    }
-
-    /// <summary>
-    /// Limpia el output del modelo LLM eliminando fences markdown y frases introductorias.
-    /// </summary>
-    /// <param name="text">El texto a limpiar.</param>
-    /// <returns>Texto limpio sin artefactos del modelo.</returns>
-    public static string CleanLLMOutput(string text)
-    {
-        if (string.IsNullOrWhiteSpace(text))
-        {
-            return string.Empty;
-        }
-
-        text = text.Trim();
-
-        // Quitar bloques ```markdown o similares al inicio
-        if (text.StartsWith("```"))
-        {
-            var afterFirstFence = text.IndexOf('\n');
-            if (afterFirstFence > 0)
-            {
-                text = text.Substring(afterFirstFence + 1);
-            }
-        }
-
-        // Quitar bloques ``` al final
-        if (text.EndsWith("```"))
-        {
-            var lastFenceIndex = text.LastIndexOf("```");
-            if (lastFenceIndex > 0)
-            {
-                text = text.Substring(0, lastFenceIndex);
-            }
-        }
-
-        // Eliminar frases introductorias comunes
-        var bannedPhrases = new[]
-        {
-            "Aquí tienes", "texto refinado", "he mejorado",
-            "refinado y corregido", "resultado final", "markdown final",
-            "Here is", "here's the", "refined markdown", "cleaned version"
-        };
-
-        foreach (var phrase in bannedPhrases)
-        {
-            var index = text.IndexOf(phrase, StringComparison.OrdinalIgnoreCase);
-            if (index >= 0)
-            {
-                // Buscar el final de la línea después de la frase
-                var lineEndIndex = text.IndexOf('\n', index);
-                if (lineEndIndex > 0)
-                {
-                    text = text.Substring(lineEndIndex + 1);
-                }
-            }
-        }
-
-        return text.Trim();
-    }
-
-    /// <summary>
-    /// Splits a Markdown document into chunks respecting its hierarchical structure.
-    /// </summary>
-    /// <param name="markdown">The Markdown text to split.</param>
-    /// <param name="maxTokens">Maximum number of tokens allowed per chunk.</param>
-    /// <param name="countTokens">Token counter method.</param>
-    /// <returns>An enumerable of Markdown chunks.</returns>
-    public static List<MarkdownChunk> ChunkingMarkdown(string markdown, int maxTokens, Func<string, int> countTokens)
-    {
-        List<string> SplitByH1(string text)
-        {
-            var matches = Regex.Matches(text, @"^# .+", RegexOptions.Multiline);
-            var sections = new List<string>();
-
-            for (var i = 0; i < matches.Count; i++)
-            {
-                var start = matches[i].Index;
-                var end = (i + 1 < matches.Count) ? matches[i + 1].Index : text.Length;
-                var section = text.Substring(start, end - start).Trim();
-                sections.Add(section);
-            }
-
-            return sections;
-        }
-
-        List<string> SplitByDelimiters(string text, int maxToks)
-        {
-            var delimiters = new[] { @"\n\s*\n", @"\n", @"\.", @";", @"," };
-
-            foreach (var delim in delimiters)
-            {
-                var parts = Regex.Split(text, delim);
-                var chunks = new List<string>();
-                var current = "";
-
-                foreach (var part in parts)
-                {
-                    if (countTokens(current + part) <= maxToks)
-                    {
-                        current += part + "\n";
-                    }
-                    else
-                    {
-                        if (!string.IsNullOrEmpty(current))
-                        {
-                            chunks.Add(current.Trim());
-                        }
-
-                        current = part + "\n";
-                    }
-                }
-
-                if (!string.IsNullOrEmpty(current))
-                {
-                    chunks.Add(current.Trim());
-                }
-
-                if (chunks.All(c => countTokens(c) <= maxToks))
-                {
-                    return chunks;
-                }
-            }
-
-            return new List<string> { text };
-        }
-
-        List<string> RecursiveSplit(string text, int maxToks, string[] headers)
-        {
-            if (countTokens(text) <= maxToks)
-            {
-                return new List<string> { text };
-            }
-
-            if (headers.Length == 0)
-            {
-                return SplitByDelimiters(text, maxToks);
-            }
-
-            var header = headers[0];
-            var pattern = $@"(?=^{Regex.Escape(header)} )";
-            var sections = Regex.Split(text, pattern, RegexOptions.Multiline);
-
-            if (sections.Length == 1)
-            {
-                return RecursiveSplit(text, maxToks, headers.Skip(1).ToArray());
-
-            }
-
-            var chunks = new List<string>();
-            var current = "";
-
-            foreach (var section in sections)
-            {
-                var trimmedSection = section.Trim();
-                if (string.IsNullOrEmpty(trimmedSection))
-                {
-                    continue;
-                }
-
-                var tentative = string.IsNullOrEmpty(current) ? trimmedSection : current + "\n" + trimmedSection;
-
-                if (countTokens(tentative) <= maxToks)
-                {
-                    current = tentative;
-                }
-                else
-                {
-                    if (!string.IsNullOrEmpty(current))
-                    {
-                        chunks.Add(current.Trim());
-                    }
-
-                    if (countTokens(trimmedSection) > maxToks)
-                    {
-                        var subs = RecursiveSplit(trimmedSection, maxToks, headers.Skip(1).ToArray());
-                        chunks.AddRange(subs);
-                        current = "";
-                    }
-                    else
-                    {
-                        current = trimmedSection;
-                    }
-                }
-            }
-
-            if (!string.IsNullOrEmpty(current))
-            {
-                chunks.Add(current.Trim());
-            }
-
-            return chunks;
-        }
-
-        Dictionary<string, object> ExtractMetadata(string text)
-        {
-            var metadata = new Dictionary<string, object>();
-
-            var h1 = Regex.Match(text, @"^# (.+)", RegexOptions.Multiline);
-            if (h1.Success)
-            {
-                metadata["Header_1"] = h1.Groups[1].Value;
-            }
-
-            for (var level = 2; level <= 6; level++)
-            {
-                var pattern = $@"^{new string('#', level)} (.+)";
-                var headerMatches = Regex.Matches(text, pattern, RegexOptions.Multiline);
-
-                if (headerMatches.Count > 0)
-                {
-                    var headers = headerMatches.Cast<Match>().Select(m => m.Groups[1].Value).ToList();
-                    metadata[$"Header_{level}"] = headers;
-                }
-            }
-
-            var bolds = Regex.Matches(text, @"\*\*(.+?)\*\*");
-            if (bolds.Count > 0)
-            {
-                metadata["Bold"] = bolds.Cast<Match>().Select(m => m.Groups[1].Value).ToList();
-            }
-
-            return metadata;
-        }
-
-        Dictionary<string, object> UpdateContext(Dictionary<string, object> currentMeta, Dictionary<string, object> previous)
-        {
-            var context = new Dictionary<string, object>(previous);
-            var levels = Enumerable.Range(1, 6).Select(i => $"Header_{i}").Concat(new[] { "Bold" }).ToList();
-
-            for (var i = 0; i < levels.Count; i++)
-            {
-                var key = levels[i];
-                if (currentMeta.ContainsKey(key))
-                {
-                    context[key] = currentMeta[key];
-
-                    foreach (var lowerKey in levels.Skip(i + 1))
-                    {
-                        context.Remove(lowerKey);
-                    }
-                }
-                else if (context.TryGetValue(key, out var val))
-                {
-                    if (val is List<string> list && list.Count > 0)
-                    {
-                        context[key] = new List<string> { list.Last() };
-                    }
-                }
-            }
-
-            return context;
-        }
-
-        var h1Sections = SplitByH1(markdown);
-        var headerLevels = new[] { "##", "###", "####", "#####", "######" };
-        var allChunks = new List<MarkdownChunk>();
-        var context = new Dictionary<string, object>();
-
-        foreach (var section in h1Sections)
-        {
-            var chunks = (countTokens(section) <= maxTokens)
-                ? new List<string> { section }
-                : RecursiveSplit(section, maxTokens, headerLevels);
-
-            foreach (var chunk in chunks)
-            {
-                if (countTokens(chunk) < 30)
-                {
-                    continue;
-                }
-
-                var currentMeta = ExtractMetadata(chunk);
-                context = UpdateContext(currentMeta, context);
-
-                allChunks.Add(new MarkdownChunk
-                {
-                    Content = chunk.Trim(),
-                    Metadata = new Dictionary<string, object>(context),
-                    TokenCount = countTokens(chunk.Trim())
-                });
-            }
-        }
-
-        var options = new JsonSerializerOptions
-        {
-            WriteIndented = true,
-            Encoder = System.Text.Encodings.Web.JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
-            DefaultIgnoreCondition = JsonIgnoreCondition.Never
-        };
-
-        var json = JsonSerializer.Serialize(allChunks, options);
-        Console.WriteLine(json);
-
-        return allChunks;
     }
 }

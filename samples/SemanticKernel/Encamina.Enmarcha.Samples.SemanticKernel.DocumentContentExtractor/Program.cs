@@ -9,8 +9,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.SemanticKernel;
 
-using static System.Runtime.InteropServices.JavaScript.JSType;
-
 using ILengthFunctions = Encamina.Enmarcha.SemanticKernel.Abstractions.ILengthFunctions;
 
 namespace Encamina.Enmarcha.Samples.SemanticKernel.DocumentContentExtractor;
@@ -39,13 +37,13 @@ internal static class Program
             services.AddScoped(_ =>
             {
                 // Get semantic kernel options
-                var options = hostContext.Configuration
-                    .GetRequiredSection(nameof(AzureOpenAIOptions))
-                    .Get<AzureOpenAIOptions>() ?? throw new InvalidOperationException("Missing configuration for AzureOpenAIOptions");
+                var options = hostContext.Configuration.GetRequiredSection(nameof(AzureOpenAIOptions)).Get<AzureOpenAIOptions>() ?? throw new InvalidOperationException("Missing configuration for AzureOpenAIOptions");
+
                 // Initialize semantic kernel
                 var kernel = Kernel.CreateBuilder()
-                    .AddAzureOpenAIChatCompletion(options.ChatModelDeploymentName, options.Endpoint.ToString(), options.Key)
-                    .Build();
+                                   .AddAzureOpenAIChatCompletion(options.ChatModelDeploymentName, options.Endpoint.ToString(), options.Key)
+                                   .Build()
+                                   ;
 
                 return kernel;
             });
@@ -66,11 +64,10 @@ internal static class Program
         var host = hostBuilder.Build();
 
         // Initialize Examples
-        var example = new Example(
-            host.Services.GetRequiredService<Kernel>(),
-            host.Services.GetRequiredService<IDocumentConnectorProvider>(),
-            host.Services.GetRequiredService<IDocumentContentExtractor>(),
-            host.Services.GetRequiredService<IDocumentContentEnrichedExtractor>());
+        var example = new Example(host.Services.GetRequiredService<Kernel>(),
+                                  host.Services.GetRequiredService<IDocumentConnectorProvider>(),
+                                  host.Services.GetRequiredService<IDocumentContentExtractor>(),
+                                  host.Services.GetRequiredService<IDocumentContentEnrichedExtractor>());
 
         //example.ExtractDocumentContent();
 
@@ -82,9 +79,7 @@ internal static class Program
 
     public static IServiceCollection AddDocumentConnectors(this IServiceCollection services, IConfiguration configuration)
     {
-        services.AddOptionsWithValidateOnStart<MistralAIDocumentConnectorOptions>()
-                .Bind(configuration.GetSection(nameof(MistralAIDocumentConnectorOptions)))
-                .ValidateDataAnnotations();
+        services.AddOptionsWithValidateOnStart<MistralAIDocumentConnectorOptions>().Bind(configuration.GetSection(nameof(MistralAIDocumentConnectorOptions))).ValidateDataAnnotations();
 
         services.AddWordDocumentConnector(configuration); // .docx
         services.AddParagraphPptxDocumentConnector();     // .pptx
