@@ -244,7 +244,7 @@ namespace Encamina.Enmarcha.SemanticKernel.Connectors.Document.Connectors
 
             var refinedParts = new List<string>();
 
-            for (int i = 0; i < markdownParts.Count; i++)
+            for (var i = 0; i < markdownParts.Count; i++)
             {
                 var history = new ChatHistory(SystemPrompt);
                 history.AddUserMessage($"[INPUT]\n\nParte {i + 1}/{markdownParts.Count}:\n\n{markdownParts[i]}\n\n[FIN INPUT]\n\n[RESPONSE]");
