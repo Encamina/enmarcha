@@ -7,8 +7,9 @@ using Encamina.Enmarcha.SemanticKernel.Connectors.Document.Options;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-
 using Microsoft.SemanticKernel;
+
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 using ILengthFunctions = Encamina.Enmarcha.SemanticKernel.Abstractions.ILengthFunctions;
 
@@ -28,33 +29,36 @@ internal static class Program
                              .AddJsonFile(path: $@"appsettings.{Environment.UserName}.json", optional: true, reloadOnChange: true);
             });
 
-        // Configure service
+        // Configure services
         hostBuilder.ConfigureServices((hostContext, services) =>
         {
+            services.AddOptions<AzureOpenAIOptions>()
+                    .Bind(hostContext.Configuration.GetSection(nameof(AzureOpenAIOptions)))
+                    .ValidateDataAnnotations();
+
             services.AddScoped(_ =>
             {
                 // Get semantic kernel options
-                var options = hostContext.Configuration.GetRequiredSection(nameof(AzureOpenAIOptions)).Get<AzureOpenAIOptions>() ?? throw new InvalidOperationException(@$"Missing configuration for {nameof(AzureOpenAIOptions)}");
-
+                var options = hostContext.Configuration
+                    .GetRequiredSection(nameof(AzureOpenAIOptions))
+                    .Get<AzureOpenAIOptions>() ?? throw new InvalidOperationException("Missing configuration for AzureOpenAIOptions");
                 // Initialize semantic kernel
                 var kernel = Kernel.CreateBuilder()
-                                   .AddAzureOpenAIChatCompletion(options.ChatModelDeploymentName, options.Endpoint.ToString(), options.Key)
-                                   .Build()
-                                   ;
+                    .AddAzureOpenAIChatCompletion(options.ChatModelDeploymentName, options.Endpoint.ToString(), options.Key)
+                    .Build();
 
                 return kernel;
             });
 
             services.AddRecursiveCharacterTextSplitter() // TODO: Should be commented...
-                    .AddEnrichedRecursiveCharacterTextSplitter()
-                    .AddSingleton(ILengthFunctions.LengthByTokenCount)
-                    ;
+                    .AddEnrichedRecursiveCharacterTextSplitter();
+
+            services.AddSingleton<Func<string, int>>(ILengthFunctions.LengthByTokenCount);
 
             services.AddDocumentConnectors(hostContext.Configuration)
                     .AddDefaultDocumentConnectorProvider()
                     .AddDefaultDocumentContentExtractor() // TODO: Should be commented...
-                    .AddDefaultDocumentContentEnrichedExtractor()
-                    ;
+                    .AddDefaultDocumentContentEnrichedExtractor();
 
             services.AddHttpClient();
         });
@@ -62,7 +66,11 @@ internal static class Program
         var host = hostBuilder.Build();
 
         // Initialize Examples
-        var example = new Example(host.Services.GetRequiredService<Kernel>(), host.Services.GetRequiredService<IDocumentConnectorProvider>(), host.Services.GetRequiredService<IDocumentContentExtractor>(), host.Services.GetRequiredService<IDocumentContentEnrichedExtractor>());
+        var example = new Example(
+            host.Services.GetRequiredService<Kernel>(),
+            host.Services.GetRequiredService<IDocumentConnectorProvider>(),
+            host.Services.GetRequiredService<IDocumentContentExtractor>(),
+            host.Services.GetRequiredService<IDocumentContentEnrichedExtractor>());
 
         //example.ExtractDocumentContent();
 
@@ -74,12 +82,16 @@ internal static class Program
 
     public static IServiceCollection AddDocumentConnectors(this IServiceCollection services, IConfiguration configuration)
     {
-        services.AddOptionsWithValidateOnStart<MistralAIDocumentConnectorOptions>().Bind(configuration.GetSection(nameof(MistralAIDocumentConnectorOptions))).ValidateDataAnnotations();
+        services.AddOptionsWithValidateOnStart<MistralAIDocumentConnectorOptions>()
+                .Bind(configuration.GetSection(nameof(MistralAIDocumentConnectorOptions)))
+                .ValidateDataAnnotations();
 
         services.AddWordDocumentConnector(configuration); // .docx
-        services.AddParagraphPptxDocumentConnector(); // .pptx
-        services.AddTxtDocumentConnector(); // .txt; .md
+        services.AddParagraphPptxDocumentConnector();     // .pptx
+        services.AddTxtDocumentConnector();               // .txt; .md
         services.AddSkVisionImageDocumentConnector(configuration); // .jpg; .jpeg; .png;
+
+        // You can toggle this based on your needs
         //services.AddSingleton<IEnmarchaDocumentConnector, SkVisionStrictFormatCleanPdfDocumentConnector>(); // .pdf
         services.AddSingleton<IEnmarchaDocumentConnector, MistralAIDocumentConnector>(); // .pdf
 

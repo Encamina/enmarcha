@@ -34,6 +34,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Encamina.Enmarcha.AI.Abstractions\Encamina.Enmarcha.AI.Abstractions.csproj" />
+    <ProjectReference Include="..\Encamina.Enmarcha.AI.OpenAI.Abstractions\Encamina.Enmarcha.AI.OpenAI.Abstractions.csproj" />
+    <ProjectReference Include="..\Encamina.Enmarcha.AI.OpenAI.Azure\Encamina.Enmarcha.AI.OpenAI.Azure.csproj" />
     <ProjectReference Include="..\Encamina.Enmarcha.Core\Encamina.Enmarcha.Core.csproj" />
     <ProjectReference Include="..\Encamina.Enmarcha.DependencyInjection\Encamina.Enmarcha.DependencyInjection.csproj" />
   </ItemGroup>

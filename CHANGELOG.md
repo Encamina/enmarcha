@@ -24,6 +24,10 @@ Previous classification is not required if changes are simple or all belong to t
 ### Major Changes
 - Added `Encamina.Enmarcha.AI.Agents`, `Encamina.Enmarcha.AI.Agents.Abstractions` and `Encamina.Enmarcha.Agents.Skills.QuestionAnswering` projects to provide support for the new Microsoft 365 Agents SDK.
 
+- Modified the sample project `Encamina.Enmarcha.Samples.SemanticKernel.DocumentContentExtractor` to develop `MistralAIDocumentConnector`.
+- Added the connector `Encamina.Enmarcha.SemanticKernel.Connectors.Document\Connectors\MistralAIDocumentConnector.cs`: Extracts and processes PDF documents using MistralAI's Pixtral model for markdown extraction, with optional Azure OpenAI-based refinement and intelligent token-aware chunking with hierarchical metadata.
+- Added the helper `Encamina.Enmarcha.SemanticKernel.Connectors.Document\Utils\MistralAIHelper.cs`: Provides utility methods for PDF splitting, base64 encoding, markdown extraction from API responses, LLM output cleaning, and intelligent hierarchical markdown chunking with metadata extraction.
+
 ## [8.3.0]
 
 ### Breaking Changes
