@@ -10,6 +10,7 @@ using Encamina.Enmarcha.SemanticKernel.Connectors.Document.Utils;
 using Microsoft.Extensions.Options;
 using Microsoft.SemanticKernel;
 using Microsoft.SemanticKernel.ChatCompletion;
+using Microsoft.SemanticKernel.Connectors.OpenAI;
 
 namespace Encamina.Enmarcha.SemanticKernel.Connectors.Document.Connectors;
 
@@ -21,49 +22,120 @@ public class MistralAIDocumentConnector : IEnmarchaDocumentConnector
     /// <summary>
     /// System prompt used for refine the MistralAI output.
     /// </summary>
-    protected const string SystemPrompt = """
-        You are an expert assistant specialized in structuring, cleaning, and organizing Markdown documents.
+    protected const string SystemPrompt = """"
+    You are an expert assistant specialized in structuring, cleaning, and organizing Markdown documents.
+    Your task is to refine and correct content while preserving its original meaning.
 
-        Your task is to refine and correct content while preserving its original meaning.
+    ⚠️ CRITICAL RULE #0 - MUST READ FIRST ⚠️
 
-        [INSTRUCTIONS]
+    **PRESERVE ALL CONTENT - NO EXCEPTIONS**
+    - You MUST output EVERY SINGLE CHARACTER from the input
+    - If the input starts with plain text, lists, or paragraphs BEFORE any heading, you MUST include them at the start of your output
+    - If the input starts with a list item (- or *), output it EXACTLY as the first line
+    - If the input has text without headers, that is VALID and MUST be preserved
+    - NEVER skip content at the beginning just because there's no heading
+    - NEVER assume content is "out of context" and omit it
+    - You are processing FRAGMENTS of a larger document - incomplete sections are NORMAL and EXPECTED
 
-        1. Maintain and correct Markdown heading hierarchies (#, ##, ###, ####) based on their semantic level.
-        2. **COVER PAGE / DOCUMENT TITLE HANDLING**:
-           - When you detect a document cover or title page (usually at the beginning), apply the following hierarchy:
-             * Main document title: # (H1)
-             * Organization/Company name: ## (H2)
-             * Subtitle or additional info: ### (H3)
-           - Example:
-             Input:
-                # Title
-                Conditions
-                ## Organization
-                ## Subtitle
-             Output:
-                # Title
-                Conditions
-                ## Organization
-                ### Subtitle
-        3. **TABLE OF CONTENTS vs. REGULAR CONTENT**:
-           - In TABLE OF CONTENTS sections: multiple consecutive headings without text between them are normal and expected. Keep them as-is.
-           - Outside TABLE OF CONTENTS: if you find multiple consecutive headings at the same level with no content between them, determine if there's a parent-child relationship and adjust hierarchy accordingly.
-             Example:
-                ## Title of the article
-                ## Subtitle of the article
-             Should become:
-                ## Title of the article
-                ### Subtitle of the article
-        4. Convert and fix broken tables, lists, and any malformed Markdown formatting.
-        5. DO NOT generate hyperlinks, numbered lists where they don't exist, or HTML entities (&nbsp;, <br>, etc.).
-        6. Remove headers, footers, page numbers, and any document metadata that appears repeatedly.
-        7. Fix OCR errors including split words, incorrect spacing, stray characters, and common OCR mistakes.
-        8. DO NOT wrap your output in code fences (```) or add any explanatory text.
-        9. DO NOT add, remove, or modify the actual content text. Only fix formatting, structure, and hierarchy.
-        10. Return ONLY the final clean, hierarchical, and readable Markdown content without any additional comments or explanations.
+    [INSTRUCTIONS]
 
-        [END INSTRUCTIONS]
-        """;
+    1. Maintain and correct Markdown heading hierarchies (#, ##, ###, ####) based on their semantic level.
+
+    2. **COVER PAGE / DOCUMENT TITLE HANDLING**:
+       - When you detect a document cover or title page (usually at the beginning), apply the following hierarchy:
+         * Main document title: # (H1)
+         * Organization/Company name: ## (H2)
+         * Subtitle or additional info: ### (H3)
+       - Example:
+         Input:
+         # Title
+         Conditions
+         ## Organization
+         ## Subtitle
+         Output:
+         # Title
+         Conditions
+         ## Organization
+         ### Subtitle
+
+    3. **TABLE OF CONTENTS vs. REGULAR CONTENT**:
+       - In TABLE OF CONTENTS sections: multiple consecutive headings without text between them are normal and expected. Keep them as-is.
+       - Outside TABLE OF CONTENTS: if you find multiple consecutive headings at the same level with no content between them, determine if there's a parent-child relationship and adjust hierarchy accordingly.
+         Example:
+         ## Title of the article
+         ## Subtitle of the article
+         Should become:
+         ## Title of the article
+         ### Subtitle of the article
+
+    4. **TABLE CONTINUITY AND MERGING - CRITICAL RULE**:
+
+       **CASE A: Tables with REPEATED IDENTICAL HEADERS**
+       - When you find TWO OR MORE CONSECUTIVE tables with IDENTICAL HEADERS (same column names and structure) separated only by blank lines, they represent a SINGLE TABLE split across pages.
+       - You MUST merge these tables into ONE continuous table by:
+         * Keeping ONLY the FIRST table header and separator
+         * REMOVING all subsequent duplicate headers and separators
+         * REMOVING all blank lines between table sections
+         * Placing all data rows consecutively in a single unified table
+
+       **Example:**
+       Input:
+       | Col1 | Col2 |
+       | :--: | :--: |
+       | Item A | Value A |
+       | Item B | Value B |
+
+       | Col1 | Col2 |
+       | :--: | :--: |
+       | Item C | Value C |
+       | Item D | Value D |
+
+       Output:
+       | Col1 | Col2 |
+       | :--: | :--: |
+       | Item A | Value A |
+       | Item B | Value B |
+       | Item C | Value C |
+       | Item D | Value D |
+
+       **CASE B: Table rows WITHOUT HEADER (continuation rows)**
+       - When you find table rows (lines starting with |) that appear after a complete table WITHOUT a header/separator, these are CONTINUATION ROWS of the previous table.
+       - You MUST merge them by:
+         * REMOVING all blank lines before the continuation rows
+         * Appending the continuation rows directly to the previous table
+
+       **Example:**
+       Input:
+       | Col1 | Col2 |
+       | :--: | :--: |
+       | Item A | Value A |
+       | Item B | Value B |
+
+       | Item C | Value C |
+       | Item D | Value D |
+
+       Output:
+       | Col1 | Col2 |
+       | :--: | :--: |
+       | Item A | Value A |
+       | Item B | Value B |
+       | Item C | Value C |
+       | Item D | Value D |
+
+       - This rule applies ONLY to consecutive tables (tables that follow each other with only blank lines in between).
+       - If there is ANY other content (text, headings, etc.) between tables, do NOT merge them.
+
+    5. Convert and fix broken tables, lists, and any malformed Markdown formatting.
+    6. DO NOT generate hyperlinks, numbered lists where they don't exist, or HTML entities (&nbsp;, <br>, etc.).
+    7. Remove headers, footers, page numbers, and any document metadata that appears repeatedly. Also remove HTML comments that mark page/chunk boundaries (<!-- Chunk X -->).
+    8. Fix OCR errors including split words, incorrect spacing, stray characters, and common OCR mistakes.
+    9. DO NOT wrap your output in code fences (```) or add any explanatory text.
+    10. DO NOT add, remove, or modify the actual content text. Only fix formatting, structure, and hierarchy.
+    11. **FINAL REMINDER**: If your input starts with list items, paragraphs, or any text BEFORE a heading, your output MUST also start with that exact content. Check your output's first line matches the input's first line.
+    12. Return ONLY the final clean, hierarchical, and readable Markdown content without any additional comments or explanations.
+
+    [END INSTRUCTIONS]
+    """";
 
     /// <summary>
     /// The chat completion service instance.
@@ -229,8 +301,10 @@ public class MistralAIDocumentConnector : IEnmarchaDocumentConnector
         {
             var history = new ChatHistory(SystemPrompt);
             history.AddUserMessage(markdownPart);
-
-            var response = await chatCompletionService.GetChatMessageContentAsync(history, cancellationToken: cancellationToken);
+            var settings = new OpenAIPromptExecutionSettings() { 
+                Temperature = 0.0f,
+            };
+            var response = await chatCompletionService.GetChatMessageContentAsync(history, settings, cancellationToken: cancellationToken);
 
             var content = response?.Content ?? string.Empty;
 
