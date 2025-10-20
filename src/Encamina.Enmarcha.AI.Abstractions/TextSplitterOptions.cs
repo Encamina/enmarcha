@@ -19,7 +19,7 @@ public class TextSplitterOptions
     /// </summary>
     [Required]
     [Range(0, int.MaxValue)]
-    public int ChunkSize { get; init; } = 1000;
+    public int ChunkSize { get; init; } = 1024;
 
     /// <summary>
     /// Gets the collection of separator characters to use when splitting the text and creating chunks.
