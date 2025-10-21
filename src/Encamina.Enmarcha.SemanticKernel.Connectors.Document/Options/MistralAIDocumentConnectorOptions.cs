@@ -32,7 +32,7 @@ public sealed class MistralAIDocumentConnectorOptions
     /// <summary>
     /// Gets or sets the number of pages to split the PDF into for processing.
     /// </summary>
-    [Range(0, 30)]
+    [Range(1, 30)]
     public int SplitPageNumber { get; set; } = 30;
 
     /// <summary>
