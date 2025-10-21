@@ -49,7 +49,7 @@ internal static class Program
             });
 
             services.AddRecursiveCharacterTextSplitter() // TODO: Should be commented...
-                    .AddEnrichedRecursiveCharacterTextSplitter();
+                    .AddEnrichedMarkdownCharacterTextSplitter();
 
             services.AddSingleton<Func<string, int>>(ILengthFunctions.LengthByTokenCount);
 

@@ -51,9 +51,9 @@ public static class IServiceCollectionExtensions
     /// </summary>
     /// <param name="services">The <see cref="IServiceCollection"/> to add services to.</param>
     /// <returns>The <see cref="IServiceCollection"/> so that additional calls can be chained.</returns>
-    public static IServiceCollection AddEnrichedRecursiveCharacterTextSplitter(this IServiceCollection services)
+    public static IServiceCollection AddEnrichedMarkdownCharacterTextSplitter(this IServiceCollection services)
     {
-        return services.AddSingleton<IEnrichedTextSplitter, EnrichedRecursiveCharacterTextSplitter>();
+        return services.AddSingleton<IEnrichedTextSplitter, EnrichedMarkdownCharacterTextSplitter>();
     }
 
     /// <summary>
