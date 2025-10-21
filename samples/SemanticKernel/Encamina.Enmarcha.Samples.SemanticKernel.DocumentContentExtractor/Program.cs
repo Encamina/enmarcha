@@ -32,7 +32,8 @@ internal static class Program
         {
             services.AddOptions<AzureOpenAIOptions>()
                     .Bind(hostContext.Configuration.GetSection(nameof(AzureOpenAIOptions)))
-                    .ValidateDataAnnotations();
+                    .ValidateDataAnnotations()
+                    ;
 
             services.AddScoped(_ =>
             {
@@ -48,14 +49,15 @@ internal static class Program
                 return kernel;
             });
 
-            services.AddRecursiveCharacterTextSplitter()
-                    .AddEnrichedMarkdownCharacterTextSplitter();
+            services.AddEnrichedMarkdownCharacterTextSplitter();
 
             services.AddSingleton(ILengthFunctions.LengthByTokenCount);
 
+            //services.AddRecursiveCharacterTextSplitter()
+            //        .AddDefaultDocumentContentExtractor();
+
             services.AddDocumentConnectors(hostContext.Configuration)
-                    .AddDefaultDocumentConnectorProvider()
-                    .AddDefaultDocumentContentExtractor()
+                    .AddDefaultDocumentConnectorEnrichedProvider()
                     .AddDefaultDocumentContentEnrichedExtractor();
 
             services.AddHttpClient();
@@ -63,15 +65,19 @@ internal static class Program
 
         var host = hostBuilder.Build();
 
-        // Initialize Examples
-        var example = new Example(host.Services.GetRequiredService<Kernel>(),
-                                  host.Services.GetRequiredService<IDocumentConnectorProvider>(),
-                                  host.Services.GetRequiredService<IDocumentContentExtractor>(),
-                                  host.Services.GetRequiredService<IDocumentContentEnrichedExtractor>());
+        // Initialize Examples - You can toggle this based on your needs
+
+        //var example = new Example(host.Services.GetRequiredService<Kernel>(),
+        //                          host.Services.GetRequiredService<IDocumentConnectorProvider>(),
+        //                          host.Services.GetRequiredService<IDocumentContentExtractor>());
 
         //example.ExtractDocumentContent();
 
-        example.ExtractDocumentContentEnriched();
+        var exampleWithMetadata = new ExampleWithMetadata(host.Services.GetRequiredService<Kernel>(),
+                                                          host.Services.GetRequiredService<IDocumentConnectorProvider>(),
+                                                          host.Services.GetRequiredService<IDocumentContentEnrichedExtractor>());
+
+        exampleWithMetadata.ExtractDocumentContentEnriched();
 
         Console.WriteLine("Press any key to exit...");
         Console.ReadKey();
@@ -81,10 +87,10 @@ internal static class Program
     {
         services.AddOptionsWithValidateOnStart<MistralAIDocumentConnectorOptions>().Bind(configuration.GetSection(nameof(MistralAIDocumentConnectorOptions))).ValidateDataAnnotations();
 
-        services.AddWordDocumentConnector(configuration); // .docx
-        services.AddParagraphPptxDocumentConnector();     // .pptx
-        services.AddTxtDocumentConnector();               // .txt; .md
-        services.AddSkVisionImageDocumentConnector(configuration); // .jpg; .jpeg; .png;
+        services.AddWordDocumentConnector(configuration);          // .docx
+        services.AddParagraphPptxDocumentConnector();              // .pptx
+        services.AddTxtDocumentConnector();                        // .txt .md
+        services.AddSkVisionImageDocumentConnector(configuration); // .jpg .jpeg .png
 
         // You can toggle this based on your needs
         //services.AddSingleton<IEnmarchaDocumentConnector, SkVisionStrictFormatCleanPdfDocumentConnector>(); // .pdf

@@ -3,8 +3,23 @@
 /// <summary>
 /// Represents a text splitter, which splits a text into chunks of text with metadata.
 /// </summary>
-public interface IEnrichedTextSplitter : ITextSplitter
+public interface IEnrichedTextSplitter
 {
+    /// <summary>
+    /// Gets the number of elements (characters, tokens, etc.) overlapping between chunks.
+    /// </summary>
+    int ChunkOverlap { get; }
+
+    /// <summary>
+    /// Gets the number of elements (characters, tokens, etc.) in each chunk.
+    /// </summary>
+    int ChunkSize { get; }
+
+    /// <summary>
+    /// Gets the collection of separator characters to use when splitting the text and creating chunks.
+    /// </summary>
+    IList<string> Separators { get; }
+
     /// <summary>
     /// Splits the specified text, using the specified length function.
     /// </summary>

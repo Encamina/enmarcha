@@ -15,8 +15,8 @@ public abstract class DocumentContentEnrichedExtractorBase : DocumentConnectorPr
     /// <param name="connectors">List of document connectors to register.</param>
     protected DocumentContentEnrichedExtractorBase(IEnrichedTextSplitter enrichedTextSplitter, Func<string, int> lengthFunction, IEnumerable<IEnmarchaDocumentConnector> connectors) : base(connectors)
     {
-         LengthFunction = lengthFunction;
-         EnrichedTextSplitter = enrichedTextSplitter;
+        LengthFunction = lengthFunction;
+        EnrichedTextSplitter = enrichedTextSplitter;
     }
 
     /// <summary>
@@ -45,23 +45,5 @@ public abstract class DocumentContentEnrichedExtractorBase : DocumentConnectorPr
         // Using Task.Run instead of Task.FromResult because the operation in GetDocumentContentWithMetadata is potentially slow,
         // and Task.Run ensures it is executed on a separate thread, maintaining responsiveness.
         return Task.Run(() => GetDocumentContentWithMetadata(stream, fileExtension), cancellationToken);
-    }
-
-    /// <inheritdoc/>
-    public virtual IEnumerable<string> GetDocumentContent(Stream stream, string fileExtension)
-    {
-        var connector = GetDocumentConnector(fileExtension);
-
-        var content = connector.ReadText(stream);
-
-        return EnrichedTextSplitter.Split(content, LengthFunction);
-    }
-
-    /// <inheritdoc/>
-    public virtual Task<IEnumerable<string>> GetDocumentContentAsync(Stream stream, string fileExtension, CancellationToken cancellationToken)
-    {
-        // Using Task.Run instead of Task.FromResult because the operation in GetDocumentContent is potentially slow,
-        // and Task.Run ensures it is executed on a separate thread, maintaining responsiveness.
-        return Task.Run(() => GetDocumentContent(stream, fileExtension), cancellationToken);
     }
 }

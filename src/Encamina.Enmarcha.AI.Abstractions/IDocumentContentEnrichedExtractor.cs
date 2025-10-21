@@ -3,7 +3,7 @@
 /// <summary>
 /// Represents an enriched document content extractor, which extracts its content from a stream.
 /// </summary>
-public interface IDocumentContentEnrichedExtractor : IDocumentContentExtractor
+public interface IDocumentContentEnrichedExtractor
 {
     /// <summary>
     /// Extracts the content from a document stream.
