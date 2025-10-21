@@ -1,4 +1,5 @@
-﻿using System.Text.RegularExpressions;
+﻿using System.Collections.Frozen;
+using System.Text.RegularExpressions;
 
 using Encamina.Enmarcha.AI.Abstractions;
 
@@ -11,15 +12,16 @@ namespace Encamina.Enmarcha.AI.TextSplitters;
 /// It splits texts in order until the chunks are small enough. It will try to keep all paragraphs
 /// (and then sentences, and then words) together as long as possible.
 /// </summary>
-public class EnrichedRecursiveCharacterTextSplitter : EnrichedTextSplitter
+public partial class EnrichedMarkdownCharacterTextSplitter : EnrichedTextSplitter
 {
+    // Static fields
     private static readonly string[] HeaderLevels = ["##", "###", "####", "#####", "######"];
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="EnrichedRecursiveCharacterTextSplitter"/> class.
+    /// Initializes a new instance of the <see cref="EnrichedMarkdownCharacterTextSplitter"/> class.
     /// </summary>
     /// <param name="options">The options to use when configuring the enriched recursive character text splitter.</param>
-    public EnrichedRecursiveCharacterTextSplitter(IOptionsMonitor<TextSplitterOptions> options) : base(options)
+    public EnrichedMarkdownCharacterTextSplitter(IOptionsMonitor<TextSplitterOptions> options) : base(options)
     {
     }
 
@@ -28,15 +30,18 @@ public class EnrichedRecursiveCharacterTextSplitter : EnrichedTextSplitter
     {
         var h1Sections = SplitByH1(text);
         var context = new Dictionary<string, string>();
+        var minTokens = Math.Max(0, options.MinChunkTokens > 0 ? options.MinChunkTokens : 30);
 
         foreach (var h1Section in h1Sections)
         {
-            var chunks = lengthFunction(h1Section) <= options.ChunkSize ? [h1Section] : RecursiveSplit(h1Section, options.ChunkSize, lengthFunction, [.. HeaderLevels]);
+            var chunks = lengthFunction(h1Section) <= options.ChunkSize
+                ? [h1Section]
+                : RecursiveSplit(h1Section, options.ChunkSize, lengthFunction, [.. HeaderLevels]);
 
             foreach (var chunk in chunks)
             {
                 // Skip chunks that are too small (less than 30 tokens)
-                if (lengthFunction(chunk) < 30)
+                if (lengthFunction(chunk) < minTokens)
                 {
                     continue;
                 }
@@ -44,17 +49,39 @@ public class EnrichedRecursiveCharacterTextSplitter : EnrichedTextSplitter
                 var currentMetadata = ExtractMetadata(chunk);
                 context = UpdateContext(currentMetadata, context);
 
-                yield return (new Dictionary<string, string>(context), chunk.Trim());
+                yield return (context.ToFrozenDictionary(), chunk.Trim());
             }
         }
     }
+
+    [GeneratedRegex(@"^# .+", RegexOptions.Multiline | RegexOptions.NonBacktracking)]
+    private static partial Regex H1Regex();
+
+    [GeneratedRegex(@"^## .+", RegexOptions.Multiline | RegexOptions.NonBacktracking)]
+    private static partial Regex H2Regex();
+
+    [GeneratedRegex(@"^### .+", RegexOptions.Multiline | RegexOptions.NonBacktracking)]
+    private static partial Regex H3Regex();
+
+    [GeneratedRegex(@"^#### .+", RegexOptions.Multiline | RegexOptions.NonBacktracking)]
+    private static partial Regex H4Regex();
+
+    [GeneratedRegex(@"^##### .+", RegexOptions.Multiline | RegexOptions.NonBacktracking)]
+    private static partial Regex H5Regex();
+
+    [GeneratedRegex(@"^###### .+", RegexOptions.Multiline | RegexOptions.NonBacktracking)]
+    private static partial Regex H6Regex();
+
+    [GeneratedRegex(@"\*\*(.+?)\*\*", RegexOptions.NonBacktracking)]
+    private static partial Regex BoldRegex();
+
 
     /// <summary>
     /// Splits text by H1 headers, keeping each H1 section together.
     /// </summary>
     private static List<string> SplitByH1(string text)
     {
-        var matches = Regex.Matches(text, @"^# .+", RegexOptions.Multiline);
+        var matches = H1Regex().Matches(text);
         var sections = new List<string>();
 
         foreach (var (match, index) in matches.Select((m, i) => (m, i)))
@@ -200,30 +227,31 @@ public class EnrichedRecursiveCharacterTextSplitter : EnrichedTextSplitter
         var metadata = new Dictionary<string, string>();
 
         // Extract H1
-        var header1Match = Regex.Match(text, @"^# (.+)", RegexOptions.Multiline);
+        var header1Match = H1Regex().Match(text);
         if (header1Match.Success)
         {
-            metadata["Header_1"] = header1Match.Groups[1].Value;
+            metadata["Header_1"] = header1Match.Groups[0].Value[2..].Trim();
         }
 
         // Extract H2-H6
-        foreach (var level in Enumerable.Range(2, 5))
+        foreach (var (regex, level) in new[]
         {
-            var pattern = $@"^{new string('#', level)} (.+)";
-            var matches = Regex.Matches(text, pattern, RegexOptions.Multiline);
-
+            (H2Regex(), 2), (H3Regex(), 3), (H4Regex(), 4), (H5Regex(), 5), (H6Regex(), 6)
+        })
+        {
+            var matches = regex.Matches(text);
             if (matches.Count > 0)
             {
-                var headers = string.Join(", ", matches.Select(m => m.Groups[1].Value));
+                var headers = string.Join(", ", matches.Cast<Match>().Select(m => m.Groups[0].Value[(level + 1)..].Trim()));
                 metadata[$"Header_{level}"] = headers;
             }
         }
 
         // Extract bold text
-        var boldMatches = Regex.Matches(text, @"\*\*(.+?)\*\*");
+        var boldMatches = BoldRegex().Matches(text);
         if (boldMatches.Count > 0)
         {
-            var bolds = string.Join(", ", boldMatches.Select(m => m.Groups[1].Value));
+            var bolds = string.Join(", ", boldMatches.Cast<Match>().Select(m => m.Groups[1].Value));
             metadata["Bold"] = bolds;
         }
 
