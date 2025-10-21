@@ -11,15 +11,15 @@ namespace Encamina.Enmarcha.AI.TextSplitters;
 /// It splits texts in order until the chunks are small enough. It will try to keep all paragraphs
 /// (and then sentences, and then words) together as long as possible.
 /// </summary>
-public class EnrichedRecursiveCharacterTextSplitter : EnrichedTextSplitter
+public class EnrichedMarkdownCharacterTextSplitter : EnrichedTextSplitter
 {
     private static readonly string[] HeaderLevels = ["##", "###", "####", "#####", "######"];
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="EnrichedRecursiveCharacterTextSplitter"/> class.
+    /// Initializes a new instance of the <see cref="EnrichedMarkdownCharacterTextSplitter"/> class.
     /// </summary>
     /// <param name="options">The options to use when configuring the enriched recursive character text splitter.</param>
-    public EnrichedRecursiveCharacterTextSplitter(IOptionsMonitor<TextSplitterOptions> options) : base(options)
+    public EnrichedMarkdownCharacterTextSplitter(IOptionsMonitor<TextSplitterOptions> options) : base(options)
     {
     }
 

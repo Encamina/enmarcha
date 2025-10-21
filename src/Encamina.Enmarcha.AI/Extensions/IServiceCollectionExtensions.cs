@@ -47,13 +47,13 @@ public static class IServiceCollectionExtensions
     }
 
     /// <summary>
-    /// Adds an «Enriched Recursive Character Text Splitter» service as singleton instance of <see cref="IEnrichedTextSplitter"/> to the <see cref="IServiceCollection"/>.
+    /// Adds an «Enriched Markdown Character Text Splitter» service as singleton instance of <see cref="IEnrichedTextSplitter"/> to the <see cref="IServiceCollection"/>.
     /// </summary>
     /// <param name="services">The <see cref="IServiceCollection"/> to add services to.</param>
     /// <returns>The <see cref="IServiceCollection"/> so that additional calls can be chained.</returns>
-    public static IServiceCollection AddEnrichedRecursiveCharacterTextSplitter(this IServiceCollection services)
+    public static IServiceCollection AddEnrichedMarkdownCharacterTextSplitter(this IServiceCollection services)
     {
-        return services.AddSingleton<IEnrichedTextSplitter, EnrichedRecursiveCharacterTextSplitter>();
+        return services.AddSingleton<IEnrichedTextSplitter, EnrichedMarkdownCharacterTextSplitter>();
     }
 
     /// <summary>

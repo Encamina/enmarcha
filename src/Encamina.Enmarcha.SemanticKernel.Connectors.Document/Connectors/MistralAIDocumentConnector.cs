@@ -4,6 +4,7 @@ using System.Text;
 using CommunityToolkit.Diagnostics;
 
 using Encamina.Enmarcha.AI.OpenAI.Abstractions;
+using Encamina.Enmarcha.AI.OpenAI.Azure;
 using Encamina.Enmarcha.SemanticKernel.Connectors.Document.Options;
 using Encamina.Enmarcha.SemanticKernel.Connectors.Document.Utils;
 
@@ -143,9 +144,14 @@ public class MistralAIDocumentConnector : IEnmarchaDocumentConnector
     private readonly IChatCompletionService chatCompletionService;
 
     /// <summary>
-    /// Configuration options for MistralAI processing.
+    /// Configuration options for MistralAI Document Connector.
     /// </summary>
-    private readonly MistralAIDocumentConnectorOptions options;
+    private readonly MistralAIDocumentConnectorOptions mistralAIDocumentConnectorOptions;
+
+    /// <summary>
+    /// Configuration options for Azure OpenAI.
+    /// </summary>
+    private readonly AzureOpenAIOptions azureOpenAIOptions;
 
     /// <summary>
     /// The HTTP client factory for making requests to external services.
@@ -161,14 +167,20 @@ public class MistralAIDocumentConnector : IEnmarchaDocumentConnector
     /// Initializes a new instance of the <see cref="MistralAIDocumentConnector"/> class.
     /// </summary>
     /// <param name="kernel">A valid <see cref="Kernel"/> instance.</param>
-    /// <param name="options"> A valid instance of <see cref="MistralAIDocumentConnectorOptions"/>.</param>
+    /// <param name="mistralAIDocumentConnectorOptions"> A valid instance of <see cref="MistralAIDocumentConnectorOptions"/>.</param>
+    /// <param name="azureOpenAIOptions"> A valid instance of <see cref="AzureOpenAIOptions"/>.</param>
     /// <param name="httpFactory">The HTTP client factory.</param>
     /// <param name="lengthFunction">Function to count tokens in text.</param>
-    public MistralAIDocumentConnector(Kernel kernel, IOptions<MistralAIDocumentConnectorOptions> options, IHttpClientFactory httpFactory, Func<string, int> lengthFunction)
+    public MistralAIDocumentConnector(Kernel kernel,
+                                      IOptions<MistralAIDocumentConnectorOptions> mistralAIDocumentConnectorOptions,
+                                      IOptions<AzureOpenAIOptions> azureOpenAIOptions,
+                                      IHttpClientFactory httpFactory,
+                                      Func<string, int> lengthFunction)
     {
         chatCompletionService = kernel.GetRequiredService<IChatCompletionService>();
 
-        this.options = options.Value;
+        this.mistralAIDocumentConnectorOptions = mistralAIDocumentConnectorOptions.Value;
+        this.azureOpenAIOptions = azureOpenAIOptions.Value;
         this.httpFactory = httpFactory;
         this.lengthFunction = lengthFunction;
     }
@@ -203,7 +215,7 @@ public class MistralAIDocumentConnector : IEnmarchaDocumentConnector
 
         var rawMarkdown = await ExtractMarkdownFromPdfAsync(stream, cancellationToken);
 
-        if (options.LLMPostProcessing)
+        if (mistralAIDocumentConnectorOptions.LLMPostProcessing)
         {
             var refinedMarkdown = await RefineMarkdownWithAIAsync(rawMarkdown, cancellationToken);
 
@@ -223,7 +235,7 @@ public class MistralAIDocumentConnector : IEnmarchaDocumentConnector
     {
         var markdown = new StringBuilder();
 
-        var pdfParts = await MistralAIHelper.SplitPdfByPagesAsync(stream, options.SplitPageNumber, cancellationToken);
+        var pdfParts = await MistralAIHelper.SplitPdfByPagesAsync(stream, mistralAIDocumentConnectorOptions.SplitPageNumber, cancellationToken);
 
         using var httpClient = httpFactory.CreateClient();
         httpClient.Timeout = TimeSpan.FromMinutes(10);
@@ -255,12 +267,12 @@ public class MistralAIDocumentConnector : IEnmarchaDocumentConnector
     {
         var documentUrl = await MistralAIHelper.BuildPdfDataUrlAsync(pdfPart, cancellationToken);
 
-        using var httpRequest = new HttpRequestMessage(HttpMethod.Post, options.Endpoint)
+        using var httpRequest = new HttpRequestMessage(HttpMethod.Post, mistralAIDocumentConnectorOptions.Endpoint)
         {
-            Headers = { { "Authorization", $"Bearer {options.ApiKey}" } },
+            Headers = { { "Authorization", $"Bearer {mistralAIDocumentConnectorOptions.ApiKey}" } },
             Content = JsonContent.Create(new
             {
-                model = options.ModelName,
+                model = mistralAIDocumentConnectorOptions.ModelName,
                 document = new
                 {
                     type = "document_url",
@@ -289,9 +301,12 @@ public class MistralAIDocumentConnector : IEnmarchaDocumentConnector
     /// <returns>The refined markdown content.</returns>
     private async Task<string> RefineMarkdownWithAIAsync(string rawMarkdown, CancellationToken cancellationToken)
     {
-        var chatModelName = chatCompletionService.Attributes["DeploymentName"];
+        if (string.IsNullOrWhiteSpace(azureOpenAIOptions.ChatModelName))
+        {
+            throw new InvalidOperationException("Chat model name is not configured in the chat completion service.");
+        }
 
-        var modelInfo = ModelInfo.GetById(chatModelName.ToString());
+        var modelInfo = ModelInfo.GetById(azureOpenAIOptions.ChatModelName) ?? throw new InvalidOperationException($"Model '{azureOpenAIOptions.ChatModelName}' is not registered in ModelInfo.");
 
         var markdownParts = MistralAIHelper.SplitMarkdownForRefinement(rawMarkdown, modelInfo.MaxTokensOutput, lengthFunction);
 
@@ -301,9 +316,12 @@ public class MistralAIDocumentConnector : IEnmarchaDocumentConnector
         {
             var history = new ChatHistory(SystemPrompt);
             history.AddUserMessage(markdownPart);
-            var settings = new OpenAIPromptExecutionSettings() { 
+
+            var settings = new OpenAIPromptExecutionSettings()
+            {
                 Temperature = 0.0f,
             };
+
             var response = await chatCompletionService.GetChatMessageContentAsync(history, settings, cancellationToken: cancellationToken);
 
             var content = response?.Content ?? string.Empty;
