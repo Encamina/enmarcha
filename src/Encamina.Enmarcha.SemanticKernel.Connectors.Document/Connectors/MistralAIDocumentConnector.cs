@@ -301,7 +301,8 @@ public class MistralAIDocumentConnector : IEnmarchaDocumentConnector
         {
             var history = new ChatHistory(SystemPrompt);
             history.AddUserMessage(markdownPart);
-            var settings = new OpenAIPromptExecutionSettings() { 
+            var settings = new OpenAIPromptExecutionSettings()
+            {
                 Temperature = 0.0f,
             };
             var response = await chatCompletionService.GetChatMessageContentAsync(history, settings, cancellationToken: cancellationToken);
