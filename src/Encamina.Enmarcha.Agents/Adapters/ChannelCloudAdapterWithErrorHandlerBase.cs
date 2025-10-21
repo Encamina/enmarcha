@@ -23,6 +23,7 @@ public class ChannelCloudAdapterWithErrorHandlerBase : CloudAdapter
     /// </summary>
     public static readonly IReadOnlyList<IMiddlewareUseRule> DefaultMiddlewareUseRules = new List<IMiddlewareUseRule>()
     {
+        new MiddlewareUseRule<CorrelationRehydrationMiddleware>() { Order = 5 },
         new MiddlewareUseRule<TelemetryInitializerMiddleware>() { Order = 10 }, // IMPORTANT - This middleware calls 'TelemetryLoggerMiddleware'. Adding 'TelemetryLoggerMiddleware' as middleware will produce repeated log entries.
         new MiddlewareUseRule<TranscriptLoggerMiddleware>() { Order = 20 },
         new MiddlewareUseRule<ShowTypingMiddleware>() { Order = 30 },

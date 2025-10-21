@@ -20,9 +20,15 @@ Previous classification is not required if changes are simple or all belong to t
 
 ### Breaking Changes
 - Removed `Encamina.Enmarcha.Bot`, `Encamina.Enmarcha.Bot.Abstractions` and `Encamina.Enmarcha.Bot.Skills.QuestionAnswering` projects.
+- Added the new `CorrelationRehydrationMiddleware` to `DefaultMiddlewareUseRules`. This middleware rehydrates correlations from incoming activities in M365 Agents SDK.
 
 ### Major Changes
 - Added `Encamina.Enmarcha.AI.Agents`, `Encamina.Enmarcha.AI.Agents.Abstractions` and `Encamina.Enmarcha.Agents.Skills.QuestionAnswering` projects to provide support for the new Microsoft 365 Agents SDK.
+- Added `ICorrelationStore` and `DistributedCacheCorrelationStore` to store correlations (`CorrelationEntry`) in a distributed cache.
+
+## Minor Changes
+- Updated dependencies:
+    - Microsoft.Azure.Cosmos from `3.47.2` to `3.49.0`.
 
 - Modified the sample project `Encamina.Enmarcha.Samples.SemanticKernel.DocumentContentExtractor` to develop `MistralAIDocumentConnector`.
 - Added the connector `Encamina.Enmarcha.SemanticKernel.Connectors.Document\Connectors\MistralAIDocumentConnector.cs`: Extracts and processes PDF documents using MistralAI's Pixtral model for markdown extraction, with optional Azure OpenAI-based refinement and intelligent token-aware chunking with hierarchical metadata.

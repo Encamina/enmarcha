@@ -1,7 +1,7 @@
 ﻿namespace Encamina.Enmarcha.Agents.Abstractions.Telemetry;
 
 /// <summary>
-/// Defines names of common properties for use with a <see cref="IAgentTelemetryClient"/> object.
+/// Defines names of common properties for use in telemety.
 /// </summary>
 public static class TelemetryConstants
 {
@@ -84,4 +84,14 @@ public static class TelemetryConstants
     /// The telemetry property value for activity id.
     /// </summary>
     public const string ActivityIdProperty = "activityId";
+
+    /// <summary>
+    /// The telemetry property value for request id.
+    /// </summary>
+    public const string RequestIdProperty = "requestId";
+
+    /// <summary>
+    /// The name of the activity source used by the telemetry of the bot.
+    /// </summary>
+    public const string BotActivitySource = "BotActivitySource";
 }
