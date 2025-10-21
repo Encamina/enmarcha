@@ -16,10 +16,10 @@ public abstract class EnrichedTextSplitter : TextSplitter, IEnrichedTextSplitter
     }
 
     /// <inheritdoc/>
-    public abstract IEnumerable<(IDictionary<string, string> Metadata, string Text)> SplitWithMetadata(string text, Func<string, int> lengthFunction, TextSplitterOptions options);
+    public abstract IEnumerable<(IReadOnlyDictionary<string, string> Metadata, string Text)> SplitWithMetadata(string text, Func<string, int> lengthFunction, TextSplitterOptions options);
 
     /// <inheritdoc/>
-    public virtual IEnumerable<(IDictionary<string, string> Metadata, string Text)> SplitWithMetadata(string text, Func<string, int> lengthFunction)
+    public virtual IEnumerable<(IReadOnlyDictionary<string, string> Metadata, string Text)> SplitWithMetadata(string text, Func<string, int> lengthFunction)
     {
         return SplitWithMetadata(text, lengthFunction, new TextSplitterOptions()
         {

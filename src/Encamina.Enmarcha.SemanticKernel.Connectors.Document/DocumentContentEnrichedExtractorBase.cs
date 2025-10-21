@@ -30,7 +30,7 @@ public abstract class DocumentContentEnrichedExtractorBase : DocumentConnectorPr
     protected Func<string, int> LengthFunction { get; }
 
     /// <inheritdoc/>
-    public virtual IEnumerable<(IDictionary<string, string> Metadata, string Text)> GetDocumentContentWithMetadata(Stream stream, string fileExtension)
+    public virtual IEnumerable<(IReadOnlyDictionary<string, string> Metadata, string Text)> GetDocumentContentWithMetadata(Stream stream, string fileExtension)
     {
         var connector = GetDocumentConnector(fileExtension);
 
@@ -40,7 +40,7 @@ public abstract class DocumentContentEnrichedExtractorBase : DocumentConnectorPr
     }
 
     /// <inheritdoc/>
-    public virtual Task<IEnumerable<(IDictionary<string, string> Metadata, string Text)>> GetDocumentContentWithMetadataAsync(Stream stream, string fileExtension, CancellationToken cancellationToken)
+    public virtual Task<IEnumerable<(IReadOnlyDictionary<string, string> Metadata, string Text)>> GetDocumentContentWithMetadataAsync(Stream stream, string fileExtension, CancellationToken cancellationToken)
     {
         // Using Task.Run instead of Task.FromResult because the operation in GetDocumentContentWithMetadata is potentially slow,
         // and Task.Run ensures it is executed on a separate thread, maintaining responsiveness.

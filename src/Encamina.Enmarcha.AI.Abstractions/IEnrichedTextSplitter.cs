@@ -11,7 +11,7 @@ public interface IEnrichedTextSplitter : ITextSplitter
     /// <param name="text">The text to split.</param>
     /// <param name="lengthFunction">A function to use to calculate the length (or size) of each split, usually specified by <see cref="ITextSplitter.ChunkSize"/>.</param>
     /// <returns>A collection of text splits with metadata. Each element contains a dictionary with metadata and the text chunk.</returns>
-    IEnumerable<(IDictionary<string, string> Metadata, string Text)> SplitWithMetadata(string text, Func<string, int> lengthFunction);
+    IEnumerable<(IReadOnlyDictionary<string, string> Metadata, string Text)> SplitWithMetadata(string text, Func<string, int> lengthFunction);
 
     /// <summary>
     /// Splits the specified text, using the specified length function and specified <see cref="TextSplitterOptions"/>.
@@ -20,5 +20,5 @@ public interface IEnrichedTextSplitter : ITextSplitter
     /// <param name="lengthFunction">Length function used to calculate the length of a string.</param>
     /// <param name="options">Custom options used for splitting.</param>
     /// <returns>A collection of text splits with metadata. Each element contains a dictionary with metadata and the text chunk.</returns>
-    IEnumerable<(IDictionary<string, string> Metadata, string Text)> SplitWithMetadata(string text, Func<string, int> lengthFunction, TextSplitterOptions options);
+    IEnumerable<(IReadOnlyDictionary<string, string> Metadata, string Text)> SplitWithMetadata(string text, Func<string, int> lengthFunction, TextSplitterOptions options);
 }

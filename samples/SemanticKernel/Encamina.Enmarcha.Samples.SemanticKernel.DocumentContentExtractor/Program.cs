@@ -51,7 +51,7 @@ internal static class Program
             services.AddRecursiveCharacterTextSplitter()
                     .AddEnrichedMarkdownCharacterTextSplitter();
 
-            services.AddSingleton<Func<string, int>>(ILengthFunctions.LengthByTokenCount);
+            services.AddSingleton(ILengthFunctions.LengthByTokenCount);
 
             services.AddDocumentConnectors(hostContext.Configuration)
                     .AddDefaultDocumentConnectorProvider()
