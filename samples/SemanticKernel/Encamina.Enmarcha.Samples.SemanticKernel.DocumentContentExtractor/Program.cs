@@ -48,14 +48,14 @@ internal static class Program
                 return kernel;
             });
 
-            services.AddRecursiveCharacterTextSplitter() // TODO: Should be commented...
+            services.AddRecursiveCharacterTextSplitter()
                     .AddEnrichedMarkdownCharacterTextSplitter();
 
             services.AddSingleton<Func<string, int>>(ILengthFunctions.LengthByTokenCount);
 
             services.AddDocumentConnectors(hostContext.Configuration)
                     .AddDefaultDocumentConnectorProvider()
-                    .AddDefaultDocumentContentExtractor() // TODO: Should be commented...
+                    .AddDefaultDocumentContentExtractor()
                     .AddDefaultDocumentContentEnrichedExtractor();
 
             services.AddHttpClient();
