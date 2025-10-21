@@ -11,32 +11,32 @@ namespace Encamina.Enmarcha.SemanticKernel.Connectors.Document.Options;
 public sealed class MistralAIDocumentConnectorOptions
 {
     /// <summary>
-    /// Gets or sets the endpoint URL for Mistral AI Document API.
+    /// Gets the endpoint URL for Mistral AI Document API.
     /// </summary>
     [Required]
     [NotEmptyOrWhitespace]
-    public string Endpoint { get; set; }
+    public required string Endpoint { get; init; }
 
     /// <summary>
-    /// Gets or sets the API key for authentication.
+    /// Gets the API key for authentication.
     /// </summary>
     [Required]
-    public string ApiKey { get; set; }
+    public required string ApiKey { get; init; }
 
     /// <summary>
-    /// Gets or sets the model name to use for document processing.
+    /// Gets the model name to use for document processing.
     /// </summary>
     [Required]
-    public string ModelName { get; set; }
+    public required string ModelName { get; init; }
 
     /// <summary>
-    /// Gets or sets the number of pages to split the PDF into for processing.
+    /// Gets the number of pages to split the PDF into for processing.
     /// </summary>
     [Range(1, 30)]
-    public int SplitPageNumber { get; set; } = 30;
+    public int SplitPageNumber { get; init; } = 30;
 
     /// <summary>
-    /// Gets or sets a value indicating whether to apply LLM-based post-processing to refine the extracted text.
+    /// Gets a value indicating whether to apply LLM-based post-processing to refine the extracted text.
     /// </summary>
-    public bool LLMPostProcessing { get; set; } = true;
+    public bool LLMPostProcessing { get; init; } = true;
 }
