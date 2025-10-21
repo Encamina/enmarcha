@@ -173,6 +173,7 @@ internal static class MistralAIHelper
         var parts = new List<string>();
         var current = new StringBuilder();
 
+        // Halve the token limit to account for system prompts, provide a safety margin, or comply with API limitations.
         maxTokens /= 2;
 
         var lines = markdown.Split('\n');
