@@ -22,8 +22,10 @@
     <PackageReference Include="BitMiracle.LibTiff.NET" Version="2.4.660" />
     <PackageReference Include="ExcelNumberFormat" Version="1.1.0" />
     <PackageReference Include="HtmlAgilityPack" Version="1.12.0" />
+    <PackageReference Include="Microsoft.Extensions.Http" Version="8.0.0" />
     <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="8.0.0" />
     <PackageReference Include="Microsoft.Extensions.Options.DataAnnotations" Version="8.0.0" />
+    <PackageReference Include="Microsoft.SemanticKernel.Connectors.AzureOpenAI" Version="1.66.0" />
     <PackageReference Include="Microsoft.SemanticKernel.Plugins.Document" Version="1.64.0-alpha" />
     <PackageReference Include="PdfPig" Version="0.1.10" />
     <PackageReference Include="ScratchPad.NPOI.HWPF" Version="2.5.7" />
@@ -33,6 +35,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Encamina.Enmarcha.AI.Abstractions\Encamina.Enmarcha.AI.Abstractions.csproj" />
+    <ProjectReference Include="..\Encamina.Enmarcha.AI.OpenAI.Abstractions\Encamina.Enmarcha.AI.OpenAI.Abstractions.csproj" />
+    <ProjectReference Include="..\Encamina.Enmarcha.AI.OpenAI.Azure\Encamina.Enmarcha.AI.OpenAI.Azure.csproj" />
     <ProjectReference Include="..\Encamina.Enmarcha.Core\Encamina.Enmarcha.Core.csproj" />
     <ProjectReference Include="..\Encamina.Enmarcha.DependencyInjection\Encamina.Enmarcha.DependencyInjection.csproj" />
   </ItemGroup>

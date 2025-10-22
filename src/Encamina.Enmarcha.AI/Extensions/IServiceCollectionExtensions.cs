@@ -47,6 +47,16 @@ public static class IServiceCollectionExtensions
     }
 
     /// <summary>
+    /// Adds an «Enriched Markdown Character Text Splitter» service as singleton instance of <see cref="IEnrichedTextSplitter"/> to the <see cref="IServiceCollection"/>.
+    /// </summary>
+    /// <param name="services">The <see cref="IServiceCollection"/> to add services to.</param>
+    /// <returns>The <see cref="IServiceCollection"/> so that additional calls can be chained.</returns>
+    public static IServiceCollection AddEnrichedMarkdownCharacterTextSplitter(this IServiceCollection services)
+    {
+        return services.AddSingleton<IEnrichedTextSplitter, EnrichedMarkdownCharacterTextSplitter>();
+    }
+
+    /// <summary>
     /// Adds a «Semantic Text Splitter» service as singleton instance of <see cref="ISemanticTextSplitter"/> to the <see cref="IServiceCollection"/>.
     /// </summary>
     /// <param name="services">The <see cref="IServiceCollection"/> to add services to.</param>
