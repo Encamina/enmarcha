@@ -23,15 +23,11 @@ public class StringToBooleanConverter : JsonConverter<bool>
         {
             JsonTokenType.True => true,
             JsonTokenType.False => false,
-            JsonTokenType.String =>
+            JsonTokenType.String => reader.GetString() switch
             {
-                var value = reader.GetString();
-                return value switch
-                {
-                    var v when string.Equals(v, bool.TrueString, StringComparison.OrdinalIgnoreCase) => true,
-                    var v when string.Equals(v, bool.FalseString, StringComparison.OrdinalIgnoreCase) => false,
-                    _ => throw new JsonException($"Invalid string value for boolean: {value}"),
-                };
+                var value when string.Equals(value, bool.TrueString, StringComparison.OrdinalIgnoreCase) => true,
+                var value when string.Equals(value, bool.FalseString, StringComparison.OrdinalIgnoreCase) => false,
+                _ => throw new JsonException($"Invalid string value for boolean: {reader.GetString()}"),
             },
             _ => throw new JsonException($"Invalid token type: {reader.TokenType}"),
         };
