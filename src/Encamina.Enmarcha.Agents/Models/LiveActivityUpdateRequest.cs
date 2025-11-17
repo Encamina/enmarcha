@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Encamina.Enmarcha.Agents.Models;
+﻿namespace Encamina.Enmarcha.Agents.Models;
 
 /// <summary>
 /// Represents a request to update the state of a live activity.
@@ -14,11 +12,11 @@ namespace Encamina.Enmarcha.Agents.Models;
 /// <param name="Subtitle">
 /// An optional subtitle providing additional context for the live activity.
 /// </param>
-/// <param name="Status">
-/// The current status of the live activity.
-/// </param>
 /// <param name="Content">
 /// The main content or message of the live activity. Supports markdown.
+/// </param>
+/// <param name="Status">
+/// The current status of the live activity.
 /// </param>
 /// <param name="ProgressPercent">
 /// The progress of the live activity as a percentage (0-100). Null if not applicable.
