@@ -18,7 +18,7 @@ public static class MediaTypeNames
         /// <summary>
         /// Specifies that the Media Type data is an AdaptiveCard Card (<see href="https://adaptivecards.io/"/>).
         /// </summary>
-        public const string AdaptiveCard = @"application/vnd.microsoft.card.adaptive";
+        public const string AdaptativeCard = @"application/vnd.microsoft.card.adaptive";
 
         /// <summary>
         /// Specifies that the Media Type data is an Excel file (<c>.xlsx</c>).
