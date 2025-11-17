@@ -10,7 +10,7 @@ public class LiveActivityManagerOptions
     /// <summary>
     /// Gets the maximum number of history entries to retain for a live activity.
     /// </summary>
-    public required int HistoryLimit { get; init; }
+    public int HistoryLimit { get; init; } = 50;
 
     /// <summary>
     /// Gets the sliding expiration duration for cached live activity entries.

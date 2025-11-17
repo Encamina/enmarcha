@@ -64,7 +64,7 @@ public sealed class LiveActivityManager
     /// <returns>A task representing the asynchronous operation.</returns>
     public async Task HandleUpdateAsync(ITurnContext turnContext, LiveActivityUpdateRequest req, string channelId, CancellationToken ct)
     {
-        var channelIsCopilot = channelId.Equals(Channels.M365Copilot);
+        var channelIsCopilot = channelId.Equals(Channels.M365Copilot, StringComparison.OrdinalIgnoreCase);
 
         var entry = await GetEntryAsync(req.LiveActivityId, ct) ?? new LiveActivityEntry { LiveActivityId = req.LiveActivityId };
 
