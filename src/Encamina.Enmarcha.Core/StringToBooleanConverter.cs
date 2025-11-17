@@ -19,18 +19,26 @@ public class StringToBooleanConverter : JsonConverter<bool>
     /// <inheritdoc/>
     public override bool Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
-        return reader.TokenType switch
+        switch (reader.TokenType)
         {
-            JsonTokenType.True => true,
-            JsonTokenType.False => false,
-            JsonTokenType.String => reader.GetString() switch
-            {
-                var value when string.Equals(value, bool.TrueString, StringComparison.OrdinalIgnoreCase) => true,
-                var value when string.Equals(value, bool.FalseString, StringComparison.OrdinalIgnoreCase) => false,
-                _ => throw new JsonException($"Invalid string value for boolean: {reader.GetString()}"),
-            },
-            _ => throw new JsonException($"Invalid token type: {reader.TokenType}"),
-        };
+            case JsonTokenType.True:
+                return true;
+
+            case JsonTokenType.False:
+                return false;
+
+            case JsonTokenType.String:
+                {
+                    var value = reader.GetString();
+
+                    return string.Equals(value, bool.TrueString, StringComparison.OrdinalIgnoreCase) || (string.Equals(value, bool.FalseString, StringComparison.OrdinalIgnoreCase)
+                        ? false
+                        : throw new JsonException($"Invalid string value for boolean: {value}"));
+                }
+
+            default:
+                throw new JsonException($"Invalid token type: {reader.TokenType}");
+        }
     }
 
     /// <summary>
