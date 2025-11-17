@@ -118,7 +118,7 @@ public sealed class LiveActivityManager
     private async Task<LiveActivityEntry?> GetEntryAsync(string liveActivityId, CancellationToken ct)
     {
         var json = await cache.GetStringAsync(CacheKey(liveActivityId), ct);
-        return string.IsNullOrEmpty(json) ? null : JsonSerializer.Deserialize<LiveActivityEntry>(json);
+        return string.IsNullOrEmpty(json) ? null : JsonSerializer.Deserialize<LiveActivityEntry>(json, jsonSerializerOptions);
     }
 
     private Task SaveEntryAsync(LiveActivityEntry entry, CancellationToken ct)
