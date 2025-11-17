@@ -43,21 +43,21 @@ public static class CommonConstants
         /// <summary>
         /// Gets the custom header that represents an activity id.
         /// </summary>
-        public const string HeaderActivityId = @"x-avolta-activity-id";
+        public const string HeaderActivityId = @"x-bot-activity-id";
 
         /// <summary>
         /// Gets the custom header that represents a conversation id.
         /// </summary>
-        public const string HeaderConversationId = @"x-avolta-conversation-id";
+        public const string HeaderConversationId = @"x-bot-conversation-id";
 
         /// <summary>
         /// Gets the custom header that represents a user email.
         /// </summary>
-        public const string HeaderUserEmail = @"x-avolta-user-email";
+        public const string HeaderUserEmail = @"x-bot-user-email";
 
         /// <summary>
         /// Gets the custom header that represents a user id.
         /// </summary>
-        public const string HeaderUserId = @"x-avolta-user-id";
+        public const string HeaderUserId = @"x-bot-user-id";
     }
 }

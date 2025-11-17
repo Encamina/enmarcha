@@ -150,7 +150,7 @@ public sealed class LiveActivityManager
 
             return new Attachment
             {
-                ContentType = Encamina.Enmarcha.Net.Http.MediaTypeNames.Application.AdaptativeCard,
+                ContentType = Encamina.Enmarcha.Net.Http.MediaTypeNames.Application.AdaptiveCard,
                 Content = JsonSerializer.Deserialize<object>(jsonEmpty, jsonSerializerOptions),
             };
         }
@@ -196,7 +196,7 @@ public sealed class LiveActivityManager
 
         return new Attachment
         {
-            ContentType = Encamina.Enmarcha.Net.Http.MediaTypeNames.Application.AdaptativeCard,
+            ContentType = Encamina.Enmarcha.Net.Http.MediaTypeNames.Application.AdaptiveCard,
             Content = JsonSerializer.Deserialize<object>(json, jsonSerializerOptions),
         };
     }
