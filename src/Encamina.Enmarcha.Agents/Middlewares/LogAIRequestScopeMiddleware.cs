@@ -38,8 +38,7 @@ internal sealed class LogAIRequestScopeMiddleware
                 .GetMetadata<Microsoft.AspNetCore.Routing.EndpointGroupNameAttribute>()?
                 .EndpointGroupName == CommonConstants.LogAIRequestScopeItems.AI)
         {
-            var scopeState = new Dictionary<string, object>
-        {
+            var scopeState = new Dictionary<string, object> {
             { CommonConstants.LogAIRequestScopeItems.ActivityId, context.GetRequestHeaderValueOrDefault(CommonConstants.LogAIRequestScopeItems.HeaderActivityId) },
             { CommonConstants.LogAIRequestScopeItems.ConversationId, context.GetRequestHeaderValueOrDefault(CommonConstants.LogAIRequestScopeItems.HeaderConversationId) },
             { CommonConstants.LogAIRequestScopeItems.UserId, context.GetRequestHeaderValueOrDefault(CommonConstants.LogAIRequestScopeItems.HeaderUserId) },
