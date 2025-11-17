@@ -15,7 +15,7 @@ public class LiveActivityManagerOptions
     /// <summary>
     /// Gets the sliding expiration duration for cached live activity entries.
     /// </summary>
-    public required TimeSpan CacheSlidingExpiration { get; init; } = TimeSpan.FromHours(3);
+    public TimeSpan CacheSlidingExpiration { get; init; } = TimeSpan.FromHours(3);
 
     /// <summary>
     /// Gets the JSON template for adaptive cards.
