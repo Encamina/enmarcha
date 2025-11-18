@@ -9,6 +9,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <PackageReference Include="AdaptiveCards.Templating" Version="2.0.5" />
       <PackageReference Include="Azure.Data.Tables" Version="12.10.0" />
       <PackageReference Include="Microsoft.Agents.Builder.Dialogs" Version="1.2.41" />
       <PackageReference Include="Microsoft.Agents.Hosting.AspNetCore" Version="1.2.41" />
@@ -16,6 +17,7 @@
       <PackageReference Include="Microsoft.Agents.Storage.CosmosDb" Version="1.2.41" />
       <PackageReference Include="Microsoft.ApplicationInsights" Version="2.23.0" />
       <PackageReference Include="Microsoft.Extensions.Logging.ApplicationInsights" Version="2.23.0" />
+      <PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="8.0.0" />
     </ItemGroup>
 
     <ItemGroup>
@@ -27,6 +29,7 @@
       <ProjectReference Include="..\Encamina.Enmarcha.Conversation\Encamina.Enmarcha.Conversation.csproj" />
       <ProjectReference Include="..\Encamina.Enmarcha.Core\Encamina.Enmarcha.Core.csproj" />
       <ProjectReference Include="..\Encamina.Enmarcha.DependencyInjection\Encamina.Enmarcha.DependencyInjection.csproj" />
+      <ProjectReference Include="..\Encamina.Enmarcha.Net.Http\Encamina.Enmarcha.Net.Http.csproj" />
     </ItemGroup>
 
     <ItemGroup>
