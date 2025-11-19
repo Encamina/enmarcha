@@ -13,8 +13,8 @@ public class SemanticKernelRateLimitMiddleware
 {
     private const string DefaultErrorMessage = @"The request was rate limited. Please try again later.";
 
-    private readonly ILogger<SemanticKernelRateLimitMiddleware> logger;
     private readonly RequestDelegate next;
+    private readonly ILogger<SemanticKernelRateLimitMiddleware> logger;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="SemanticKernelRateLimitMiddleware"/> class.
