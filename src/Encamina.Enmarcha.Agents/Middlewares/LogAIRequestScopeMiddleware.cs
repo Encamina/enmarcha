@@ -10,7 +10,7 @@ namespace Encamina.Enmarcha.Agents.Middlewares;
 /// It extracts specific headers from the request (e.g., ActivityId, UserId)
 /// and includes them in the log scope for better traceability.
 /// </summary>
-internal sealed class LogAIRequestScopeMiddleware
+public class LogAIRequestScopeMiddleware
 {
     private readonly RequestDelegate next;
     private readonly ILogger<LogAIRequestScopeMiddleware> logger;
