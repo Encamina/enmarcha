@@ -101,7 +101,7 @@ public class SemanticKernelRateLimitMiddleware
                 error = DefaultErrorMessage,
             });
 
-            await context.Response.WriteAsync(payload).ConfigureAwait(false);
+            await context.Response.WriteAsync(payload);
             return;
         }
 
