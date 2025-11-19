@@ -1,4 +1,5 @@
 ﻿using System.Runtime.ExceptionServices;
+using System.Text.Json;
 
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
@@ -95,8 +96,13 @@ public class SemanticKernelRateLimitMiddleware
                 }
             }
 
-            await context.Response.WriteAsync(DefaultErrorMessage).ConfigureAwait(false);
-            return; // Stop further processing as we have handled the exception.
+            var payload = JsonSerializer.Serialize(new
+            {
+                error = DefaultErrorMessage,
+            });
+
+            await context.Response.WriteAsync(payload).ConfigureAwait(false);
+            return;
         }
 
         // If the internal exception is not a 429, rethrow the original exception.
