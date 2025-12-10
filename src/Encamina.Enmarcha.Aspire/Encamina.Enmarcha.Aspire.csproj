@@ -7,13 +7,13 @@
     <PropertyGroup>
         <PackageReadmeFile>README.md</PackageReadmeFile>
     </PropertyGroup>
-    
-  <ItemGroup>
-    <PackageReference Include="Aspire.Hosting" Version="8.2.2" />
-  </ItemGroup>
 
     <ItemGroup>
         <None Include="README.md" Pack="true" PackagePath="\" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Aspire.Hosting.AppHost" Version="13.0.2" />
     </ItemGroup>
 
 </Project>
