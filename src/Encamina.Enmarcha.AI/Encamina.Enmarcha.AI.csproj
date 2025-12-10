@@ -12,8 +12,8 @@
     <ProjectReference Include="..\Encamina.Enmarcha.AI.LanguagesDetection.Abstractions\Encamina.Enmarcha.AI.LanguagesDetection.Abstractions.csproj" />
     <ProjectReference Include="..\Encamina.Enmarcha.AI.QuestionsAnswering.Abstractions\Encamina.Enmarcha.AI.QuestionsAnswering.Abstractions.csproj" />
     <ProjectReference Include="..\Encamina.Enmarcha.AI.TextsTranslation.Abstractions\Encamina.Enmarcha.AI.TextsTranslation.Abstractions.csproj" />
-    <PackageReference Include="Microsoft.Extensions.Options" Version="8.0.2" />
-    <PackageReference Include="System.Numerics.Tensors" Version="8.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Options" Version="10.0.1" />
+    <PackageReference Include="System.Numerics.Tensors" Version="10.0.1" />
   </ItemGroup>
 
   <ItemGroup>
