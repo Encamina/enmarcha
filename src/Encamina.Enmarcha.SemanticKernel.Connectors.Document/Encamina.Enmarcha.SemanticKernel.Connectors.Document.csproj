@@ -22,15 +22,15 @@
     <PackageReference Include="BitMiracle.LibTiff.NET" Version="2.4.660" />
     <PackageReference Include="ExcelNumberFormat" Version="1.1.0" />
     <PackageReference Include="HtmlAgilityPack" Version="1.12.0" />
-    <PackageReference Include="Microsoft.Extensions.Http" Version="8.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="8.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Options.DataAnnotations" Version="8.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Http" Version="10.0.1" />
+    <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="10.0.1" />
+    <PackageReference Include="Microsoft.Extensions.Options.DataAnnotations" Version="10.0.1" />
     <PackageReference Include="Microsoft.SemanticKernel.Connectors.AzureOpenAI" Version="1.66.0" />
     <PackageReference Include="Microsoft.SemanticKernel.Plugins.Document" Version="1.64.0-alpha" />
     <PackageReference Include="PdfPig" Version="0.1.10" />
     <PackageReference Include="ScratchPad.NPOI.HWPF" Version="2.5.7" />
-    <PackageReference Include="SixLabors.ImageSharp" Version="3.1.7" />
-    <PackageReference Include="System.Memory.Data" Version="8.0.1" />
+    <PackageReference Include="SixLabors.ImageSharp" Version="3.1.12" />
+    <PackageReference Include="System.Memory.Data" Version="10.0.1" />
   </ItemGroup>
 
   <ItemGroup>
