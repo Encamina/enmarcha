@@ -23,6 +23,7 @@ Previous classification is not required if changes are simple or all belong to t
 - Added the new `CorrelationRehydrationMiddleware` to `DefaultMiddlewareUseRules`. This middleware rehydrates correlations from incoming activities in M365 Agents SDK.
 
 ### Major Changes
+- Upgrade to NET 10.0.
 - Added `Encamina.Enmarcha.AI.Agents`, `Encamina.Enmarcha.AI.Agents.Abstractions` and `Encamina.Enmarcha.Agents.Skills.QuestionAnswering` projects to provide support for the new Microsoft 365 Agents SDK.
 - Added `ICorrelationStore` and `DistributedCacheCorrelationStore` to store correlations (`CorrelationEntry`) in a distributed cache.
 
