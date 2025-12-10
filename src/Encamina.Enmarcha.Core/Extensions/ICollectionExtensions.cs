@@ -1,8 +1,6 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using System.Runtime.CompilerServices;
-using CommunityToolkit.Diagnostics;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using CommunityToolkit.Diagnostics;
 
 namespace Encamina.Enmarcha.Core.Extensions;
 
