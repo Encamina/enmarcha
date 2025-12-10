@@ -1,4 +1,6 @@
 ﻿using CommunityToolkit.Diagnostics;
+using System;
+using System.Collections.Generic;
 
 namespace Encamina.Enmarcha.Core.Extensions;
 
