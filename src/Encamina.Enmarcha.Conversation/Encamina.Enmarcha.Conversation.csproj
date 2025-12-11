@@ -9,7 +9,7 @@
         <None Include="README.md" Pack="true" PackagePath="\" />
         <PackageReference Include="Azure.Data.Tables" Version="12.10.0" />
         <PackageReference Include="Microsoft.Extensions.Caching.Abstractions" Version="10.0.1" />
-        <PackageReference Include="System.Linq.Async" Version="6.0.1" />
+        <PackageReference Include="System.Linq.AsyncEnumerable" Version="10.0.1" />
     </ItemGroup>
 
     <ItemGroup>
