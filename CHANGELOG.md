@@ -18,7 +18,7 @@ Previous classification is not required if changes are simple or all belong to t
 
 ## [10.0.1]
 
-## Minor Changes
+### Minor Changes
 - Updated all Semantic Kernel dependencies to version `1.68.0`.
 
 ## [10.0.0]
