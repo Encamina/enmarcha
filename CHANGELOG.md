@@ -35,7 +35,7 @@ Previous classification is not required if changes are simple or all belong to t
 ## Minor Changes
 - Updated dependencies:
     - Microsoft.Azure.Cosmos from `3.47.2` to `3.49.0`.
-    - Semantic Kernerl Consolitaded to `1.68.0`.
+    - Semantic Kernel Consolidated to `1.68.0`.
 
 - Modified the sample project `Encamina.Enmarcha.Samples.SemanticKernel.DocumentContentExtractor` to develop `MistralAIDocumentConnector`.
 - Added the connector `Encamina.Enmarcha.SemanticKernel.Connectors.Document\Connectors\MistralAIDocumentConnector.cs`: Extracts and processes PDF documents using MistralAI's Pixtral model for markdown extraction, with optional Azure OpenAI-based refinement and intelligent token-aware chunking with hierarchical metadata.
