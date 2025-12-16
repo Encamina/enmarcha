@@ -90,7 +90,7 @@ internal class CachedTableStorageCompositeMetadataHandler : IMetadataHandler
         return await tableClient.QueryAsync<MetadataTableEntity>(cancellationToken: cancellationToken)
                                 .ToDictionaryAsync(e => KeyValuePair.Create(e.IsComposite ? $@"{e.Label}{e.CompositeToken}{e.Value}" : e.Label, e.Value),
                                                    e => BuildRegex(e.Terms, e.TermsSeparatorToken),
-                                                   cancellationToken);
+                                                   cancellationToken: cancellationToken);
     }
 
     private sealed class MetadataTableEntity : ITableEntity

@@ -148,7 +148,7 @@ internal class TableStorageResponseProvider : IIntentResponsesProvider
         await tableClient.CreateIfNotExistsAsync(cancellationToken);
 
         var entities = await tableClient.QueryAsync<ResponsesTableEntity>(cancellationToken: cancellationToken)
-                                        .ToLookupAsync(e => e.Locale.ToUpperInvariant(), cancellationToken);
+                                        .ToLookupAsync(e => e.Locale.ToUpperInvariant(), cancellationToken: cancellationToken);
 
         var intentsByLocale = new Dictionary<string, IDictionary<string, IList<Response>>>();
 

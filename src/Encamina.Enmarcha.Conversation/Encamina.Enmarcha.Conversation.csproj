@@ -2,20 +2,14 @@
 
     <PropertyGroup>
         <TargetFramework>netstandard2.1</TargetFramework>
-    </PropertyGroup>
-
-    <PropertyGroup>
         <PackageReadmeFile>README.md</PackageReadmeFile>
     </PropertyGroup>
 
     <ItemGroup>
         <None Include="README.md" Pack="true" PackagePath="\" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <PackageReference Include="Azure.Data.Tables" Version="12.10.0" />
-      <PackageReference Include="Microsoft.Extensions.Caching.Abstractions" Version="8.0.0" />
-      <PackageReference Include="System.Linq.Async" Version="6.0.1" />
+        <PackageReference Include="Azure.Data.Tables" Version="12.10.0" />
+        <PackageReference Include="Microsoft.Extensions.Caching.Abstractions" Version="10.0.1" />
+        <PackageReference Include="System.Linq.AsyncEnumerable" Version="10.0.1" />
     </ItemGroup>
 
     <ItemGroup>
