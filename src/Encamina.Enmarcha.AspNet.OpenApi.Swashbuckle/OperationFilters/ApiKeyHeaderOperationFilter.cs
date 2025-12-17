@@ -44,10 +44,7 @@ public sealed class ApiKeyHeaderOperationFilter : IOperationFilter
     /// <inheritdoc/>
     public void Apply(OpenApiOperation operation, OperationFilterContext context)
     {
-        if (operation.Parameters == null)
-        {
-            operation.Parameters = new List<OpenApiParameter>();
-        }
+        operation.Parameters ??= [];
 
         operation.Parameters.Add(new OpenApiParameter()
         {

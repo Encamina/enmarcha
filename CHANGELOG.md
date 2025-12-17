@@ -16,6 +16,11 @@ Also, any bug fix must start with the prefix �Bug fix:� followed by the desc
 
 Previous classification is not required if changes are simple or all belong to the same category.
 
+## [10.0.2]
+
+### Major Changes
+- Consolidate `Swashbuckle.AspNetCore.X` packages to version `8.1.4`. Semantic Kernel version `1.68.0` requires `Microsoft.OpenApi` version `1.6.x` which is not compatible with `Swashbuckle.AspNetCore` versions later than `8.x.x`.
+
 ## [10.0.1]
 
 ### Minor Changes
