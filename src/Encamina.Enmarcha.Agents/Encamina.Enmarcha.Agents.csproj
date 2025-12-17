@@ -17,7 +17,7 @@
       <PackageReference Include="Microsoft.Agents.Storage.CosmosDb" Version="1.2.41" />
       <PackageReference Include="Microsoft.ApplicationInsights" Version="2.23.0" />
       <PackageReference Include="Microsoft.Extensions.Logging.ApplicationInsights" Version="2.23.0" />
-      <PackageReference Include="Microsoft.SemanticKernel" Version="1.66.0" />
+      <PackageReference Include="Microsoft.SemanticKernel" Version="1.68.0" />
       <PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="10.0.1" />
     </ItemGroup>
 

@@ -16,6 +16,11 @@ Also, any bug fix must start with the prefix �Bug fix:� followed by the desc
 
 Previous classification is not required if changes are simple or all belong to the same category.
 
+## [10.0.1]
+
+### Minor Changes
+- Updated all Semantic Kernel dependencies to version `1.68.0`.
+
 ## [10.0.0]
 
 ### Breaking Changes
@@ -30,7 +35,7 @@ Previous classification is not required if changes are simple or all belong to t
 ## Minor Changes
 - Updated dependencies:
     - Microsoft.Azure.Cosmos from `3.47.2` to `3.49.0`.
-    - Semantic Kernerl Consolitaded to `1.66.0`.
+    - Semantic Kernel consolidated to `1.66.0`.
 
 - Modified the sample project `Encamina.Enmarcha.Samples.SemanticKernel.DocumentContentExtractor` to develop `MistralAIDocumentConnector`.
 - Added the connector `Encamina.Enmarcha.SemanticKernel.Connectors.Document\Connectors\MistralAIDocumentConnector.cs`: Extracts and processes PDF documents using MistralAI's Pixtral model for markdown extraction, with optional Azure OpenAI-based refinement and intelligent token-aware chunking with hierarchical metadata.
