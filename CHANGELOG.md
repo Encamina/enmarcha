@@ -16,31 +16,43 @@ Also, any bug fix must start with the prefix �Bug fix:� followed by the desc
 
 Previous classification is not required if changes are simple or all belong to the same category.
 
+## [10.0.3]
+
+### Minor Changes
+
+- Updated all Semantic Kernel dependencies to version `1.74.0`.
+- Aligned `Microsoft.Extensions.DependencyInjection.Abstractions` and `Microsoft.Extensions.Options` package versions with the transitive requirements introduced by Semantic Kernel `1.74.0`.
+
 ## [10.0.2]
 
 ### Major Changes
+
 - Consolidate `Swashbuckle.AspNetCore.X` packages to version `8.1.4`. Semantic Kernel version `1.68.0` requires `Microsoft.OpenApi` version `1.6.x` which is not compatible with `Swashbuckle.AspNetCore` versions later than `8.x.x`.
 
 ## [10.0.1]
 
 ### Minor Changes
+
 - Updated all Semantic Kernel dependencies to version `1.68.0`.
 
 ## [10.0.0]
 
 ### Breaking Changes
+
 - Removed `Encamina.Enmarcha.Bot`, `Encamina.Enmarcha.Bot.Abstractions` and `Encamina.Enmarcha.Bot.Skills.QuestionAnswering` projects.
 - Added the new `CorrelationRehydrationMiddleware` to `DefaultMiddlewareUseRules`. This middleware rehydrates correlations from incoming activities in M365 Agents SDK.
 
 ### Major Changes
+
 - Upgrade to NET 10.0.
 - Added `Encamina.Enmarcha.AI.Agents`, `Encamina.Enmarcha.AI.Agents.Abstractions` and `Encamina.Enmarcha.Agents.Skills.QuestionAnswering` projects to provide support for the new Microsoft 365 Agents SDK.
 - Added `ICorrelationStore` and `DistributedCacheCorrelationStore` to store correlations (`CorrelationEntry`) in a distributed cache.
 
 ## Minor Changes
+
 - Updated dependencies:
-    - Microsoft.Azure.Cosmos from `3.47.2` to `3.49.0`.
-    - Semantic Kernel consolidated to `1.66.0`.
+  - Microsoft.Azure.Cosmos from `3.47.2` to `3.49.0`.
+  - Semantic Kernel consolidated to `1.66.0`.
 
 - Modified the sample project `Encamina.Enmarcha.Samples.SemanticKernel.DocumentContentExtractor` to develop `MistralAIDocumentConnector`.
 - Added the connector `Encamina.Enmarcha.SemanticKernel.Connectors.Document\Connectors\MistralAIDocumentConnector.cs`: Extracts and processes PDF documents using MistralAI's Pixtral model for markdown extraction, with optional Azure OpenAI-based refinement and intelligent token-aware chunking with hierarchical metadata.
@@ -53,26 +65,30 @@ Previous classification is not required if changes are simple or all belong to t
 **This is the last version of ENMARCHA libraries to use the [Microsoft Bot Framework](https://learn.microsoft.com/en-us/azure/bot-service/), which is being deprecated and replaced by the new [Microsoft Agent SDK](https://github.com/Microsoft/Agents).**
 
 ### Major Changes
+
 - Updated Semantic Kernel from `1.42.0` to `1.64.0`.
 
 - Updated dependencies:
-    - Microsoft.SemanticKernel.Core 1.42.0 -> 1.64.0
-    - Microsoft.SemanticKernel.Plugins.Memory 1.42.0 -> 1.64.0
-    - Microsoft.SemanticKernel.Connectors.AzureOpenAI 1.42.0 -> 1.64.0
-    - Microsoft.SemanticKernel.Plugins.Document 1.42.0 -> 1.64.0
-    - Microsoft.SemanticKernel.Connectors.AzureAISearch 1.42.0 -> 1.64.0
-    - Microsoft.SemanticKernel.Connectors.Qdrant 1.42.0 -> 1.64.0
-    - Microsoft.SemanticKernel.Abstractions 1.42.0 -> 1.64.0
+  - Microsoft.SemanticKernel.Core 1.42.0 -> 1.64.0
+  - Microsoft.SemanticKernel.Plugins.Memory 1.42.0 -> 1.64.0
+  - Microsoft.SemanticKernel.Connectors.AzureOpenAI 1.42.0 -> 1.64.0
+  - Microsoft.SemanticKernel.Plugins.Document 1.42.0 -> 1.64.0
+  - Microsoft.SemanticKernel.Connectors.AzureAISearch 1.42.0 -> 1.64.0
+  - Microsoft.SemanticKernel.Connectors.Qdrant 1.42.0 -> 1.64.0
+  - Microsoft.SemanticKernel.Abstractions 1.42.0 -> 1.64.0
 
 ### Minor Changes
+
 - Added `AuthorizationScope` property to `AzureOpenAIOptions` to specify the authorization scope.
 
 ### Minor Changes
+
 - Removed `Encamina.Enmarcha.Samples.SemanticKernel.QuestionAnswering` project.
 
 ## [8.2.1]
 
 ### Major Changes
+
 - Added Azure authentication support via TokenCredential in `LocalizedHeroCardGreetingsOptionsFromTableStorage` and `TableStorageResponseProvider`.
 - Added a new sample project: `Encamina.Enmarcha.Samples.SemanticKernel.DocumentContentExtractor`, demonstrating how to extract content from documents using Semantic Kernel connectors and vision capabilities.
   - Interactive console example allowing content extraction from `.docx`, `.pptx`, `.txt`, `.md`, `.jpg`, `.jpeg`, `.png`, and `.pdf` files.
@@ -85,7 +101,7 @@ Previous classification is not required if changes are simple or all belong to t
 - Added a new connector `SkVisionWordDocumentConnector` to extract text, tables, hyperlinks and images from Word documents (.docx) using Semantic Kernel vision capabilities in image extractions. This capacity to extract the description for each image is realized using the existing `SkVisionImageExtractor`. This functionality is compatible with the previous `WordDocumentConector` implementation, so it can be used interchangeably using the `WordDocumentConnector:UseImageExtractor` setting.
 - Added Azure authentication support via TokenCredential in `CosmosInitializer`.
 - Added Azure authentication support via TokenCredential in Azure AI Search.
- 
+
 - Updated dependencies:
   - Aspire.Hosting 8.2.1 → 8.2.2
   - Azure.AI.OpenAI 2.1.0-beta.1 → 2.2.0-beta.1
@@ -132,16 +148,17 @@ Previous classification is not required if changes are simple or all belong to t
   - xunit.runner.visualstudio 2.8.1 → 3.0.2
 
 ### Minor Changes
+
 - Updated the `BinaryData.FromStream` method in `SKVisionImageExtractor.cs` to a more robust custom implementation `ProcessImageAndGetBinary` implemented in `ImageHelper.cs`.
 - Added new methods for the `ImageHelper.cs` class for extract images in PDF's:
-    - Added `TryDecompressZlib` method that attempts to decompress compressed bytes from images.
-    - Added `ProcessImageAndGetBinary` for processing an image and returning its binary data.
-    - Added `EnsureImageSharpCompatible` for ensuring the image is compatible with ImageSharp.
-    - Added `DetectImageInfo` for detecting image information.
-    - Added `ConvertPbmP4ToPng` for converting PBM or P4 images to PNG format.
-    - Added `ConvertCcittTiffToPng` for converting CCITT TIFF images to PNG format.
-    - Added `WrapRawCcittAsTiff` for wrapping raw CCITT data as a TIFF image.
-    - Added `ProcessImageStream` for processing an image stream.
+  - Added `TryDecompressZlib` method that attempts to decompress compressed bytes from images.
+  - Added `ProcessImageAndGetBinary` for processing an image and returning its binary data.
+  - Added `EnsureImageSharpCompatible` for ensuring the image is compatible with ImageSharp.
+  - Added `DetectImageInfo` for detecting image information.
+  - Added `ConvertPbmP4ToPng` for converting PBM or P4 images to PNG format.
+  - Added `ConvertCcittTiffToPng` for converting CCITT TIFF images to PNG format.
+  - Added `WrapRawCcittAsTiff` for wrapping raw CCITT data as a TIFF image.
+  - Added `ProcessImageStream` for processing an image stream.
 - Added new class `ImageInfo` to encapsulate image types information.
 
 ## [8.2.0]
@@ -150,13 +167,14 @@ Previous classification is not required if changes are simple or all belong to t
 
 - Semantic Kernel has been updated to `1.24.1`, migrating OpenAI and AzureOpenAI services to use the new OpenAI SDK v2.0 and Azure OpenAI SDK v2.0 SDKs. You can follow the [Migration Guide](https://learn.microsoft.com/en-us/semantic-kernel/support/v2-openai-migration-guide).
 - Removed the `ICompletionService` interface from `Encamina.Enmarcha.AI.OpenAI.Abstractions` and its implementation, `CompletionService`, from `Encamina.Enmarcha.AI.OpenAI.Azure`, as the OpenAI SDK 2.0 no longer includes the completion endpoint.
-    - Removed `CompletionServiceOptions`, `ICompletionServiceFactoryProvider`, `ICompletionServiceFactory`, `CompletionResult`, `CompletionRequest`, `Completion`, `CompletionServiceFactory`, `CompletionServiceFactoryProvider` they are not longer necessary.  
+  - Removed `CompletionServiceOptions`, `ICompletionServiceFactoryProvider`, `ICompletionServiceFactory`, `CompletionResult`, `CompletionRequest`, `Completion`, `CompletionServiceFactory`, `CompletionServiceFactoryProvider` they are not longer necessary.  
 
 ### Major Changes
+
 - Updated dependencies:
-    - Updated all `Microsoft.SemanticKernel.XXX` packages to `1.24.1`
-    - Updated `System.Text.Json` from `8.0.4` to `8.0.5`
-    
+  - Updated all `Microsoft.SemanticKernel.XXX` packages to `1.24.1`
+  - Updated `System.Text.Json` from `8.0.4` to `8.0.5`
+
 ## [8.1.9]
 
 ### Major Changes
@@ -172,14 +190,14 @@ Previous classification is not required if changes are simple or all belong to t
 - Enchanced `JsonUtils` with new methods: `FastCheckIsJson` and `IsAnAdaptiveCard`.
 - Added new `AtLeastOneRequiredSchemaFilter` to ensure OpenAPI schemas enforce that at least one of the specified properties is required, by modifying the schema to use the `anyOf` rule in Swagger documentation generation.
 - Added two new connectors to `Encamina.Enmarcha.SemanticKernel.Connectors.Document`:
-    - Document connector for reading `.doc` files: `DocDocumentConnector`.
-    - Document connector for reading `.html` files: `HtmlDocumentConnector`.
+  - Document connector for reading `.doc` files: `DocDocumentConnector`.
+  - Document connector for reading `.html` files: `HtmlDocumentConnector`.
 
 ## [8.1.8]
 
-### Breaking Changes 
+### Breaking Changes
 
-- `DocumentConnectorProviderBase` no longer automatically registers document connectors. Instead, it will register available connectors in the dependency container. 
+- `DocumentConnectorProviderBase` no longer automatically registers document connectors. Instead, it will register available connectors in the dependency container.
   This means that document connectors must be registered manually in the dependency container. For this purpose, new extension methods have been added to `IServiceCollection` that allow to register document connectors in the dependency container.
   Also the `AddDefaultDocumentConnectors` method has been added in `IServiceCollectionExtensions` to register document connectors that were registered by default before.
 
@@ -189,7 +207,7 @@ Previous classification is not required if changes are simple or all belong to t
 - Added `CsvTsvDocumentConnector` document connector that allows to read CSV and TSV files keeping the headers in different chunks.
 - Added `SkVisionImageDocumentConnector` which allows to read images and extract text from them. Using Semantic Kernel vision capabilities. You can configure the connector with the `SkVisionImageDocumentConnectorOptions` class.
 - The `IDocumentConnectorProvider` interface now works with the `IEnframeDocumentConnector` interface instead of `IDocumentConnector`.
-    - The `AddDocumentConnector` function has been modified by removing the `fileExtension` parameter, which will now come in the `CompatibleFileFormats` property of the document connector.
+  - The `AddDocumentConnector` function has been modified by removing the `fileExtension` parameter, which will now come in the `CompatibleFileFormats` property of the document connector.
 - The `ParagraphPptxDocumentConnector` class is no longer sealed, allowing the creation of derived classes.
 - The `SlidePptxDocumentConnector` class is no longer sealed, allowing the creation of derived classes.
 - The `TxtDocumentConnector` class is no longer sealed, allowing the creation of derived classes.
@@ -200,24 +218,24 @@ Previous classification is not required if changes are simple or all belong to t
   - Moved `TableStorageResponseProvider` class to `Encamina.Enmarcha.Conversation`.
   - Updated `LocalizedResponseGreetingsProvider.cs` to use new abstractions.
 - Updated dependencies:
-    - Updated all `Microsoft.SemanticKernel.XXX` packages to `1.17.2`
-    - Updated Azure.Core from 1.40.0 to 1.43.0
-    - Updated Azure.Data.Tables from 12.8.3 to 12.9.0
-    - Updated Bogus from 35.5.1 to 35.6.1
-    - Updated Encamina.Enmarcha.Testing.Smtp from MimeKit 4.5.0 to 4.7.1
-    - Updated MailKit from 4.7.0 to 4.7.1.1
-    - Updated Microsoft.AspNetCore.Authentication.JwtBearer from 8.0.6 to 8.0.8
-    - Updated Microsoft.Azure.Cosmos from 3.41.0 to 3.43.0
-    - Updated Microsoft.Bot.Builder.Azure from 4.22.7 to 4.22.8
-    - Updated Microsoft.Bot.Builder.Azure.Blobs from 4.22.7 to 4.22.8
-    - Updated Microsoft.Bot.Builder.Dialogs from 4.22.7 to 4.22.8
-    - Updated Microsoft.Bot.Builder.Integration.ApplicationInsights.Core from 4.22.7 to 4.22.8
-    - Updated Microsoft.Bot.Builder.Integration.AspNet.Core from 4.22.7 to 4.22.8
-    - Updated Microsoft.EntityFrameworkCore from 8.0.6 to 8.0.8
-    - Updated Microsoft.EntityFrameworkCore.SqlServer from 8.0.6 to 8.0.8
-    - Updated Microsoft.Extensions.Azure from 1.7.4 to 1.7.5
-    - Updated Swashbuckle.AspNetCore.SwaggerGen from 6.6.2 to 6.7.3
-    - Updated System.Text.Json from 8.0.3 to 8.0.4
+  - Updated all `Microsoft.SemanticKernel.XXX` packages to `1.17.2`
+  - Updated Azure.Core from 1.40.0 to 1.43.0
+  - Updated Azure.Data.Tables from 12.8.3 to 12.9.0
+  - Updated Bogus from 35.5.1 to 35.6.1
+  - Updated Encamina.Enmarcha.Testing.Smtp from MimeKit 4.5.0 to 4.7.1
+  - Updated MailKit from 4.7.0 to 4.7.1.1
+  - Updated Microsoft.AspNetCore.Authentication.JwtBearer from 8.0.6 to 8.0.8
+  - Updated Microsoft.Azure.Cosmos from 3.41.0 to 3.43.0
+  - Updated Microsoft.Bot.Builder.Azure from 4.22.7 to 4.22.8
+  - Updated Microsoft.Bot.Builder.Azure.Blobs from 4.22.7 to 4.22.8
+  - Updated Microsoft.Bot.Builder.Dialogs from 4.22.7 to 4.22.8
+  - Updated Microsoft.Bot.Builder.Integration.ApplicationInsights.Core from 4.22.7 to 4.22.8
+  - Updated Microsoft.Bot.Builder.Integration.AspNet.Core from 4.22.7 to 4.22.8
+  - Updated Microsoft.EntityFrameworkCore from 8.0.6 to 8.0.8
+  - Updated Microsoft.EntityFrameworkCore.SqlServer from 8.0.6 to 8.0.8
+  - Updated Microsoft.Extensions.Azure from 1.7.4 to 1.7.5
+  - Updated Swashbuckle.AspNetCore.SwaggerGen from 6.6.2 to 6.7.3
+  - Updated System.Text.Json from 8.0.3 to 8.0.4
 
 ### Minor Changes
 
@@ -277,16 +295,16 @@ Previous classification is not required if changes are simple or all belong to t
   - `Encamina.Enmarcha.Data`
   - `Encamina.Enmarcha.Email`
   - `Encamina.Enmarcha.Entities`
-  - `Encamina.Enmarcha.SemanticKernel` 
+  - `Encamina.Enmarcha.SemanticKernel`
   - `Encamina.Enmarcha.Services`
 
 ## [8.1.6]
 
-### Breaking Changes 
+### Breaking Changes
 
 - Class `IDocumentConnectorUtils` has been removed. Please use an instance of `IDocumentConnectorProvider` and the method `SupportedFileExtension` to check if the file extension is supported and the method `GetDocumentConnector` to get the appropriate document connector.
 - The method `GetDocumentConnector` from interface type `IDocumentConnectorProvider` now throws `InvalidOperationException` if a connector for the specified file extension is not found.
-- Renamed `UserId` to `IndexerId` in `ChatMessageHistoryRecord`. This change requires consumers to update their database to match the new property name. 
+- Renamed `UserId` to `IndexerId` in `ChatMessageHistoryRecord`. This change requires consumers to update their database to match the new property name.
   - In case of using Cosmos DB, `IndexerId` should be the new partition key of the collection. You can learn how to change the partition key and do the data migration [here](https://learn.microsoft.com/en-us/azure/cosmos-db/nosql/change-partition-key).
 - Split the `OpenAIOptions` class into two separate classes:
   - Created a new abstract class `OpenAIOptionsBase` containing common properties related to OpenAI model configuration.
@@ -345,14 +363,14 @@ Previous classification is not required if changes are simple or all belong to t
   - `Encamina.Enmarcha.AI`.
   - `Encamina.Enmarcha.AspNet`
 - Corrected a typo in the Spanish error message in `ResponseMessages.es.resx` from "ha encontrar" to "ha encontrado".
- 
+
 ## [8.1.5]
 
-### Breaking Changes 
+### Breaking Changes
 
- - In `AzureOpenAIOptions` the default value of `ServiceVersion` changes from `V2023_12_01_Preview` to `V2024_02_15_Preview` since the former is **deprecated**.
- - In the `QuestionAnsweringFromMemoryQuery` function of the `QuestionAnsweringPlugin`, a `null` value is no longer returned when there are no relevant memory results. Instead, the execution flow continues, prompting a message with an empty context information, ultimately resulting in a response such as "I don't know" or a similar message.
- - Added a new method `GetDocumentContentAsync` to the `IDocumentContentExtractor` interface, which is now required to be implemented.
+- In `AzureOpenAIOptions` the default value of `ServiceVersion` changes from `V2023_12_01_Preview` to `V2024_02_15_Preview` since the former is **deprecated**.
+- In the `QuestionAnsweringFromMemoryQuery` function of the `QuestionAnsweringPlugin`, a `null` value is no longer returned when there are no relevant memory results. Instead, the execution flow continues, prompting a message with an empty context information, ultimately resulting in a response such as "I don't know" or a similar message.
+- Added a new method `GetDocumentContentAsync` to the `IDocumentContentExtractor` interface, which is now required to be implemented.
 
 ### Major Changes
 
@@ -399,46 +417,48 @@ Previous classification is not required if changes are simple or all belong to t
 
 ### Important
 
-Some features from `Semantic Kernel` that we might have been using, are marked as ***experimental*** and produce warnings that do not allow the compilation of the code. To use these features, these warnings must be ignored explicitly per project. The following is a list of these warnings and the affected projects:
+Some features from `Semantic Kernel` that we might have been using, are marked as _**experimental**_ and produce warnings that do not allow the compilation of the code. To use these features, these warnings must be ignored explicitly per project. The following is a list of these warnings and the affected projects:
+
 - SKEXP0001:
-    - `Encamina.Enmarcha.SemanticKernel.Abstractions`
-    - `Encamina.Enmarcha.SemanticKernel.Connectors.Memory`
-    - `Encamina.Enmarcha.SemanticKernel.Plugins.Memory`
-    - `Encamina.Enmarcha.SemanticKernel.Plugins.QuestionAnswering`
-    - `Encamina.Enmarcha.Samples.SemanticKernel.QuestionAnswering`
+  - `Encamina.Enmarcha.SemanticKernel.Abstractions`
+  - `Encamina.Enmarcha.SemanticKernel.Connectors.Memory`
+  - `Encamina.Enmarcha.SemanticKernel.Plugins.Memory`
+  - `Encamina.Enmarcha.SemanticKernel.Plugins.QuestionAnswering`
+  - `Encamina.Enmarcha.Samples.SemanticKernel.QuestionAnswering`
 - SKEXP0010:
-    - `Encamina.Enmarcha.SemanticKernel.Connectors.Memory`
-    - `Encamina.Enmarcha.Samples.SemanticKernel.QuestionAnswering`
+  - `Encamina.Enmarcha.SemanticKernel.Connectors.Memory`
+  - `Encamina.Enmarcha.Samples.SemanticKernel.QuestionAnswering`
 - SKEXP0020:
-    - `Encamina.Enmarcha.SemanticKernel.Connectors.Memory`
+  - `Encamina.Enmarcha.SemanticKernel.Connectors.Memory`
 - SKEXP0050:
-    - `Encamina.Enmarcha.SemanticKernel.Connectors.Document`
-    - `Encamina.Enmarcha.Samples.SemanticKernel.QuestionAnswering`
+  - `Encamina.Enmarcha.SemanticKernel.Connectors.Document`
+  - `Encamina.Enmarcha.Samples.SemanticKernel.QuestionAnswering`
 
 Some warnings have also been removed with the new `Semantic Kernel` updates.
-- SKEXP0003:
-    - `Encamina.Enmarcha.Samples.SemanticKernel.QuestionAnswering`
-    - `Encamina.Enmarcha.SemanticKernel`
-    - `Encamina.Enmarcha.SemanticKernel.Abstractions`
-    - `Encamina.Enmarcha.SemanticKernel.Connectors.Memory`
-    - `Encamina.Enmarcha.SemanticKernel.Plugins.Memory`
-    - `Encamina.Enmarcha.SemanticKernel.Plugins.QuestionAnswering`
-- SKEXP0011:
-    - `Encamina.Enmarcha.Samples.SemanticKernel.QuestionAnswering`
-    - `Encamina.Enmarcha.SemanticKernel.Connectors.Memory`
-- SKEXP0021:
-    - `Encamina.Enmarcha.SemanticKernel.Connectors.Memory`
-- SKEXP0026:
-    - `Encamina.Enmarcha.SemanticKernel.Connectors.Memory` 
-- SKEXP0051:
-    - `Encamina.Enmarcha.SemanticKernel.Connectors.Document`
-- SKEXP0052:
-    - `Encamina.Enmarcha.Samples.SemanticKernel.QuestionAnswering`
 
+- SKEXP0003:
+  - `Encamina.Enmarcha.Samples.SemanticKernel.QuestionAnswering`
+  - `Encamina.Enmarcha.SemanticKernel`
+  - `Encamina.Enmarcha.SemanticKernel.Abstractions`
+  - `Encamina.Enmarcha.SemanticKernel.Connectors.Memory`
+  - `Encamina.Enmarcha.SemanticKernel.Plugins.Memory`
+  - `Encamina.Enmarcha.SemanticKernel.Plugins.QuestionAnswering`
+- SKEXP0011:
+  - `Encamina.Enmarcha.Samples.SemanticKernel.QuestionAnswering`
+  - `Encamina.Enmarcha.SemanticKernel.Connectors.Memory`
+- SKEXP0021:
+  - `Encamina.Enmarcha.SemanticKernel.Connectors.Memory`
+- SKEXP0026:
+  - `Encamina.Enmarcha.SemanticKernel.Connectors.Memory`
+- SKEXP0051:
+  - `Encamina.Enmarcha.SemanticKernel.Connectors.Document`
+- SKEXP0052:
+  - `Encamina.Enmarcha.Samples.SemanticKernel.QuestionAnswering`
 
 ## [8.1.4]
 
 ### Major Changes
+
 - Updated dependencies:
   - Updated `Microsoft.AspNetCore.Authentication.JwtBearer` from `8.0.1` to `8.0.2`.
   - Updated `Microsoft.AspNetCore.Authentication.OpenIdConnect` from `8.0.1` to `8.0.2`.
@@ -461,12 +481,14 @@ Some warnings have also been removed with the new `Semantic Kernel` updates.
 ## [8.1.3]
 
 ### Breaking Changes  
+
 - Removed `HistoryMaxMessages` property from `ChatWithHistoryPluginOptions` as part of a refactor to improve the configuration management of chat history. This property is now available within a new dedicated class `ChatHistoryProviderOptions`, which is designed to configure aspects of the `IChatHistoryProvider` implementation.
 - The method `ImportChatWithHistoryPluginUsingCosmosDb` has been renamed to `ImportChatWithHistoryPlugin` to reflect its decoupling from the specific storage implementation and to align with the new `IChatHistoryProvider` abstraction. This change requires consumers to update their method calls to match the new signature, and to provide an instance of `IChatHistoryProvider` in the dependency container. You can use `AddCosmosChatHistoryProvider` to add an instance of `IChatHistoryProvider` that uses Azure Cosmos DB for storing chat histories.
-- Modified the `ChatAsync` method signature in `ChatWithHistoryPlugin` by changing the order of parameters and making `userName` and `locale` optional. This change requires consumers to update their method calls to match the new signature. 
-- The `KernelExtensions.cs` and `ChatWithHistoryPluginOptions.cs` files in `Encamina.Enmarcha.SemanticKernel.Plugins.Chat` had been moved to a new location to better align with the project's structure. 
+- Modified the `ChatAsync` method signature in `ChatWithHistoryPlugin` by changing the order of parameters and making `userName` and `locale` optional. This change requires consumers to update their method calls to match the new signature.
+- The `KernelExtensions.cs` and `ChatWithHistoryPluginOptions.cs` files in `Encamina.Enmarcha.SemanticKernel.Plugins.Chat` had been moved to a new location to better align with the project's structure.
 
 ### Major Changes
+
 - Introduced `IChatHistoryProvider` interface and its corresponding implementation `ChatHistoryProvider`. This new abstraction layer provides a more flexible and decoupled way to work with chat history.
 - Added a new extension method `AddCosmosChatHistoryProvider` to the service collection extensions. This method streamlines the setup and registration of `IChatHistoryProvider` that uses Azure Cosmos DB for storing chat histories.
 - Removed direct dependency on `IAsyncRepository<ChatMessageHistoryRecord>` in `ChatWithHistoryPlugin`, now relying on `IChatHistoryProvider` for chat history management.  
@@ -487,6 +509,7 @@ Some warnings have also been removed with the new `Semantic Kernel` updates.
   - Updated `SharpToken` from `1.2.14` to `1.2.15`.
 
 ### Minor Changes
+
 - Added `Description` property in `VersionSwaggerGenOptions`.
 - New text prompt function for extract KeyPhrases with specified locale, `KeyPhrasesLocaled`.
 - Added an example of using `KeyPhrasesLocaled` in `Encamina.Enmarcha.Samples.SemanticKernel.Text`.
@@ -497,9 +520,9 @@ Some warnings have also been removed with the new `Semantic Kernel` updates.
 - Added a new optional parameter `Locale` to the functions of `QuestionAnsweringPlugin`, to specify the language of the response.
 - Improved memory store event types, when they are raised and the data inside the arguments.
 - Added new package `Encamina.Enmarcha.AspNet.OpenApi` with some goodies for OpenAPI. Currently, it adds the following:
-    - `GroupNameKeyAuthorizationMiddleware` a middleware that provides key authorization for OpenAPI specifications based on the group name of an API.
-    - `GroupNameKeyAuthenticationOptions` an options class to configure the `GroupNameKeyAuthorizationMiddleware`.
-    - Extensions method on `IApplicationBuilder` to add the `GroupNameKeyAuthorizationMiddleware`. For more information, refer to the package `README.md`.
+  - `GroupNameKeyAuthorizationMiddleware` a middleware that provides key authorization for OpenAPI specifications based on the group name of an API.
+  - `GroupNameKeyAuthenticationOptions` an options class to configure the `GroupNameKeyAuthorizationMiddleware`.
+  - Extensions method on `IApplicationBuilder` to add the `GroupNameKeyAuthorizationMiddleware`. For more information, refer to the package `README.md`.
 - Adjusted package references in `Encamina.Enmarcha.SemanticKernel.csproj` to include `Encamina.Enmarcha.Data.Abstractions`.  
 
 ## [8.1.2]
@@ -508,11 +531,13 @@ Some warnings have also been removed with the new `Semantic Kernel` updates.
 
 This version updates the `Semantic Kernel` library from version `1.1.0` to `1.3.0`, which introduces minor changes in the code, mostly internal dependencies.
 
-For more information about these changes, please visit the following links: 
- - [Semantic Kernel release dotnet-1.2.0](https://github.com/microsoft/semantic-kernel/releases/tag/dotnet-1.2.0)
- - [Semantic Kernel release dotnet-1.3.0](https://github.com/microsoft/semantic-kernel/releases/tag/dotnet-1.3.0)
+For more information about these changes, please visit the following links:
+
+- [Semantic Kernel release dotnet-1.2.0](https://github.com/microsoft/semantic-kernel/releases/tag/dotnet-1.2.0)
+- [Semantic Kernel release dotnet-1.3.0](https://github.com/microsoft/semantic-kernel/releases/tag/dotnet-1.3.0)
 
 ### Breaking Changes
+
 - Replace dependency with `IMemoryStore` for `IMemoryManager` in abstract class `MemoryStoreHandlerBase`. This affects internal types like the `EphemeralMemoryStoreHandler`.
 - Removed visibility modifiers in `IMemoryManager` interface.
 - Signature of `UpsertMemoryAsync` method has changed in `IMemoryManager` interface.
@@ -521,6 +546,7 @@ For more information about these changes, please visit the following links:
 - Added method overloads to pass `Encamina.Enmarcha.AI.Abstractions.TextSplitterOptions` when splitting text in `Encamina.Enmarcha.AI.Abstractions.ITextSplitter` and its implementations.
 
 ### Major change
+
 - Method `GetDocumentConnector` in `DocumentContentExtractorBase` is now `public` instead of `protected`.
 - New `MemoryManager` property of type `IMemoryManager` in `IMemoryStoreHandler` interface to get read-only access to the underlaying memory manager.
 - New `MemoryStore` property of type `IMemoryStore` in `IMemoryManager` interface to get read-only access to the underlaying memory store.
@@ -537,6 +563,7 @@ For more information about these changes, please visit the following links:
   - Updated `Microsoft.Bot.Builder.Integration.ApplicationInsights.Core` from version `4.21.2` to `4.22.0`.
 
 ### Minor Changes
+
 - Properties `CollectionNamePostfix` and `CollectionNamePrefix` from `MemoryStoreHandlerBase` are now `virtual` instead of `abstract`.
 - In `EphemeralMemoryStoreHandler`, property `CollectionNamePrefix` has the value `ephemeral-` fixed.
 - Fixed some typos and grammatical errors (mostly on code comments).
@@ -556,7 +583,8 @@ For more information about these changes, please visit the following links:
 ## [8.1.1]
 
 ### Minor Changes
-  - Fixed `BuildConfiguration` not set to Release in `.github/workflows/main.yml` for the main branch. [(#31)](https://github.com/Encamina/enmarcha/issues/31)
+
+- Fixed `BuildConfiguration` not set to Release in `.github/workflows/main.yml` for the main branch. [(#31)](https://github.com/Encamina/enmarcha/issues/31)
 
 ## [8.1.0]
 
@@ -564,42 +592,42 @@ For more information about these changes, please visit the following links:
 
 This version updates the `Semantic Kernel` library from version `1.0.0-beta8` to `1.1.0`, which introduces a lot of breaking changes in the code.
 
-Sadly, some features from `Semantic Kernel` that we might have been using, are marked as ***experimental*** and produce warnings that do not allow the compilation of the code. To use these features, these warnings must be ignored explicitly per project. The following is a list of these warnings and the affected projects:
+Sadly, some features from `Semantic Kernel` that we might have been using, are marked as _**experimental**_ and produce warnings that do not allow the compilation of the code. To use these features, these warnings must be ignored explicitly per project. The following is a list of these warnings and the affected projects:
 
- - SKEXP0001: 
-   - `Encamina.Enmarcha.SemanticKernel`   
- - SKEXP0003: 
-   - `Encamina.Enmarcha.SemanticKernel`
-   - `Encamina.Enmarcha.SemanticKernel.Abstractions`
-   - `Encamina.Enmarcha.SemanticKernel.Connectors.Memory`
-   - `Encamina.Enmarcha.SemanticKernel.Plugins.Memory`
-   - `Encamina.Enmarcha.SemanticKernel.Plugins.QuestionAnswering`
- - SKEXP0011:
-   - `Encamina.Enmarcha.SemanticKernel.Connectors.Memory`
- - SKEXP0026: 
-   - `Encamina.Enmarcha.SemanticKernel.Connectors.Memory`
- - SKEXP0051:
-   - `Encamina.Enmarcha.SemanticKernel.Connectors.Document`
+- SKEXP0001:
+  - `Encamina.Enmarcha.SemanticKernel`
+- SKEXP0003:
+  - `Encamina.Enmarcha.SemanticKernel`
+  - `Encamina.Enmarcha.SemanticKernel.Abstractions`
+  - `Encamina.Enmarcha.SemanticKernel.Connectors.Memory`
+  - `Encamina.Enmarcha.SemanticKernel.Plugins.Memory`
+  - `Encamina.Enmarcha.SemanticKernel.Plugins.QuestionAnswering`
+- SKEXP0011:
+  - `Encamina.Enmarcha.SemanticKernel.Connectors.Memory`
+- SKEXP0026:
+  - `Encamina.Enmarcha.SemanticKernel.Connectors.Memory`
+- SKEXP0051:
+  - `Encamina.Enmarcha.SemanticKernel.Connectors.Document`
 
- More information about these warnings is available here: https://github.com/microsoft/semantic-kernel/blob/main/dotnet/docs/EXPERIMENTS.md
+ More information about these warnings is available here: <https://github.com/microsoft/semantic-kernel/blob/main/dotnet/docs/EXPERIMENTS.md>
 
 ### Breaking Changes
 
 - Replaced class `Completition` for `Completion` in `Encamina.Enmarcha.AI.OpenAI.Abstractions`. It was misspelled.
-- Class `SemanticKernelOptions` does not exists anymore. It has been replaced by `AzureOpenAIOptions` from `Encamina.Enmarcha.AI.OpenAI.Abstractions`. 
+- Class `SemanticKernelOptions` does not exists anymore. It has been replaced by `AzureOpenAIOptions` from `Encamina.Enmarcha.AI.OpenAI.Abstractions`.
 - The following references were updated due to changes in `Semantic Kernel` version `1.0.1`:
- - Changed `IKernel` for `Kernel`.
- - Changed `ISKFunction` for `KernelFunction` or `KernelPlugin`.
- - Changed `SKFunction` for `KernelFunction`.
- - Changed `ContextVariables` for `KernelArguments`.
- - Changed `kernel.Functions.GetFunction(...)` for `kernel.Plugins[<name of plugin>][<name of function>]`.
- - Changed `OpenAIRequestSettings` for `OpenAIPromptExecutionSettings`.
+- Changed `IKernel` for `Kernel`.
+- Changed `ISKFunction` for `KernelFunction` or `KernelPlugin`.
+- Changed `SKFunction` for `KernelFunction`.
+- Changed `ContextVariables` for `KernelArguments`.
+- Changed `kernel.Functions.GetFunction(...)` for `kernel.Plugins[<name of plugin>][<name of function>]`.
+- Changed `OpenAIRequestSettings` for `OpenAIPromptExecutionSettings`.
 - Removed extension methods for `SKContext` because that class does not exists anymore in `Semantic Kernel`.
 - Due to the breaking nature of the new version of `Semantic Kernel`, the following extension methods are not available any more and have been replace by new methods, and it was not possible to marked it as `Obsolete`:
   - `GetSemanticFunctionPromptAsync` is replaced by `GetKernelFunctionPromptAsync`.
   - `GetSemanticFunctionUsedTokensAsync` is replaced by `GetKernelFunctionUsedTokensAsync`.
   - `ImportSemanticPluginsFromAssembly` is replaced by `ImportPromptFunctionsFromAssembly`.
-- Extension method `GetSemanticFunctionPromptAsync` is no longer available. It is replaced by `GetKernelFunctionPromptAsync`. 
+- Extension method `GetSemanticFunctionPromptAsync` is no longer available. It is replaced by `GetKernelFunctionPromptAsync`.
 - Extension method `ImportQuestionAnsweringPlugin` has different signature.
 - Extension method `ImportQuestionAnsweringPluginWithMemory` has different signature.
 - Extension method `ImportChatWithHistoryPluginUsingCosmosDb` has different signature.
@@ -639,58 +667,63 @@ Sadly, some features from `Semantic Kernel` that we might have been using, are m
 ## [8.0.3]
 
 ### Minor Changes
-  - Add gpt-35-turbo-16k and gpt-3.5-turbo-16k model implementation allowed
+
+- Add gpt-35-turbo-16k and gpt-3.5-turbo-16k model implementation allowed
 
 ## [8.0.2]
 
 ### Major Changes
- - In `Encamina.Enmarcha.SemanticKernel.Plugins.Text` Summarize Plugin, a new parameter `locale` has been added to control the output language of the generated summary. [(#34)](https://github.com/Encamina/enmarcha/issues/34)
+
+- In `Encamina.Enmarcha.SemanticKernel.Plugins.Text` Summarize Plugin, a new parameter `locale` has been added to control the output language of the generated summary. [(#34)](https://github.com/Encamina/enmarcha/issues/34)
 
 ## [8.0.1]
 
 ### Major Changes
- - In `Encamina.Enmarcha.SemanticKernel.Abstractions.ILengthFunctions`, `GptEncoding` is now cached and reused to improve performance. [(#30)](https://github.com/Encamina/enmarcha/pull/30)
+
+- In `Encamina.Enmarcha.SemanticKernel.Abstractions.ILengthFunctions`, `GptEncoding` is now cached and reused to improve performance. [(#30)](https://github.com/Encamina/enmarcha/pull/30)
 
 ### Minor Changes
-  - Changes from version 8.0.0 have been added to the `CHANGELOG.md` file.
+
+- Changes from version 8.0.0 have been added to the `CHANGELOG.md` file.
 
 ## [8.0.0]
 
 ### Major Changes
 
- - Changed .NET version from 6 to 8, therefore closes issue `Everything ready for ENMARCHA 8.0.0 #7`.
- - Updated the following .NET libraries to their newest version (8.0.0):
-   - Microsoft.AspNetCore.Authentication.JwtBearer
-   - Microsoft.AspNetCore.Authentication.OpenIdConnect
-   - Microsoft.EntityFrameworkCore
-   - Microsoft.EntityFrameworkCore.SqlServer
-   - Microsoft.Extensions.Caching.Abstractions
-   - Microsoft.Extensions.Configuration.Abstractions
-   - Microsoft.Extensions.DependencyInjection.Abstractions
-   - Microsoft.Extensions.Hosting
-   - Microsoft.Extensions.Http
-   - Microsoft.Extensions.Logging.Abstractions
-   - Microsoft.Extensions.Options
-   - Microsoft.Extensions.Options.ConfigurationExtensions
-   - Microsoft.Extensions.Options.DataAnnotations
-   - System.Net.Http.Json
-   - System.Text.Json
- - Updated library Azure.Data.Tables from 12.8.1 to 12.8.2.
- - Updated library Microsoft.Azure.Cosmos from 3.36.0 to 3.37.0.
- - Updated Bot Framework related libraries from version 4.21.1 to 4.21.2. These libraries are:
-   - Microsoft.Bot.Builder.Azure
-   - Microsoft.Bot.Builder.Azure.Blobs
-   - Microsoft.Bot.Builder.Dialogs
-   - Microsoft.Bot.Builder.Integration.ApplicationInsights.Core
-   - Microsoft.Bot.Builder.Integration.AspNet.Core
- - Updated library Moq from 4.20.69 to 4.20.70.
- - Updated library xunit from 2.6.1 to 2.6.2.
- - Updated library xunit.analyzers from 1.5.0 to 1.6.0.
- - Updated library xunit.extensibility.core from 2.6.1 to 2.6.2.
- - Updated library xunit.runner.visualstudio from 2.5.3 to 2.5.4.
+- Changed .NET version from 6 to 8, therefore closes issue `Everything ready for ENMARCHA 8.0.0 #7`.
+- Updated the following .NET libraries to their newest version (8.0.0):
+  - Microsoft.AspNetCore.Authentication.JwtBearer
+  - Microsoft.AspNetCore.Authentication.OpenIdConnect
+  - Microsoft.EntityFrameworkCore
+  - Microsoft.EntityFrameworkCore.SqlServer
+  - Microsoft.Extensions.Caching.Abstractions
+  - Microsoft.Extensions.Configuration.Abstractions
+  - Microsoft.Extensions.DependencyInjection.Abstractions
+  - Microsoft.Extensions.Hosting
+  - Microsoft.Extensions.Http
+  - Microsoft.Extensions.Logging.Abstractions
+  - Microsoft.Extensions.Options
+  - Microsoft.Extensions.Options.ConfigurationExtensions
+  - Microsoft.Extensions.Options.DataAnnotations
+  - System.Net.Http.Json
+  - System.Text.Json
+- Updated library Azure.Data.Tables from 12.8.1 to 12.8.2.
+- Updated library Microsoft.Azure.Cosmos from 3.36.0 to 3.37.0.
+- Updated Bot Framework related libraries from version 4.21.1 to 4.21.2. These libraries are:
+  - Microsoft.Bot.Builder.Azure
+  - Microsoft.Bot.Builder.Azure.Blobs
+  - Microsoft.Bot.Builder.Dialogs
+  - Microsoft.Bot.Builder.Integration.ApplicationInsights.Core
+  - Microsoft.Bot.Builder.Integration.AspNet.Core
+- Updated library Moq from 4.20.69 to 4.20.70.
+- Updated library xunit from 2.6.1 to 2.6.2.
+- Updated library xunit.analyzers from 1.5.0 to 1.6.0.
+- Updated library xunit.extensibility.core from 2.6.1 to 2.6.2.
+- Updated library xunit.runner.visualstudio from 2.5.3 to 2.5.4.
 
 ## Minor Changes
- - Some minor tweaks.
+
+- Some minor tweaks.
 
 ## [6.0.4]
 
@@ -702,19 +735,19 @@ The main motivation for this update is to take advantage of the latest improveme
 
 Sadly, some warnings regarding types or members obsolescence could not be addresses until the Microsoft team behind `Semantic Kernel` provides a final version of the library. So far, these warnings are:
 
- - CS0618: *IKernel.PromptTemplateEngine' is obsolete: 'PromptTemplateEngine has been replaced with PromptTemplateFactory and will be null. If you pass an PromptTemplateEngine instance when creating a Kernel it will be wrapped in an instance of IPromptTemplateFactory. This will be removed in a future release.*
- - CS0618: *ISKFunction.RequestSettings' is obsolete: 'Use PromptTemplateConfig.ModelSettings instead. This will be removed in a future release.*
- - CS0618: *ISKFunction.SkillName' is obsolete: 'Methods, properties and classes which include Skill in the name have been renamed. Use ISKFunction.SkillName instead. This will be removed in a future release.*
- 
+- CS0618: _IKernel.PromptTemplateEngine' is obsolete: 'PromptTemplateEngine has been replaced with PromptTemplateFactory and will be null. If you pass an PromptTemplateEngine instance when creating a Kernel it will be wrapped in an instance of IPromptTemplateFactory. This will be removed in a future release._
+- CS0618: _ISKFunction.RequestSettings' is obsolete: 'Use PromptTemplateConfig.ModelSettings instead. This will be removed in a future release._
+- CS0618: _ISKFunction.SkillName' is obsolete: 'Methods, properties and classes which include Skill in the name have been renamed. Use ISKFunction.SkillName instead. This will be removed in a future release._
+
 ### Breaking Changes
 
 - Updated `Semantic Kernel` libraries to version `1.0.0-beta8`.
 - `Encamina.Enmarcha.SemanticKernel.Abstractions`
-  * Removed method `ValidateAndThrowIfErrorOccurred`.
-  * Removed properties `ChatModelName`, `CompletionsModelName`, and `EmbeddingsModelName` from `SemanticKernelOptions`.
+  - Removed method `ValidateAndThrowIfErrorOccurred`.
+  - Removed properties `ChatModelName`, `CompletionsModelName`, and `EmbeddingsModelName` from `SemanticKernelOptions`.
 - The following methods do not throw an `ArgumentException` if the instance of `ISKFunction` is not a semantic function, since now `Semantic Kernel` does not longer differentiates between Semantic and Native functions:
-  * GetSemanticFunctionPromptAsync
-  * GetSemanticFunctionUsedTokensAsync
+  - GetSemanticFunctionPromptAsync
+  - GetSemanticFunctionUsedTokensAsync
 - The extension method `ImportQuestionAnsweringPlugin` in `Encamina.Enmarcha.SemanticKernel.Plugins.QuestionAnswering` does not import the Memory plugin anymore. If the usage of the Question Answering plugin requires memory support, use the `ImportQuestionAnsweringPluginWithMemory` extension method instead. Remember to add a valid instance of `ISemanticTextMemory` as a service in the dependency container.
 
 ### Major Changes
@@ -724,6 +757,7 @@ Sadly, some warnings regarding types or members obsolescence could not be addres
 - Added `Directory.Build.targets` at Samples level to prevent generating NuGet packages of these projects.
 
 ### Minor Changes
+
 - Renamed sample projects to match Microsoft's naming conventions.
 - Sample projects also use the new `Semantic Kernel` library version `1.0.0-beta8`.
 - Some boy scouting by editing the comments in the code to have correct grammar and fixing some StyleCop warnings.
@@ -734,8 +768,8 @@ Sadly, some warnings regarding types or members obsolescence could not be addres
 
 - Added  this `CHANGELOG.md`
 - In `Encamina.Enmarcha.SemanticKernel.Abstractions`, method `ValidateAndThrowIfErrorOccurred` is now obsolete, and will be removed in a future version of this library.
-- In `Encamina.Enmarcha.SemanticKernel.Plugins.Chat`, property `ChatRequestSettings` is now obsolete due to future changes in Semantic Kernel library its type `ChatRequestSettings` will change to `OpenAIRequestSettings `. Therefore, the signature of this property will change in future versions of this library.
-- In `Encamina.Enmarcha.SemanticKernel.Connectors.Memory`, the constructor of `MemoryQueryPlugin` is now obsolete due to future changes in Semantic Kernel library, where the semantic memory will be a dependency outside the `IKernel`. The `IKernel` dependency will be replaced with `ISemanticTextMemory`. The signature of this constructor will change in future versions of this library. 
+- In `Encamina.Enmarcha.SemanticKernel.Plugins.Chat`, property `ChatRequestSettings` is now obsolete due to future changes in Semantic Kernel library its type `ChatRequestSettings` will change to `OpenAIRequestSettings`. Therefore, the signature of this property will change in future versions of this library.
+- In `Encamina.Enmarcha.SemanticKernel.Connectors.Memory`, the constructor of `MemoryQueryPlugin` is now obsolete due to future changes in Semantic Kernel library, where the semantic memory will be a dependency outside the `IKernel`. The `IKernel` dependency will be replaced with `ISemanticTextMemory`. The signature of this constructor will change in future versions of this library.
 - In `Encamina.Enmarcha.SemanticKernel.Connectors.Memory`, the extension method `ImportMemoryPlugin` is now obsolete due to future changes in Semantic Kernel library, where the semantic memory will be a dependency outside the `IKernel`. An additional dependency with `ISemanticTextMemory` will be added to this extension method. The signature of this method will change in future versions of this library.
 
 ## [6.0.3.18] and [6.0.3.19]
