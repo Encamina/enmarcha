@@ -1,5 +1,6 @@
 ﻿using System.Net.Http.Json;
 using System.Text;
+using System.Text.Json;
 
 using CommunityToolkit.Diagnostics;
 
@@ -267,20 +268,26 @@ public class MistralAIDocumentConnector : IEnmarchaDocumentConnector
     {
         var documentUrl = await MistralAIHelper.BuildPdfDataUrlAsync(pdfPart, cancellationToken);
 
+        var requestBody = new
+        {
+            model = mistralAIDocumentConnectorOptions.ModelName,
+            document = new
+            {
+                type = "document_url",
+                document_url = documentUrl,
+            },
+            include_image_base64 = true,
+        };
+
+        var jsonString = JsonSerializer.Serialize(requestBody);
+
         using var httpRequest = new HttpRequestMessage(HttpMethod.Post, mistralAIDocumentConnectorOptions.Endpoint)
         {
             Headers = { { "Authorization", $"Bearer {mistralAIDocumentConnectorOptions.ApiKey}" } },
-            Content = JsonContent.Create(new
-            {
-                model = mistralAIDocumentConnectorOptions.ModelName,
-                document = new
-                {
-                    type = "document_url",
-                    document_url = documentUrl,
-                },
-                include_image_base64 = true,
-            }),
+            Content = new StringContent(jsonString, Encoding.UTF8, "application/json"),
         };
+
+        httpRequest.Content.Headers.ContentLength = Encoding.UTF8.GetByteCount(jsonString);
 
         using var httpResponse = await httpClient.SendAsync(httpRequest, cancellationToken);
 

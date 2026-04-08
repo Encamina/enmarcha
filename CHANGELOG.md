@@ -16,6 +16,12 @@ Also, any bug fix must start with the prefix �Bug fix:� followed by the desc
 
 Previous classification is not required if changes are simple or all belong to the same category.
 
+## [10.0.4]
+
+### Minor Changes
+
+- Replaced `JsonContent.Create()` with `StringContent` to ensure explicit `Content-Length` header required by Mistral AI API (rejects chunked transfer encoding).
+
 ## [10.0.3]
 
 ### Minor Changes
