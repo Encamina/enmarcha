@@ -33,9 +33,14 @@ public class ChannelCloudAdapterWithErrorHandlerBase : CloudAdapter
     /// <summary>
     /// Initializes a new instance of the <see cref="ChannelCloudAdapterWithErrorHandlerBase"/> class.
     /// </summary>
+    /// <remarks>
+    /// Middlewares from <paramref name="adapterOptions"/> are not registered automatically by the base constructor.
+    /// Subclasses must call <see cref="InitializeDefaultMiddlewares"/> or <see cref="InitializeMiddlewares"/> in their
+    /// own constructor to register them in a controlled order using the configured middleware use rules.
+    /// </remarks>
     /// <param name="adapterOptions">Options for this agent adapter.</param>
     protected ChannelCloudAdapterWithErrorHandlerBase(IChannelAdapterOptions<ChannelCloudAdapterWithErrorHandlerBase> adapterOptions)
-        : base(adapterOptions.ChannelServiceClientFactory, adapterOptions.ActivityTaskQueue, adapterOptions.Logger, adapterOptions.Options, adapterOptions.Middlewares.ToArray(), adapterOptions.Configuration)
+        : base(adapterOptions.ChannelServiceClientFactory, adapterOptions.ActivityTaskQueue, adapterOptions.Logger, adapterOptions.Options, [], adapterOptions.Configuration)
     {
         Options = adapterOptions;
         OnTurnError = ErrorHandlerAsync;
