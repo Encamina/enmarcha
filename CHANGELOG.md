@@ -16,6 +16,12 @@ Also, any bug fix must start with the prefix �Bug fix:� followed by the desc
 
 Previous classification is not required if changes are simple or all belong to the same category.
 
+## [10.0.5]
+
+### Major Changes
+
+- Fixed duplicate middleware registration in `ChannelCloudAdapterWithErrorHandlerBase`. Middlewares are no longer passed to the `CloudAdapter` base constructor (which would auto-register them); subclasses must now explicitly call `InitializeDefaultMiddlewares` or `InitializeMiddlewares` to register them in a controlled order via the configured middleware use rules.
+
 ## [10.0.4]
 
 ### Minor Changes
