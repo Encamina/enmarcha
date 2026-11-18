@@ -1,4 +1,6 @@
-﻿using Encamina.Enmarcha.SemanticKernel.Connectors.Document.Models.Excel;
+﻿using System.Globalization;
+
+using Encamina.Enmarcha.SemanticKernel.Connectors.Document.Models.Excel;
 
 namespace Encamina.Enmarcha.SemanticKernel.Connectors.Document.Tests;
 
@@ -98,31 +100,44 @@ public class ExcelDocumentTest
         Assert.True(worksheet.Rows[1][2].IsItalic);
     }
 
-    [Fact]
-    public void CreateExcelDocument_With_CellFormattedTexts()
+    [Theory]
+    [InlineData("en-US")]
+    [InlineData("es-ES")]
+    [InlineData("de-DE")]
+    public void CreateExcelDocument_With_CellFormattedTexts(string cultureName)
     {
-        var excelStream = GivenAnExcelStream(ExcelFileWithFormatValues);
-        var excelOptions = new ExcelLoadOptions();
+        var originalCulture = CultureInfo.CurrentCulture;
 
-        var result = ExcelDocument.Create(excelStream, excelOptions);
+        try
+        {
+            CultureInfo.CurrentCulture = CultureInfo.GetCultureInfo(cultureName);
+            using var excelStream = GivenAnExcelStream(ExcelFileWithFormatValues);
+            var excelOptions = new ExcelLoadOptions();
 
-        var worksheet = Assert.Single(result.Worksheets);
+            var result = ExcelDocument.Create(excelStream, excelOptions);
 
-        Assert.Equal("-24.4%", worksheet.Rows[0][0].FormattedText);
-        Assert.Equal("-24.0%", worksheet.Rows[0][1].FormattedText);
-        Assert.Equal("24.0%", worksheet.Rows[0][2].FormattedText);
+            var worksheet = Assert.Single(result.Worksheets);
 
-        Assert.Equal("This is a text", worksheet.Rows[1][0].FormattedText);
+            Assert.Equal("-24.4%", worksheet.Rows[0][0].FormattedText);
+            Assert.Equal("-24.0%", worksheet.Rows[0][1].FormattedText);
+            Assert.Equal("24.0%", worksheet.Rows[0][2].FormattedText);
 
-        Assert.Equal("4,317.1 ", worksheet.Rows[2][0].FormattedText);
-        Assert.Equal("4317.06", worksheet.Rows[2][1].FormattedText);
+            Assert.Equal("This is a text", worksheet.Rows[1][0].FormattedText);
 
-        Assert.Equal("Tuesday, April 16, 2024", worksheet.Rows[3][0].FormattedText);
-        Assert.Equal("4/16/2024", worksheet.Rows[3][1].FormattedText);
-        Assert.Equal("4/16/24 12:00 AM", worksheet.Rows[3][2].FormattedText);
+            Assert.Equal("4,317.1 ", worksheet.Rows[2][0].FormattedText);
+            Assert.Equal("4317.06", worksheet.Rows[2][1].FormattedText);
 
-        Assert.Equal("23:59:59", worksheet.Rows[4][0].FormattedText);
-        Assert.Equal("11:59:59 PM", worksheet.Rows[4][1].FormattedText);
+            Assert.Equal("Tuesday, April 16, 2024", worksheet.Rows[3][0].FormattedText);
+            Assert.Equal("4/16/2024", worksheet.Rows[3][1].FormattedText);
+            Assert.Equal("4/16/24 12:00 AM", worksheet.Rows[3][2].FormattedText);
+
+            Assert.Equal("23:59:59", worksheet.Rows[4][0].FormattedText);
+            Assert.Equal("11:59:59 PM", worksheet.Rows[4][1].FormattedText);
+        }
+        finally
+        {
+            CultureInfo.CurrentCulture = originalCulture;
+        }
     }
 
     [Fact]

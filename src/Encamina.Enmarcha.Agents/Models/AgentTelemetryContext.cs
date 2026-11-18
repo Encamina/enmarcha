@@ -52,7 +52,7 @@ internal sealed class AgentTelemetryContext
         var context = new AgentTelemetryContext
         {
             ActivityId = activity.Id ?? string.Empty,
-            ChannelId = activity.ChannelId ?? string.Empty,
+            ChannelId = activity.ChannelId?.ToString() ?? string.Empty,
             ActivityType = activity.Type?.ToString() ?? string.Empty,
             RequestId = activity.RequestId ?? string.Empty,
         };
