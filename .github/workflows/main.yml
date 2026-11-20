@@ -77,7 +77,7 @@ jobs:
     if: github.event_name != 'pull_request' && (startsWith(github.ref, 'refs/heads/releases') || github.ref == 'refs/heads/main')
     permissions:
       contents: write # Required to create releases and push tags
-      packages: write # Required for package operations (good to have for NuGet operations)
+      id-token: write # Required for NuGet Trusted Publishing
       pull-requests: read # Required to read PR information for generate-notes
     steps:
       - name: Checkout code
@@ -104,10 +104,16 @@ jobs:
           cd ${{ github.workspace }}
           unzip nupkg.zip -d nupkg
 
+      - name: NuGet login
+        uses: NuGet/login@v1
+        id: login
+        with:
+          user: ${{ secrets.NUGET_USER }}
+
       # Use --skip-duplicate to prevent errors if a package with the same version already exists.
       # When retrying a failed workflow, already published packages will be skipped without error.
       - name: Push Libraries to NuGet.org
-        run: dotnet nuget push **/*.nupkg --api-key ${{ secrets.NUGET_KEY }} --source https://api.nuget.org/v3/index.json --skip-duplicate
+        run: dotnet nuget push **/*.nupkg --api-key "${{ steps.login.outputs.NUGET_API_KEY }}" --source https://api.nuget.org/v3/index.json --skip-duplicate
 
       - name: Create Tag
         run: |

@@ -70,6 +70,17 @@ The scripts below are used to build, test, and lint within the project.
    - PublishToLocal.ps1 → Publishes NuGet packages to a local package repository that you can reference in your projects to test implementations before a final pull request.
    - PublishToExternalDistribution.ps1 → Creates NuGet packages in a local package repository that are suitable to distribute freely to ENCAMINA's customers. These NuGet packages does not have [Source Link](https://github.com/dotnet/sourcelink) configured, and also does not generate [symbols packages](https://learn.microsoft.com/en-us/nuget/create-packages/symbol-packages-snupkg), thus preventing easy reverse engineering, disclosing implementation details or ENCAMINA's Intellecutal Property.
 
+### Publishing to NuGet.org
+
+The `CD` job in [main.yml](.github/workflows/main.yml) uses [NuGet Trusted Publishing](https://learn.microsoft.com/nuget/nuget-org/trusted-publishing) instead of a stored API key. It exchanges a GitHub Actions OIDC token for a short-lived NuGet API key immediately before pushing packages.
+
+Maintainers must configure:
+
+- A GitHub Actions repository secret named `NUGET_USER`, containing the NuGet.org profile username of the account that created the trusted publishing policy (not an email address or the package-owning organization name).
+- A NuGet.org trusted publishing policy for package owner `ENCAMINA`, repository owner `encamina`, repository `enmarcha`, and workflow `main.yml`, with no environment restriction. Its package pattern must cover the package IDs published by this repository: use `Encamina.Enmarcha.*`, not `Enmarcha*`.
+
+The workflow requests `id-token: write` only for the publishing job and retains `--skip-duplicate` when pushing packages. The old `NUGET_KEY` secret is no longer used and can be removed after a successful publication with Trusted Publishing.
+
 ### Suggested Workflow
 
 We recommend the following workflow:
