@@ -16,6 +16,12 @@ Also, any bug fix must start with the prefix �Bug fix:� followed by the desc
 
 Previous classification is not required if changes are simple or all belong to the same category.
 
+## [10.0.6.1]
+
+### Minor Changes
+
+- Switched NuGet.org publishing to Trusted Publishing using GitHub Actions OIDC and short-lived API keys instead of a stored API key.
+
 ## [10.0.6]
 
 ### Major Changes
