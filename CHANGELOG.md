@@ -16,6 +16,17 @@ Also, any bug fix must start with the prefix �Bug fix:� followed by the desc
 
 Previous classification is not required if changes are simple or all belong to the same category.
 
+## [10.0.6]
+
+### Major Changes
+
+- Bug fix: Parse Excel numeric cell values using invariant culture so formatted values remain consistent across regional settings, preserving existing output formats and raw cell text.
+
+### Minor Changes
+
+- Updated Microsoft Agents SDK from `1.2.41` to `1.9.205`.
+- Preserved empty channel identifiers in agent telemetry when converting the SDK's `ChannelId` type to a string.
+
 ## [10.0.5]
 
 ### Major Changes

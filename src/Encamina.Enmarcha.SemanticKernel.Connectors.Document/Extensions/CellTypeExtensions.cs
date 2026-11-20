@@ -111,7 +111,7 @@ internal static class CellTypeExtensions
         }
 
         if ((cell.DataType == null || cell.DataType.Value == CellValues.Number)
-            && double.TryParse(cell.CellValue?.InnerText, out var number)
+            && double.TryParse(cell.CellValue?.InnerText, NumberStyles.Float | NumberStyles.AllowThousands, CultureInfo.InvariantCulture, out var number)
             && cell.StyleIndex != null && workbookPart.WorkbookStylesPart?.Stylesheet is { CellFormats: not null, NumberingFormats: not null })
         {
             var cellFormat = workbookPart.WorkbookStylesPart.Stylesheet.CellFormats?.ElementAtOrDefault((int)cell.StyleIndex.Value) as CellFormat;

@@ -1,4 +1,6 @@
-﻿using Encamina.Enmarcha.SemanticKernel.Connectors.Document.Connectors;
+﻿using System.Globalization;
+
+using Encamina.Enmarcha.SemanticKernel.Connectors.Document.Connectors;
 using Encamina.Enmarcha.SemanticKernel.Connectors.Document.Models.Excel;
 
 namespace Encamina.Enmarcha.SemanticKernel.Connectors.Document.Tests;
@@ -142,27 +144,40 @@ public class ExcelToMarkdownDocumentConnectorTest
         Assert.Equal(expectedResult, result);
     }
 
-    [Fact]
-    public void CreateMarkdownTable_With_FormatValues()
+    [Theory]
+    [InlineData("en-US")]
+    [InlineData("es-ES")]
+    [InlineData("de-DE")]
+    public void CreateMarkdownTable_With_FormatValues(string cultureName)
     {
-        var excelStream = GivenAnExcelStream(ExcelFileWithFormatValues);
-        var excelConnector = new ExcelToMarkdownDocumentConnector()
+        var originalCulture = CultureInfo.CurrentCulture;
+
+        try
         {
-            WithFormattedValues = true,
-        };
+            CultureInfo.CurrentCulture = CultureInfo.GetCultureInfo(cultureName);
+            using var excelStream = GivenAnExcelStream(ExcelFileWithFormatValues);
+            var excelConnector = new ExcelToMarkdownDocumentConnector()
+            {
+                WithFormattedValues = true,
+            };
 
-        var result = excelConnector.ReadText(excelStream);
+            var result = excelConnector.ReadText(excelStream);
 
-        const string expectedResult = """
-                                      |-24.4%|-24.0%|24.0%|
-                                      |---|---|---|
-                                      |This is a text|||
-                                      |4,317.1 |4317.06||
-                                      |Tuesday, April 16, 2024|4/16/2024|4/16/24 12:00 AM|
-                                      |23:59:59|11:59:59 PM||
-                                      """;
+            const string expectedResult = """
+                                          |-24.4%|-24.0%|24.0%|
+                                          |---|---|---|
+                                          |This is a text|||
+                                          |4,317.1 |4317.06||
+                                          |Tuesday, April 16, 2024|4/16/2024|4/16/24 12:00 AM|
+                                          |23:59:59|11:59:59 PM||
+                                          """;
 
-        Assert.Equal(expectedResult, result);
+            Assert.Equal(expectedResult, result);
+        }
+        finally
+        {
+            CultureInfo.CurrentCulture = originalCulture;
+        }
     }
 
     [Fact]
