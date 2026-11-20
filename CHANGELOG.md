@@ -24,63 +24,7 @@ Previous classification is not required if changes are simple or all belong to t
 
 ### Minor Changes
 
-- Updated dependencies:
-  - Microsoft Agents SDK from `1.2.41` to `1.9.205`.
-  - Azure.Core from `1.51.1` to `1.55.0`.
-  - Azure.Identity from `1.13.2` to `1.21.0`.
-  - Azure.Storage.Blobs from `12.22.2` to `12.29.1`.
-  - Azure.Storage.Common from `12.21.1` to `12.28.0`.
-  - Microsoft.AspNetCore.Authentication.JwtBearer from `8.0.11` to `8.0.29`.
-  - Microsoft.Azure.Cosmos from `3.49.0` to `3.62.0`.
-  - Microsoft.Bcl.AsyncInterfaces from `10.0.2` to `10.0.13`.
-  - Microsoft.Bcl.Cryptography added at `10.0.2` (transitive dependency).
-  - Microsoft.Bcl.Memory added at `10.0.13` (transitive dependency).
-  - Microsoft.Extensions.Configuration from `9.0.1` to `10.0.13`.
-  - Microsoft.Extensions.Configuration.Abstractions from `10.0.2` to `10.0.13`.
-  - Microsoft.Extensions.Configuration.Binder from `9.0.1` to `10.0.13`.
-  - Microsoft.Extensions.Configuration.CommandLine from `9.0.1` to `10.0.13`.
-  - Microsoft.Extensions.Configuration.EnvironmentVariables from `9.0.1` to `10.0.13`.
-  - Microsoft.Extensions.Configuration.FileExtensions from `9.0.1` to `10.0.13`.
-  - Microsoft.Extensions.Configuration.Json from `9.0.1` to `10.0.13`.
-  - Microsoft.Extensions.Configuration.UserSecrets from `9.0.1` to `10.0.13`.
-  - Microsoft.Extensions.DependencyInjection from `10.0.2` to `10.0.13`.
-  - Microsoft.Extensions.DependencyInjection.Abstractions from `10.0.4` to `10.0.13`.
-  - Microsoft.Extensions.Diagnostics from `9.0.1` to `10.0.13`.
-  - Microsoft.Extensions.Diagnostics.Abstractions from `10.0.2` to `10.0.13`.
-  - Microsoft.Extensions.FileProviders.Abstractions from `10.0.2` to `10.0.13`.
-  - Microsoft.Extensions.FileProviders.Physical from `9.0.1` to `10.0.13`.
-  - Microsoft.Extensions.FileSystemGlobbing from `9.0.1` to `10.0.13`.
-  - Microsoft.Extensions.Hosting from `9.0.1` to `10.0.13`.
-  - Microsoft.Extensions.Hosting.Abstractions from `10.0.2` to `10.0.13`.
-  - Microsoft.Extensions.Http from `9.0.1` to `10.0.13`.
-  - Microsoft.Extensions.Logging from `9.0.1` to `10.0.13`.
-  - Microsoft.Extensions.Logging.Abstractions from `10.0.4` to `10.0.13`.
-  - Microsoft.Extensions.Logging.Configuration from `9.0.1` to `10.0.13`.
-  - Microsoft.Extensions.Logging.Console from `9.0.1` to `10.0.13`.
-  - Microsoft.Extensions.Logging.Debug from `9.0.1` to `10.0.13`.
-  - Microsoft.Extensions.Logging.EventLog from `9.0.1` to `10.0.13`.
-  - Microsoft.Extensions.Logging.EventSource from `9.0.1` to `10.0.13`.
-  - Microsoft.Extensions.Options from `10.0.2` to `10.0.13`.
-  - Microsoft.Extensions.Options.ConfigurationExtensions from `9.0.1` to `10.0.13`.
-  - Microsoft.Extensions.Primitives from `10.0.4` to `10.0.13`.
-  - Microsoft.Identity.Client from `4.67.2` to `4.83.1`.
-  - Microsoft.Identity.Client.Extensions.Msal from `4.67.2` to `4.83.1`.
-  - Microsoft.IdentityModel.Abstractions from `8.8.0` to `8.22.0`.
-  - Microsoft.IdentityModel.JsonWebTokens from `8.8.0` to `8.22.0`.
-  - Microsoft.IdentityModel.Logging from `8.8.0` to `8.22.0`.
-  - Microsoft.IdentityModel.Protocols from `8.8.0` to `8.22.0`.
-  - Microsoft.IdentityModel.Protocols.OpenIdConnect from `8.8.0` to `8.22.0`.
-  - Microsoft.IdentityModel.Tokens from `8.8.0` to `8.22.0`.
-  - Microsoft.IdentityModel.Validators from `8.8.0` to `8.22.0`.
-  - System.ClientModel from `1.9.0` to `1.11.0`.
-  - System.Configuration.ConfigurationManager from `10.0.1` to `10.0.13`.
-  - System.Diagnostics.EventLog from `10.0.1` to `10.0.13`.
-  - System.IdentityModel.Tokens.Jwt from `8.8.0` to `8.22.0`.
-  - System.IO.Hashing from `6.0.0` to `10.0.3`.
-  - System.Memory.Data from `10.0.1` to `10.0.13`.
-  - System.Runtime.Caching from `8.0.1` to `10.0.13`.
-  - System.Security.Cryptography.ProtectedData from `10.0.1` to `10.0.13`.
-- Transitive dependency versions above refer to `Encamina.Enmarcha.Agents`; direct references in unrelated projects are unchanged.
+- Updated Microsoft Agents SDK from `1.2.41` to `1.9.205`.
 - Preserved empty channel identifiers in agent telemetry when converting the SDK's `ChannelId` type to a string.
 
 ## [10.0.5]
