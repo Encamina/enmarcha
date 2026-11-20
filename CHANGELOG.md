@@ -16,6 +16,12 @@ Also, any bug fix must start with the prefix �Bug fix:� followed by the desc
 
 Previous classification is not required if changes are simple or all belong to the same category.
 
+## [10.0.7]
+
+### Minor Changes
+
+- Bumped the package version to `10.0.7` so NuGet recognizes this release as the latest version following the `10.0.6.1` publishing update. Functional changes remain those documented in `10.0.6`; no additional functional changes were introduced.
+
 ## [10.0.6.1]
 
 ### Minor Changes
